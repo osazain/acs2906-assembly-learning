@@ -1009,6 +1009,390 @@
             width: 80px;
         }
 
+        /* ============================================
+           INTERACTIVE LEARNING DEVICES STYLES
+           ============================================ */
+        
+        /* Inline Quiz Styles */
+        .inline-quiz {
+            background: linear-gradient(135deg, rgba(74, 144, 217, 0.1), rgba(155, 89, 182, 0.1));
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .inline-quiz-title {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        
+        .inline-quiz-question {
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .inline-quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .inline-quiz-option {
+            padding: 12px 15px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            color: var(--text);
+        }
+        
+        .inline-quiz-option:hover {
+            border-color: var(--primary);
+            background: rgba(74, 144, 217, 0.1);
+        }
+        
+        .inline-quiz-option.correct {
+            background: rgba(39, 174, 96, 0.2);
+            border-color: var(--success);
+        }
+        
+        .inline-quiz-option.incorrect {
+            background: rgba(217, 83, 79, 0.2);
+            border-color: var(--danger);
+        }
+        
+        .inline-quiz-option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .inline-quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .inline-quiz-feedback.correct {
+            display: block;
+            background: rgba(39, 174, 96, 0.15);
+            border-left: 4px solid var(--success);
+        }
+        
+        .inline-quiz-feedback.incorrect {
+            display: block;
+            background: rgba(217, 83, 79, 0.15);
+            border-left: 4px solid var(--danger);
+        }
+        
+        /* Formula Explorer Styles */
+        .formula-explorer {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .formula-explorer-title {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .formula-visualizer {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .bit-breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .bit-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: rgba(74, 144, 217, 0.2);
+            border-radius: 4px;
+            min-width: 60px;
+        }
+        
+        .bit-group.sign { background: rgba(231, 76, 60, 0.3); }
+        .bit-group.exponent { background: rgba(46, 204, 113, 0.3); }
+        .bit-group.mantissa { background: rgba(155, 89, 182, 0.3); }
+        
+        .bit-group-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        
+        .bit-value {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Practice Generator Styles */
+        .practice-generator {
+            background: linear-gradient(135deg, rgba(92, 184, 92, 0.1), rgba(240, 173, 78, 0.1));
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .practice-generator-title {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .practice-problem {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .practice-problem-text {
+            font-size: 1.3rem;
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .practice-input {
+            padding: 12px 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: monospace;
+            font-size: 16px;
+            text-align: center;
+            width: 200px;
+        }
+        
+        .practice-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .practice-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .practice-feedback.show {
+            display: block;
+        }
+        
+        .practice-feedback.correct {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid var(--success);
+        }
+        
+        .practice-feedback.incorrect {
+            background: rgba(217, 83, 79, 0.2);
+            border: 1px solid var(--danger);
+        }
+        
+        /* Quick Reference Card Styles */
+        .quick-ref-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .quick-ref-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .quick-ref-card.expanded {
+            border-color: var(--primary);
+            background: rgba(74, 144, 217, 0.05);
+        }
+        
+        .quick-ref-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quick-ref-title {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .quick-ref-toggle {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        
+        .quick-ref-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .quick-ref-content.show {
+            display: block;
+        }
+        
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .ref-item {
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .ref-item-name {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .ref-item-desc {
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        /* Step-by-Step Visualizer */
+        .step-visualizer {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 10px 0;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 3px solid var(--border);
+            transition: all 0.3s;
+        }
+        
+        .step-item.active {
+            border-left-color: var(--primary);
+            background: rgba(74, 144, 217, 0.1);
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        /* Timer Display */
+        .timer-display {
+            background: var(--card-bg);
+            border: 2px solid var(--danger);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .timer-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--danger);
+        }
+        
+        .timer-label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        /* Formula Cheat Sheet */
+        .cheat-sheet {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .cheat-sheet-title {
+            color: var(--accent);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .cheat-formula {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .cheat-formula-name {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .cheat-formula-math {
+            font-family: 'Courier New', monospace;
+            color: var(--text);
+            font-size: 14px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-tabs {
@@ -1761,109 +2145,246 @@ Executable (.exe)
 // ============================================================================
 // LECTURE 2: DATA REPRESENTATION
 // ============================================================================
+// ============================================================================
+// LECTURE 2: DATA REPRESENTATION - COMPREHENSIVE
+// ============================================================================
 const lecture2Content = {
-  title: "Lecture 2: Data Representation",
-  description: "How integers are stored, signed vs unsigned, bit operations, and byte ordering.",
+  title: "Lecture 2: Data Representation & Integer Arithmetic",
+  description: "Binary representations, signed/unsigned integers, two's complement, bit operations, shifts, byte ordering, and floating point introduction.",
   
   sections: [
     {
-      id: "integer-representation",
-      title: "Integer Representations",
+      id: "number-systems-review",
+      title: "Number Systems Review",
       icon: "🔢",
-      
-      unsignedIntegers: {
-        title: "Unsigned Integers (Positive Only)",
-        explanation: "Unsigned integers can only represent positive numbers and zero.",
-        ranges: {
-          "8-bit": "0 to 255 (0 to 2⁸-1)",
-          "16-bit": "0 to 65,535 (0 to 2¹⁶-1)",
-          "32-bit": "0 to 4,294,967,295 (0 to 2³²-1)"
-        },
-        formula: "Range = 0 to 2ⁿ - 1, where n = number of bits"
-      },
-      
-      signedIntegers: {
-        title: "Signed Integers (Positive and Negative)",
-        explanation: "Signed integers use two's complement to represent both positive and negative numbers.",
-        ranges: {
-          "8-bit": "-128 to +127 (-2⁷ to 2⁷-1)",
-          "16-bit": "-32,768 to +32,767 (-2¹⁵ to 2¹⁵-1)",
-          "32-bit": "-2,147,483,648 to +2,147,483,647 (-2³¹ to 2³¹-1)"
-        },
-        formula: "Range = -2ⁿ⁻¹ to 2ⁿ⁻¹ - 1, where n = number of bits"
-      },
-      
-      whyAsymmetric: "The range is asymmetric because there's one more negative number than positive. Zero takes up one positive slot. Example: 8-bit has -128 but only up to +127."
-    },
-    {
-      id: "twos-complement",
-      title: "Two's Complement - Negative Numbers",
-      icon: "➖",
-      explanation: `Two's complement is how computers store negative numbers. It's clever because:
-1. There's only one representation of zero
-2. Addition works the same for positive and negative numbers
-3. The sign bit (leftmost) is 1 for negative, 0 for positive`,
-      
-      formula: {
-        title: "The Formula",
-        description: "For a negative number N with n bits:",
-        steps: [
-          "1. Take the absolute value |N|",
-          "2. Convert |N| to binary",
-          "3. Invert all bits (0→1, 1→0) - this is One's Complement",
-          "4. Add 1 to the result",
-          "5. The result is the Two's Complement representation"
-        ],
-        shortcut: "Shortcut formula: Two's complement of N = 2ⁿ + N (when N is negative)"
-      },
-      
-      detailedExample: {
-        title: "Example: Convert -5 to 8-bit Two's Complement",
-        steps: [
-          "Step 1: |N| = 5",
-          "Step 2: 5 in binary = 00000101",
-          "Step 3: Invert bits = 11111010 (One's Complement)",
-          "Step 4: Add 1 = 11111011",
-          "Step 5: Result: 11111011₂ = 0xFB = -5"
-        ],
-        verification: "Verify: 5 + (-5) should = 0\n  00000101 (5)\n+ 11111011 (-5)\n= 00000000 with carry out (which is discarded) ✓"
-      },
-      
-      calculatorFormula: {
-        title: "Calculator Implementation Formula",
-        code: `function toTwosComplement(value, bits) {
-  if (value >= 0) {
-    return value;  // Positive numbers unchanged
-  }
-  // For negative: 2^n + value
-  return Math.pow(2, bits) + value;
-}
+      explanation: `Computers store all information as bits. Understanding number systems is essential for low-level programming.
 
-// Example: toTwosComplement(-5, 8)
-// = 256 + (-5) = 251 = 0xFB = 11111011₂`
+DECIMAL (Base 10): Uses digits 0-9
+• 7392 = 7×10³ + 3×10² + 9×10¹ + 2×10⁰
+
+BINARY (Base 2): Uses digits 0-1
+• 1011₂ = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 11₁₀
+
+HEXADECIMAL (Base 16): Uses 0-9, A-F
+• Each hex digit = 4 binary digits (1 nibble)
+• FF₁₆ = 15×16 + 15 = 255₁₀
+• Convention: prefix with 0x (e.g., 0xFF)`,
+      
+      whyBinary: `Why Computers Use Binary:
+1. Easy to store: Two states (high/low voltage)
+2. Reliable transmission: Two signal levels vs. ten
+3. Simple logic: AND, OR, NOT gates work naturally
+4. Electronic implementation is straightforward`,
+
+      conversionMethods: {
+        decToBinary: {
+          title: "Decimal → Binary: Repeated Division by 2",
+          steps: [
+            "Divide number by 2",
+            "Record remainder (0 or 1)",
+            "Repeat with quotient until 0",
+            "Read remainders BOTTOM to TOP"
+          ],
+          example: `Convert 219 to binary:
+219 ÷ 2 = 109 remainder 1
+109 ÷ 2 = 54  remainder 1
+54  ÷ 2 = 27  remainder 0
+27  ÷ 2 = 13  remainder 1
+13  ÷ 2 = 6   remainder 1
+6   ÷ 2 = 3   remainder 0
+3   ÷ 2 = 1   remainder 1
+1   ÷ 2 = 0   remainder 1
+
+Result: 11011011₂`,
+          formula: "219 = 128+64+16+8+2+1 = 11011011₂"
+        },
+        
+        binaryToHex: {
+          title: "Binary → Hex: Group by 4 bits",
+          steps: [
+            "Start from RIGHT (least significant)",
+            "Group into sets of 4 bits",
+            "Pad with leading zeros if needed",
+            "Convert each group to hex digit"
+          ],
+          example: `Convert 11011011 to hex:
+1101 1011
+
+1101₂ = 8+4+0+1 = 13 = D₁₆
+1011₂ = 8+0+2+1 = 11 = B₁₆
+
+Result: 0xDB`,
+          reference: {
+            "0000": "0", "0001": "1", "0010": "2", "0011": "3",
+            "0100": "4", "0101": "5", "0110": "6", "0111": "7",
+            "1000": "8", "1001": "9", "1010": "A", "1011": "B",
+            "1100": "C", "1101": "D", "1110": "E", "1111": "F"
+          }
+        },
+        
+        decToHex: {
+          title: "Decimal → Hex: Repeated Division by 16",
+          steps: [
+            "Divide number by 16",
+            "Record remainder (0-15, A=10, B=11, etc.)",
+            "Repeat with quotient until 0",
+            "Read remainders BOTTOM to TOP"
+          ],
+          example: `Convert 312236 to hex:
+312236 ÷ 16 = 19514 remainder 12 (C)
+19514  ÷ 16 = 1219  remainder 10 (A)
+1219   ÷ 16 = 76    remainder 3
+76     ÷ 16 = 4     remainder 12 (C)
+4      ÷ 16 = 0     remainder 4
+
+Reading from bottom: 0x4C3AC`,
+          verification: "4×16⁴ + 12×16³ + 3×16² + 10×16 + 12 = 312236"
+        }
       },
       
-      signExtension: {
-        title: "Sign Extension",
-        explanation: "When converting from smaller to larger bits, copy the sign bit to fill new bits.",
-        example: "8-bit 11111011 (-5) → 16-bit: 1111111111111011 (-5)",
-        instruction: "Use CBW (Convert Byte to Word) or CWD (Convert Word to Double) instructions in assembly."
+      commonMistakes: [
+        "Reading binary remainders top-to-bottom (must be bottom-to-top!)",
+        "Forgetting that hex digits A-F represent 10-15",
+        "Not padding binary to groups of 4 when converting to hex",
+        "Confusing 0x prefix (hex) with 0 prefix (octal in some languages)"
+      ],
+      
+      examTip: "Exam Tip: Practice conversions quickly. You'll need them for interpreting register values and memory dumps!"
+    },
+    
+    {
+      id: "memory-units",
+      title: "Memory Units & Organization",
+      icon: "💾",
+      explanation: `Understanding memory units is crucial for working with computer systems:
+
+BIT: Single binary digit (0 or 1)
+NIBBLE: 4 bits (one hex digit)
+BYTE: 8 bits = 2 nibbles (smallest addressable unit)
+WORD: 16 bits (2 bytes) on x86
+DOUBLE WORD: 32 bits (4 bytes)
+
+Larger units (powers of 2):
+• 1 KB (Kilobyte) = 1024 bytes = 2¹⁰ bytes
+• 1 MB (Megabyte) = 1024 KB = 2²⁰ bytes
+• 1 GB (Gigabyte) = 1024 MB = 2³⁰ bytes
+• 1 TB (Terabyte) = 1024 GB = 2⁴⁰ bytes`,
+
+      memoryOrganization: {
+        title: "Memory Addressing",
+        explanation: `Memory is organized as a linear array of bytes. Each byte has a unique address.
+
+• 32-bit address bus can address 2³² bytes = 4 GB
+• 64-bit address bus can address 2⁶⁴ bytes ≈ 18 exabytes
+
+Objects are stored contiguously, and the object's address is the address of its first byte.`,
+        example: `Example: Word at address 0x100
+Address:  0x100   0x101
+Value:    0x34    0x12    (for value 0x1234 in little-endian)
+
+Addresses of successive words differ by:
+• 4 bytes on 32-bit systems
+• 8 bytes on 64-bit systems`
+      },
+
+      dataTypes: {
+        title: "C/C++ Data Type Sizes",
+        types: [
+          { type: "char", size: "1 byte", range: "-128 to 127 or 0 to 255" },
+          { type: "short", size: "2 bytes", range: "-32,768 to 32,767" },
+          { type: "int", size: "4 bytes", range: "-2,147,483,648 to 2,147,483,647" },
+          { type: "long", size: "4 or 8 bytes", range: "System dependent" },
+          { type: "float", size: "4 bytes", notes: "IEEE 754 single precision" },
+          { type: "double", size: "8 bytes", notes: "IEEE 754 double precision" }
+        ],
+        examTip: "Important: Same bit pattern can represent different values depending on type (int vs float)!"
       }
     },
+
     {
-      id: "bitwise-operations",
-      title: "Bitwise Operations",
-      icon: "🔧",
-      explanation: "Operations that work on individual bits.",
+      id: "byte-ordering",
+      title: "Byte Ordering: Big-Endian vs Little-Endian",
+      icon: "📊",
+      explanation: `When storing multi-byte values, the order of bytes matters. There are two conventions:
+
+BIG-ENDIAN (Network Order, used by some RISC processors):
+• Most Significant Byte at lowest address
+• Like normal reading: left (big) to right
+• Example: 0x01234567 stored as [01][23][45][67]
+
+LITTLE-ENDIAN (x86 Architecture):
+• Least Significant Byte at lowest address
+• Like reading backwards
+• Example: 0x01234567 stored as [67][45][23][01]
+
+x86 uses LITTLE-ENDIAN!`,
       
+      visualExample: {
+        title: "Visual Example: Storing 0x01234567 at address 0x100",
+        bigEndian: `
+Address:  0x100  0x101  0x102  0x103
+Value:     0x01   0x23   0x45   0x67
+          (MSB)................(LSB)
+        `,
+        littleEndian: `
+Address:  0x100  0x101  0x102  0x103
+Value:     0x67   0x45   0x23   0x01
+          (LSB)................(MSB)
+        `
+      },
+      
+      stringRepresentation: {
+        title: "String Representation",
+        explanation: `Strings are sequences of characters terminated by a null byte (0x00).
+
+ASCII encoding:
+• Characters '0'-'9': 0x30-0x39 (48-57)
+• Characters 'A'-'Z': 0x41-0x5A (65-90)
+• Characters 'a'-'z': 0x61-0x7A (97-122)
+
+Example: "Hello" is stored as:
+0x48 0x65 0x6C 0x6C 0x6F 0x00
+  H    e    l    l    o   NUL
+
+Note: ASCII strings look the same on both endian systems because each character is one byte.`,
+        examTip: "Exam Tip: For x86, always remember: LOW BYTE at LOW ADDRESS"
+      },
+
+      whyItMatters: `Network protocols use Big Endian, but x86 uses Little Endian. When sending data over a network from an x86 machine, you must convert (byte swap)!
+
+Assembly example showing little-endian:
+  MOV word ptr [0x100], 0x1234
+After execution:
+  Memory at 0x100: 0x34
+  Memory at 0x101: 0x12`
+    },
+
+    {
+      id: "boolean-logic",
+      title: "Bit-Level Operations (Boolean Logic)",
+      icon: "🔧",
+      explanation: `Boolean logic, developed by George Boole, is the foundation of bit manipulation in computers.
+
+Boolean Operations:
+• NOT ~p: True if p is false (complement)
+• AND p & q: True only if BOTH p and q are true
+• OR p | q: True if EITHER p or q is true  
+• XOR p ^ q: True if ONLY ONE of p or q is true
+
+These operations are applied BIT-WISE to entire integers.`,
+
       operations: {
         AND: {
           symbol: "&",
           description: "Result bit is 1 ONLY if both bits are 1",
-          useCase: "Masking - extract specific bits",
+          useCase: "Masking - extract/isolate specific bits",
           truthTable: "0&0=0, 0&1=0, 1&0=0, 1&1=1",
-          example: "0x0F & 0x3A = 0x0A\n  00001111\n& 00111010\n= 00001010",
-          assembly: "AND AL, 0Fh  ; Mask to get low nibble"
+          example: `0x69 & 0x55 = 0x41
+  0110 1001 (0x69)
+& 0101 0101 (0x55)
+= 0100 0001 (0x41)`,
+          assembly: "AND AL, 0Fh  ; Mask to get low nibble",
+          tip: "(X & 1) returns the lowest bit of X - use for even/odd check!"
         },
         
         OR: {
@@ -1871,133 +2392,837 @@ const lecture2Content = {
           description: "Result bit is 1 if EITHER bit is 1",
           useCase: "Setting bits - turn specific bits ON",
           truthTable: "0|0=0, 0|1=1, 1|0=1, 1|1=1",
-          example: "0x0F | 0x30 = 0x3F\n  00001111\n| 00110000\n= 00111111",
-          assembly: "OR AL, 30h  ; Convert digit to ASCII"
+          example: `0x69 | 0x55 = 0x7D
+  0110 1001 (0x69)
+| 0101 0101 (0x55)
+= 0111 1101 (0x7D)`,
+          assembly: "OR AL, 30h  ; Convert digit to ASCII",
+          tip: "Setting bit: OR with a mask that has 1s where you want to set"
         },
         
         XOR: {
           symbol: "^",
           description: "Result bit is 1 if bits are DIFFERENT",
-          useCase: "Toggling bits, zeroing registers",
+          useCase: "Toggling bits, zeroing registers efficiently",
           truthTable: "0^0=0, 0^1=1, 1^0=1, 1^1=0",
-          example: "0xFF ^ 0x0F = 0xF0\n  11111111\n^ 00001111\n= 11110000",
-          special: "XOR EAX, EAX  ; Fast way to zero register (faster than MOV EAX, 0)",
-          assembly: "XOR EAX, EAX  ; Clear EAX efficiently"
+          example: `0xFF ^ 0x0F = 0xF0
+  1111 1111 (0xFF)
+^ 0000 1111 (0x0F)
+= 1111 0000 (0xF0)`,
+          special: "XOR EAX, EAX  ; Clears EAX to 0 (faster than MOV EAX, 0!)",
+          tip: "XOR with 0x20 toggles case: 'A'(0x41) ^ 0x20 = 'a'(0x61)"
         },
         
         NOT: {
           symbol: "~",
           description: "Invert all bits (0 becomes 1, 1 becomes 0)",
           useCase: "One's complement, bit inversion",
-          example: "~0x0F = 0xF0 (in 8-bit)\n  00001111\n~ 11110000",
-          assembly: "NOT AL  ; Invert all bits in AL"
+          example: `~0x41 = 0xBE (in 8-bit)
+  0100 0001 (0x41)
+~ 1011 1110 (0xBE)`,
+          assembly: "NOT AL  ; Invert all bits in AL",
+          note: "In C/C++/Java: NOT is ~, but in logical contexts ! is used"
         }
       },
       
       commonPatterns: {
-        title: "Common Bit Patterns",
+        title: "Common Bit Patterns for Assembly Programming",
         list: [
           { pattern: "AND with 0x0F", effect: "Extract low nibble (4 bits)", example: "0x3A & 0x0F = 0x0A" },
           { pattern: "AND with 0xF0", effect: "Extract high nibble", example: "0x3A & 0xF0 = 0x30" },
           { pattern: "OR with 0x30", effect: "Convert digit to ASCII", example: "0x05 | 0x30 = 0x35 ('5')" },
-          { pattern: "XOR with 0x20", effect: "Toggle case (a↔A)", example: "0x41('A') ^ 0x20 = 0x61('a')" }
+          { pattern: "XOR with 0x20", effect: "Toggle case (a↔A)", example: "0x41('A') ^ 0x20 = 0x61('a')" },
+          { pattern: "AND with 1", effect: "Check if odd/even", example: "X & 1 = 0 if even, 1 if odd" }
         ]
+      },
+
+      logicalVsBitwise: {
+        title: "Logical vs Bitwise Operators (C/C++/Java)",
+        bitwise: "&, |, ^, ~ - operate on each bit individually",
+        logical: "&&, ||, ! - treat entire value as true (non-zero) or false (zero)",
+        example: `int a = 5, b = 10;
+(a < b) && (a < 15) = true (1)
+
+Bitwise: 0x69 & 0x55 = 0x41
+Logical: 0x69 && 0x55 = 1 (both non-zero)`,
+        examTip: "In assembly, we use bitwise operations. Logical operators are for high-level control flow."
       }
     },
+
     {
       id: "shift-operations",
       title: "Shift Operations",
       icon: "↔️",
-      explanation: "Moving bits left or right. Useful for multiplication/division by powers of 2.",
+      explanation: `Shift operations move bits left or right. They're efficient alternatives to multiplication and division by powers of 2.
+
+Three types of shifts:
+1. Left Shift (SHL / <<) - multiply by powers of 2
+2. Right Logical Shift (SHR) - divide unsigned by powers of 2
+3. Right Arithmetic Shift (SAR) - divide signed by powers of 2`,
       
       leftShift: {
         title: "Shift Left (SHL / <<)",
-        description: "Move all bits left, fill right with 0",
+        description: "Move all bits left, fill right with zeros. Bit shifted out goes to Carry Flag.",
         formula: "x << n = x × 2ⁿ",
-        example: `5 << 2 = 20
-  00000101 (5)
-<< 2
-  00010100 (20)
+        example: `5 << 3 = 40
+  0000 0101 (5)
+<< 3
+  0010 1000 (40)
 
-Because: 5 × 2² = 5 × 4 = 20`,
-        flags: "CF = bit shifted out, ZF, SF, PF updated",
-        assembly: "SHL AX, 2  ; Multiply AX by 4"
+Because: 5 × 2³ = 5 × 8 = 40`,
+        flags: "CF = last bit shifted out, ZF set if result zero, SF = MSB of result",
+        assembly: "SHL AX, 3  ; Multiply AX by 8",
+        overflow: "If significant bit shifted out, overflow occurs!"
       },
       
       rightShiftLogical: {
-        title: "Shift Right Logical (SHR)",
-        description: "Move all bits right, fill left with 0",
-        formula: "x >> n = x ÷ 2ⁿ (unsigned)",
-        example: `20 >> 2 = 5
-  00010100 (20)
->> 2
-  00000101 (5)
+        title: "Right Logical Shift (SHR)",
+        description: "Move all bits right, fill left with ZEROS. Used for UNSIGNED numbers.",
+        formula: "x SHR n = x ÷ 2ⁿ (unsigned, rounds toward 0)",
+        example: `40 SHR 3 = 5
+  0010 1000 (40)
+>> 3
+  0000 0101 (5)
 
-Because: 20 ÷ 2² = 20 ÷ 4 = 5`,
-        warning: "WARNING: For signed numbers, use SAR instead to preserve sign!",
+Because: 40 ÷ 2³ = 40 ÷ 8 = 5`,
+        warning: "⚠️ WARNING: For signed numbers, use SAR to preserve sign bit!",
         assembly: "SHR AX, 1  ; Divide unsigned AX by 2"
       },
       
       rightShiftArithmetic: {
-        title: "Shift Right Arithmetic (SAR)",
-        description: "Move all bits right, fill left with SIGN BIT (copy MSB)",
+        title: "Right Arithmetic Shift (SAR)",
+        description: "Move all bits right, fill left with SIGN BIT (copy MSB). Used for SIGNED numbers.",
         formula: "x SAR n = x ÷ 2ⁿ (signed, rounds toward -∞)",
         example: `-20 SAR 2 = -5
-  11101100 (-20)
+  1110 1100 (-20 in 8-bit)
 SAR 2
-  11111011 (-5)
+  1111 1011 (-5)
 
-Notice sign bit (1) is copied to the left`,
+Notice: Sign bit (1) is copied to the left!`,
+        problem: "Problem: Integer division should round toward 0, but SAR rounds toward -∞",
+        solution: "For negative numbers, add bias (2ⁿ - 1) before shifting",
+        biasedExample: `-5 / 2: Should be -2 (not -3)
+Without bias: 1011 SAR 1 = 1101 (-3) ✗
+With bias: (1011 + 0001) SAR 1 = 1100 (-4)? 
+Wait: -5 = 1011, bias = 2¹-1 = 1
+(1011 + 0001) = 1100, SAR 1 = 1110 (-2) ✓`,
         assembly: "SAR AX, 1  ; Divide signed AX by 2"
       },
+
+      comparisonTable: {
+        title: "Shift Operations Summary",
+        headers: ["Operation", "Fill Direction", "Use For", "Example"],
+        rows: [
+          ["SHL/<<", "Right with 0s", "Multiply (×2ⁿ)", "5 << 2 = 20"],
+          ["SHR", "Left with 0s", "Unsigned ÷ 2ⁿ", "20 >> 2 = 5"],
+          ["SAR", "Left with sign", "Signed ÷ 2ⁿ", "-20 SAR 2 = -5"]
+        ]
+      },
+
+      performanceNote: `Performance Advantage:
+• Addition: 1-2 cycles
+• Multiplication: 5-10 cycles
+• Division: 20-39 cycles
+• Shift: 1 cycle!
+
+Always substitute multiplication/division by powers of 2 with shifts when possible!`
+    },
+
+    {
+      id: "unsigned-integers",
+      title: "Unsigned Integer Representation",
+      icon: "➕",
+      explanation: `Unsigned integers can only represent non-negative numbers (zero and positive).
+
+The bit pattern is interpreted directly as a binary number:
+
+B2U(X) = Σ(xᵢ × 2ⁱ) for i = 0 to w-1
+
+Where:
+• w = number of bits
+• xᵢ = bit i (0 or 1)
+• U = Unsigned interpretation`,
+
+      formula: "Range: 0 to 2ʷ - 1",
       
-      calculatorFormulas: {
-        title: "Calculator Implementation",
-        shl: "result = (value << shiftAmount) & mask",
-        shr: "result = (value >>> shiftAmount)  // unsigned",
-        sar: "result = value >> shiftAmount  // signed (preserves sign in JS)"
+      ranges: {
+        title: "Unsigned Integer Ranges",
+        sizes: [
+          { bits: 8, range: "0 to 255", formula: "0 to 2⁸ - 1" },
+          { bits: 16, range: "0 to 65,535", formula: "0 to 2¹⁶ - 1" },
+          { bits: 32, range: "0 to 4,294,967,295", formula: "0 to 2³² - 1" }
+        ]
+      },
+
+      example: {
+        title: "8-bit Unsigned Examples",
+        table: [
+          { binary: "00000000", hex: "0x00", decimal: "0" },
+          { binary: "00001111", hex: "0x0F", decimal: "15" },
+          { binary: "10000000", hex: "0x80", decimal: "128" },
+          { binary: "11111111", hex: "0xFF", decimal: "255" }
+        ]
+      },
+
+      observation: "With w bits, there are 2ʷ different patterns, representing integers 0 through 2ʷ - 1."
+    },
+
+    {
+      id: "signed-integers",
+      title: "Signed Integer Representation (Two's Complement)",
+      icon: "➖",
+      explanation: `Signed integers represent both positive and negative numbers using Two's Complement.
+
+In two's complement:
+• The most significant bit (MSB) is the SIGN BIT
+• 0 in MSB = positive number
+• 1 in MSB = negative number
+
+Formula:
+B2T(X) = -x_{w-1} × 2^{w-1} + Σ(xᵢ × 2ⁱ) for i = 0 to w-2
+
+The MSB has a NEGATIVE weight!`,
+
+      formula: "Range: -2^{w-1} to 2^{w-1} - 1",
+
+      ranges: {
+        title: "Signed Integer Ranges (Two's Complement)",
+        sizes: [
+          { bits: 8, range: "-128 to +127", formula: "-2⁷ to 2⁷ - 1" },
+          { bits: 16, range: "-32,768 to +32,767", formula: "-2¹⁵ to 2¹⁵ - 1" },
+          { bits: 32, range: "-2,147,483,648 to +2,147,483,647", formula: "-2³¹ to 2³¹ - 1" }
+        ]
+      },
+
+      whyAsymmetric: `The range is asymmetric because:
+• Zero uses one of the "positive" slots
+• There are 2^{w-1} negative numbers (-2^{w-1} to -1)
+• There are 2^{w-1} non-negative numbers (0 to 2^{w-1}-1)
+• Most negative number has no positive counterpart!`,
+
+      conversionTable: {
+        title: "4-bit Two's Complement Examples",
+        headers: ["Binary", "Hex", "Unsigned", "Signed"],
+        rows: [
+          ["0000", "0x0", "0", "0"],
+          ["0001", "0x1", "1", "1"],
+          ["0010", "0x2", "2", "2"],
+          ["0111", "0x7", "7", "7"],
+          ["1000", "0x8", "8", "-8"],
+          ["1001", "0x9", "9", "-7"],
+          ["1110", "0xE", "14", "-2"],
+          ["1111", "0xF", "15", "-1"]
+        ]
+      },
+
+      properties: {
+        title: "Key Properties of Two's Complement",
+        list: [
+          "Uniqueness: Every bit pattern represents exactly one integer",
+          "One zero: Only one representation of zero (000...000)",
+          "Negation: Negating a number: invert all bits and add 1",
+          "Addition: Same hardware works for both signed and unsigned",
+          "Sign extension: Copy sign bit to expand to larger width"
+        ]
       }
     },
+
     {
-      id: "byte-ordering",
-      title: "Byte Ordering - Big vs Little Endian",
-      icon: "📊",
-      explanation: `When storing multi-byte values (like 16-bit or 32-bit), the order of bytes matters.
+      id: "twos-complement-conversion",
+      title: "Two's Complement Conversion Methods",
+      icon: "🔄",
+      explanation: `There are several methods to convert between decimal and two's complement binary.`,
 
-BIG ENDIAN (Network Order):
-- Most Significant Byte (MSB) stored at lowest address
-- Like reading: Left to right, most significant first
-- Example: 0x1234 stored as [0x12, 0x34]
+      negativeToBinary: {
+        title: "Method 1: Convert Negative Decimal to Binary",
+        steps: [
+          "1. Take the absolute value |N|",
+          "2. Convert |N| to binary",
+          "3. Invert all bits (0→1, 1→0) - One's Complement",
+          "4. Add 1 to the result",
+          "5. Result is Two's Complement representation"
+        ],
+        example: `Convert -5 to 8-bit:
+Step 1: |N| = 5
+Step 2: 5 in binary = 00000101
+Step 3: Invert = 11111010
+Step 4: Add 1 = 11111011
+Step 5: -5 = 11111011₂ = 0xFB`,
+        verification: `Check: 5 + (-5) = 0
+  00000101 (5)
++ 11111011 (-5)
+= 00000000 with carry out (discarded) ✓`
+      },
 
-LITTLE ENDIAN (x86 Architecture):
-- Least Significant Byte (LSB) stored at lowest address  
-- Like reading: Backwards, least significant first
-- Example: 0x1234 stored as [0x34, 0x12]
+      shortcutMethod: {
+        title: "Method 2: Shortcut Formula",
+        formula: "For N < 0: Representation = 2ʷ + N",
+        example: `Convert -5 to 8-bit:
+Representation = 2⁸ + (-5) = 256 - 5 = 251
+251 in binary = 11111011 = 0xFB ✓
 
-x86 uses LITTLE ENDIAN!`,
-      
-      visualExample: {
-        title: "Visual Example: Storing 0x12345678 at address 0x100",
-        bigEndian: `
-Address:  0x100  0x101  0x102  0x103
-Value:     0x12   0x34   0x56   0x78
-          (MSB)................(LSB)
-        `,
-        littleEndian: `
-Address:  0x100  0x101  0x102  0x103
-Value:     0x78   0x56   0x34   0x12
-          (LSB)................(MSB)
+Convert -128 to 8-bit:
+Representation = 256 + (-128) = 128 = 0x80 = 10000000 ✓`
+      },
+
+      binaryToNegative: {
+        title: "Method 3: Read a Negative Binary Number",
+        shortcut: "If MSB is 1 (negative):",
+        steps: [
+          "1. Invert all bits",
+          "2. Add 1",
+          "3. Read as positive value",
+          "4. Add negative sign"
+        ],
+        example: `Read signed 11111011:
+Step 1: Invert = 00000100
+Step 2: Add 1 = 00000101 = 5
+Step 3: Therefore 11111011 = -5
+
+Read signed 1100 (4-bit):
+Step 1: Invert = 0011 = 3
+Step 2: Add 1 = 0100 = 4
+Step 3: Therefore 1100 = -4`
+      },
+
+      formulaMethod: {
+        title: "Method 4: Weighted Sum Formula",
+        formula: "Value = -x_{w-1} × 2^{w-1} + Σ(xᵢ × 2ⁱ)",
+        example: `11111011 (8-bit):
+= -1×2⁷ + 1×2⁶ + 1×2⁵ + 1×2⁴ + 1×2³ + 0×2² + 1×2¹ + 1×2⁰
+= -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1
+= -128 + 123
+= -5 ✓`
+      },
+
+      calculatorFormula: {
+        title: "Calculator Implementation",
+        code: `function toTwosComplement(value, bits) {
+  if (value >= 0) {
+    return value;  // Positive: direct representation
+  }
+  // Negative: 2^n + value
+  return Math.pow(2, bits) + value;
+}
+
+// Example: toTwosComplement(-5, 8)
+// = 256 + (-5) = 251 = 0xFB = 11111011₂`
+      }
+    },
+
+    {
+      id: "sign-extension",
+      title: "Sign Extension",
+      icon: "📏",
+      explanation: `Sign extension is converting a signed integer from a smaller bit width to a larger one while preserving its value.
+
+For UNSIGNED numbers: Add leading zeros (zero extension)
+• 8-bit 1001 → 16-bit: 0000 0000 0000 1001
+
+For SIGNED numbers: Copy the SIGN BIT to fill new positions
+• 8-bit 1001 (-7) → 16-bit: 1111 1111 1111 1001 (-7)
+• 8-bit 0111 (7) → 16-bit: 0000 0000 0000 0111 (7)`,
+
+      whyItWorks: `Why sign extension preserves value:
+The sign bit has weight -2^{w-1}. When extending:
+• Original: -1 × 2^{w-1}
+• Extended: -1 × 2^{W-1} + 1 × (2^{W-1} - 2^{w-1})
+• The added 1s contribute: 2^{W-1} - 2^{w-1}
+• Net effect: value is unchanged!`,
+
+      examples: {
+        title: "Sign Extension Examples",
+        table: [
+          { original: "1001 (4-bit)", value: "-7", extended: "1111 1001 (8-bit)", newValue: "-7" },
+          { original: "0111 (4-bit)", value: "+7", extended: "0000 0111 (8-bit)", newValue: "+7" },
+          { original: "1111 1011 (8-bit)", value: "-5", extended: "1111 1111 1111 1011 (16-bit)", newValue: "-5" },
+          { original: "0000 0101 (8-bit)", value: "+5", extended: "0000 0000 0000 0101 (16-bit)", newValue: "+5" }
+        ]
+      },
+
+      assemblyInstructions: {
+        title: "x86 Sign Extension Instructions",
+        instructions: [
+          { inst: "CBW", description: "Convert Byte to Word", effect: "AL (8-bit) → AX (16-bit)" },
+          { inst: "CWD", description: "Convert Word to Doubleword", effect: "AX (16-bit) → DX:AX (32-bit)" },
+          { inst: "CWDE", description: "Convert Word to Doubleword Extended", effect: "AX (16-bit) → EAX (32-bit)" },
+          { inst: "CDQ", description: "Convert Doubleword to Quadword", effect: "EAX (32-bit) → EDX:EAX (64-bit)" },
+          { inst: "MOVSX", description: "Move with Sign Extension", effect: "Sign extend any source to destination" }
+        ],
+        example: `MOV AL, -5      ; AL = 0xFB (11111011)
+CBW             ; AX = 0xFFFB (11111111 11111011)
+                ; Sign bit (1) copied to AH
+
+MOV AX, -5      ; AX = 0xFFFB
+CWD             ; DX = 0xFFFF, AX = 0xFFFB
+                ; Sign bit copied to DX`
+      },
+
+      truncation: {
+        title: "Truncation (Reducing Bit Width)",
+        explanation: `When truncating a w-bit number to k bits, we drop the high-order (w-k) bits.
+
+This can alter the value - it's a form of overflow!`,
+        example: `0x00FF (16-bit) = 255
+Truncate to 8-bit: 0xFF = -1 (as signed!) ✗
+
+0x1234 (16-bit) = 4660
+Truncate to 8-bit: 0x34 = 52 ✓ (just lost high bits)
+
+Truncation formula: B2U_k([x_{k-1},...,x_0]) = B2U_w([x_{w-1},...,x_0]) mod 2^k`,
+        warning: "Be careful truncating signed values - can change sign!"
+      }
+    },
+
+    {
+      id: "unsigned-arithmetic",
+      title: "Unsigned Integer Arithmetic",
+      icon: "➕",
+      explanation: `Unsigned arithmetic follows modular arithmetic (mod 2ʷ).
+
+When a result requires more than w bits, the excess is discarded (truncated).`,
+
+      addition: {
+        title: "Unsigned Addition",
+        formula: "x +ᵤ y = (x + y) mod 2ʷ",
+        operation: "Add bit patterns as unsigned, discard carry out",
+        example: `4-bit addition: 11 + 6
+  1011 (11)
++ 0110 (6)
+--------
+ 10001 (17)
+
+Keep only 4 bits: 0001 (1)
+
+Because: 11 + 6 = 17, 17 mod 16 = 1`,
+        overflow: "Overflow occurs when carry out = 1 (true sum ≥ 2ʷ)"
+      },
+
+      subtraction: {
+        title: "Unsigned Subtraction",
+        formula: "x -ᵤ y = (x - y) mod 2ʷ",
+        operation: "Add two's complement of subtrahend, discard borrow",
+        example: `4-bit subtraction: 4 - 7
+  0100 (4)
++ 1001 (-7 in two's complement, or +9 unsigned)
+--------
+  1101 (13)
+
+Because: 4 - 7 = -3, -3 mod 16 = 13`,
+        overflow: "Overflow occurs when result > minuend (need to borrow)"
+      },
+
+      overflowDetection: {
+        title: "Detecting Unsigned Overflow",
+        addition: "CF (Carry Flag) = 1 when carry out of MSB occurs",
+        subtraction: "CF = 1 when a borrow is needed",
+        summary: "For unsigned: CF indicates overflow"
+      },
+
+      modularVisualization: {
+        title: "Modular Arithmetic Visualization",
+        description: "Unsigned arithmetic wraps around like a clock:",
+        diagram: `
+        2ʷ-1
+          ↑
+    2ʷ-2 ← → 0
+          ↓
+          1
+        `
+      }
+    },
+
+    {
+      id: "signed-arithmetic",
+      title: "Signed (Two's Complement) Arithmetic",
+      icon: "➕➖",
+      explanation: `Signed arithmetic uses the same hardware as unsigned! The bit patterns are identical - only the interpretation differs.
+
+Addition formula: x +ₜ y = U2T[(x + y) mod 2ʷ]
+
+Subtract by adding negative: x - y = x + (-y)`,
+
+      additionExamples: {
+        title: "4-bit Signed Addition Examples",
+        cases: [
+          { x: "-8", y: "5", binary: "1000 + 0101", result: "1101 (-3)", case: "Case 2: Negative + Positive, no overflow" },
+          { x: "-8", y: "-5", binary: "1000 + 1011", result: "0011 (3)", case: "Case 1: Negative overflow! (-13 needs 5 bits)" },
+          { x: "2", y: "5", binary: "0010 + 0101", result: "0111 (7)", case: "Case 3: Positive + Positive, no overflow" },
+          { x: "5", y: "5", binary: "0101 + 0101", result: "1010 (-6)", case: "Case 4: Positive overflow! (10 > 7)" }
+        ]
+      },
+
+      overflowCases: {
+        title: "Four Cases in Signed Addition",
+        case1: { name: "Case 1: Negative + Negative = Positive", result: "NEGATIVE OVERFLOW", of: "OF = 1" },
+        case2: { name: "Case 2: Negative + Positive", result: "Always correct", of: "OF = 0" },
+        case3: { name: "Case 3: Positive + Positive = Negative", result: "POSITIVE OVERFLOW", of: "OF = 1" },
+        case4: { name: "Case 4: Any other result", result: "No overflow", of: "OF = 0" }
+      },
+
+      overflowDetection: {
+        title: "Detecting Signed Overflow (OF)",
+        rule: "OF = 1 when:",
+        conditions: [
+          "Positive + Positive = Negative, OR",
+          "Negative + Negative = Positive"
+        ],
+        formula: "OF = carry_in_to_MSB XOR carry_out_of_MSB",
+        important: "For signed: OF (not CF) indicates overflow!"
+      },
+
+      subtraction: {
+        title: "Signed Subtraction",
+        method: "a - b = a + (-b)",
+        example: `25 - 5 = 20 (6-bit)
+  01 1001  (25)
++ 11 1011  (-5, two's complement)
+-----------
+    101 0100  
+Truncate to 6 bits: 01 0100 = 20 ✓`,
+        negation: "To negate: invert all bits and add 1"
+      },
+
+      cfVsOf: {
+        title: "CF vs OF: The Critical Difference",
+        comparison: [
+          { flag: "CF (Carry Flag)", for: "UNSIGNED arithmetic", when: "Carry out of MSB or borrow needed" },
+          { flag: "OF (Overflow Flag)", for: "SIGNED arithmetic", when: "Sign changes incorrectly" }
+        ],
+        examTip: "⚠️ EXAM TIP: Know when to check CF (unsigned) vs OF (signed)! They're different!"
+      }
+    },
+
+    {
+      id: "multiplication-division",
+      title: "Multiplication and Division by Powers of 2",
+      icon: "✖️➗",
+      explanation: `Multiplication and division by powers of 2 can be done much faster using shift operations.`,
+
+      multiplication: {
+        title: "Multiplication by Powers of 2",
+        rule: "x × 2ᵏ = x << k",
+        explanation: "Shifting left by k bits multiplies by 2ᵏ",
+        examples: [
+          { operation: "7 × 2", binary: "00000111 << 1", result: "00001110 (14)" },
+          { operation: "7 × 8", binary: "00000111 << 3", result: "00111000 (56)" },
+          { operation: "3 × 4", binary: "00000011 << 2", result: "00001100 (12)" }
+        ],
+        overflowWarning: "If significant bits shift out, overflow occurs!"
+      },
+
+      unsignedDivision: {
+        title: "Unsigned Division by Powers of 2",
+        rule: "x ÷ 2ᵏ = x >> k (logical shift)",
+        explanation: "Logical shift right fills with zeros",
+        examples: [
+          { operation: "42 ÷ 2", binary: "00101010 SHR 1", result: "00010101 (21)" },
+          { operation: "42 ÷ 8", binary: "00101010 SHR 3", result: "00000101 (5)" }
+        ],
+        rounding: "Integer division truncates toward 0 (discards fraction)"
+      },
+
+      signedDivision: {
+        title: "Signed Division by Powers of 2",
+        rule: "x ÷ 2ᵏ requires arithmetic shift with bias for negatives",
+        problem: `Problem: SAR rounds toward -∞, but we need toward 0
+Example: -5 ÷ 2 should be -2, not -3`,
+        solution: `Solution: Add bias before shifting if x < 0
+Bias = 2ᵏ - 1 where k = shift amount`,
+        examples: [
+          { operation: "-5 ÷ 2", steps: "(1011 + 0001) SAR 1 = 1100 SAR 1 = 1110 (-2)", result: "-2 ✓" },
+          { operation: "-5 ÷ 4", steps: "(1011 + 0011) SAR 2 = 1110 SAR 2 = 1111 (-1)", result: "-1 ✓" },
+          { operation: "-11 ÷ 2 (5-bit)", steps: "(10101 + 00001) SAR 1 = 10110 SAR 1 = 11011 (-5)", result: "-5 ✓" }
+        ]
+      },
+
+      performanceComparison: {
+        title: "Performance Comparison",
+        operations: [
+          { operation: "Addition", cycles: "1-2 cycles" },
+          { operation: "Shift", cycles: "1 cycle" },
+          { operation: "Multiplication", cycles: "5-10 cycles" },
+          { operation: "Division", cycles: "20-39 cycles" }
+        ],
+        recommendation: "Always use shifts for multiply/divide by powers of 2!"
+      }
+    },
+
+    {
+      id: "conversion-between-reps",
+      title: "Converting Between Signed and Unsigned",
+      icon: "🔄",
+      explanation: `The same bit pattern can be interpreted as signed or unsigned, giving different values.`,
+
+      formulas: {
+        title: "Conversion Formulas",
+        signedToUnsigned: {
+          formula: "T2U(x) = x + 2ʷ when x < 0, else x",
+          explanation: "Add 2ʷ to negative signed numbers",
+          example: "T2U(-5, 8-bit) = -5 + 256 = 251 = 0xFB"
+        },
+        unsignedToSigned: {
+          formula: "U2T(u) = u - 2ʷ when u ≥ 2ʷ⁻¹, else u",
+          explanation: "Subtract 2ʷ from large unsigned values",
+          example: "U2T(251, 8-bit) = 251 - 256 = -5"
+        }
+      },
+
+      visualization: {
+        title: "Visualizing the Conversion",
+        description: "The conversion is a shift on the number line:",
+        diagram: `
+        UNSIGNED                    SIGNED
+    0 -------- 2^{w-1} -------- 2^w-1    0 -------- 2^{w-1}
+         |                            |         |
+    0 ----+ 2^{w-1}                   -2^{w-1} ----+ 0
+        '- w-1 bits ->'               '<- w-1 bits -'
+        
+Values 0 to 2^{w-1}-1 have same representation.
+Values 2^{w-1} to 2^w-1 (unsigned) map to -2^{w-1} to -1 (signed).
         `
       },
-      
-      whyItMatters: `Network protocols use Big Endian, x86 uses Little Endian. When sending data over network from x86, you must convert!
 
-Assembly example showing little endian:
-  MOV word ptr [0x100], 0x1234
-Memory at 0x100: 0x34
-Memory at 0x101: 0x12`,
-      
-      examTip: "Exam Tip: For x86, always remember: LOW BYTE at LOW ADDRESS"
+      cProgramming: {
+        title: "In C/C++ Programming",
+        implicitCast: {
+          description: "Implicit casting changes interpretation",
+          example: `short int v = -12345;
+unsigned short uv = v;
+// v = 0xCFC7 (signed: -12345)
+// uv = 0xCFC7 (unsigned: 53191)`
+        },
+        comparisonTrap: {
+          description: "Mixing signed and unsigned is dangerous!",
+          example: `int i = -1;
+unsigned int u = 0;
+if (i < u)  // FALSE! -1 is converted to UINT_MAX
+    printf("i is less");  // Never prints!`
+        }
+      },
+
+      shortcutReading: {
+        title: "Shortcut: Reading Signed Values",
+        method: "For negative numbers (MSB = 1):",
+        steps: [
+          "1. Invert all bits",
+          "2. Add 1", 
+          "3. Read the positive value",
+          "4. Add negative sign"
+        ],
+        example: `Read signed 0xFB (11111011):
+1. Invert: 00000100
+2. Add 1: 00000101 = 5
+3. Therefore: 0xFB as signed = -5`
+      }
+    },
+
+    {
+      id: "floating-point-intro",
+      title: "Floating Point Introduction",
+      icon: "🔬",
+      explanation: `Floating point represents real numbers (with fractional parts) using a form of scientific notation.
+
+Limitations of fixed-point binary:
+• Binary fractions can only represent numbers of form M × 2ᴱ
+• Many decimal fractions (like 0.1) have no finite binary representation
+
+IEEE 754 Standard provides:
+• Standardized representation across systems
+• Special values (infinity, NaN)
+• Gradual underflow for very small numbers`,
+
+      binaryFractions: {
+        title: "Binary Fractions",
+        explanation: `Just like decimal has decimal points, binary has binary points:
+
+Decimal: 123.45 = 1×100 + 2×10 + 3×1 + 4×0.1 + 5×0.01
+Binary:  101.11 = 1×4 + 0×2 + 1×1 + 1×0.5 + 1×0.25 = 5.75
+
+Bit positions after the point:
+• .1 = 1/2 = 0.5
+• .01 = 1/4 = 0.25
+• .001 = 1/8 = 0.125
+• .0001 = 1/16 = 0.0625`,
+        conversionMethod: {
+          title: "Converting Decimal Fraction to Binary",
+          steps: [
+            "1. Separate integer and fractional parts",
+            "2. Convert integer using division by 2",
+            "3. Convert fraction using multiplication by 2",
+            "4. For fraction: multiply by 2, integer part is next bit, repeat with fraction"
+          ],
+          example: `Convert 5.625 to binary:
+
+Integer (5): 101
+
+Fraction (0.625):
+0.625 × 2 = 1.25 → bit 1, use 0.25
+0.25  × 2 = 0.5  → bit 0, use 0.5
+0.5   × 2 = 1.0  → bit 1, use 0.0 (done!)
+
+Result: 101.101`
+        }
+      },
+
+      ieee754Format: {
+        title: "IEEE 754 Floating Point Format",
+        representation: "Value = (-1)ˢ × 1.M × 2^(E-bias)",
+        components: [
+          { name: "Sign (S)", bits: 1, description: "0=positive, 1=negative" },
+          { name: "Exponent (E)", bits: "8 or 11", description: "Biased exponent" },
+          { name: "Mantissa/Significand (M)", bits: "23 or 52", description: "Fractional part (with implicit leading 1)" }
+        ],
+        precisions: {
+          single: { bits: 32, expBits: 8, mantBits: 23, bias: 127 },
+          double: { bits: 64, expBits: 11, mantBits: 52, bias: 1023 }
+        }
+      },
+
+      specialValues: {
+        title: "Special Values in IEEE 754",
+        values: [
+          { exp: "All 0s", frac: "0", value: "±0 (two representations of zero)" },
+          { exp: "All 0s", frac: "Non-zero", value: "Denormalized (very small numbers)" },
+          { exp: "1 to 2^k-2", frac: "Any", value: "Normalized numbers (most values)" },
+          { exp: "All 1s", frac: "0", value: "±∞ (infinity)" },
+          { exp: "All 1s", frac: "Non-zero", value: "NaN (Not a Number)" }
+        ]
+      },
+
+      exampleConversion: {
+        title: "Example: Convert -6.625 to IEEE 754 Single Precision",
+        steps: [
+          "Step 1: Convert to binary: 6.625 = 110.101",
+          "Step 2: Normalize: 110.101 = 1.10101 × 2²",
+          "Step 3: Extract fields:",
+          "  • Sign S = 1 (negative)",
+          "  • Exponent E = 2 + 127 = 129 = 10000001",
+          "  • Mantissa M = 10101000000000000000000 (23 bits)",
+          "Step 4: Combine: 1 10000001 10101000000000000000000",
+          "Result: 0xC0D40000"
+        ]
+      }
+    },
+
+    {
+      id: "practice-problems",
+      title: "Practice Problems with Solutions",
+      icon: "📝",
+      explanation: "Test your understanding with these practice problems.",
+
+      problems: [
+        {
+          question: "Convert 219 to binary and hexadecimal",
+          solution: `Binary: 11011011
+Hex: 0xDB
+
+Work:
+219 ÷ 2 = 109 r 1
+109 ÷ 2 = 54  r 1
+54  ÷ 2 = 27  r 0
+27  ÷ 2 = 13  r 1
+13  ÷ 2 = 6   r 1
+6   ÷ 2 = 3   r 0
+3   ÷ 2 = 1   r 1
+1   ÷ 2 = 0   r 1
+Read bottom to top: 11011011
+
+Hex: 1101=D, 1011=B → 0xDB`
+        },
+        {
+          question: "Convert -42 to 8-bit two's complement",
+          solution: `Step 1: 42 in binary = 00101010
+Step 2: Invert = 11010101
+Step 3: Add 1 = 11010110
+
+Result: 11010110₂ = 0xD6
+
+Check: 42 + (-42) = 0
+00101010 + 11010110 = 00000000 (with carry out) ✓`
+        },
+        {
+          question: "What is 0x8A interpreted as 8-bit signed?",
+          solution: `0x8A = 10001010 (binary)
+MSB is 1, so negative.
+
+Shortcut:
+Invert: 01110101
+Add 1:  01110110 = 118
+Therefore: -118
+
+Formula check:
+-128 + 8 + 2 = -118 ✓`
+        },
+        {
+          question: "Calculate 0x69 & 0x55",
+          solution: `  01101001 (0x69)
+& 01010101 (0x55)
+= 01000001 (0x41)
+
+Result: 0x41 = 65`
+        },
+        {
+          question: "Sign extend 0x8A (8-bit) to 16-bit",
+          solution: `0x8A = 10001010 (MSB is 1, negative)
+Sign extension: copy 1s to high byte
+
+Result: 11111111 10001010 = 0xFF8A
+
+Value check:
+8-bit: 0x8A = -128 + 8 + 2 = -118
+16-bit: 0xFF8A = -32768 + 32768 - 128 + 8 + 2 = -118 ✓`
+        },
+        {
+          question: "How is 0x12345678 stored in little-endian?",
+          solution: `Little-endian: least significant byte at lowest address
+
+0x12345678 broken into bytes:
+0x78 (LSB), 0x56, 0x34, 0x12 (MSB)
+
+Memory layout:
+Address 0x100: 0x78
+Address 0x101: 0x56
+Address 0x102: 0x34
+Address 0x103: 0x12`
+        },
+        {
+          question: "Calculate 5 + (-3) in 4-bit two's complement",
+          solution: `5 = 0101
+-3 = 1101 (invert 0011 + 1)
+
+  0101 (5)
++ 1101 (-3)
+--------
+ 10010
+
+Discard carry: 0010 = 2 ✓`
+        },
+        {
+          question: "Does (-8) + (-5) overflow in 4-bit signed?",
+          solution: `-8 = 1000
+-5 = 1011
+
+  1000
++ 1011
+------
+ 10011 → 0011 (3)
+
+Result is positive, but both inputs were negative!
+This is NEGATIVE OVERFLOW (OF = 1)
+
+True sum -13 requires 5 bits (minimum -8 to +7 in 4-bit)`
+        }
+      ],
+
+      examTips: [
+        "Always check if MSB indicates sign for signed interpretation",
+        "For hex to binary, write out all 4 bits - don't skip leading zeros within the nibble",
+        "Two's complement range is always asymmetric: one more negative than positive",
+        "CF is for unsigned overflow, OF is for signed overflow - don't confuse them!",
+        "x86 is little-endian: remember 'low byte at low address'",
+        "Sign extension copies the sign bit; zero extension fills with zeros"
+      ]
     }
   ]
 };
@@ -4058,6 +5283,900 @@ const lectureStats = {
             currentQuestion = 0;
             renderQuestion();
         });
+
+        // ============================================
+        // INTERACTIVE LEARNING DEVICES
+        // ============================================
+
+        // --- INLINE QUIZ DATA AND FUNCTIONS ---
+        const inlineQuizData = {
+            'number-systems': [
+                {
+                    question: "Convert decimal 45 to binary:",
+                    options: ["101011", "101101", "110101", "100111"],
+                    correct: 1,
+                    explanation: "45 / 2 = 22 r1, 22 / 2 = 11 r0, 11 / 2 = 5 r1, 5 / 2 = 2 r1, 2 / 2 = 1 r0, 1 / 2 = 0 r1. Reading bottom-to-top: 101101"
+                },
+                {
+                    question: "What is 0xFF in decimal?",
+                    options: ["255", "256", "240", "128"],
+                    correct: 0,
+                    explanation: "0xFF = 15*16 + 15 = 240 + 15 = 255"
+                }
+            ],
+            'twos-complement': [
+                {
+                    question: "What is the 8-bit two's complement representation of -5?",
+                    options: ["0xFB", "0x05", "0xFA", "0xF5"],
+                    correct: 0,
+                    explanation: "5 = 00000101, invert = 11111010, add 1 = 11111011 = 0xFB"
+                },
+                {
+                    question: "What is the range of 16-bit signed integers?",
+                    options: ["0 to 65535", "-32768 to 32767", "-32767 to 32767", "-128 to 127"],
+                    correct: 1,
+                    explanation: "16-bit signed: -2^15 to 2^15-1 = -32768 to 32767"
+                }
+            ],
+            'ieee754': [
+                {
+                    question: "In IEEE 754 single precision, how many bits are used for the exponent?",
+                    options: ["8 bits", "11 bits", "23 bits", "32 bits"],
+                    correct: 0,
+                    explanation: "Single precision uses 1 bit sign, 8 bits exponent, 23 bits mantissa"
+                },
+                {
+                    question: "What is the bias value for IEEE 754 single precision?",
+                    options: ["127", "128", "1023", "255"],
+                    correct: 0,
+                    explanation: "Single precision uses bias of 127. Double precision uses 1023."
+                }
+            ],
+            'registers': [
+                {
+                    question: "Which register is typically used as a loop counter?",
+                    options: ["AX", "BX", "CX", "DX"],
+                    correct: 2,
+                    explanation: "CX is the Count register, used by LOOP instructions and string operations with REP"
+                },
+                {
+                    question: "What is the name of the register that points to the top of the stack?",
+                    options: ["BP", "SP", "IP", "SI"],
+                    correct: 1,
+                    explanation: "SP (Stack Pointer) always points to the top of the stack"
+                }
+            ],
+            'flags': [
+                {
+                    question: "Which flag is set when the result of an operation is zero?",
+                    options: ["CF (Carry)", "ZF (Zero)", "SF (Sign)", "OF (Overflow)"],
+                    correct: 1,
+                    explanation: "ZF (Zero Flag) is set when the result is zero. Used for equality comparisons."
+                },
+                {
+                    question: "What is the difference between CF and OF?",
+                    options: ["They are the same", "CF is for signed, OF for unsigned", "CF is for unsigned, OF for signed", "CF is for addition, OF for subtraction"],
+                    correct: 2,
+                    explanation: "CF (Carry Flag) indicates unsigned overflow. OF (Overflow Flag) indicates signed overflow."
+                }
+            ],
+            'addressing-modes': [
+                {
+                    question: "Which addressing mode uses MOV AX, [BX]?",
+                    options: ["Immediate", "Direct", "Register Indirect", "Based Indexed"],
+                    correct: 2,
+                    explanation: "[BX] uses the value in BX as a memory address pointer - this is Register Indirect addressing"
+                },
+                {
+                    question: "What addressing mode is used in MOV AX, 5?",
+                    options: ["Immediate", "Register", "Direct", "Indirect"],
+                    correct: 0,
+                    explanation: "The value 5 is used directly as the operand - this is Immediate addressing"
+                }
+            ],
+            'interrupts': [
+                {
+                    question: "What value should be in AH for INT 21h to read a character?",
+                    options: ["00h", "01h", "02h", "09h"],
+                    correct: 1,
+                    explanation: "AH=01h is the function to read a character with echo. AH=02h outputs a character."
+                },
+                {
+                    question: "What interrupt function displays a string?",
+                    options: ["01h", "02h", "09h", "4Ch"],
+                    correct: 2,
+                    explanation: "INT 21h with AH=09h displays a '$'-terminated string pointed to by DS:DX"
+                }
+            ],
+            'bitwise': [
+                {
+                    question: "What is the result of 0x0F AND 0x3A?",
+                    options: ["0x3F", "0x0A", "0x35", "0x00"],
+                    correct: 1,
+                    explanation: "0x0F = 00001111, 0x3A = 00111010. AND gives 00001010 = 0x0A"
+                },
+                {
+                    question: "Which operation is commonly used to convert a digit to ASCII?",
+                    options: ["AND with 30h", "OR with 30h", "XOR with 30h", "NOT"],
+                    correct: 1,
+                    explanation: "OR with 30h sets the high nibble to 0011, converting 0-9 to '0'-'9' (30h-39h)"
+                }
+            ]
+        };
+
+        function createInlineQuiz(topicId) {
+            const quizzes = inlineQuizData[topicId];
+            if (!quizzes || quizzes.length === 0) return '';
+            
+            const quiz = quizzes[Math.floor(Math.random() * quizzes.length)];
+            const quizId = 'quiz-' + Math.random().toString(36).substr(2, 9);
+            
+            let html = '<div class="inline-quiz" id="' + quizId + '">';
+            html += '<div class="inline-quiz-title">Check Your Understanding</div>';
+            html += '<div class="inline-quiz-question">' + quiz.question + '</div>';
+            html += '<div class="inline-quiz-options">';
+            
+            quiz.options.forEach((opt, idx) => {
+                html += '<button class="inline-quiz-option" onclick="checkInlineQuiz(\'' + quizId + '\', ' + idx + ', ' + quiz.correct + ', \'' + quiz.explanation.replace(/'/g, "\\'") + '\')">' + String.fromCharCode(65 + idx) + '. ' + opt + '</button>';
+            });
+            
+            html += '</div>';
+            html += '<div class="inline-quiz-feedback" id="' + quizId + '-feedback"></div>';
+            html += '</div>';
+            
+            return html;
+        }
+
+        function checkInlineQuiz(quizId, selected, correct, explanation) {
+            const options = document.querySelectorAll('#' + quizId + ' .inline-quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach((opt, idx) => {
+                opt.classList.add('disabled');
+                if (idx === correct) opt.classList.add('correct');
+                else if (idx === selected && idx !== correct) opt.classList.add('incorrect');
+            });
+            
+            const isCorrect = selected === correct;
+            feedback.className = 'inline-quiz-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedback.innerHTML = '<strong>' + (isCorrect ? 'Correct!' : 'Not quite.') + '</strong><br>' + explanation;
+        }
+
+        // --- INTERACTIVE FORMULA EXPLORERS ---
+        
+        function createTwosComplementExplorer() {
+            return '<div class="formula-explorer">' +
+                '<div class="formula-explorer-title">Interactive Two\'s Complement Converter</div>' +
+                '<div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">' +
+                '<div><label class="calc-label">Decimal Number:</label>' +
+                '<input type="number" class="calc-input" id="tc-input" placeholder="-42" style="width: 150px;" oninput="updateTwosComplementExplorer()"></div>' +
+                '<div><label class="calc-label">Bit Width:</label>' +
+                '<select class="calc-input" id="tc-bits" style="width: 100px;" onchange="updateTwosComplementExplorer()">' +
+                '<option value="8">8-bit</option><option value="16" selected>16-bit</option><option value="32">32-bit</option>' +
+                '</select></div></div>' +
+                '<div class="formula-visualizer" id="tc-visualizer">Enter a number to see the two\'s complement breakdown</div>' +
+                '<div class="step-visualizer" id="tc-steps"></div></div>';
+        }
+
+        function updateTwosComplementExplorer() {
+            const val = parseInt(document.getElementById('tc-input').value);
+            const bits = parseInt(document.getElementById('tc-bits').value);
+            
+            if (isNaN(val)) {
+                document.getElementById('tc-visualizer').innerHTML = 'Enter a number to see the two\'s complement breakdown';
+                document.getElementById('tc-steps').innerHTML = '';
+                return;
+            }
+            
+            const max = Math.pow(2, bits);
+            const mask = max - 1;
+            const unsigned = val & mask;
+            
+            let html = '<div style="text-align: center;">';
+            html += '<div style="font-size: 1.2rem; margin-bottom: 10px;">Decimal: <strong>' + val + '</strong></div>';
+            html += '<div style="font-size: 1.2rem; margin-bottom: 10px;">Hex: <strong>0x' + unsigned.toString(16).toUpperCase().padStart(bits/4, '0') + '</strong></div>';
+            html += '<div style="font-size: 1.1rem; font-family: monospace;">Binary: <strong style="color: var(--primary);">' + unsigned.toString(2).padStart(bits, '0') + '</strong></div>';
+            html += '</div>';
+            document.getElementById('tc-visualizer').innerHTML = html;
+            
+            let stepsHtml = '';
+            if (val < 0) {
+                const absVal = Math.abs(val);
+                const absBinary = absVal.toString(2).padStart(bits, '0');
+                const inverted = (max - 1 - absVal).toString(2).padStart(bits, '0');
+                const twosComp = unsigned.toString(2).padStart(bits, '0');
+                
+                stepsHtml += createStep(1, 'Take absolute value: |' + val + '| = ' + absVal, true);
+                stepsHtml += createStep(2, 'Convert to binary: ' + absBinary, true);
+                stepsHtml += createStep(3, 'Invert all bits (One\'s Complement):<br><span style="font-family: monospace; color: #e74c3c;">' + absBinary + ' → ' + inverted + '</span>', true);
+                stepsHtml += createStep(4, 'Add 1 (Two\'s Complement):<br><span style="font-family: monospace; color: #27ae60;">' + inverted + ' + 1 = ' + twosComp + '</span>', true);
+                stepsHtml += createStep(5, 'Formula check: 2^' + bits + ' + (' + val + ') = ' + max + ' - ' + absVal + ' = ' + unsigned, false);
+            } else {
+                stepsHtml += createStep(1, 'Positive number - direct binary representation', true);
+                stepsHtml += createStep(2, val + ' = ' + unsigned.toString(2).padStart(bits, '0'), false);
+            }
+            
+            document.getElementById('tc-steps').innerHTML = stepsHtml;
+        }
+
+        function createStep(num, content, active) {
+            return '<div class="step-item ' + (active ? 'active' : '') + '">' +
+                '<div class="step-number">' + num + '</div>' +
+                '<div class="step-content">' + content + '</div>' +
+                '</div>';
+        }
+
+        function createIEEE754Explorer() {
+            return '<div class="formula-explorer">' +
+                '<div class="formula-explorer-title">Visual IEEE 754 Bit Breakdown</div>' +
+                '<div style="margin-bottom: 15px;">' +
+                '<label class="calc-label">Decimal Number:</label>' +
+                '<input type="text" class="calc-input" id="ieee-explorer-input" placeholder="e.g., -6.625" style="width: 200px;" oninput="updateIEEE754Explorer()">' +
+                '</div>' +
+                '<div class="formula-visualizer">' +
+                '<div style="text-align: center; margin-bottom: 15px; font-weight: bold;">32-Bit Layout</div>' +
+                '<div class="bit-breakdown" id="ieee-bits">' +
+                '<div class="bit-group sign"><div class="bit-value">S</div><div class="bit-group-label">1 bit</div></div>' +
+                '<div class="bit-group exponent"><div class="bit-value">EEEEEEEE</div><div class="bit-group-label">8 bits</div></div>' +
+                '<div class="bit-group mantissa"><div class="bit-value">MMMMMMMMMMMMMMMMMMMMMMM</div><div class="bit-group-label">23 bits</div></div>' +
+                '</div>' +
+                '<div id="ieee-explainer" style="margin-top: 15px; text-align: center;">Enter a number to see the bit breakdown</div>' +
+                '</div>' +
+                '<div class="cheat-formula">' +
+                '<div class="cheat-formula-name">Formula</div>' +
+                '<div class="cheat-formula-math">Value = (-1)^S × 1.M × 2^(E-127)</div>' +
+                '</div></div>';
+        }
+
+        function updateIEEE754Explorer() {
+            const input = document.getElementById('ieee-explorer-input').value;
+            const val = parseFloat(input);
+            
+            if (isNaN(val)) {
+                document.getElementById('ieee-bits').innerHTML = 
+                    '<div class="bit-group sign"><div class="bit-value">S</div><div class="bit-group-label">1 bit</div></div>' +
+                    '<div class="bit-group exponent"><div class="bit-value">EEEEEEEE</div><div class="bit-group-label">8 bits</div></div>' +
+                    '<div class="bit-group mantissa"><div class="bit-value">MMMMMMMMMMMMMMMMMMMMMMM</div><div class="bit-group-label">23 bits</div></div>';
+                document.getElementById('ieee-explainer').textContent = 'Enter a number to see the bit breakdown';
+                return;
+            }
+            
+            const buffer = new ArrayBuffer(4);
+            const floatView = new Float32Array(buffer);
+            const intView = new Uint32Array(buffer);
+            floatView[0] = val;
+            const bits = intView[0];
+            
+            const sign = (bits >>> 31) & 0x1;
+            const exponent = (bits >>> 23) & 0xFF;
+            const mantissa = bits & 0x7FFFFF;
+            
+            const signBits = sign.toString();
+            const expBits = exponent.toString(2).padStart(8, '0');
+            const mantBits = mantissa.toString(2).padStart(23, '0');
+            
+            document.getElementById('ieee-bits').innerHTML = 
+                '<div class="bit-group sign"><div class="bit-value">' + signBits + '</div><div class="bit-group-label">Sign</div></div>' +
+                '<div class="bit-group exponent"><div class="bit-value">' + expBits + '</div><div class="bit-group-label">Exp: ' + exponent + ' (' + (exponent-127) + ')</div></div>' +
+                '<div class="bit-group mantissa"><div class="bit-value" style="font-size: 10px;">' + mantBits + '</div><div class="bit-group-label">Mantissa</div></div>';
+            
+            const actualExp = exponent === 0 ? -126 : exponent - 127;
+            const mantissaValue = exponent === 0 ? (mantissa / Math.pow(2, 23)) : (1 + mantissa / Math.pow(2, 23));
+            
+            document.getElementById('ieee-explainer').innerHTML = 
+                '<strong>Sign:</strong> ' + sign + ' (' + (sign ? 'Negative' : 'Positive') + ') | ' +
+                '<strong>Exponent:</strong> ' + exponent + ' - 127 = ' + actualExp + ' | ' +
+                '<strong>Mantissa:</strong> ' + mantissaValue.toFixed(6) + '<br>' +
+                '<strong>Hex:</strong> 0x' + bits.toString(16).toUpperCase().padStart(8, '0');
+        }
+
+        function createBaseConversionVisualizer() {
+            return '<div class="formula-explorer">' +
+                '<div class="formula-explorer-title">Step-by-Step Base Converter</div>' +
+                '<div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">' +
+                '<div><label class="calc-label">Input Number:</label>' +
+                '<input type="text" class="calc-input" id="bc-input" placeholder="219" style="width: 150px;" oninput="updateBaseConversionVisualizer()"></div>' +
+                '<div><label class="calc-label">From Base:</label>' +
+                '<select class="calc-input" id="bc-from" style="width: 100px;" onchange="updateBaseConversionVisualizer()">' +
+                '<option value="10" selected>Decimal</option><option value="2">Binary</option><option value="16">Hex</option>' +
+                '</select></div>' +
+                '<div><label class="calc-label">To Base:</label>' +
+                '<select class="calc-input" id="bc-to" style="width: 100px;" onchange="updateBaseConversionVisualizer()">' +
+                '<option value="2" selected>Binary</option><option value="10">Decimal</option><option value="16">Hex</option>' +
+                '</select></div></div>' +
+                '<div class="step-visualizer" id="bc-steps">Enter a number to see step-by-step conversion</div></div>';
+        }
+
+        function updateBaseConversionVisualizer() {
+            const input = document.getElementById('bc-input').value.trim();
+            const fromBase = parseInt(document.getElementById('bc-from').value);
+            const toBase = parseInt(document.getElementById('bc-to').value);
+            
+            if (!input) {
+                document.getElementById('bc-steps').innerHTML = 'Enter a number to see step-by-step conversion';
+                return;
+            }
+            
+            let dec;
+            try {
+                dec = parseInt(input, fromBase);
+            } catch(e) {
+                document.getElementById('bc-steps').innerHTML = 'Invalid input for selected base';
+                return;
+            }
+            
+            if (isNaN(dec)) {
+                document.getElementById('bc-steps').innerHTML = 'Invalid input';
+                return;
+            }
+            
+            let html = '';
+            
+            if (fromBase === 10 && toBase === 2) {
+                html += createStep(1, 'Converting ' + dec + ' from decimal to binary', true);
+                let n = dec, steps = [];
+                while (n > 0) {
+                    steps.push(n + ' / 2 = ' + Math.floor(n/2) + ' remainder ' + n%2);
+                    n = Math.floor(n/2);
+                }
+                html += createStep(2, 'Repeated division by 2:<br><span style="font-family: monospace; font-size: 12px;">' + steps.join('<br>') + '</span>', true);
+                html += createStep(3, 'Read remainders <strong>bottom to top</strong>: ' + dec.toString(2), false);
+            } else if (fromBase === 10 && toBase === 16) {
+                html += createStep(1, 'Converting ' + dec + ' from decimal to hex', true);
+                let n = dec, steps = [];
+                while (n > 0) {
+                    const rem = n % 16;
+                    steps.push(n + ' / 16 = ' + Math.floor(n/16) + ' remainder ' + rem.toString(16).toUpperCase());
+                    n = Math.floor(n/16);
+                }
+                html += createStep(2, 'Repeated division by 16:<br><span style="font-family: monospace; font-size: 12px;">' + steps.join('<br>') + '</span>', true);
+                html += createStep(3, 'Read remainders <strong>bottom to top</strong>: 0x' + dec.toString(16).toUpperCase(), false);
+            } else if (fromBase === 2 && toBase === 16) {
+                const bin = dec.toString(2);
+                const groups = bin.match(/.{1,4}/g) || [bin];
+                html += createStep(1, 'Converting ' + input + ' from binary to hex', true);
+                html += createStep(2, 'Group binary into sets of 4 (from right): ' + groups.join(' '), true);
+                html += createStep(3, 'Each group = 1 hex digit: 0x' + dec.toString(16).toUpperCase(), false);
+            } else {
+                html += createStep(1, 'Converting from base ' + fromBase + ' to base ' + toBase, true);
+                html += createStep(2, 'First convert to decimal: ' + dec, true);
+                html += createStep(3, 'Then to base ' + toBase + ': ' + dec.toString(toBase).toUpperCase(), false);
+            }
+            
+            document.getElementById('bc-steps').innerHTML = html;
+        }
+
+        // --- PRACTICE PROBLEM GENERATORS ---
+        
+        const practiceState = {};
+
+        function createPracticeGenerator(type) {
+            const id = 'pg-' + Math.random().toString(36).substr(2, 9);
+            
+            if (type === 'converter') {
+                setTimeout(() => initConverterPractice(id), 100);
+                return '<div class="practice-generator">' +
+                    '<div class="practice-generator-title">Random Number Converter Practice</div>' +
+                    '<div id="' + id + '-problem" class="practice-problem">' +
+                    '<div class="practice-problem-text">Convert decimal <strong id="' + id + '-num">42</strong> to hexadecimal</div>' +
+                    '<input type="text" class="practice-input" id="' + id + '-answer" placeholder="0x..." onkeypress="if(event.key===\'Enter\')checkConverterPractice(\'' + id + '\')">' +
+                    '</div>' +
+                    '<div style="text-align: center;">' +
+                    '<button class="btn btn-primary" onclick="checkConverterPractice(\'' + id + '\')">Check Answer</button>' +
+                    '<button class="btn btn-secondary" onclick="nextConverterPractice(\'' + id + '\')">New Problem</button>' +
+                    '</div>' +
+                    '<div class="practice-feedback" id="' + id + '-feedback"></div></div>';
+            } else if (type === 'ieee') {
+                setTimeout(() => initIEEEPractice(id), 100);
+                return '<div class="practice-generator">' +
+                    '<div class="practice-generator-title">IEEE 754 Encoding Practice</div>' +
+                    '<div id="' + id + '-problem" class="practice-problem">' +
+                    '<div class="practice-problem-text">Encode <strong id="' + id + '-num">3.14159</strong> in IEEE 754 (hex)</div>' +
+                    '<input type="text" class="practice-input" id="' + id + '-answer" placeholder="0x..." onkeypress="if(event.key===\'Enter\')checkIEEEPractice(\'' + id + '\')">' +
+                    '</div>' +
+                    '<div style="text-align: center;">' +
+                    '<button class="btn btn-primary" onclick="checkIEEEPractice(\'' + id + '\')">Check Answer</button>' +
+                    '<button class="btn btn-secondary" onclick="nextIEEEPractice(\'' + id + '\')">New Problem</button>' +
+                    '</div>' +
+                    '<div class="practice-feedback" id="' + id + '-feedback"></div></div>';
+            } else if (type === 'addressing') {
+                setTimeout(() => initAddressingPractice(id), 100);
+                return '<div class="practice-generator">' +
+                    '<div class="practice-generator-title">Addressing Mode Identification</div>' +
+                    '<div id="' + id + '-problem" class="practice-problem">' +
+                    '<div class="practice-problem-text" style="font-family: monospace;" id="' + id + '-instruction">MOV AX, [BX + SI + 4]</div>' +
+                    '<div style="margin: 15px 0;">' +
+                    '<select class="calc-input" id="' + id + '-answer" style="width: 250px;">' +
+                    '<option value="">Select addressing mode...</option>' +
+                    '<option value="immediate">Immediate</option>' +
+                    '<option value="register">Register</option>' +
+                    '<option value="direct">Direct</option>' +
+                    '<option value="register-indirect">Register Indirect</option>' +
+                    '<option value="based">Based</option>' +
+                    '<option value="indexed">Indexed</option>' +
+                    '<option value="based-indexed">Based Indexed</option>' +
+                    '<option value="based-indexed-disp">Based Indexed with Displacement</option>' +
+                    '</select></div></div>' +
+                    '<div style="text-align: center;">' +
+                    '<button class="btn btn-primary" onclick="checkAddressingPractice(\'' + id + '\')">Check Answer</button>' +
+                    '<button class="btn btn-secondary" onclick="nextAddressingPractice(\'' + id + '\')">New Problem</button>' +
+                    '</div>' +
+                    '<div class="practice-feedback" id="' + id + '-feedback"></div></div>';
+            }
+            return '';
+        }
+
+        function initConverterPractice(id) {
+            const modes = [
+                { from: 'dec', to: 'hex', label: 'to hexadecimal', fn: n => '0x' + n.toString(16).toUpperCase() },
+                { from: 'dec', to: 'bin', label: 'to binary', fn: n => n.toString(2) },
+                { from: 'hex', to: 'dec', label: 'to decimal', fn: n => n.toString() },
+                { from: 'bin', to: 'dec', label: 'to decimal', fn: n => n.toString() }
+            ];
+            const mode = modes[Math.floor(Math.random() * modes.length)];
+            let num;
+            if (mode.from === 'dec') num = Math.floor(Math.random() * 256);
+            else if (mode.from === 'hex') num = Math.floor(Math.random() * 256);
+            else num = Math.floor(Math.random() * 64);
+            
+            practiceState[id] = { num, mode, answer: mode.fn(num) };
+            
+            const displayNum = mode.from === 'hex' ? '0x' + num.toString(16).toUpperCase() : 
+                              mode.from === 'bin' ? num.toString(2) : num;
+            
+            const numEl = document.getElementById(id + '-num');
+            if (numEl) {
+                numEl.textContent = displayNum;
+                document.getElementById(id + '-problem').querySelector('.practice-problem-text').innerHTML = 
+                    'Convert <strong>' + displayNum + '</strong> ' + mode.label;
+            }
+        }
+
+        function checkConverterPractice(id) {
+            if (!practiceState[id]) initConverterPractice(id);
+            
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (!inputEl || !feedbackEl) return;
+            
+            const input = inputEl.value.trim().toUpperCase();
+            const correct = practiceState[id].answer.toUpperCase();
+            
+            const isCorrect = input === correct || input === correct.replace('0X', '');
+            
+            feedbackEl.className = 'practice-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackEl.innerHTML = isCorrect ? 
+                'Correct!' : 
+                'Not quite. The answer is ' + practiceState[id].answer;
+        }
+
+        function nextConverterPractice(id) {
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (inputEl) inputEl.value = '';
+            if (feedbackEl) feedbackEl.className = 'practice-feedback';
+            initConverterPractice(id);
+        }
+
+        function initIEEEPractice(id) {
+            const nums = [1.0, 2.0, 4.0, 0.5, 3.14159, -1.0, 0.1, 100.0, -0.5, 6.625];
+            const num = nums[Math.floor(Math.random() * nums.length)];
+            
+            const buffer = new ArrayBuffer(4);
+            const floatView = new Float32Array(buffer);
+            const intView = new Uint32Array(buffer);
+            floatView[0] = num;
+            
+            practiceState[id] = { num, answer: '0x' + intView[0].toString(16).toUpperCase().padStart(8, '0') };
+            
+            const numEl = document.getElementById(id + '-num');
+            if (numEl) numEl.textContent = num;
+        }
+
+        function checkIEEEPractice(id) {
+            if (!practiceState[id]) initIEEEPractice(id);
+            
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (!inputEl || !feedbackEl) return;
+            
+            const input = inputEl.value.trim().toUpperCase();
+            const correct = practiceState[id].answer.toUpperCase();
+            
+            const isCorrect = input === correct || input === correct.replace('0X', '');
+            
+            feedbackEl.className = 'practice-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackEl.innerHTML = isCorrect ? 
+                'Correct!' : 
+                'Not quite. The answer is ' + practiceState[id].answer;
+        }
+
+        function nextIEEEPractice(id) {
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (inputEl) inputEl.value = '';
+            if (feedbackEl) feedbackEl.className = 'practice-feedback';
+            initIEEEPractice(id);
+        }
+
+        function initAddressingPractice(id) {
+            const problems = [
+                { instr: 'MOV AX, 5', mode: 'immediate', desc: 'The value 5 is used directly' },
+                { instr: 'MOV AX, BX', mode: 'register', desc: 'Data is in register BX' },
+                { instr: 'MOV AX, [1000h]', mode: 'direct', desc: 'Direct memory address' },
+                { instr: 'MOV AX, [BX]', mode: 'register-indirect', desc: 'BX contains the address' },
+                { instr: 'MOV AX, [BX + 4]', mode: 'based', desc: 'Base register + displacement' },
+                { instr: 'MOV AX, [SI + 8]', mode: 'indexed', desc: 'Index register + displacement' },
+                { instr: 'MOV AX, [BX + SI]', mode: 'based-indexed', desc: 'Base + Index registers' },
+                { instr: 'MOV AX, [BX + SI + 4]', mode: 'based-indexed-disp', desc: 'Base + Index + displacement' }
+            ];
+            const problem = problems[Math.floor(Math.random() * problems.length)];
+            practiceState[id] = problem;
+            
+            const instrEl = document.getElementById(id + '-instruction');
+            if (instrEl) instrEl.textContent = problem.instr;
+        }
+
+        function checkAddressingPractice(id) {
+            if (!practiceState[id]) initAddressingPractice(id);
+            
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (!inputEl || !feedbackEl) return;
+            
+            const input = inputEl.value;
+            const correct = practiceState[id].mode;
+            
+            const isCorrect = input === correct;
+            
+            feedbackEl.className = 'practice-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackEl.innerHTML = isCorrect ? 
+                'Correct!' : 
+                'Not quite. This is <strong>' + practiceState[id].mode.replace(/-/g, ' ') + '</strong> addressing.<br>' + practiceState[id].desc;
+        }
+
+        function nextAddressingPractice(id) {
+            const inputEl = document.getElementById(id + '-answer');
+            const feedbackEl = document.getElementById(id + '-feedback');
+            if (inputEl) inputEl.value = '';
+            if (feedbackEl) feedbackEl.className = 'practice-feedback';
+            initAddressingPractice(id);
+        }
+
+        // --- QUICK REFERENCE CARDS ---
+        
+        function createQuickReferenceCard(type) {
+            if (type === 'registers') {
+                return '<div class="quick-ref-card" onclick="toggleQuickRef(this)">' +
+                    '<div class="quick-ref-header"><span class="quick-ref-title">Register Quick Reference</span><span class="quick-ref-toggle">Click to expand</span></div>' +
+                    '<div class="quick-ref-content"><div class="ref-grid">' +
+                    '<div class="ref-item"><div class="ref-item-name">AX (Accumulator)</div><div class="ref-item-desc">Arithmetic, I/O, returns. Parts: AH, AL</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">BX (Base)</div><div class="ref-item-desc">Memory addressing, pointers. Parts: BH, BL</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">CX (Count)</div><div class="ref-item-desc">Loop counter, string ops. Parts: CH, CL</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">DX (Data)</div><div class="ref-item-desc">I/O, MUL/DIV high bits. Parts: DH, DL</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">SI / DI</div><div class="ref-item-desc">Source/Destination Index for strings</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">SP / BP</div><div class="ref-item-desc">Stack Pointer / Base Pointer</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">CS / DS / SS / ES</div><div class="ref-item-desc">Code, Data, Stack, Extra Segments</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">IP</div><div class="ref-item-desc">Instruction Pointer (next instruction)</div></div>' +
+                    '</div></div></div>';
+            } else if (type === 'flags') {
+                return '<div class="quick-ref-card" onclick="toggleQuickRef(this)">' +
+                    '<div class="quick-ref-header"><span class="quick-ref-title">Flags Quick Reference</span><span class="quick-ref-toggle">Click to expand</span></div>' +
+                    '<div class="quick-ref-content"><div class="ref-grid">' +
+                    '<div class="ref-item"><div class="ref-item-name">CF (Carry Flag)</div><div class="ref-item-desc">Unsigned overflow. 255 + 1 = 0, CF=1</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">ZF (Zero Flag)</div><div class="ref-item-desc">Result is zero. Used for equality</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">SF (Sign Flag)</div><div class="ref-item-desc">Result is negative (MSB = 1)</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">OF (Overflow Flag)</div><div class="ref-item-desc">Signed overflow. 127 + 1 = -128</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">PF (Parity Flag)</div><div class="ref-item-desc">Even number of 1s in low byte</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AF (Auxiliary)</div><div class="ref-item-desc">Carry/borrow from bit 3 (BCD)</div></div>' +
+                    '</div>' +
+                    '<div style="margin-top: 15px; padding: 10px; background: rgba(231, 76, 60, 0.1); border-radius: 6px;">' +
+                    '<strong>Key Distinction:</strong> CF = UNSIGNED overflow, OF = SIGNED overflow</div></div></div>';
+            } else if (type === 'instructions') {
+                return '<div class="quick-ref-card" onclick="toggleQuickRef(this)">' +
+                    '<div class="quick-ref-header"><span class="quick-ref-title">Common Instructions</span><span class="quick-ref-toggle">Click to expand</span></div>' +
+                    '<div class="quick-ref-content"><div class="ref-grid">' +
+                    '<div class="ref-item"><div class="ref-item-name">MOV dest, src</div><div class="ref-item-desc">Copy data. Does NOT affect flags!</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">ADD / SUB</div><div class="ref-item-desc">Add/Subtract. Affects all flags</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">INC / DEC</div><div class="ref-item-desc">Increment/Decrement. Does NOT affect CF!</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">CMP a, b</div><div class="ref-item-desc">Compare (subtract, no store). Sets flags</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AND / OR / XOR</div><div class="ref-item-desc">Bitwise ops. CF=0, OF=0 after</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">SHL / SHR / SAR</div><div class="ref-item-desc">Shift ops. CF gets shifted bit</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">PUSH / POP</div><div class="ref-item-desc">Stack operations. SP changes by 2</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">CALL / RET</div><div class="ref-item-desc">Call/return from procedure</div></div>' +
+                    '</div></div></div>';
+            } else if (type === 'int21h') {
+                return '<div class="quick-ref-card" onclick="toggleQuickRef(this)">' +
+                    '<div class="quick-ref-header"><span class="quick-ref-title">INT 21h Functions</span><span class="quick-ref-toggle">Click to expand</span></div>' +
+                    '<div class="quick-ref-content"><div class="ref-grid">' +
+                    '<div class="ref-item"><div class="ref-item-name">AH = 01h - Read Char</div><div class="ref-item-desc">Waits for key, echoes. Returns in AL</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AH = 02h - Write Char</div><div class="ref-item-desc">DL = character to display</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AH = 09h - Display String</div><div class="ref-item-desc">DS:DX = address of $-terminated string</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AH = 0Ah - Buffered Input</div><div class="ref-item-desc">DS:DX = input buffer structure</div></div>' +
+                    '<div class="ref-item"><div class="ref-item-name">AH = 4Ch - Exit</div><div class="ref-item-desc">AL = return code (0 = success)</div></div>' +
+                    '</div></div></div>';
+            }
+            return '';
+        }
+
+        function toggleQuickRef(card) {
+            card.classList.toggle('expanded');
+            const content = card.querySelector('.quick-ref-content');
+            const toggle = card.querySelector('.quick-ref-toggle');
+            content.classList.toggle('show');
+            toggle.textContent = content.classList.contains('show') ? 'Click to collapse' : 'Click to expand';
+        }
+
+        // --- EXAM PREP SECTION ---
+        
+        function createExamPrepSection() {
+            return '<div class="card" style="margin-top: 30px;">' +
+                '<div class="card-header"><h2>Exam Prep Center</h2></div>' +
+                '<div class="cheat-sheet">' +
+                '<div class="cheat-sheet-title">Formula Cheat Sheet</div>' +
+                '<div class="cheat-formula"><div class="cheat-formula-name">Two\'s Complement (Negative Numbers)</div>' +
+                '<div class="cheat-formula-math">Representation = 2^n + N (where N < 0)</div>' +
+                '<div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Range: -2^(n-1) to 2^(n-1) - 1</div></div>' +
+                '<div class="cheat-formula"><div class="cheat-formula-name">Physical Address (Real Mode)</div>' +
+                '<div class="cheat-formula-math">Physical = Segment * 16 + Offset</div>' +
+                '<div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Also: (Segment << 4) + Offset</div></div>' +
+                '<div class="cheat-formula"><div class="cheat-formula-name">IEEE 754 Single Precision</div>' +
+                '<div class="cheat-formula-math">Value = (-1)^S * 1.M * 2^(E-127)</div>' +
+                '<div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Bias = 127, 1 bit sign + 8 bits exponent + 23 bits mantissa</div></div>' +
+                '<div class="cheat-formula"><div class="cheat-formula-name">ASCII Conversion</div>' +
+                '<div class="cheat-formula-math">Digit to ASCII: + 30h | ASCII to Digit: - 30h</div>' +
+                '<div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">\'0\' = 30h, \'A\' = 41h, \'a\' = 61h</div></div>' +
+                '<div class="cheat-formula"><div class="cheat-formula-name">Shift Operations</div>' +
+                '<div class="cheat-formula-math">SHL n = * 2^n | SHR n = / 2^n (unsigned)</div>' +
+                '<div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Use SAR for signed division (preserves sign)</div></div>' +
+                '</div>' +
+                '<div style="background: var(--bg); padding: 20px; border-radius: 12px; margin-top: 20px;">' +
+                '<h3 style="color: var(--primary); text-align: center;">Timed Practice Mode</h3>' +
+                '<div class="timer-display"><div class="timer-value" id="exam-timer">60</div><div class="timer-label">seconds</div></div>' +
+                '<div id="timed-question" style="text-align: center; font-size: 1.2rem; margin-bottom: 20px;">Click Start to begin timed practice</div>' +
+                '<div class="answers-grid" id="timed-answers" style="max-width: 500px; margin: 0 auto;"></div>' +
+                '<div id="timed-feedback" style="text-align: center; margin-top: 15px; min-height: 30px;"></div>' +
+                '<div style="text-align: center; margin-top: 20px;">' +
+                '<button class="btn btn-primary" id="start-timed-btn" onclick="startTimedPractice()">Start Timed Practice</button>' +
+                '<button class="btn btn-secondary" id="stop-timed-btn" onclick="stopTimedPractice()" style="display: none;">Stop</button>' +
+                '</div>' +
+                '<div style="text-align: center; margin-top: 15px; color: var(--text-muted);">' +
+                'Score: <span id="timed-score">0</span> | Streak: <span id="timed-streak">0</span>' +
+                '</div></div>' +
+                '<div style="margin-top: 30px;">' +
+                '<h3 style="color: var(--accent); margin-bottom: 15px;">Common Exam Questions with Solutions</h3>' +
+                createCommonExamQuestions() +
+                '</div></div>';
+        }
+
+        function createCommonExamQuestions() {
+            const questions = [
+                {
+                    q: "Convert -73 to 8-bit two's complement",
+                    solution: "Step 1: |73| = 73 = 01001001<br>Step 2: Invert = 10110110<br>Step 3: Add 1 = 10110111 = 0xB7",
+                    answer: "0xB7"
+                },
+                {
+                    q: "Calculate physical address for Segment=0x1234, Offset=0x5678",
+                    solution: "Physical = 0x1234 * 16 + 0x5678<br>= 0x12340 + 0x5678<br>= 0x179B8",
+                    answer: "0x179B8"
+                },
+                {
+                    q: "What is the value of FLAGS after MOV AL, 0 followed by ADD AL, 0?",
+                    solution: "MOV doesn't affect flags. ADD AL, 0 results in 0, so:<br>ZF=1 (zero result), SF=0 (not negative),<br>CF=0 (no carry), PF=1 (even parity)",
+                    answer: "ZF=1, SF=0, CF=0, PF=1"
+                },
+                {
+                    q: "How is 0x1234 stored in little-endian memory at 0x100?",
+                    solution: "Little-endian: low byte first<br>0x100: 0x34<br>0x101: 0x12",
+                    answer: "[0x100]=0x34, [0x101]=0x12"
+                },
+                {
+                    q: "Convert decimal 5.75 to IEEE 754 single precision",
+                    solution: "5.75 = 101.11 = 1.0111 * 2^2<br>Sign=0, Exp=2+127=129=10000001,<br>Mantissa=0111000...<br>Result: 0x40B80000",
+                    answer: "0x40B80000"
+                }
+            ];
+            
+            return questions.map((q, i) => 
+                '<div class="quick-ref-card" onclick="toggleQuickRef(this)">' +
+                '<div class="quick-ref-header"><span class="quick-ref-title">Q' + (i+1) + ': ' + q.q + '</span><span class="quick-ref-toggle">View Solution</span></div>' +
+                '<div class="quick-ref-content"><div style="background: rgba(74, 144, 217, 0.1); padding: 15px; border-radius: 8px;">' +
+                '<strong>Solution:</strong><br>' + q.solution +
+                '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">' +
+                '<strong>Answer:</strong> <span style="color: var(--success);">' + q.answer + '</span></div></div></div></div>'
+            ).join('');
+        }
+
+        // Timed Practice State
+        let timedPracticeState = {
+            active: false,
+            timer: null,
+            timeLeft: 60,
+            score: 0,
+            streak: 0,
+            currentQuestion: null
+        };
+
+        function startTimedPractice() {
+            timedPracticeState.active = true;
+            timedPracticeState.timeLeft = 60;
+            timedPracticeState.score = 0;
+            timedPracticeState.streak = 0;
+            
+            document.getElementById('start-timed-btn').style.display = 'none';
+            document.getElementById('stop-timed-btn').style.display = 'inline-block';
+            
+            nextTimedQuestion();
+            
+            timedPracticeState.timer = setInterval(() => {
+                timedPracticeState.timeLeft--;
+                document.getElementById('exam-timer').textContent = timedPracticeState.timeLeft;
+                
+                if (timedPracticeState.timeLeft <= 10) {
+                    document.getElementById('exam-timer').style.color = 'var(--danger)';
+                }
+                
+                if (timedPracticeState.timeLeft <= 0) {
+                    stopTimedPractice();
+                    alert('Time is up! Final score: ' + timedPracticeState.score);
+                }
+            }, 1000);
+        }
+
+        function stopTimedPractice() {
+            timedPracticeState.active = false;
+            clearInterval(timedPracticeState.timer);
+            document.getElementById('start-timed-btn').style.display = 'inline-block';
+            document.getElementById('stop-timed-btn').style.display = 'none';
+            document.getElementById('exam-timer').textContent = '60';
+            document.getElementById('exam-timer').style.color = 'var(--danger)';
+        }
+
+        function nextTimedQuestion() {
+            const types = ['hex', 'binary', 'flags', 'register'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let question, options, correct;
+            
+            if (type === 'hex') {
+                const dec = Math.floor(Math.random() * 256);
+                question = 'Convert decimal ' + dec + ' to hex:';
+                correct = '0x' + dec.toString(16).toUpperCase();
+                options = generateHexOptions(dec);
+            } else if (type === 'binary') {
+                const dec = Math.floor(Math.random() * 32);
+                question = 'Convert decimal ' + dec + ' to binary:';
+                correct = dec.toString(2);
+                options = generateBinaryOptions(dec);
+            } else if (type === 'flags') {
+                const flagQuestions = [
+                    { q: 'Which flag indicates zero result?', a: 'ZF', opts: ['CF', 'ZF', 'SF', 'OF'] },
+                    { q: 'Which flag indicates unsigned overflow?', a: 'CF', opts: ['CF', 'ZF', 'SF', 'OF'] },
+                    { q: 'Which flag indicates signed overflow?', a: 'OF', opts: ['CF', 'ZF', 'SF', 'OF'] }
+                ];
+                const fq = flagQuestions[Math.floor(Math.random() * flagQuestions.length)];
+                question = fq.q;
+                correct = fq.a;
+                options = fq.opts;
+            } else {
+                const regQuestions = [
+                    { q: 'Which register is used for loop counting?', a: 'CX', opts: ['AX', 'BX', 'CX', 'DX'] },
+                    { q: 'Which register points to stack top?', a: 'SP', opts: ['BP', 'SP', 'IP', 'SI'] },
+                    { q: 'Which is the accumulator register?', a: 'AX', opts: ['AX', 'BX', 'CX', 'DX'] }
+                ];
+                const rq = regQuestions[Math.floor(Math.random() * regQuestions.length)];
+                question = rq.q;
+                correct = rq.a;
+                options = rq.opts;
+            }
+            
+            timedPracticeState.currentQuestion = { question, options, correct };
+            
+            document.getElementById('timed-question').textContent = question;
+            document.getElementById('timed-answers').innerHTML = options.map((opt) => 
+                '<button class="answer-btn" onclick="checkTimedAnswer(\'' + opt + '\', \'' + correct + '\')">' + opt + '</button>'
+            ).join('');
+            document.getElementById('timed-feedback').innerHTML = '';
+        }
+
+        function generateHexOptions(dec) {
+            const correct = '0x' + dec.toString(16).toUpperCase();
+            const options = [correct];
+            while (options.length < 4) {
+                const wrong = '0x' + Math.floor(Math.random() * 256).toString(16).toUpperCase();
+                if (!options.includes(wrong)) options.push(wrong);
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function generateBinaryOptions(dec) {
+            const correct = dec.toString(2);
+            const options = [correct];
+            while (options.length < 4) {
+                const wrong = Math.floor(Math.random() * 32).toString(2);
+                if (!options.includes(wrong)) options.push(wrong);
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function checkTimedAnswer(selected, correct) {
+            const feedback = document.getElementById('timed-feedback');
+            
+            if (selected === correct) {
+                timedPracticeState.score += 10 + (timedPracticeState.streak > 2 ? 5 : 0);
+                timedPracticeState.streak++;
+                feedback.innerHTML = '<span style="color: var(--success);">Correct! +' + (10 + (timedPracticeState.streak > 2 ? 5 : 0)) + ' points</span>';
+            } else {
+                timedPracticeState.streak = 0;
+                feedback.innerHTML = '<span style="color: var(--danger);">Wrong! Answer: ' + correct + '</span>';
+            }
+            
+            document.getElementById('timed-score').textContent = timedPracticeState.score;
+            document.getElementById('timed-streak').textContent = timedPracticeState.streak;
+            
+            setTimeout(nextTimedQuestion, 1500);
+        }
+
+        // Override renderSection to include inline quizzes
+        const originalRenderSection = renderSection;
+        renderSection = function(section) {
+            let html = originalRenderSection(section);
+            
+            const quizTopics = {
+                'number-systems': 'number-systems',
+                'twos-complement': 'twos-complement',
+                'ieee754': 'ieee754',
+                'registers': 'registers',
+                'flags': 'flags',
+                'addressing-modes': 'addressing-modes',
+                'interrupts': 'interrupts',
+                'bitwise-operations': 'bitwise'
+            };
+            
+            if (section.id && quizTopics[section.id]) {
+                html = html.replace('</div>', createInlineQuiz(quizTopics[section.id]) + '</div>');
+            }
+            
+            return html;
+        };
+        
+        // Override renderLecture to add interactive explorers and reference cards
+        const originalRenderLecture = renderLecture;
+        renderLecture = function(index) {
+            originalRenderLecture(index);
+            
+            const lecture = lecturesData[index];
+            if (!lecture) return;
+            
+            let extraContent = '';
+            
+            if (index === 1) {
+                extraContent += createTwosComplementExplorer();
+                extraContent += createBaseConversionVisualizer();
+                extraContent += createPracticeGenerator('converter');
+            } else if (index === 2) {
+                extraContent += createIEEE754Explorer();
+                extraContent += createPracticeGenerator('ieee');
+            } else if (index === 3) {
+                extraContent += createQuickReferenceCard('registers');
+                extraContent += createQuickReferenceCard('flags');
+                extraContent += createQuickReferenceCard('instructions');
+            } else if (index === 4) {
+                extraContent += createPracticeGenerator('addressing');
+                extraContent += createQuickReferenceCard('int21h');
+            }
+            
+            extraContent += createExamPrepSection();
+            
+            if (extraContent) {
+                const contentDiv = document.getElementById('lecture-content');
+                if (contentDiv) contentDiv.innerHTML += extraContent;
+            }
+        };
+
+        // Re-render current lecture
+        renderLecture(currentLecture);
 
     </script>
 </body>

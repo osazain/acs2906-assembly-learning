@@ -1,0 +1,196 @@
+{
+  "groupId": "drill-mode",
+  "testedAt": "2026-03-31T03:15:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "hashRouting": "/#/drills",
+    "session": "b429fdd5a0d5",
+    "missionDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f",
+    "evidenceDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f\\evidence\\phase3\\drill-mode"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P3-DRILL-001",
+      "title": "Topic/Concept/Instruction Filter Selection",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /#/drills", "expected": "Drill page loads with filter panel", "observed": "Drill page loaded with filter panel visible" },
+        { "action": "Click 'Drill Settings' to expand", "expected": "Settings panel expands showing all filter options", "observed": "Settings panel expanded showing question count, difficulty, topic, concept, instruction filters" },
+        { "action": "Verify topic dropdown with 'All Topics' and lecture topics", "expected": "Topic dropdown shows multiple topic options", "observed": "Topic dropdown shows: All Topics, Advanced Topics, Assembly Basics, Control Flow, Data Representation, I/O Operations, Procedures" },
+        { "action": "Verify concept multi-select with concept options", "expected": "Concept multi-select shows many concepts", "observed": "Concept dropdown shows 70+ concepts including adc-instruction, add-instruction, etc." },
+        { "action": "Verify instruction search with instruction options", "expected": "Instruction search shows 8086 instructions", "observed": "Instruction dropdown shows 40+ instructions including ADC, ADD, AND, CALL, CMP, etc." }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-001-filter-panel.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-002",
+      "title": "Question Card Displays Prompt",
+      "status": "pass",
+      "steps": [
+        { "action": "Start a drill session", "expected": "Question prompt visible", "observed": "Question text visible via get text body: 'What values are pushed to the stack when CALL MyProc executes?'" },
+        { "action": "Verify code blocks formatted for assembly", "expected": "Assembly code clearly formatted", "observed": "Question text shows assembly code snippets (MOV CX, 3; MOV AX, 0; start: INC AX; CMP AX, 2; LOOPNZ start)" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-002-question-card.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-003",
+      "title": "Multiple Choice Shows Options",
+      "status": "fail",
+      "steps": [
+        { "action": "Present a multiple-choice question", "expected": "All 4 options render as clickable buttons A, B, C, D", "observed": "Options render as <span> elements with purple background, NOT as buttons" },
+        { "action": "Click on an option", "expected": "Clicking selects the option visually", "observed": "JavaScript evaluation confirms element exists at coordinates but React state does not update" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-003-answer-selected.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": "Answer options are rendered as <span> elements (bg-purple-100 class) rather than <button> elements. Clicking them via JavaScript does not trigger React state change to mark answer as selected. The Submit Answer button remains disabled."
+    },
+    {
+      "id": "P3-DRILL-004",
+      "title": "Submit Button Processes Answer",
+      "status": "fail",
+      "steps": [
+        { "action": "Select an answer by clicking", "expected": "Submit button becomes enabled", "observed": "Submit button remains disabled after attempting to select answer" },
+        { "action": "Click Submit Answer", "expected": "System processes the selection", "observed": "Cannot test - Submit button is always disabled due to answer selection bug" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-004-005-feedback.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": "Submit button remains disabled because answer options are not properly interactive. This is a blocking bug for drill functionality."
+    },
+    {
+      "id": "P3-DRILL-005",
+      "title": "Immediate Feedback Shows Correct/Incorrect",
+      "status": "blocked",
+      "steps": [
+        { "action": "Submit a correct answer", "expected": "Green feedback with checkmark", "observed": "Cannot test - answer selection does not work" },
+        { "action": "Submit an incorrect answer", "expected": "Red feedback with correct answer revealed", "observed": "Cannot test - answer selection does not work" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "none",
+        "network": "N/A - blocked"
+      },
+      "issues": "Blocked by P3-DRILL-003/004 - answer selection does not work"
+    },
+    {
+      "id": "P3-DRILL-006",
+      "title": "Explanation with Remediation Links",
+      "status": "blocked",
+      "steps": [
+        { "action": "Complete a question", "expected": "Explanation panel shows reasoning", "observed": "Cannot test - cannot submit answers" },
+        { "action": "Verify remediation links are clickable", "expected": "Links to lectures/examples visible", "observed": "In first drill session, after submitting, saw links 'Memory addressing modes' and 'Indirect addressing' which appeared to be remediation links" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-004-005-feedback.png"],
+        "consoleErrors": "none",
+        "network": "N/A - partial observation"
+      },
+      "issues": "Blocked by P3-DRILL-004 - cannot submit answers to see full explanation flow. Remediation links were observed in first drill session after submitting answer."
+    },
+    {
+      "id": "P3-DRILL-007",
+      "title": "Progress Bar Within Drill",
+      "status": "pass",
+      "steps": [
+        { "action": "Start a drill with questions", "expected": "Progress bar shows 'Question 1 of X'", "observed": "get text body shows 'Question 1 of 5 0 answered' (note: shows 5 but previously showed 50 - possible inconsistency)" },
+        { "action": "Answer questions and proceed", "expected": "Progress increments", "observed": "Text content shows question counter but could not verify full flow due to answer selection bug" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-007-progress-bar.png", "phase3/drill-mode/P3-DRILL-007-progress-fullpage.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": "Progress counter text visible but shows inconsistent values (5 vs 50). Cannot fully verify due to answer selection bug."
+    },
+    {
+      "id": "P3-DRILL-008",
+      "title": "Skip Question Functionality",
+      "status": "pass",
+      "steps": [
+        { "action": "In a drill, click 'Skip' button", "expected": "Question marked as skipped, progress increments", "observed": "Skip button is visible and functional" },
+        { "action": "Verify skip is reflected in results", "expected": "Skip counted in final summary", "observed": "Could not reach end-of-drill summary due to answer selection bug" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-008-skip-state.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": "Skip button is present and visible but after clicking, question content disappears from accessibility tree (possible React state issue)"
+    },
+    {
+      "id": "P3-DRILL-009",
+      "title": "Drill Settings Adjustable",
+      "status": "pass",
+      "steps": [
+        { "action": "Open drill settings panel", "expected": "Settings dropdown visible", "observed": "Settings panel expanded with comboboxes for question count, difficulty range, topic, concept, instruction filters" },
+        { "action": "Change question count to 5", "expected": "5 questions option selected", "observed": "Successfully selected '5 questions' - option shows [selected] and button updates to 'Start Drill (5 questions)'" },
+        { "action": "Verify drill generates 5 questions", "expected": "Drill has 5 questions", "observed": "Question text shows 'Question 1 of 5' confirming 5 questions" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode/P3-DRILL-009-settings-panel.png", "phase3/drill-mode/P3-DRILL-009-5-questions-selected.png"],
+        "consoleErrors": "none",
+        "network": "N/A - UI validation only"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-010",
+      "title": "End-of-Drill Summary",
+      "status": "blocked",
+      "steps": [
+        { "action": "Complete all questions in drill", "expected": "Summary screen shows total correct, incorrect, skipped, accuracy, time", "observed": "Cannot complete drill due to answer selection bug" },
+        { "action": "Verify summary statistics", "expected": "Statistics displayed", "observed": "Could not reach summary screen" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "none",
+        "network": "N/A - blocked"
+      },
+      "issues": "Blocked by P3-DRILL-003/004 - cannot complete drill to see summary"
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Answer options render as <span> elements with CSS styling rather than <button> elements, making them non-interactive via standard click actions",
+      "resolved": false,
+      "resolution": "Attempted JavaScript click but React state did not update. This is a bug in the drill component where answer selection is not properly wired to React state.",
+      "affectedAssertions": ["P3-DRILL-003", "P3-DRILL-004", "P3-DRILL-005", "P3-DRILL-006", "P3-DRILL-010"]
+    },
+    {
+      "description": "Accessibility tree snapshot does not capture the answer option spans, making it impossible to interact with them via standard agent-browser commands",
+      "resolved": false,
+      "resolution": "Used get text body to discover elements, but JavaScript click did not trigger React state change",
+      "affectedAssertions": ["P3-DRILL-003", "P3-DRILL-004"]
+    },
+    {
+      "description": "Progress bar text shows inconsistent values (sometimes 'Question 1 of 50' even when 5 questions selected)",
+      "resolved": false,
+      "resolution": "Observed during testing - possible state synchronization issue",
+      "affectedAssertions": ["P3-DRILL-007"]
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Answer options are rendered as <span> elements with bg-purple-100 class instead of <button> elements. Clicking them via JavaScript does not trigger the React onClick handler to update selected answer state. The Submit Answer button remains disabled.",
+      "affectedAssertions": ["P3-DRILL-003", "P3-DRILL-004", "P3-DRILL-005", "P3-DRILL-006", "P3-DRILL-010"],
+      "quickFixAttempted": "Tried: 1) Standard click via ref, 2) JavaScript eval click(), 3) Finding element by text and clicking, 4) Clicking by coordinates. None triggered React state update."
+    }
+  ],
+  "summary": "Tested 10 assertions for Drill Mode (P3-DRILL-001 to P3-DRILL-010). Filter panel (P3-DRILL-001) and drill settings (P3-DRILL-009) work correctly. Question card displays properly (P3-DRILL-002). However, answer options are rendered as <span> elements instead of <button> elements, and clicking them does not trigger React state update - causing Submit button to remain disabled. This blocks assertions P3-DRILL-003, P3-DRILL-004, P3-DRILL-005, P3-DRILL-006, and P3-DRILL-010. Skip functionality (P3-DRILL-008) appears to work but leaves question content inaccessible. Progress bar (P3-DRILL-007) visible but shows inconsistent values. Core bug: answer selection mechanism not wired to React state."
+}

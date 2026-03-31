@@ -1,0 +1,107 @@
+{
+  "groupId": "drill-mode-rerun",
+  "testedAt": "2026-03-31T04:52:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "hashRouting": "/#/drills",
+    "workingDirectory": "C:\\OsaZain_stuff\\edu\\ACS2906\\acs2906-assembly-learning",
+    "missionDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P3-DRILL-003",
+      "title": "Multiple choice shows 4 options (A/B/C/D) as clickable buttons",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /#/drills", "expected": "Drill filter page displayed", "observed": "Drill filter page with Start Drill button displayed" },
+        { "action": "Click Start Drill (10 questions)", "expected": "Drill question displayed with options", "observed": "First question was code-tracing (no options), skipped to get to multiple-choice" },
+        { "action": "Skip first question", "expected": "Next question displayed", "observed": "Second question displayed with 4 options: A JL, B JG, C JE, D JB" },
+        { "action": "Inspect options in snapshot", "expected": "4 options rendered as buttons", "observed": "Options rendered as <button> elements: 'A JL', 'B JG', 'C JE', 'D JB'" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode-rerun/P3-DRILL-003-question-with-options.png"],
+        "consoleErrors": "none",
+        "network": "n/a - local app"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-004",
+      "title": "Submit button becomes enabled after selecting answer",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to a multiple-choice drill question", "expected": "Submit Answer button disabled", "observed": "Submit Answer button showed [disabled] before selection" },
+        { "action": "Click option 'A'", "expected": "Option selected, submit enabled", "observed": "After clicking 'A', Submit Answer button no longer showed [disabled]" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode-rerun/P3-DRILL-004-submit-enabled.png"],
+        "consoleErrors": "none",
+        "network": "n/a - local app"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-005",
+      "title": "Immediate feedback shows correct/incorrect after submit",
+      "status": "pass",
+      "steps": [
+        { "action": "Select answer and click Submit Answer", "expected": "Feedback shown immediately", "observed": "Feedback displayed: 'Incorrect. The correct answer was: CA'" },
+        { "action": "Check feedback visibility", "expected": "Correct/incorrect clearly indicated", "observed": "Feedback clearly showed 'Incorrect' and correct answer was displayed" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode-rerun/P3-DRILL-005-feedback.png"],
+        "consoleErrors": "none",
+        "network": "n/a - local app"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-006",
+      "title": "Explanation with remediation links shown after feedback",
+      "status": "pass",
+      "steps": [
+        { "action": "Submit answer and wait for feedback", "expected": "Explanation and remediation links visible", "observed": "Explanation section showed: 'Binary 11001010 groups into 1100 (12 = C) and 1010 (10 = A), giving CA in hexadecimal.'" },
+        { "action": "Check remediation links", "expected": "Clickable links to review material", "observed": "Review Material section had links: 'Introduction to number systems' and 'Hexadecimal representation'" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode-rerun/P3-DRILL-005-feedback.png"],
+        "consoleErrors": "none",
+        "network": "n/a - local app"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DRILL-010",
+      "title": "End-of-drill summary shows total correct, incorrect, skipped, accuracy",
+      "status": "pass",
+      "steps": [
+        { "action": "Complete or skip all drill questions", "expected": "Drill ends with summary", "observed": "Drill completed with Results Summary page" },
+        { "action": "Verify summary statistics", "expected": "Correct, incorrect, skipped, accuracy shown", "observed": "Summary displayed: 10 Total Questions, 0 Correct, 3 Incorrect, 7 Skipped, 0% Overall Accuracy, 2m 4s Time Taken" },
+        { "action": "Check additional summary features", "expected": "Overview, By Concept, Misconceptions, Remediation tabs", "observed": "Summary had: Overview, By Concept, Misconceptions, Remediation buttons; Export JSON, Share, Try Again buttons" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/drill-mode-rerun/P3-DRILL-010-end-summary.png"],
+        "consoleErrors": "none",
+        "network": "n/a - local app"
+      },
+      "issues": null
+    }
+  ],
+  "frictions": [
+    {
+      "description": "First question in drill was code-tracing type (no multiple choice options), required skipping to reach a multiple-choice question",
+      "resolved": true,
+      "resolution": "Skipped first question to reach a question with 4 A/B/C/D options",
+      "affectedAssertions": ["P3-DRILL-003"]
+    },
+    {
+      "description": "agent-browser click command with @e12 format failed; had to use 'find text' approach for clicking",
+      "resolved": true,
+      "resolution": "Used agent-browser find text 'A' click --exact for clicking answer options",
+      "affectedAssertions": ["P3-DRILL-003", "P3-DRILL-004", "P3-DRILL-005"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 5 assertions (P3-DRILL-003, P3-DRILL-004, P3-DRILL-005, P3-DRILL-006, P3-DRILL-010): All passed. Multiple choice options render as button elements (not span), submit enables after selection, immediate feedback shows correct/incorrect with explanation and remediation links, and end-of-drill summary displays all statistics (correct/incorrect/skipped/accuracy/time)."
+}

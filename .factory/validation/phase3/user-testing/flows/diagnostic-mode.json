@@ -1,0 +1,134 @@
+{
+  "groupId": "diagnostic-mode",
+  "testedAt": "2026-03-31T03:25:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "hashRouting": "/#/diagnostics",
+    "session": "b429fdd5a0d5-diag",
+    "missionDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f",
+    "evidenceDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f\\evidence\\phase3\\diagnostic-mode"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P3-DIAG-001",
+      "title": "Initial Topic Selection",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to /#/diagnostics", "expected": "Topic selection UI shows all 10 lectures", "observed": "Topic selection UI shows 6 topics: Advanced Topics, Assembly Basics, Control Flow, Data Representation, I/O Operations, Procedures" },
+        { "action": "Check course-map.json for lecture count", "expected": "10 lectures", "observed": "10 lectures exist in course-map.json but only 6 topics shown in UI" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/diagnostic-mode/P3-DIAG-001-diagnostics-topic-selection.png"],
+        "consoleErrors": "none"
+      },
+      "issues": "Topic selection shows 6 topics instead of 10 lectures. The UI groups lectures into 6 broad topics rather than displaying individual lectures."
+    },
+    {
+      "id": "P3-DIAG-002",
+      "title": "Adaptive Question Selection",
+      "status": "pass",
+      "steps": [
+        { "action": "Answer first question correctly", "expected": "Subsequent questions may increase in difficulty", "observed": "Difficulty showed 'Medium', streak indicator appeared" },
+        { "action": "Answer second question correctly", "expected": "Difficulty increases", "observed": "Difficulty changed to 'Hard', message 'Showing harder questions based on your performance' appeared" },
+        { "action": "Answer third question correctly", "expected": "Difficulty continues to increase", "observed": "Difficulty changed to 'Expert', streak reached 3" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/diagnostic-mode/P3-DIAG-002-first-question.png", "phase3/diagnostic-mode/P3-DIAG-002-correct-feedback.png", "phase3/diagnostic-mode/P3-DIAG-002-adaptive-difficulty.png"],
+        "consoleErrors": "none"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DIAG-003",
+      "title": "Mistake Pattern Detection",
+      "status": "blocked",
+      "steps": [
+        { "action": "Navigate to /#/diagnostics", "expected": "Start diagnostic and answer questions to trigger misconception", "observed": "Diagnostic has 40-115 questions per topic - too many to complete in reasonable time" },
+        { "action": "Answer questions triggering misconception", "expected": "Pattern identified in report", "observed": "Could not complete diagnostic to see report; UI bug caused answer options to not render on some questions" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/diagnostic-mode/P3-DIAG-002-question-missing-options.png"],
+        "consoleErrors": "none"
+      },
+      "issues": "Could not complete full diagnostic to verify misconception detection. Diagnostic has too many questions (40-115). Some questions have missing answer options in the accessibility tree (UI bug)."
+    },
+    {
+      "id": "P3-DIAG-004",
+      "title": "Diagnostic Report Generation",
+      "status": "blocked",
+      "steps": [
+        { "action": "Complete diagnostic", "expected": "Report renders with accuracy percentages", "observed": "After 5 questions, 'View Report' button appeared" },
+        { "action": "Click 'View Report' button", "expected": "Navigate to or display report with accuracy", "observed": "Button click had no effect - did not navigate or display report" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/diagnostic-mode/P3-DIAG-004-view-report-button.png"],
+        "consoleErrors": "none"
+      },
+      "issues": "'View Report' button appears but does not function. Could not verify report content because diagnostic was not complete and report UI is non-functional."
+    },
+    {
+      "id": "P3-DIAG-005",
+      "title": "Links to Remediation",
+      "status": "pass",
+      "steps": [
+        { "action": "Answer a question incorrectly", "expected": "Remediation links displayed", "observed": "Links shown: 'Memory addressing modes', 'Indirect addressing'" },
+        { "action": "Click remediation link 'Memory addressing modes'", "expected": "Navigate to relevant content", "observed": "Successfully navigated to /lecture/4 which contains MOV, XCHG, LEA instructions content" }
+      ],
+      "evidence": {
+        "screenshots": ["phase3/diagnostic-mode/P3-DIAG-005-remediation-navigation.png"],
+        "consoleErrors": "none",
+        "network": "Navigation to /lecture/4 confirmed"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-DIAG-006",
+      "title": "Diagnostic History Saved",
+      "status": "blocked",
+      "steps": [
+        { "action": "Complete diagnostic session", "expected": "Results saved to IndexedDB", "observed": "Diagnostic session was not persisted - navigation away reset the session" },
+        { "action": "Navigate to Progress page", "expected": "Diagnostic history accessible", "observed": "Progress page shows 'No Mastery Data Yet'" },
+        { "action": "Query IndexedDB", "expected": "Diagnostic records exist", "observed": "No IndexedDB data found" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "none"
+      },
+      "issues": "Diagnostic results are not persisted to IndexedDB. Progress page shows no data. Session state is lost on navigation."
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Some diagnostic questions have missing answer options in the accessibility tree - options don't render but question text does",
+      "resolved": false,
+      "resolution": "Skipped affected questions",
+      "affectedAssertions": ["P3-DIAG-003", "P3-DIAG-004"]
+    },
+    {
+      "description": "Diagnostic mode has 40-115 questions per topic - too many to complete in reasonable testing time",
+      "resolved": false,
+      "resolution": "Attempted to test with smaller topics (Data Representation, I/O Operations) but still had too many questions",
+      "affectedAssertions": ["P3-DIAG-003", "P3-DIAG-004", "P3-DIAG-006"]
+    },
+    {
+      "description": "View Report button appears but clicking it does nothing - no navigation or modal display",
+      "resolved": false,
+      "resolution": "None - UI bug in diagnostic report display",
+      "affectedAssertions": ["P3-DIAG-004"]
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Diagnostic sessions are not persisted - navigating away loses all progress",
+      "affectedAssertions": ["P3-DIAG-003", "P3-DIAG-004", "P3-DIAG-006"],
+      "quickFixAttempted": "Attempted to complete diagnostic but session was lost on navigation"
+    },
+    {
+      "description": "IndexedDB storage not working - no diagnostic records found after completing questions",
+      "affectedAssertions": ["P3-DIAG-006"],
+      "quickFixAttempted": "Queried IndexedDB directly via JavaScript - no data found"
+    }
+  ],
+  "summary": "Tested 6 assertions for Diagnostic Mode: 2 passed (P3-DIAG-002 adaptive difficulty, P3-DIAG-005 remediation links), 4 failed/blocked. P3-DIAG-001 fails because UI shows 6 topics instead of 10 lectures. P3-DIAG-003, P3-DIAG-004, P3-DIAG-006 are blocked due to: (1) diagnostic sessions not persisting, (2) View Report button non-functional, (3) IndexedDB storage not working, (4) too many questions per diagnostic (40-115) to complete in reasonable time."
+}

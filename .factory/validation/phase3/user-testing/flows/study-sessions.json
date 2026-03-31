@@ -1,0 +1,78 @@
+{
+  "groupId": "study-sessions",
+  "testedAt": "2026-03-31T08:45:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "hashRouting": true,
+    "session": "b429fdd5a0d5-sessions",
+    "missionDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f",
+    "evidenceDir": "C:\\Users\\zain1\\.factory\\missions\\00f39a90-a18e-4aa0-bea6-c237b2cfe68f\\evidence\\phase3\\study-sessions"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P3-SESSION-001",
+      "title": "Session Started on Drill Begin",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to Drills page", "expected": "Drills page with Start Drill button", "observed": "Drills page loaded with filter options and Start Drill button" },
+        { "action": "Click Start Drill (10 questions)", "expected": "Drill session starts with question 1", "observed": "Drill started with Question 1 of 10" },
+        { "action": "Query IndexedDB for sessions store", "expected": "New session record with startTime", "observed": "Session record found with startedAt: 2026-03-31T08:32:28.399Z" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "evidence/phase3/study-sessions/P3-SESSION-001-home-page.png",
+          "evidence/phase3/study-sessions/P3-SESSION-001-drills-page.png",
+          "evidence/phase3/study-sessions/P3-SESSION-001-drill-started.png"
+        ],
+        "consoleErrors": "none",
+        "indexedDB": "Session record created in 'ACS2906Learning' database, 'sessions' object store with startedAt timestamp present"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-SESSION-002",
+      "title": "Session Ended with Stats",
+      "status": "pass",
+      "steps": [
+        { "action": "Complete drill by answering/skipping 10 questions", "expected": "Drill summary page with statistics", "observed": "Drill summary page displayed with Overview, By Concept, Misconceptions, Remediation tabs" },
+        { "action": "Query IndexedDB session record", "expected": "Session has endTime and stats", "observed": "Session record has endedAt: 2026-03-31T08:41:57.044Z, itemsCompleted: 10, correctCount: 1" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "evidence/phase3/study-sessions/P3-SESSION-002-question-with-options.png",
+          "evidence/phase3/study-sessions/P3-SESSION-002-answer-feedback.png",
+          "evidence/phase3/study-sessions/P3-SESSION-002-drill-summary.png"
+        ],
+        "consoleErrors": "none",
+        "indexedDB": "Session record updated with endedAt timestamp and stats (itemsCompleted: 10, correctCount: 1)"
+      },
+      "issues": null
+    },
+    {
+      "id": "P3-SESSION-003",
+      "title": "Duration Tracked",
+      "status": "fail",
+      "steps": [
+        { "action": "Query IndexedDB session record after drill completion", "expected": "Session has duration field with seconds value within 5 seconds of actual elapsed time", "observed": "Session record has startedAt: 2026-03-31T08:32:28.399Z and endedAt: 2026-03-31T08:41:57.044Z (568.645 seconds elapsed) but NO duration field present" }
+      ],
+      "evidence": {
+        "screenshots": [
+          "evidence/phase3/study-sessions/P3-SESSION-002-drill-summary.png"
+        ],
+        "consoleErrors": "none",
+        "indexedDB": "Session record fields: userId, mode, startedAt, topics, itemsCompleted, correctCount, id, endedAt - NO duration field"
+      },
+      "issues": "The session record does not contain a 'duration' field as specified in the validation contract. While startTime (startedAt) and endTime (endedAt) are present and can be used to calculate duration, the assertion requires a 'duration field' to be stored in seconds."
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Answer options not visible in accessibility tree snapshot for some questions - required using text search to find and click options",
+      "resolved": false,
+      "affectedAssertions": ["P3-SESSION-002"]
+    }
+  ],
+  "blockers": [],
+  "summary": "Tested 3 assertions: 2 passed (P3-SESSION-001, P3-SESSION-002), 1 failed (P3-SESSION-003: duration field missing from session record). Session tracking works - records created on drill start with startedAt, updated on completion with endedAt and stats. However, the duration field is not being persisted, which is required by the validation contract."
+}

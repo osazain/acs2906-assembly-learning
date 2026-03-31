@@ -1,0 +1,94 @@
+{
+  "groupId": "diagnostic-mode-rerun",
+  "testedAt": "2026-03-31T04:58:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "hashRouting": "/#/diagnostics",
+    "workingDirectory": "C:\\OsaZain_stuff\\edu\\ACS2906\\acs2906-assembly-learning"
+  },
+  "toolsUsed": ["agent-browser", "playwright"],
+  "assertions": [
+    {
+      "id": "P3-DIAG-001",
+      "title": "Initial Topic Selection",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to /#/diagnostics", "expected": "Topic selection UI shows all 10 lectures", "observed": "Topic selection shows 6 topic categories" },
+        { "action": "Count topics in dropdown", "expected": "10 lectures from course-map.json", "observed": "6 topics: Advanced Topics, Assembly Basics, Control Flow, Data Representation, I/O Operations, Procedures" },
+        { "action": "Verify question counts", "expected": "Questions available per lecture", "observed": "Advanced Topics 25, Assembly Basics 10, Control Flow 10, Data Representation 5, I/O Operations 2, Procedures 7" }
+      ],
+      "evidence": {
+        "screenshots": ["evidence/phase3/diagnostic-mode-rerun/P3-DIAG-001-topic-selection.png", "evidence/phase3/diagnostic-mode-rerun/P3-DIAG-001-final-state.png"],
+        "consoleErrors": "none",
+        "playwrightOutput": "Topics found: 6 - Advanced Topics25 questions available, Assembly Basics10 questions available, Control Flow10 questions available, Data Representation5 questions available, I/O Operations2 questions available, Procedures7 questions available"
+      },
+      "issues": "Topic selection shows 6 topic categories instead of 10 lectures from course-map.json. The 6 topics are concept categories, not individual lectures."
+    },
+    {
+      "id": "P3-DIAG-003",
+      "title": "Mistake Pattern Detection",
+      "status": "blocked",
+      "steps": [
+        { "action": "Navigate to /#/diagnostics", "expected": "Topic selection displayed", "observed": "Topic selection displayed" },
+        { "action": "Select all topics and start diagnostic", "expected": "Diagnostic starts with questions", "observed": "Diagnostic starts but browser automation issues prevent reliable flow completion" },
+        { "action": "Answer questions and check pattern detection", "expected": "Mistake patterns identified", "observed": "Could not complete full diagnostic due to click/interaction issues" }
+      ],
+      "evidence": {
+        "screenshots": ["evidence/phase3/diagnostic-mode-rerun/P3-DIAG-003-question-with-options.png", "evidence/phase3/diagnostic-mode-rerun/playwright-test.png"],
+        "consoleErrors": "none",
+        "playwrightOutput": "Started diagnostic, saw questions about INT 21h and ADC instruction"
+      },
+      "issues": "Browser automation via agent-browser CLI has click/interaction issues in PowerShell. Could not reliably complete a full diagnostic session to test mistake pattern detection. Playwright test shows diagnostic questions load correctly but answer submission is unreliable."
+    },
+    {
+      "id": "P3-DIAG-004",
+      "title": "View Report Button",
+      "status": "blocked",
+      "steps": [
+        { "action": "Complete diagnostic", "expected": "Report button becomes active", "observed": "Could not complete diagnostic due to browser automation issues" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "none"
+      },
+      "issues": "Cannot test View Report button without completing a full diagnostic session."
+    },
+    {
+      "id": "P3-DIAG-006",
+      "title": "Diagnostic History Saved to IndexedDB",
+      "status": "blocked",
+      "steps": [
+        { "action": "Check IndexedDB for diagnostic records", "expected": "ACS2906Learning database with diagnostic records", "observed": "Database exists (ACS2906Learning, version 10) but could not query contents due to async IndexedDB API issues" },
+        { "action": "Complete diagnostic and verify persistence", "expected": "Results saved and retrievable", "observed": "Could not complete diagnostic to test persistence" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "none",
+        "indexedDB": "ACS2906Learning database exists with version 10"
+      },
+      "issues": "Cannot verify IndexedDB persistence without completing a diagnostic session. IndexedDB API requires async handling which is difficult to test via agent-browser eval."
+    }
+  ],
+  "frictions": [
+    {
+      "description": "agent-browser click commands fail in PowerShell due to argument parsing issues",
+      "resolved": false,
+      "resolution": "Tried using @ref syntax, find text, and other approaches. Playwright script worked better but still had issues with answer submission.",
+      "affectedAssertions": ["P3-DIAG-003", "P3-DIAG-004", "P3-DIAG-006"]
+    },
+    {
+      "description": "IndexedDB async API difficult to test via agent-browser eval",
+      "resolved": false,
+      "resolution": "Tried multiple approaches including eval with async/await, but PowerShell and heredoc syntax conflicts prevented reliable testing",
+      "affectedAssertions": ["P3-DIAG-006"]
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Browser automation interactions (clicks) are unreliable in PowerShell environment with agent-browser CLI",
+      "affectedAssertions": ["P3-DIAG-003", "P3-DIAG-004", "P3-DIAG-006"],
+      "quickFixAttempted": "Switched to Playwright script which worked better for navigation but still had issues with answer submission in the diagnostic flow"
+    }
+  ],
+  "summary": "Tested 4 assertions: 1 failed (P3-DIAG-001: only 6 topics shown instead of 10 lectures), 3 blocked (P3-DIAG-003, P3-DIAG-004, P3-DIAG-006 - all require completing a full diagnostic which is blocked by browser automation issues)"
+}

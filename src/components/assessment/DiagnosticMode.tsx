@@ -674,6 +674,7 @@ export function DiagnosticMode() {
         userId,
         startedAt: currentSession.startedAt,
         endedAt: completedAt,
+        duration: Math.floor(duration / 1000),
         mode: 'diagnostic',
         topics: currentSession.selectedTopics,
         itemsCompleted: totalQuestions,

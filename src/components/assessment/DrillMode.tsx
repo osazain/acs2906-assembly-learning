@@ -334,7 +334,8 @@ export function DrillMode() {
   useEffect(() => {
     if (session?.completedAt && session.sessionId && results && !sessionEndedRef.current) {
       sessionEndedRef.current = true
-      endSession(session.sessionId, results.total, results.correct).catch(err => {
+      const durationSeconds = Math.floor(results.duration / 1000)
+      endSession(session.sessionId, results.total, results.correct, durationSeconds).catch(err => {
         console.error('Failed to end study session:', err)
       })
     }

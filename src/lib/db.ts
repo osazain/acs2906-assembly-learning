@@ -43,6 +43,7 @@ export interface StudySession {
   userId: string
   startedAt: string
   endedAt?: string
+  duration?: number // Duration in seconds
   mode: 'lecture' | 'drill' | 'diagnostic' | 'game' | 'test' | 'simulator'
   topics: string[]
   itemsCompleted: number
@@ -245,12 +246,14 @@ export async function createSession(
 export async function endSession(
   sessionId: number,
   itemsCompleted: number,
-  correctCount: number
+  correctCount: number,
+  durationSeconds?: number
 ): Promise<void> {
   await db.sessions.update(sessionId, {
     endedAt: new Date().toISOString(),
     itemsCompleted,
     correctCount,
+    duration: durationSeconds,
   })
 }
 

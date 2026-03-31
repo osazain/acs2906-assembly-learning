@@ -69,6 +69,9 @@ function parseOperands(operandStr: string): string[] {
   return operands;
 }
 
+// Data definition directives that can follow a label on the same line
+const DATA_DIRECTIVES = ['DB', 'DW', 'DD', 'BYTE', 'WORD', 'DWORD'];
+
 // Parse a single line into a parsed instruction
 function parseLine(line: string, lineNumber: number, currentAddress: number): { instruction: ParsedInstruction | null; label: string | null; addressAdvance: number } {
   const processed = preprocessLine(line);
@@ -88,8 +91,25 @@ function parseLine(line: string, lineNumber: number, currentAddress: number): { 
   const mnemonic = parts[0];
   const operandStr = parts.slice(1).join(' ');
   
-  // Skip directives (like .MODEL, .DATA, .CODE, etc.)
+  // Check if first token is a label followed by a data directive (e.g., "msg DB 'Hello'")
+  // In this case, the first token is a label, not a mnemonic
+  const firstOperand = parts[1]?.toUpperCase();
+  if (firstOperand && DATA_DIRECTIVES.includes(firstOperand)) {
+    // This line is a label definition with data directive on the same line
+    // e.g., "msg DB 'Hello'" means label "msg" with data definition
+    const label = mnemonic;
+    // This is just data, not executable code, so skip it
+    return { instruction: null, label, addressAdvance: 0 };
+  }
+  
+  // Skip directives (like .MODEL, .DATA, .CODE, etc. and non-dot directives like DB, DW, PROC, ENDP, etc.)
   if (mnemonic.startsWith('.')) {
+    return { instruction: null, label: null, addressAdvance: 0 };
+  }
+  
+  // Also skip common assembler directives that don't start with dot
+  const dotlessDirectives = ['DB', 'DW', 'DD', 'PROC', 'ENDP', 'SEGMENT', 'ENDS', 'EQU', 'MODEL', 'STACK', 'DATA', 'CODE'];
+  if (dotlessDirectives.includes(mnemonic)) {
     return { instruction: null, label: null, addressAdvance: 0 };
   }
   

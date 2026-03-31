@@ -4,8 +4,8 @@ import { Link } from '@tanstack/react-router'
 import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
-
-type CourseMapLecture = typeof courseMapData.lectures[number]
+import { LectureReader } from '@/components/lecture/LectureReader'
+import type { CourseMapLecture } from '@/lib/types'
 
 const rootRoute = createRootRoute()
 
@@ -107,105 +107,7 @@ function LectureDetailPage() {
     )
   }
 
-  const getExamRelevanceLabel = (relevance: CourseMapLecture['examRelevance']) => {
-    switch (relevance) {
-      case 'high': return 'High Exam Relevance'
-      case 'medium': return 'Medium Exam Relevance'
-      case 'low': return 'Low Exam Relevance'
-    }
-  }
-
-  const getDifficultyStyles = (difficulty: CourseMapLecture['difficulty']) => {
-    switch (difficulty) {
-      case 'foundational':
-        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-      case 'intermediate':
-        return 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-      case 'advanced':
-        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
-    }
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Back Link */}
-      <Link to="/course-map" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-        <BookOpen className="h-4 w-4" />
-        Back to Course Map
-      </Link>
-
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary font-bold text-lg">
-            {lecture.id}
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">{lecture.title}</h1>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={cn('text-xs px-2.5 py-1 rounded-full font-medium', getDifficultyStyles(lecture.difficulty))}>
-            {lecture.difficulty}
-          </span>
-          <span className={cn('text-xs px-2.5 py-1 rounded-full font-medium',
-            lecture.examRelevance === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' :
-            lecture.examRelevance === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400' :
-            'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-          )}>
-            {getExamRelevanceLabel(lecture.examRelevance)}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {lecture.examples} examples
-          </span>
-        </div>
-      </div>
-
-      {/* Topics Section */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
-          <Target className="h-5 w-5 text-primary" />
-          Key Topics
-        </h2>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {lecture.topics.map((topic, index) => (
-            <div key={index} className="flex items-start gap-2 p-3 rounded-lg bg-card border">
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-medium shrink-0">
-                {index + 1}
-              </div>
-              <span className="text-sm">{topic}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Coming Soon Placeholder */}
-      <section className="text-center py-8 px-4 rounded-xl border border-dashed bg-muted/30">
-        <FileText className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-        <h3 className="font-semibold mb-1">Lecture Content Coming Soon</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Full lecture content, examples, and assessments will be available in Phase 2.
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          <Link
-            to="/examples"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-          >
-            <FlaskConical className="h-4 w-4" />
-            View Examples
-          </Link>
-          <Link
-            to="/simulator"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-sm font-medium hover:bg-muted transition-colors"
-          >
-            <Cpu className="h-4 w-4" />
-            Try Simulator
-          </Link>
-        </div>
-      </section>
-    </div>
-  )
+  return <LectureReader lecture={lecture as CourseMapLecture} />
 }
 
 const lecturesRoute = createRoute({

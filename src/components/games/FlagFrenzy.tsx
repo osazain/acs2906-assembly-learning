@@ -11,6 +11,7 @@ import {
   Target
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { updateGameScore } from '@/lib/gameScores'
 
 // ============================================================================
 // Types
@@ -425,20 +426,28 @@ export function FlagFrenzy({ className, onBack }: FlagFrenzyProps) {
       
       // Check if game is over
       if (nextIndex >= scenarios.length) {
+        // Calculate correct/incorrect for this scenario
+        const correctCount = prev.flagStates.filter(f => 
+          f.predicted === (prev.currentScenario?.flagsAffected.includes(f.name) ?? false)
+        ).length
+        const wrongCount = prev.flagStates.length - correctCount
+        
         // Update stats
         const newStats: GameStats = {
           ...stats,
           gamesPlayed: stats.gamesPlayed + 1,
           highScore: Math.max(stats.highScore, prev.score),
-          totalCorrect: stats.totalCorrect + prev.flagStates.filter(f => 
-            f.predicted === (prev.currentScenario?.flagsAffected.includes(f.name) ?? false)
-          ).length,
-          totalWrong: stats.totalWrong + prev.flagStates.filter(f => 
-            f.predicted !== (prev.currentScenario?.flagsAffected.includes(f.name) ?? false)
-          ).length,
+          totalCorrect: stats.totalCorrect + correctCount,
+          totalWrong: stats.totalWrong + wrongCount,
         }
         setStats(newStats)
         saveGameStats(newStats)
+        
+        // Update unified game scores for dashboard
+        updateGameScore('flag-frenzy', prev.score, {
+          totalCorrect: correctCount,
+          totalWrong: wrongCount,
+        })
         
         return {
           ...prev,

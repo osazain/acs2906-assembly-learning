@@ -9,10 +9,13 @@ import {
   CheckCircle2,
   Clock,
   Brain,
-  ChevronRight
+  ChevronRight,
+  Gamepad2,
+  Trophy
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getOrCreateUserId, getAllMasteryRecords, type MasteryRecord } from '@/lib/db'
+import { loadGameScores, type GameScore } from '@/lib/gameScores'
 import { Link } from '@tanstack/react-router'
 import courseMapData from '@/data/processed/course-map.json'
 import type { CourseMapLecture } from '@/lib/types'
@@ -92,6 +95,7 @@ export function MasteryDashboard({ className }: MasteryDashboardProps) {
   const [masteryRecords, setMasteryRecords] = useState<MasteryRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'concepts' | 'instructions' | 'weaknesses'>('overview')
+  const [gameScores, setGameScores] = useState<GameScore[]>([])
 
   const lectures = courseMapData.lectures as CourseMapLecture[]
 
@@ -102,6 +106,11 @@ export function MasteryDashboard({ className }: MasteryDashboardProps) {
         const userId = await getOrCreateUserId()
         const records = await getAllMasteryRecords(userId)
         setMasteryRecords(records)
+        
+        // Load game scores from localStorage
+        const scores = loadGameScores()
+        const scoresArray = Object.values(scores)
+        setGameScores(scoresArray)
       } catch (error) {
         console.error('Failed to load mastery records:', error)
       } finally {
@@ -375,6 +384,51 @@ export function MasteryDashboard({ className }: MasteryDashboardProps) {
                 )}
               </div>
 
+              {/* Game Activity */}
+              {gameScores.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <Gamepad2 className="h-4 w-4" />
+                    Game Activity
+                  </h3>
+                  <div className="space-y-2">
+                    {gameScores
+                      .sort((a, b) => new Date(b.lastPlayed).getTime() - new Date(a.lastPlayed).getTime())
+                      .slice(0, 5)
+                      .map((score) => (
+                        <div key={score.gameId} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-3">
+                            <Trophy className="h-4 w-4 text-yellow-600" />
+                            <div>
+                              <div className="font-medium text-sm">
+                                {score.gameId === 'flag-frenzy' && 'Flag Frenzy'}
+                                {score.gameId === 'instruction-hangman' && 'Instruction Hangman'}
+                                {score.gameId === 'register-rally' && 'Register Rally'}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                Played {score.gamesPlayed} time{score.gamesPlayed !== 1 ? 's' : ''} • Last: {new Date(score.lastPlayed).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-sm font-medium">
+                              <Trophy className="h-4 w-4 text-yellow-600 inline mr-1" />
+                              {score.highScore}
+                            </div>
+                            <Link
+                              to="/games"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-sm hover:bg-primary/20 transition-colors"
+                            >
+                              Play
+                              <ChevronRight className="h-3 w-3" />
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+
               {/* Quick Actions */}
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link
@@ -383,6 +437,13 @@ export function MasteryDashboard({ className }: MasteryDashboardProps) {
                 >
                   <Target className="h-4 w-4" />
                   Practice Weak Areas
+                </Link>
+                <Link
+                  to="/games"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-muted transition-colors text-sm font-medium"
+                >
+                  <Gamepad2 className="h-4 w-4" />
+                  Play Games
                 </Link>
               </div>
             </div>

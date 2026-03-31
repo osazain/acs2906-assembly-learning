@@ -11,6 +11,7 @@ import {
   Target
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { updateGameScore } from '@/lib/gameScores'
 
 // ============================================================================
 // Types
@@ -328,6 +329,12 @@ export function RegisterRally({ className, onBack }: RegisterRallyProps) {
             }
             setStats(newStats)
             saveGameStats(newStats)
+            
+            // Update unified game scores for dashboard
+            updateGameScore('register-rally', score, {
+              totalCorrect: newMatchedPairs.length,
+              totalWrong: newAttempts - newMatchedPairs.length,
+            })
 
             return {
               ...prev,

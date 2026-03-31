@@ -10,6 +10,7 @@ import {
   ChevronLeft
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { updateGameScore } from '@/lib/gameScores'
 import instructionIndexData from '@/data/processed/instruction-index.json'
 import type { InstructionEntry } from '@/lib/types'
 
@@ -334,6 +335,12 @@ export function InstructionHangman({ className, onBack }: InstructionHangmanProp
       }
       setStats(newStats)
       saveGameStats(newStats)
+      
+      // Update unified game scores for dashboard
+      updateGameScore('instruction-hangman', newState.score + scoreChange, {
+        totalCorrect: isCorrect ? 1 : 0,
+        totalWrong: isCorrect ? 0 : 1,
+      })
     }
   }, [state, stats])
 

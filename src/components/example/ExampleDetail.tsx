@@ -9,7 +9,8 @@ import {
   AlertTriangle,
   Lightbulb,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  FlaskConical
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import examplesData from '@/data/processed/examples.json'
@@ -138,6 +139,24 @@ export function ExampleDetail({ exampleId }: ExampleDetailProps) {
       annotation
     }
   }
+
+  // Compute related examples based on shared instructions, concepts, and lectures
+  const relatedExamples = examples
+    .filter(ex => ex.id !== example.id) // Exclude current example
+    .map(ex => {
+      // Calculate relevance score based on overlap
+      const instructionOverlap = ex.instructions.filter(i => example.instructions.includes(i)).length
+      const conceptOverlap = ex.concepts.filter(c => example.concepts.includes(c)).length
+      const lectureOverlap = ex.lectureIds.filter(l => example.lectureIds.includes(l)).length
+      
+      // Weighted scoring: instructions are most important, then concepts, then lectures
+      const score = (instructionOverlap * 3) + (conceptOverlap * 2) + lectureOverlap
+      
+      return { ...ex, score }
+    })
+    .filter(ex => ex.score > 0) // Only include if there's some relevance
+    .sort((a, b) => b.score - a.score) // Sort by relevance score descending
+    .slice(0, 6) // Limit to 6 related examples
 
   return (
     <div className="space-y-6">
@@ -299,6 +318,32 @@ export function ExampleDetail({ exampleId }: ExampleDetailProps) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Related Examples */}
+      {relatedExamples.length > 0 && (
+        <div className="border rounded-lg p-4">
+          <h3 className="font-semibold flex items-center gap-2 mb-3">
+            <FlaskConical className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            Related Examples
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {relatedExamples.map(relEx => (
+              <Link
+                key={relEx.id}
+                to="/examples/$exampleId"
+                params={{ exampleId: relEx.id }}
+                className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-colors"
+              >
+                <FlaskConical className="h-3.5 w-3.5" />
+                {relEx.filename}
+                <span className="text-xs opacity-60">
+                  ({relEx.instructions.slice(0, 2).join(', ')}{relEx.instructions.length > 2 ? ` +${relEx.instructions.length - 2}` : ''})
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
 

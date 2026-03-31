@@ -1,0 +1,66 @@
+{
+  "milestone": "phase2",
+  "round": 1,
+  "status": "fail",
+  "validatorsRun": {
+    "test": { "passed": true, "command": "echo 'No tests configured for Phase 2'", "exitCode": 0 },
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "npm run lint", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "failedFeatures": ["example-code-viewer"]
+  },
+  "blockingIssues": [
+    {
+      "featureId": "example-code-viewer",
+      "severity": "blocking",
+      "description": "Critical: imports examples.json which does not exist in data/processed/. Running 'dir data/processed' shows only concept-taxonomy.json, course-map.json, instruction-index.json, and question-bank.json. This will cause runtime errors when navigating to example detail pages."
+    },
+    {
+      "featureId": "example-code-viewer",
+      "severity": "blocking",
+      "description": "Run in Simulator button links to /simulator without pre-loading the example code. Expected behavior states 'Simulator button pre-loads code' but implementation just uses a simple Link to '/simulator' with no code parameter."
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Create frontend-worker skill at .factory/skills/frontend-worker/SKILL.md. All 6 phase2 features had frontend-worker as skillName but the skill file does not exist. Workers proceeded without it.",
+      "evidence": "Reviews for course-map-page, lecture-reader, example-explorer, example-code-viewer, global-search, and responsive-layout all noted the skill was missing.",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify expectation for automated tests. AGENTS.md Engineering Rules state 'Add automated tests at each phase boundary' but no tests were added in phase2. Consider either enforcing this requirement or explicitly deferring tests to a later phase.",
+      "evidence": "global-search review noted handoff.tests.added is empty array. Build/lint pass only used for verification.",
+      "isSystemic": true
+    },
+    {
+      "target": "library",
+      "suggestion": "Document: JSON imports from root data/processed/ don't resolve in Vite unless files are in src/data/processed/. Workers discovered this workaround by copying files. This is specific Vite behavior worth noting.",
+      "evidence": "instruction-index.json and concept-taxonomy.json were copied to src/data/processed/ because Vite JSON imports don't resolve from root. Also applies to course-map.json workaround.",
+      "isSystemic": false
+    },
+    {
+      "target": "library",
+      "suggestion": "Document: Phase 1 content ingestion did not create data/processed/lectures.json with actual lecture body content. lecture-reader worked around this by generating content from topics metadata. This gap should be addressed if full lecture content is needed.",
+      "evidence": "LectureReader.tsx uses generateSectionContent() which creates synthetic content because lectures.json doesn't exist.",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Add JSON schema validation for data files",
+      "reason": "Consistent with existing pattern - no other data files have schema validation. Adding it now would be scope creep for phase2 scrutiny."
+    },
+    {
+      "observation": "Dev server not documented as service in services.yaml",
+      "reason": "services.yaml already has dev service defined. The observation was about workers starting it manually, which is acceptable workflow."
+    }
+  ],
+  "previousRound": null
+}

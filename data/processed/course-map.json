@@ -1,0 +1,149 @@
+{
+  "lectures": [
+    {
+      "id": 1,
+      "title": "Introduction to Assembly Language",
+      "topics": [
+        "Number systems (binary, hexadecimal, decimal)",
+        "Data representation fundamentals",
+        "Introduction to 8086 architecture",
+        "Assembly language basics and syntax",
+        "Registers and memory concepts"
+      ],
+      "examples": 0,
+      "examRelevance": "medium",
+      "difficulty": "foundational"
+    },
+    {
+      "id": 2,
+      "title": "Data Representation and Arithmetic",
+      "topics": [
+        "Signed and unsigned numbers",
+        "Two's complement representation",
+        "Binary and hexadecimal arithmetic",
+        "Carry and overflow flags",
+        "ASCII representation"
+      ],
+      "examples": 0,
+      "examRelevance": "medium",
+      "difficulty": "foundational"
+    },
+    {
+      "id": 3,
+      "title": "Basic Assembly Programming",
+      "topics": [
+        "MOV instruction and data transfer",
+        "Register usage and classification",
+        "Memory addressing modes",
+        "Basic I/O operations",
+        "DOS interrupts (INT 21h)"
+      ],
+      "examples": 0,
+      "examRelevance": "high",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": 4,
+      "title": "Data Transfer and Arithmetic Instructions",
+      "topics": [
+        "MOV, XCHG, LEA instructions",
+        "ADD, SUB, CMP instructions",
+        "INC, DEC, NEG instructions",
+        "Flags register and conditional flags",
+        "Arithmetic operations and overflow",
+        "Hello World and template programs"
+      ],
+      "examples": 6,
+      "examRelevance": "high",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": 5,
+      "title": "Input/Output Operations",
+      "topics": [
+        "DOS interrupt 21h functions",
+        "Keyboard input (AH=01h, AH=0Ah)",
+        "Screen output (AH=02h, AH=09h)",
+        "String input and output",
+        "Buffer management",
+        "Input validation concepts"
+      ],
+      "examples": 0,
+      "examRelevance": "medium",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": 6,
+      "title": "Control Flow and Loops",
+      "topics": [
+        "Unconditional jump (JMP)",
+        "Conditional jumps (JE, JNE, JL, JLE, JG, JGE)",
+        "CMP instruction and flag combinations",
+        "LOOP and LOOPE instructions",
+        "For loops, while loops, if-else structures",
+        "Loop examples (forloop.asm, ifelse.asm)"
+      ],
+      "examples": 6,
+      "examRelevance": "high",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": 7,
+      "title": "Procedures and Subroutines",
+      "topics": [
+        "CALL and RET instructions",
+        "Stack operations (PUSH, POP)",
+        "Stack frame and BP register",
+        "Parameter passing conventions",
+        "Recursive procedures",
+        "proc.asm example"
+      ],
+      "examples": 2,
+      "examRelevance": "high",
+      "difficulty": "advanced"
+    },
+    {
+      "id": 8,
+      "title": "String Operations",
+      "topics": [
+        "MOVSB, MOVSW, LODSB, LODSW",
+        "STOSB, STOSW instructions",
+        "REP prefix and repetition",
+        "String processing loops",
+        "CLD and STD direction flag"
+      ],
+      "examples": 0,
+      "examRelevance": "medium",
+      "difficulty": "advanced"
+    },
+    {
+      "id": 9,
+      "title": "Arrays and Data Structures",
+      "topics": [
+        "Array declaration and initialization",
+        "Indexed addressing modes",
+        "Bubble sort and selection sort",
+        "Searching algorithms (linear, binary)",
+        "Multi-dimensional arrays"
+      ],
+      "examples": 0,
+      "examRelevance": "medium",
+      "difficulty": "advanced"
+    },
+    {
+      "id": 10,
+      "title": "Advanced Topics and Review",
+      "topics": [
+        "Macros and assembly directives",
+        "Modular programming",
+        "Bit manipulation instructions",
+        "Shift and rotate operations",
+        "Course review and exam preparation"
+      ],
+      "examples": 0,
+      "examRelevance": "low",
+      "difficulty": "advanced"
+    }
+  ],
+  "lastUpdated": "2026-03-31T00:12:15.341Z"
+}

@@ -1194,6 +1194,37 @@ export function DiagnosticMode() {
                 })}
               </div>
             )}
+
+            {/* Text Input for questions without options (code-tracing, output-prediction, short-answer, etc.) */}
+            {(!currentQuestion.options || currentQuestion.options.length === 0) && currentQuestion.type !== 'true-false' && (
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-muted-foreground">
+                  Your Answer
+                </label>
+                <input
+                  type="text"
+                  value={selectedAnswer || ''}
+                  onChange={(e) => handleSelectAnswer(e.target.value)}
+                  disabled={showFeedback}
+                  placeholder="Type your answer here..."
+                  className={cn(
+                    'w-full p-4 rounded-lg border bg-background text-foreground transition-colors',
+                    'focus:outline-none focus:ring-2 focus:ring-primary/50',
+                    showFeedback
+                      ? currentQuestion.status === 'correct'
+                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                        : 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                      : 'border-border hover:border-primary/50'
+                  )}
+                />
+                {showFeedback && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-muted-foreground">Correct answer:</span>
+                    <span className="font-medium text-green-600 dark:text-green-400">{currentQuestion.answer}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Feedback Section */}

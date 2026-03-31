@@ -193,21 +193,31 @@ export function MasteryDashboard({ className }: MasteryDashboardProps) {
     )
   }
 
-  if (masteryRecords.length === 0) {
+  // Show "No Mastery Data" only when both mastery records and game scores are empty
+  if (masteryRecords.length === 0 && gameScores.length === 0) {
     return (
       <div className={cn('text-center py-12 border rounded-xl bg-card', className)}>
         <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
         <h2 className="text-xl font-semibold mb-2">No Mastery Data Yet</h2>
         <p className="text-muted-foreground max-w-md mx-auto mb-6">
-          Complete drills and diagnostics to track your mastery of assembly language concepts and instructions.
+          Complete drills, diagnostics, and games to track your mastery of assembly language concepts and instructions.
         </p>
-        <Link
-          to="/drills"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
-        >
-          <Target className="h-4 w-4" />
-          Start a Drill
-        </Link>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            to="/drills"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
+          >
+            <Target className="h-4 w-4" />
+            Start a Drill
+          </Link>
+          <Link
+            to="/games"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border hover:bg-muted transition-colors font-medium"
+          >
+            <Gamepad2 className="h-4 w-4" />
+            Play Games
+          </Link>
+        </div>
       </div>
     )
   }

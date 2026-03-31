@@ -1,12 +1,10 @@
 import { useState, useMemo, useCallback } from 'react'
-import { Link } from '@tanstack/react-router'
 import { 
   Target, 
   CheckCircle2, 
   XCircle, 
   SkipForward, 
   Settings, 
-  RotateCcw,
   ChevronRight,
   AlertCircle,
   Lightbulb,
@@ -20,6 +18,7 @@ import {
 import { cn } from '@/lib/utils'
 import questionBankData from '@/data/processed/question-bank.json'
 import type { AssessmentItem } from '@/lib/types'
+import { ResultsSummary, type DrillSessionResults } from './ResultsSummary'
 
 // ============================================================================
 // Types
@@ -471,112 +470,26 @@ export function DrillMode() {
 
   // If drill is complete, show results
   if (session.completedAt && results) {
-    const formatDuration = (ms: number): string => {
-      const seconds = Math.floor(ms / 1000)
-      const minutes = Math.floor(seconds / 60)
-      const remainingSeconds = seconds % 60
-      if (minutes > 0) {
-        return `${minutes}m ${remainingSeconds}s`
-      }
-      return `${seconds}s`
+    // Convert to DrillSessionResults format for ResultsSummary
+    const sessionResults: DrillSessionResults = {
+      questions: session.questions.map(q => ({
+        question: q,
+        status: q.status,
+        selectedAnswer: q.selectedAnswer,
+        timeMs: q.timeMs
+      })),
+      startedAt: session.startedAt,
+      completedAt: session.completedAt,
+      mode: 'drill'
     }
 
     return (
-      <div className="space-y-6 max-w-2xl mx-auto">
-        {/* Results Header */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium">
-            <Trophy className="h-4 w-4" />
-            Drill Complete!
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight">Results Summary</h1>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-3xl font-bold text-primary">{results.total}</div>
-            <div className="text-sm text-muted-foreground">Total Questions</div>
-          </div>
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-3xl font-bold text-green-600">{results.correct}</div>
-            <div className="text-sm text-muted-foreground">Correct</div>
-          </div>
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-3xl font-bold text-red-600">{results.incorrect}</div>
-            <div className="text-sm text-muted-foreground">Incorrect</div>
-          </div>
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-3xl font-bold text-yellow-600">{results.skipped}</div>
-            <div className="text-sm text-muted-foreground">Skipped</div>
-          </div>
-        </div>
-
-        {/* Accuracy and Duration */}
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-4xl font-bold">{results.accuracy}%</div>
-            <div className="text-sm text-muted-foreground mt-1">Accuracy</div>
-            <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary transition-all"
-                style={{ width: `${results.accuracy}%` }}
-              />
-            </div>
-          </div>
-          <div className="border rounded-xl bg-card p-4 text-center">
-            <div className="text-4xl font-bold">{formatDuration(results.duration)}</div>
-            <div className="text-sm text-muted-foreground mt-1">Time Taken</div>
-          </div>
-        </div>
-
-        {/* Per-Topic Breakdown */}
-        {Object.keys(results.byTopic).length > 0 && (
-          <div className="border rounded-xl bg-card p-4">
-            <h2 className="font-semibold mb-3">Performance by Topic</h2>
-            <div className="space-y-3">
-              {Object.entries(results.byTopic).map(([topic, data]) => {
-                const topicAccuracy = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0
-                return (
-                  <div key={topic} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium">{topic}</span>
-                      <span className="text-muted-foreground">{data.correct}/{data.total} ({topicAccuracy}%)</span>
-                    </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className={cn(
-                          'h-full transition-all',
-                          topicAccuracy >= 80 ? 'bg-green-500' : topicAccuracy >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-                        )}
-                        style={{ width: `${topicAccuracy}%` }}
-                      />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={startDrill}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Try Again
-          </button>
-          <Link
-            to="/course-map"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border hover:bg-muted transition-colors font-medium"
-          >
-            <BookOpen className="h-4 w-4" />
-            Back to Course Map
-          </Link>
-        </div>
-      </div>
+      <ResultsSummary
+        results={sessionResults}
+        onRetry={startDrill}
+        onBackToMap={() => {}}
+        showRetry={true}
+      />
     )
   }
 

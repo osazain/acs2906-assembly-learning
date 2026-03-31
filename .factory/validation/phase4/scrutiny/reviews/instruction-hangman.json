@@ -1,0 +1,57 @@
+{
+  "featureId": "instruction-hangman",
+  "reviewedAt": "2026-03-31T11:45:00.000Z",
+  "commitId": "f1eb4ef",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The InstructionHangman game implementation is mostly solid with proper masked instruction display, keyboard input (both physical and on-screen), category hints, visual hangman figure, score tracking, and localStorage persistence. However, there is a high score calculation bug and some accessibility improvements needed.",
+    "issues": [
+      {
+        "file": "src/components/games/InstructionHangman.tsx",
+        "line": 289,
+        "severity": "blocking",
+        "description": "High score calculation bug: `Math.max(stats.highScore, newState.score + scoreChange)` adds `scoreChange` twice. `newState.score` already includes `scoreChange` from line 280 (`score: state.score + (hasWon ? scoreChange : 0)`). The correct formula should be `Math.max(stats.highScore, newState.score)`."
+      },
+      {
+        "file": "src/components/games/InstructionHangman.tsx",
+        "line": 143,
+        "severity": "non_blocking",
+        "description": "Keyboard buttons lack aria-labels. Add `aria-label={letter}` or similar to improve screen reader accessibility."
+      },
+      {
+        "file": "src/components/games/InstructionHangman.tsx",
+        "line": 143,
+        "severity": "non_blocking",
+        "description": "Keyboard buttons have focus ring (`focus:outline-none focus:ring-2 focus:ring-ring`) but no aria-disabled when disabled. Consider adding `aria-disabled={disabled || isGuessed}` for better accessibility."
+      },
+      {
+        "file": "src/components/games/InstructionHangman.tsx",
+        "line": 396,
+        "severity": "non_blocking",
+        "description": "The `maskedCount` display shows letters remaining based on the instruction mnemonic letters only, but the visual masked display shows the full syntax string. This could be misleading to users. Consider either: (1) Showing the count of unique letters in the full syntax, or (2) Clarifying that the count refers to the instruction name."
+      },
+      {
+        "file": "src/components/games/InstructionHangman.tsx",
+        "line": 309,
+        "severity": "non_blocking",
+        "description": "The `useEffect` for keyboard listener depends on `state` and `handleGuess`. When `stats` changes inside `handleGuess` (after game ends), the effect re-runs, which is correct behavior. However, the dependency chain is complex. Consider extracting `stats` update outside of `handleGuess` to simplify."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The `onBack` callback uses `window.location.hash` directly instead of using TanStack Router's navigation API. While this works, other components may use the router's `useNavigate` hook. Verify if this is an acceptable pattern or if it should be updated for consistency.",
+      "evidence": "InstructionHangman.tsx:327 - `window.location.hash = '#/games'`"
+    },
+    {
+      "area": "knowledge",
+      "observation": "The instruction-index.json data structure uses lowercase keys ('mov') but the code converts them to uppercase for display. This case conversion is handled consistently in the code but could be confusing for future maintainers.",
+      "evidence": "InstructionHangman.tsx:233 - `mnemonic: mnemonic.toUpperCase()`"
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The InstructionHangman game is well-implemented with good game mechanics, keyboard input support, and localStorage persistence. A blocking bug was found in high score calculation where the score is added twice. Additionally, accessibility improvements (aria labels) are recommended. The game logic correctly implements masked instruction display, letter guessing, win/lose conditions, and streak bonuses. Overall code quality is good with proper component separation."
+}

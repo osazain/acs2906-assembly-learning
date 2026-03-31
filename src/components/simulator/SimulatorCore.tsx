@@ -54,7 +54,7 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
   const [code, setCode] = useState(initialCode);
   const [isRunning, setIsRunning] = useState(false);
   const [isHalted, setIsHalted] = useState(false);
-  const [executionSpeed, setExecutionSpeed] = useState<ExecutionSpeed>('normal');
+  const [executionSpeed, setExecutionSpeed] = useState<ExecutionSpeed>(100);
   const [executionResult, setExecutionResult] = useState<ExecutionState>({
     result: null,
     registersModified: {},
@@ -241,14 +241,6 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     setIsRunning(true);
     setHitBreakpoint(null);
     
-    // Calculate delay based on speed
-    const delays: Record<ExecutionSpeed, number> = {
-      step: 0,
-      slow: 500,
-      normal: 100,
-      fast: 20,
-    };
-    
     const runStep = () => {
       // Check if still running (use ref to avoid stale closure)
       if (!isRunningRef.current) return;
@@ -269,9 +261,9 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
         return;
       }
       
-      // Continue if not halted
+      // Continue if not halted - use executionSpeed directly as delay in ms
       if (!currentCpu.halted) {
-        executionIntervalRef.current = window.setTimeout(runStep, delays[executionSpeed]);
+        executionIntervalRef.current = window.setTimeout(runStep, executionSpeed);
       }
     };
     

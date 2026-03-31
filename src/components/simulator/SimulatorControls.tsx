@@ -6,7 +6,13 @@
 import { Play, SkipForward, Square, RotateCcw, Pause, CircleDot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type ExecutionSpeed = 'step' | 'slow' | 'normal' | 'fast';
+// Speed in milliseconds delay between instructions
+// Range: 20ms (fastest) to 500ms (slowest)
+export type ExecutionSpeed = number;
+
+export const MIN_SPEED_DELAY = 20;
+export const MAX_SPEED_DELAY = 500;
+export const DEFAULT_SPEED_DELAY = 100;
 
 interface SimulatorControlsProps {
   isRunning: boolean;
@@ -69,14 +75,6 @@ export function SimulatorControls({
   const resetButtonClass = cn(
     'flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors',
     'bg-muted hover:bg-muted/80 text-foreground border border-border'
-  );
-
-  const speedButtonClass = (isActive: boolean) => cn(
-    'px-3 py-1 rounded text-xs font-medium transition-colors',
-    isActive
-      ? 'bg-primary text-primary-foreground'
-      : 'bg-muted hover:bg-muted/80 text-muted-foreground',
-    isRunning && 'disabled:opacity-50 disabled:cursor-not-allowed'
   );
 
   return (
@@ -142,20 +140,25 @@ export function SimulatorControls({
           </button>
         </div>
         
-        {/* Speed Control */}
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">Speed:</span>
-          <div className="flex gap-1">
-            {(['step', 'slow', 'normal', 'fast'] as ExecutionSpeed[]).map((s) => (
-              <button
-                key={s}
-                onClick={() => onSpeedChange(s)}
-                disabled={isRunning}
-                className={speedButtonClass(speed === s)}
-              >
-                {s.charAt(0).toUpperCase() + s.slice(1)}
-              </button>
-            ))}
+        {/* Speed Control Slider */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Speed:</span>
+            <span className="text-sm font-medium">{speed}ms delay</span>
+          </div>
+          <input
+            type="range"
+            min={MIN_SPEED_DELAY}
+            max={MAX_SPEED_DELAY}
+            value={speed}
+            onChange={(e) => onSpeedChange(Number(e.target.value))}
+            disabled={isRunning}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Adjust execution speed"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>Fast</span>
+            <span>Slow</span>
           </div>
         </div>
         

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef } from 'react'
 import { Link } from '@tanstack/react-router'
 import { 
   Stethoscope, 
@@ -157,6 +157,13 @@ export function DiagnosticMode() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [questionStartTime, setQuestionStartTime] = useState<number>(() => Date.now())
   const [report, setReport] = useState<DiagnosticReport | null>(null)
+  
+  // Use ref to always have access to current session for async callbacks
+  const sessionRef = useRef<DiagnosticSession | null>(session)
+  sessionRef.current = session
+  
+  // Use ref to store finishDiagnostic to avoid forward reference issues
+  const finishDiagnosticRef = useRef<(() => Promise<void>) | null>(null)
   
   // Topic selection state
   const [selectedTopics, setSelectedTopics] = useState<string[]>([])
@@ -414,11 +421,17 @@ export function DiagnosticMode() {
   }, [session, selectedAnswer, questionStartTime, detectMistakePatterns, selectNextQuestion])
 
   // Handle skip
+  // Uses sessionRef.current to avoid stale closure issues
   const handleSkip = useCallback(() => {
-    if (!session) return
+    // Use sessionRef.current to get the current session
+    const currentSession = sessionRef.current
+    if (!currentSession) return
 
     const timeMs = Date.now() - questionStartTime
-    const currentQuestion = session.questions[session.currentIndex]
+    const currentQuestion = currentSession.questions[currentSession.currentIndex]
+
+    // Determine if there's a next question BEFORE updating state
+    const hasNextQuestion = currentSession.currentIndex < currentSession.questions.length - 1
 
     setSession(prev => {
       if (!prev) return prev
@@ -454,35 +467,41 @@ export function DiagnosticMode() {
       }
     })
 
-    // Move to next if there's more questions
-    if (session.currentIndex < session.questions.length - 1) {
+    // Move to next if there's more questions - use the pre-computed value
+    if (hasNextQuestion) {
       setSelectedAnswer(null)
       setShowFeedback(false)
       setQuestionStartTime(Date.now())
       setSession(prev => prev ? { ...prev, currentIndex: prev.currentIndex + 1 } : prev)
     } else {
-      // End diagnostic
-      finishDiagnostic()
+      // End diagnostic - use the ref to call finishDiagnostic
+      // This ensures we get the latest version with updated sessionRef.current
+      if (finishDiagnosticRef.current) {
+        finishDiagnosticRef.current()
+      }
     }
-  }, [session, questionStartTime, selectNextQuestion])
+  }, [questionStartTime, selectNextQuestion])
 
   // Finish diagnostic and generate report
+  // Uses sessionRef.current to ensure we always have the latest session state
   const finishDiagnostic = useCallback(async () => {
-    if (!session) return
+    // Use sessionRef.current to get the current session (avoids stale closure issue)
+    const currentSession = sessionRef.current
+    if (!currentSession) return
 
     const completedAt = new Date().toISOString()
-    const duration = new Date(completedAt).getTime() - new Date(session.startedAt).getTime()
+    const duration = new Date(completedAt).getTime() - new Date(currentSession.startedAt).getTime()
 
     // Calculate topic breakdown
     const topicBreakdown: Record<string, { total: number; correct: number; accuracy: number }> = {}
-    session.selectedTopics.forEach(topic => {
+    currentSession.selectedTopics.forEach(topic => {
       topicBreakdown[topic] = { total: 0, correct: 0, accuracy: 0 }
     })
 
     // Calculate concept breakdown
     const conceptBreakdown: Record<string, { total: number; correct: number; accuracy: number }> = {}
 
-    session.questions.forEach(q => {
+    currentSession.questions.forEach(q => {
       // Topic breakdown
       if (topicBreakdown[q.topic]) {
         topicBreakdown[q.topic].total++
@@ -551,7 +570,7 @@ export function DiagnosticMode() {
     
     weakAreas.slice(0, 5).forEach(area => {
       // Find remediation references from questions
-      session.questions
+      currentSession.questions
         .filter(q => 
           (area.type === 'topic' && q.topic === area.id) ||
           (area.type === 'concept' && q.concepts.includes(area.id))
@@ -569,10 +588,10 @@ export function DiagnosticMode() {
     })
 
     // Calculate totals
-    const totalQuestions = session.questions.length
-    const correctCount = session.questions.filter(q => q.status === 'correct').length
-    const incorrectCount = session.questions.filter(q => q.status === 'incorrect').length
-    const skippedCount = session.questions.filter(q => q.status === 'skipped').length
+    const totalQuestions = currentSession.questions.length
+    const correctCount = currentSession.questions.filter(q => q.status === 'correct').length
+    const incorrectCount = currentSession.questions.filter(q => q.status === 'incorrect').length
+    const skippedCount = currentSession.questions.filter(q => q.status === 'skipped').length
     const accuracy = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
 
     const newReport: DiagnosticReport = {
@@ -584,7 +603,7 @@ export function DiagnosticMode() {
       duration,
       topicBreakdown,
       conceptBreakdown,
-      identifiedPatterns: session.mistakePatterns,
+      identifiedPatterns: currentSession.mistakePatterns,
       weakAreas,
       recommendations
     }
@@ -597,17 +616,20 @@ export function DiagnosticMode() {
       const userId = await getOrCreateUserId()
       await db.sessions.add({
         userId,
-        startedAt: session.startedAt,
+        startedAt: currentSession.startedAt,
         endedAt: completedAt,
         mode: 'diagnostic',
-        topics: session.selectedTopics,
+        topics: currentSession.selectedTopics,
         itemsCompleted: totalQuestions,
         correctCount
       })
     } catch (e) {
       console.warn('Failed to save diagnostic session to IndexedDB:', e)
     }
-  }, [session])
+    
+    // Store reference for callers that need the current function
+    finishDiagnosticRef.current = finishDiagnostic
+  }, []) // No dependencies - uses sessionRef.current internally
 
   // Handle next question
   const handleNext = useCallback(() => {
@@ -619,10 +641,12 @@ export function DiagnosticMode() {
       setShowFeedback(false)
       setQuestionStartTime(Date.now())
     } else {
-      // No more questions, finish diagnostic
-      finishDiagnostic()
+      // No more questions, finish diagnostic - use ref
+      if (finishDiagnosticRef.current) {
+        finishDiagnosticRef.current()
+      }
     }
-  }, [session, finishDiagnostic])
+  }, [session])
 
   // Reset to topic selection
   const resetDiagnostic = useCallback(() => {

@@ -375,7 +375,7 @@ export function GlobalSearch() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground bg-muted/50 hover:bg-muted rounded-lg border border-transparent hover:border-border transition-colors"
+        className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground bg-muted/50 hover:bg-muted rounded-lg border border-transparent hover:border-border transition-colors min-h-[44px] min-w-[44px] justify-center"
       >
         <Search className="h-4 w-4" />
         <span className="hidden sm:inline">Search...</span>

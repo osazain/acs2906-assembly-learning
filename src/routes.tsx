@@ -36,7 +36,7 @@ function AppLayout() {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors"
+            className="lg:hidden p-3 rounded-md hover:bg-muted transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -53,7 +53,7 @@ function AppLayout() {
               <Link
                 key={item.href}
                 to={item.href}
-                className="px-3 py-1.5 text-sm rounded-md hover:bg-muted transition-colors"
+                className="px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors min-h-[44px] flex items-center"
               >
                 {item.title}
               </Link>
@@ -72,16 +72,16 @@ function AppLayout() {
             className="fixed inset-0 z-30 bg-black/50 lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
-          <aside className="fixed left-0 top-14 bottom-0 z-40 w-64 border-r bg-background lg:hidden">
+          <aside className="fixed left-0 top-14 bottom-0 z-40 w-64 border-r bg-background lg:hidden overflow-y-auto">
             <nav className="p-4 space-y-1">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   onClick={() => setIsSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 text-sm rounded-md hover:bg-muted transition-colors min-h-[48px]"
                 >
-                  <item.icon className="h-4 w-4" />
+                  <item.icon className="h-5 w-5 shrink-0" />
                   {item.title}
                 </Link>
               ))}

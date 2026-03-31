@@ -1,11 +1,11 @@
 {
   "milestone": "phase2",
-  "round": 2,
-  "status": "fail",
+  "round": 3,
+  "status": "pass",
   "assertionsSummary": {
     "total": 43,
-    "passed": 40,
-    "failed": 3,
+    "passed": 43,
+    "failed": 0,
     "blocked": 0
   },
   "passedAssertions": [
@@ -13,58 +13,33 @@
     "P2-LEC-001", "P2-LEC-002", "P2-LEC-003", "P2-LEC-004", "P2-LEC-005", "P2-LEC-006", "P2-LEC-007", "P2-LEC-008",
     "P2-EXP-001", "P2-EXP-002", "P2-EXP-003", "P2-EXP-004", "P2-EXP-005", "P2-EXP-006", "P2-EXP-007", "P2-EXP-008", "P2-EXP-009", "P2-EXP-010",
     "P2-CODE-001", "P2-CODE-002", "P2-CODE-003", "P2-CODE-004", "P2-CODE-005", "P2-CODE-006",
-    "P2-SEARCH-001", "P2-SEARCH-002", "P2-SEARCH-003", "P2-SEARCH-005",
+    "P2-SEARCH-001", "P2-SEARCH-002", "P2-SEARCH-003", "P2-SEARCH-004", "P2-SEARCH-005",
     "P2-RESP-001", "P2-RESP-002", "P2-RESP-003", "P2-RESP-004"
   ],
-  "failedAssertions": [
-    { "id": "P2-EXP-003", "reason": "Lecture filter combobox visible but not interactable via Playwright automation - click on combobox times out" },
-    { "id": "P2-EXP-008", "reason": "URL parameters not updated when filters are applied - URL remains /examples without filter params" },
-    { "id": "P2-SEARCH-004", "reason": "Recent searches not displayed when search palette opens with empty input" }
-  ],
+  "failedAssertions": [],
   "blockedAssertions": [],
   "appliedUpdates": [
-    { "target": "validation-state.json", "description": "Updated 12 Phase 2 assertions from failed/blocked to passed after fixes applied", "source": "flow-report" }
+    { "target": "validation-state.json", "description": "Updated P2-EXP-003, P2-EXP-008, P2-SEARCH-004 from failed to passed after fix features applied", "source": "flow-report" }
   ],
   "previousRound": {
     "path": ".factory/validation/phase2/user-testing/synthesis.json",
-    "round": 1,
-    "passedAssertions": 28,
-    "failedAssertions": 13,
-    "blockedAssertions": 2
+    "round": 2,
+    "passedAssertions": 40,
+    "failedAssertions": 3,
+    "blockedAssertions": 0
   },
   "fixesApplied": [
     {
-      "fixFeature": "fix-lecture-content",
-      "fulfills": ["P2-LEC-001", "P2-LEC-002"],
-      "effect": "Unblocked P2-LEC-003 through P2-LEC-008 which were all blocked by lecture content not rendering"
+      "fixFeature": "fix-example-filters",
+      "fulfills": ["P2-EXP-003", "P2-EXP-008"],
+      "effect": "Lecture filter combobox now interactable - keyboard navigation works, URL parameters sync when filter applied"
     },
     {
-      "fixFeature": "fix-course-nav-routing",
-      "fulfills": ["P2-NAV-003"],
-      "effect": "Fixed P2-NAV-008 hover/focus states which were blocked by routing instability"
-    },
-    {
-      "fixFeature": "fix-search-keyboard",
-      "fulfills": ["P2-SEARCH-003", "P2-SEARCH-005"],
-      "effect": "Fixed keyboard navigation and Escape key behavior in search palette"
+      "fixFeature": "fix-recent-searches",
+      "fulfills": ["P2-SEARCH-004"],
+      "effect": "Recent searches now persisted and displayed when search palette opens with empty input"
     }
   ],
-  "systemicIssues": [
-    {
-      "rootCause": "Lecture filter combobox not properly exposed to Playwright",
-      "description": "The combobox element exists but all interactions timeout. This may be a custom UI component that Playwright cannot interact with standard methods.",
-      "affectedAssertions": ["P2-EXP-003"]
-    },
-    {
-      "rootCause": "URL filter parameters not implemented",
-      "description": "When filters are applied to example explorer, the URL does not update with query parameters. This is a missing feature implementation.",
-      "affectedAssertions": ["P2-EXP-008"]
-    },
-    {
-      "rootCause": "Recent searches not persisted or displayed",
-      "description": "Search palette does not show recent searches when opened with empty input. localStorage may not be used to persist searches.",
-      "affectedAssertions": ["P2-SEARCH-004"]
-    }
-  ],
-  "summary": "Phase 2 user testing round 2: 40/43 assertions passing. Fixes applied (fix-lecture-content, fix-course-nav-routing, fix-search-keyboard) resolved 11 previously failed/blocked assertions. Remaining 3 failures require new fix features: P2-EXP-003 (lecture filter combobox), P2-EXP-008 (URL parameters), P2-SEARCH-004 (recent searches)."
+  "systemicIssues": [],
+  "summary": "Phase 2 user testing round 3: ALL 43/43 assertions passing. Fix features (fix-example-filters, fix-recent-searches) resolved the remaining 3 failed assertions from round 2. Phase 2 validation complete."
 }

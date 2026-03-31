@@ -45,7 +45,7 @@ const GAMES: Game[] = [
     title: 'Instruction Hangman',
     description: 'Guess assembly instructions with category hints. Practice recognizing mnemonics and their purposes.',
     icon: 'hangman',
-    status: 'coming-soon',
+    status: 'available',
     estimatedMinutes: 5,
     concepts: ['instruction-set', 'mnemonics', 'operands'],
   },
@@ -260,10 +260,7 @@ export function GamesHub({ className }: GamesHubProps) {
 
   const handleLaunchGame = (gameId: string) => {
     // Navigate to the game route
-    // For now, games are not yet implemented, so we show an alert
-    console.log('Launching game:', gameId)
-    // In the future, this would navigate to the actual game route
-    // window.location.hash = `#/games/${gameId}`
+    window.location.hash = `#/games/${gameId}`
   }
 
   // Calculate total stats

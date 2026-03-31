@@ -12,7 +12,13 @@ import { DrillMode } from '@/components/assessment/DrillMode'
 import { DiagnosticMode } from '@/components/assessment/DiagnosticMode'
 import { MasteryDashboard } from '@/components/mastery/MasteryDashboard'
 import { GamesHub } from '@/components/games/GamesHub'
+import { InstructionHangman } from '@/components/games/InstructionHangman'
 import type { CourseMapLecture } from '@/lib/types'
+
+// Games layout component that renders Outlet for child routes
+function GamesLayout() {
+  return <Outlet />
+}
 
 const rootRoute = createRootRoute({
   component: AppLayout,
@@ -242,7 +248,19 @@ const diagnosticsRoute = createRoute({
 const gamesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/games',
+  component: GamesLayout,
+})
+
+const gamesIndexRoute = createRoute({
+  getParentRoute: () => gamesRoute,
+  path: '/',
   component: GamesPage,
+})
+
+const instructionHangmanRoute = createRoute({
+  getParentRoute: () => gamesRoute,
+  path: 'instruction-hangman',
+  component: InstructionHangmanPage,
 })
 
 const simulatorRoute = createRoute({
@@ -412,6 +430,10 @@ function GamesPage() {
   return <GamesHub />
 }
 
+function InstructionHangmanPage() {
+  return <InstructionHangman onBack={() => window.location.hash = '#/games'} />
+}
+
 function SimulatorPage() {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -544,6 +566,12 @@ function SettingsPage() {
   )
 }
 
+// Add children to gamesRoute
+const gamesRouteTree = gamesRoute.addChildren([
+  gamesIndexRoute,
+  instructionHangmanRoute,
+])
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   courseMapRoute,
@@ -553,7 +581,7 @@ const routeTree = rootRoute.addChildren([
   exampleDetailRoute,
   drillsRoute,
   diagnosticsRoute,
-  gamesRoute,
+  gamesRouteTree,
   simulatorRoute,
   progressRoute,
   settingsRoute,

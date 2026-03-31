@@ -411,15 +411,115 @@ function CourseMapPage() {
 }
 
 function LecturesPage() {
+  const lectures = courseMapData.lectures as CourseMapLecture[]
+
+  const getExamRelevanceStyles = (relevance: CourseMapLecture['examRelevance']) => {
+    switch (relevance) {
+      case 'high':
+        return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+      case 'medium':
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+      case 'low':
+        return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+    }
+  }
+
+  const getDifficultyStyles = (difficulty: CourseMapLecture['difficulty']) => {
+    switch (difficulty) {
+      case 'foundational':
+        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+      case 'intermediate':
+        return 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+      case 'advanced':
+        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
+    }
+  }
+
   return (
-    <div className="text-center py-12 space-y-4">
-      <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
-      <h2 className="text-xl font-semibold">Lectures Coming Soon</h2>
-      <p className="text-muted-foreground">Lecture content will be available after Phase 1.</p>
-      <Link to="/course-map" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-        <ArrowRight className="h-4 w-4" />
-        Back to Course Map
-      </Link>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+          <FileText className="h-4 w-4" />
+          ACS2906 Lectures
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Lectures</h1>
+        <p className="text-muted-foreground max-w-xl mx-auto">
+          Comprehensive coverage from data representation to advanced assembly programming.
+        </p>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="flex flex-wrap justify-center gap-6 text-sm">
+        <div className="flex items-center gap-2">
+          <BookOpen className="h-4 w-4 text-primary" />
+          <span><strong>{lectures.length}</strong> Lectures</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <FlaskConical className="h-4 w-4 text-emerald-600" />
+          <span><strong>{lectures.reduce((sum, l) => sum + l.examples, 0)}</strong> Examples</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Target className="h-4 w-4 text-orange-600" />
+          <span><strong>{lectures.filter(l => l.examRelevance === 'high').length}</strong> High-Exam-Relevance</span>
+        </div>
+      </div>
+
+      {/* Lecture Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {lectures.map((lecture) => (
+          <Link
+            key={lecture.id}
+            to="/lecture/$lectureId"
+            params={{ lectureId: String(lecture.id) }}
+            className="group block p-5 rounded-xl border bg-card hover:bg-muted/50 hover:border-primary/50 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {/* Card Header */}
+            <div className="flex items-start gap-3 mb-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 text-primary font-bold shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                {lecture.id}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-sm sm:text-base leading-tight group-hover:text-primary transition-colors">
+                  {lecture.title}
+                </h3>
+              </div>
+            </div>
+
+            {/* Topics */}
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {lecture.topics.slice(0, 3).map((topic) => (
+                <span
+                  key={topic}
+                  className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground truncate max-w-[150px]"
+                  title={topic}
+                >
+                  {topic}
+                </span>
+              ))}
+              {lecture.topics.length > 3 && (
+                <span className="text-xs text-muted-foreground">+{lecture.topics.length - 3} more</span>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-2 border-t border-border">
+              <div className="flex items-center gap-2">
+                <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', getExamRelevanceStyles(lecture.examRelevance))}>
+                  {lecture.examRelevance === 'high' ? 'High Exam' : lecture.examRelevance}
+                </span>
+                <span className={cn('text-xs px-2 py-0.5 rounded-full', getDifficultyStyles(lecture.difficulty))}>
+                  {lecture.difficulty}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <span>{lecture.examples} examples</span>
+                <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
@@ -499,9 +599,15 @@ function ProgressPage() {
 }
 
 function SettingsPage() {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('acs2906_theme') as 'light' | 'dark' | 'system') || 'system'
+    }
+    return 'system'
+  })
 
   useEffect(() => {
+    localStorage.setItem('acs2906_theme', theme)
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')
     } else if (theme === 'light') {

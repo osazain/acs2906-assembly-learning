@@ -285,6 +285,47 @@ Phase 3 has 29 assertions organized into 5 surfaces. Based on isolation analysis
 4. Verify session record has endTime
 5. Verify duration field is within 5 seconds of actual elapsed time
 
+# Phase 5: Simulator Integration
+
+## Validation Concurrency
+
+Phase 5 has 10 assertions organized into 1 surface (Simulator). Based on isolation analysis:
+- All simulator assertions test the same page/component
+- **Max concurrent validators: 1** (single simulator page, sequential testing)
+
+## Flow Validator Guidance: Simulator
+
+**URL**: `http://localhost:4173/#/simulator`
+
+**Assertions**: P5-SIM-001 to P5-SIM-010
+
+**What to test**:
+- P5-SIM-001: Simulator page loads at /#/simulator, renders without errors
+- P5-SIM-002: All 8086 registers displayed with hex values (AX, BX, CX, DX, SI, DI, SP, BP, CS, DS, ES, SS, IP, FLAGS)
+- P5-SIM-003: CPU flags display with boolean states (CF, OF, SF, ZF, AF, PF, DF)
+- P5-SIM-004: Step button executes exactly one instruction
+- P5-SIM-005: Run button begins continuous execution, Halt button stops it
+- P5-SIM-006: Breakpoints can be set on lines, execution pauses at breakpoint, breakpoints can be cleared
+- P5-SIM-007: Example preset dropdown loads pre-built programs, registers initialize correctly
+- P5-SIM-008: Memory view displays addresses and hex values, updates on execution
+- P5-SIM-009: Current instruction pointer (IP) highlighted in code editor during stepping
+- P5-SIM-010: Speed control slider adjusts execution speed
+
+**Isolation**: Single browser session, tests a single page
+
+**Test approach**:
+1. Navigate to /#/simulator
+2. Verify page loads with all UI components (register panel, flag panel, code editor, controls)
+3. Verify registers display with initial values (typically 0000 for general purpose registers)
+4. Verify flags show initial states (typically all 0 or unset)
+5. Load an example preset and verify registers initialize
+6. Click Step and verify only one instruction executes, registers/flags update
+7. Set a breakpoint on a line, click Run, verify execution pauses at breakpoint
+8. Clear breakpoint and verify it no longer triggers
+9. Adjust speed slider and verify execution speed changes
+10. Verify memory view shows address-value pairs that update on execution
+11. Verify current instruction is highlighted during stepping
+
 # Phase 4: Game Systems
 
 ## Validation Concurrency

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { 
   Target, 
   CheckCircle2, 
@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 import questionBankData from '@/data/processed/question-bank.json'
 import type { AssessmentItem } from '@/lib/types'
 import { ResultsSummary, type DrillSessionResults } from './ResultsSummary'
-import { db, getOrCreateUserId, updateMastery, addMistakePattern } from '@/lib/db'
+import { db, getOrCreateUserId, updateMastery, addMistakePattern, createSession, endSession } from '@/lib/db'
 import type { AnswerRecord } from '@/lib/db'
 
 // ============================================================================
@@ -46,6 +46,7 @@ interface DrillSession {
   startedAt: string
   completedAt?: string
   settings: DrillSettings
+  sessionId?: number
 }
 
 interface DrillResult {
@@ -161,7 +162,7 @@ export function DrillMode() {
   }, [])
 
   // Start a new drill session
-  const startDrill = useCallback(() => {
+  const startDrill = useCallback(async () => {
     const shuffled = shuffleArray(filteredQuestions)
     const selected = shuffled.slice(0, Math.min(settings.questionCount, shuffled.length))
     
@@ -170,11 +171,23 @@ export function DrillMode() {
       status: 'unanswered',
     }))
 
+    // Create a study session in IndexedDB
+    let sessionId: number | undefined
+    try {
+      const userId = await getOrCreateUserId()
+      // Collect unique topics from selected questions
+      const topics = [...new Set(selected.map(q => q.topic))]
+      sessionId = await createSession(userId, 'drill', topics)
+    } catch (error) {
+      console.error('Failed to create study session:', error)
+    }
+
     setSession({
       questions,
       currentIndex: 0,
       startedAt: new Date().toISOString(),
       settings,
+      sessionId,
     })
     setSelectedAnswer(null)
     setShowFeedback(false)
@@ -315,6 +328,17 @@ export function DrillMode() {
 
     return { total, correct, incorrect, skipped, accuracy, duration, byTopic }
   }, [session])
+
+  // End session when drill completes
+  const sessionEndedRef = useRef(false)
+  useEffect(() => {
+    if (session?.completedAt && session.sessionId && results && !sessionEndedRef.current) {
+      sessionEndedRef.current = true
+      endSession(session.sessionId, results.total, results.correct).catch(err => {
+        console.error('Failed to end study session:', err)
+      })
+    }
+  }, [session?.completedAt, session?.sessionId, results])
 
   // Get current question
   const currentQuestion = session?.questions[session.currentIndex]

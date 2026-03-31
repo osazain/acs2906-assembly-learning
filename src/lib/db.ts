@@ -220,3 +220,51 @@ export async function getMasteryByType(
 ): Promise<MasteryRecord[]> {
   return db.mastery.where('userId').equals(userId).and(r => r.topicType === topicType).toArray()
 }
+
+// ============================================================================
+// Study Session Management
+// ============================================================================
+
+export async function createSession(
+  userId: string,
+  mode: StudySession['mode'],
+  topics: string[] = []
+): Promise<number> {
+  const session: StudySession = {
+    userId,
+    mode,
+    startedAt: new Date().toISOString(),
+    topics,
+    itemsCompleted: 0,
+    correctCount: 0,
+  }
+  const id = await db.sessions.add(session)
+  return id as number
+}
+
+export async function endSession(
+  sessionId: number,
+  itemsCompleted: number,
+  correctCount: number
+): Promise<void> {
+  await db.sessions.update(sessionId, {
+    endedAt: new Date().toISOString(),
+    itemsCompleted,
+    correctCount,
+  })
+}
+
+export async function getSession(sessionId: number): Promise<StudySession | undefined> {
+  return db.sessions.get(sessionId)
+}
+
+export async function getAllSessions(userId: string): Promise<StudySession[]> {
+  return db.sessions.where('userId').equals(userId).reverse().sortBy('startedAt')
+}
+
+export async function getSessionsByMode(
+  userId: string,
+  mode: StudySession['mode']
+): Promise<StudySession[]> {
+  return db.sessions.where('userId').equals(userId).and(s => s.mode === mode).reverse().sortBy('startedAt')
+}

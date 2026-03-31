@@ -194,6 +194,10 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     // Execute instruction
     const result = executeInstruction(instruction, cpuState, labels);
     
+    // Update React state to trigger re-render with new values (including memory)
+    // Clone memory array to create new reference so useMemo in MemoryView recalculates
+    setCpuState({ ...cpuState, memory: new Uint8Array(cpuState.memory) });
+    
     // Update the ref synchronously so run() can read the updated state
     cpuStateRef.current = cpuState;
     
@@ -228,7 +232,7 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     }
     
     return cpuState;
-  }, [cpuState, getCurrentInstruction, labels, parsedInstructions, isHalted, onExecutionEnd]);
+  }, [cpuState, setCpuState, getCurrentInstruction, labels, parsedInstructions, isHalted, onExecutionEnd]);
   
   // Start continuous execution
   const run = useCallback(() => {

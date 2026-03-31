@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { 
   Stethoscope, 
@@ -123,6 +123,40 @@ const MISTAKE_PATTERNS: Record<string, { description: string; indicators: string
 }
 
 // ============================================================================
+// Session Persistence (localStorage)
+// ============================================================================
+
+const DIAGNOSTIC_PROGRESS = 'acs2906_diagnostic_progress'
+
+function saveDiagnosticSession(session: DiagnosticSession): void {
+  try {
+    localStorage.setItem(DIAGNOSTIC_PROGRESS, JSON.stringify(session))
+  } catch (e) {
+    console.warn('Failed to save diagnostic session:', e)
+  }
+}
+
+function loadDiagnosticSession(): DiagnosticSession | null {
+  try {
+    const stored = localStorage.getItem(DIAGNOSTIC_PROGRESS)
+    if (stored) {
+      return JSON.parse(stored) as DiagnosticSession
+    }
+  } catch (e) {
+    console.warn('Failed to load diagnostic session:', e)
+  }
+  return null
+}
+
+function clearDiagnosticSession(): void {
+  try {
+    localStorage.removeItem(DIAGNOSTIC_PROGRESS)
+  } catch (e) {
+    console.warn('Failed to clear diagnostic session:', e)
+  }
+}
+
+// ============================================================================
 // Utility Functions
 // ============================================================================
 
@@ -164,6 +198,19 @@ export function DiagnosticMode() {
   
   // Use ref to store finishDiagnostic to avoid forward reference issues
   const finishDiagnosticRef = useRef<(() => Promise<void>) | null>(null)
+  
+  // Load saved diagnostic session on mount
+  useEffect(() => {
+    const savedSession = loadDiagnosticSession()
+    if (savedSession && !savedSession.completedAt) {
+      // Restore in-progress session
+      setSession(savedSession)
+      setSelectedAnswer(null)
+      setShowFeedback(false)
+      setQuestionStartTime(Date.now())
+      setReport(null)
+    }
+  }, [])
   
   // Topic selection state
   const [selectedTopics, setSelectedTopics] = useState<string[]>([])
@@ -392,7 +439,7 @@ export function DiagnosticMode() {
         updatedQuestions.push(nextQ)
       }
 
-      return { 
+      const updatedSession = { 
         ...prev, 
         questions: updatedQuestions, 
         currentDifficulty: newDifficulty,
@@ -400,6 +447,11 @@ export function DiagnosticMode() {
         mistakePatterns: mergedPatterns,
         topicPerformance: topicPerf
       }
+      
+      // Save session state to localStorage for persistence
+      saveDiagnosticSession(updatedSession)
+      
+      return updatedSession
     })
 
     setShowFeedback(true)
@@ -459,12 +511,17 @@ export function DiagnosticMode() {
         updatedQuestions.push(nextQ)
       }
 
-      return { 
+      const updatedSession = { 
         ...prev, 
         questions: updatedQuestions, 
         mistakePatterns: prev.mistakePatterns,
         topicPerformance: topicPerf
       }
+      
+      // Save session state to localStorage for persistence
+      saveDiagnosticSession(updatedSession)
+      
+      return updatedSession
     })
 
     // Move to next if there's more questions - use the pre-computed value
@@ -472,7 +529,12 @@ export function DiagnosticMode() {
       setSelectedAnswer(null)
       setShowFeedback(false)
       setQuestionStartTime(Date.now())
-      setSession(prev => prev ? { ...prev, currentIndex: prev.currentIndex + 1 } : prev)
+      setSession(prev => {
+        if (!prev) return prev
+        const updated = { ...prev, currentIndex: prev.currentIndex + 1 }
+        saveDiagnosticSession(updated)
+        return updated
+      })
     } else {
       // End diagnostic - use the ref to call finishDiagnostic
       // This ensures we get the latest version with updated sessionRef.current
@@ -627,6 +689,9 @@ export function DiagnosticMode() {
       console.warn('Failed to save diagnostic session to IndexedDB:', e)
     }
     
+    // Clear localStorage session as diagnostic is complete
+    clearDiagnosticSession()
+    
     // Store reference for callers that need the current function
     finishDiagnosticRef.current = finishDiagnostic
   }, []) // No dependencies - uses sessionRef.current internally
@@ -655,6 +720,7 @@ export function DiagnosticMode() {
     setShowFeedback(false)
     setReport(null)
     setSelectedTopics([])
+    clearDiagnosticSession()
   }, [])
 
   // Get current question

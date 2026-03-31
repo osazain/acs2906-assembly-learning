@@ -1,6 +1,6 @@
 /**
  * Code Editor Component
- * Displays assembly code with line numbers and current instruction highlighting.
+ * Displays assembly code with line numbers, current instruction highlighting, and breakpoints.
  */
 
 import { useMemo, useState } from 'react';
@@ -10,7 +10,8 @@ interface CodeEditorProps {
   code: string;
   currentLine: number;
   parsedInstructions: ParsedInstruction[];
-  onLineClick?: (lineNumber: number) => void;
+  breakpoints?: Set<number>;
+  onToggleBreakpoint?: (lineNumber: number) => void;
 }
 
 interface LineData {
@@ -18,13 +19,15 @@ interface LineData {
   content: string;
   isCurrentInstruction: boolean;
   isExecutable: boolean;
+  hasBreakpoint: boolean;
 }
 
 export function CodeEditor({ 
   code, 
   currentLine, 
   parsedInstructions,
-  onLineClick,
+  breakpoints = new Set(),
+  onToggleBreakpoint,
 }: CodeEditorProps) {
   const [hoveredLine, setHoveredLine] = useState<number | null>(null);
   
@@ -37,8 +40,9 @@ export function CodeEditor({
       content,
       isCurrentInstruction: currentLine === idx + 1,
       isExecutable: execLines.has(idx + 1),
+      hasBreakpoint: breakpoints.has(idx + 1),
     }));
-  }, [code, currentLine, parsedInstructions]);
+  }, [code, currentLine, parsedInstructions, breakpoints]);
   
   // Syntax highlighting for assembly
   const highlightLine = (line: string): React.ReactNode => {
@@ -125,22 +129,33 @@ export function CodeEditor({
               <tr
                 key={line.lineNumber}
                 className={`
-                  cursor-pointer transition-colors
+                  transition-colors
                   ${line.isCurrentInstruction 
                     ? 'bg-yellow-200 dark:bg-yellow-900/50' 
                     : hoveredLine === line.lineNumber 
                       ? 'bg-muted/50' 
                       : ''
                   }
-                  ${line.isExecutable ? '' : 'opacity-50'}
+                  ${line.isExecutable ? 'cursor-pointer' : 'cursor-default'}
+                  ${line.hasBreakpoint ? 'bg-red-100 dark:bg-red-900/20' : ''}
                 `}
-                onClick={() => line.isExecutable && onLineClick?.(line.lineNumber)}
+                onClick={() => line.isExecutable && onToggleBreakpoint?.(line.lineNumber)}
                 onMouseEnter={() => setHoveredLine(line.lineNumber)}
                 onMouseLeave={() => setHoveredLine(null)}
               >
-                {/* Line Number */}
-                <td className="select-none text-right pr-4 pl-2 py-1 text-muted-foreground border-r border-muted/20 w-12">
-                  <span className="inline-block w-8 text-right">{line.lineNumber}</span>
+                {/* Line Number with Breakpoint Indicator */}
+                <td className="select-none text-right pr-2 pl-2 py-1 border-r border-muted/20 w-12">
+                  <div className="flex items-center justify-end gap-1">
+                    {/* Breakpoint indicator */}
+                    {line.hasBreakpoint && (
+                      <span className="w-3 h-3 rounded-full bg-red-500 flex items-center justify-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+                      </span>
+                    )}
+                    <span className={`${line.lineNumber === currentLine ? 'font-bold text-yellow-700 dark:text-yellow-400' : 'text-muted-foreground'}`}>
+                      {line.lineNumber}
+                    </span>
+                  </div>
                 </td>
                 {/* Code Content */}
                 <td className="pl-4 pr-4 py-1 whitespace-pre">

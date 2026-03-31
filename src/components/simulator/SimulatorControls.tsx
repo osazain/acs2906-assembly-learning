@@ -3,7 +3,7 @@
  * Step, Run, and Halt buttons for execution control.
  */
 
-import { Play, SkipForward, Square, RotateCcw, Pause } from 'lucide-react';
+import { Play, SkipForward, Square, RotateCcw, Pause, CircleDot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type ExecutionSpeed = 'step' | 'slow' | 'normal' | 'fast';
@@ -13,11 +13,14 @@ interface SimulatorControlsProps {
   isHalted: boolean;
   canStep: boolean;
   speed: ExecutionSpeed;
+  hitBreakpoint: number | null;
+  breakpointCount: number;
   onStep: () => void;
   onRun: () => void;
   onHalt: () => void;
   onReset: () => void;
   onSpeedChange: (speed: ExecutionSpeed) => void;
+  onClearBreakpoints: () => void;
 }
 
 export function SimulatorControls({
@@ -25,11 +28,14 @@ export function SimulatorControls({
   isHalted,
   canStep,
   speed,
+  hitBreakpoint,
+  breakpointCount,
   onStep,
   onRun,
   onHalt,
   onReset,
   onSpeedChange,
+  onClearBreakpoints,
 }: SimulatorControlsProps) {
   const stepButtonClass = cn(
     'flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors',
@@ -155,7 +161,12 @@ export function SimulatorControls({
         
         {/* Execution Status */}
         <div className="text-sm">
-          {isHalted ? (
+          {hitBreakpoint !== null ? (
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+              <CircleDot className="h-4 w-4" />
+              <span className="font-medium">Breakpoint hit at line {hitBreakpoint}</span>
+            </div>
+          ) : isHalted ? (
             <span className="text-red-600 dark:text-red-400 font-medium">CPU Halted</span>
           ) : isRunning ? (
             <span className="text-green-600 dark:text-green-400 font-medium">Running...</span>
@@ -163,6 +174,23 @@ export function SimulatorControls({
             <span className="text-muted-foreground">Ready</span>
           )}
         </div>
+        
+        {/* Breakpoint Info and Clear */}
+        {breakpointCount > 0 && (
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="w-2 h-2 rounded-full bg-red-500"></span>
+              <span>{breakpointCount} breakpoint{breakpointCount !== 1 ? 's' : ''}</span>
+            </div>
+            <button
+              onClick={onClearBreakpoints}
+              className="text-xs text-muted-foreground hover:text-foreground underline"
+              title="Clear all breakpoints"
+            >
+              Clear all
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

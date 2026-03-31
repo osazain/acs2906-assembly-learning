@@ -47,8 +47,45 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     flagsModified: {},
   });
   
+  // Breakpoint state - Set of line numbers with breakpoints
+  const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set());
+  
+  // Track if we paused due to breakpoint
+  const [hitBreakpoint, setHitBreakpoint] = useState<number | null>(null);
+  
   // Execution interval ref for continuous running
   const executionIntervalRef = useRef<number | null>(null);
+  
+  // Ref to track current cpuState to avoid stale closures in run loop
+  const cpuStateRef = useRef(cpuState);
+  useEffect(() => {
+    cpuStateRef.current = cpuState;
+  }, [cpuState]);
+  
+  // Ref to track isRunning to avoid stale closure in run loop
+  const isRunningRef = useRef(isRunning);
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+  }, [isRunning]);
+  
+  // Toggle breakpoint on a line
+  const toggleBreakpoint = useCallback((lineNumber: number) => {
+    setBreakpoints(prev => {
+      const next = new Set(prev);
+      if (next.has(lineNumber)) {
+        next.delete(lineNumber);
+      } else {
+        next.add(lineNumber);
+      }
+      return next;
+    });
+  }, []);
+  
+  // Clear all breakpoints
+  const clearAllBreakpoints = useCallback(() => {
+    setBreakpoints(new Set());
+    setHitBreakpoint(null);
+  }, []);
   
   // Parse code using useMemo to avoid cascading renders
   const { instructions: parsedInstructions, labels, errors: parseErrors } = useMemo(() => {
@@ -71,16 +108,16 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     return null;
   }, [cpuState.IP, parsedInstructions]);
   
-  // Execute one instruction
-  const step = useCallback(() => {
-    if (isHalted) return;
+  // Execute one instruction - returns the updated CPU state
+  const step = useCallback((): CPUState => {
+    if (isHalted) return cpuState;
     
     const instruction = getCurrentInstruction();
     if (!instruction) {
       setIsHalted(true);
       setIsRunning(false);
       onExecutionEnd?.();
-      return;
+      return cpuState;
     }
     
     // Capture old values before execution
@@ -105,6 +142,9 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     // Execute instruction
     const result = executeInstruction(instruction, cpuState, labels);
     
+    // Update the ref synchronously so run() can read the updated state
+    cpuStateRef.current = cpuState;
+    
     // Calculate what changed
     const registersModified: Record<string, { oldValue: number; newValue: number }> = {};
     for (const [name, oldVal] of Object.entries(oldRegisters)) {
@@ -126,7 +166,7 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     
     if (!result.success) {
       setIsRunning(false);
-      return;
+      return cpuState;
     }
     
     if (result.halted) {
@@ -134,13 +174,16 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
       setIsRunning(false);
       onExecutionEnd?.();
     }
+    
+    return cpuState;
   }, [cpuState, getCurrentInstruction, labels, parsedInstructions, isHalted, onExecutionEnd]);
   
   // Start continuous execution
   const run = useCallback(() => {
-    if (isHalted || isRunning) return;
+    if (isHalted || isRunningRef.current) return;
     
     setIsRunning(true);
+    setHitBreakpoint(null);
     
     // Calculate delay based on speed
     const delays: Record<ExecutionSpeed, number> = {
@@ -151,17 +194,33 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     };
     
     const runStep = () => {
-      if (!isRunning) return;
+      // Check if still running (use ref to avoid stale closure)
+      if (!isRunningRef.current) return;
       
-      step();
+      // Execute one step and get the updated CPU state
+      const currentCpu = step();
       
-      if (isHalted || !cpuState.halted) {
+      // Check if halted or breakpoint hit
+      const currentInstruction = currentCpu.IP >= 0 && currentCpu.IP < parsedInstructions.length 
+        ? parsedInstructions[currentCpu.IP] 
+        : null;
+      const currentLine = currentInstruction?.lineNumber ?? 0;
+      
+      // Check for breakpoint hit (only if not already halting)
+      if (!currentCpu.halted && breakpoints.has(currentLine)) {
+        setHitBreakpoint(currentLine);
+        setIsRunning(false);
+        return;
+      }
+      
+      // Continue if not halted
+      if (!currentCpu.halted) {
         executionIntervalRef.current = window.setTimeout(runStep, delays[executionSpeed]);
       }
     };
     
     runStep();
-  }, [isHalted, isRunning, executionSpeed, step, cpuState.halted]);
+  }, [isHalted, executionSpeed, step, parsedInstructions, breakpoints]);
   
   // Halt execution
   const halt = useCallback(() => {
@@ -255,6 +314,8 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
             code={code}
             currentLine={currentInstruction?.lineNumber ?? 0}
             parsedInstructions={parsedInstructions}
+            breakpoints={breakpoints}
+            onToggleBreakpoint={toggleBreakpoint}
           />
           
           {/* Current Instruction Display */}
@@ -280,11 +341,14 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
             isHalted={isHalted}
             canStep={parsedInstructions.length > 0 && !isRunning && !isHalted}
             speed={executionSpeed}
+            hitBreakpoint={hitBreakpoint}
+            breakpointCount={breakpoints.size}
             onStep={step}
             onRun={run}
             onHalt={halt}
             onReset={reset}
             onSpeedChange={handleSpeedChange}
+            onClearBreakpoints={clearAllBreakpoints}
           />
           
           {/* Registers */}

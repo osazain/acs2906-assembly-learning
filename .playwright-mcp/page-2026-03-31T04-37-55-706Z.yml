@@ -1,0 +1,111 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - button [ref=e22]:
+        - img [ref=e23]
+      - complementary [ref=e24]:
+        - generic [ref=e25]:
+          - link "Back to Course Map" [ref=e26] [cursor=pointer]:
+            - /url: /course-map
+            - img [ref=e27]
+            - text: Back to Course Map
+          - navigation [ref=e29]:
+            - heading "Sections" [level=3] [ref=e30]
+            - button "1 Number systems (binary, hexadecimal, decimal)" [ref=e31]:
+              - generic [ref=e32]: "1"
+              - generic [ref=e33]: Number systems (binary, hexadecimal, decimal)
+            - button "2 Data representation fundamentals" [ref=e34]:
+              - generic [ref=e35]: "2"
+              - generic [ref=e36]: Data representation fundamentals
+            - button "3 Introduction to 8086 architecture" [ref=e37]:
+              - generic [ref=e38]: "3"
+              - generic [ref=e39]: Introduction to 8086 architecture
+            - button "4 Assembly language basics and syntax" [ref=e40]:
+              - generic [ref=e41]: "4"
+              - generic [ref=e42]: Assembly language basics and syntax
+            - button "5 Registers and memory concepts" [ref=e43]:
+              - generic [ref=e44]: "5"
+              - generic [ref=e45]: Registers and memory concepts
+          - link "Try in Simulator" [ref=e46] [cursor=pointer]:
+            - /url: /simulator
+            - img [ref=e47]
+            - text: Try in Simulator
+      - main [ref=e50]:
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]: "1"
+            - heading "Introduction to Assembly Language" [level=1] [ref=e55]
+          - generic [ref=e56]:
+            - generic [ref=e57]: foundational
+            - generic [ref=e58]: Medium Exam Relevance
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - generic [ref=e62]:
+                - generic [ref=e63]: "1"
+                - heading "Number systems (binary, hexadecimal, decimal)" [level=2] [ref=e64]
+              - button "Mark as Read" [ref=e65]
+            - generic [ref=e67]:
+              - paragraph [ref=e68]:
+                - strong [ref=e69]: Number systems (binary, hexadecimal, decimal)
+              - paragraph [ref=e70]: This section covers Number systems (binary, hexadecimal, decimal) in the context of 8086 assembly language programming.
+              - paragraph [ref=e71]: Understanding Number systems (binary, hexadecimal, decimal) is essential for mastering assembly language programming. In 8086 assembly, this concept forms the foundation for writing efficient programs.
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - generic [ref=e74]:
+                - generic [ref=e75]: "2"
+                - heading "Data representation fundamentals" [level=2] [ref=e76]
+              - button "Mark as Read" [ref=e77]
+            - generic [ref=e79]:
+              - paragraph [ref=e80]:
+                - strong [ref=e81]: Data representation fundamentals
+              - paragraph [ref=e82]: This section covers Data representation fundamentals in the context of 8086 assembly language programming.
+              - paragraph [ref=e83]: Understanding Data representation fundamentals is essential for mastering assembly language programming. In 8086 assembly, this concept forms the foundation for writing efficient programs.
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]:
+                - generic [ref=e87]: "3"
+                - heading "Introduction to 8086 architecture" [level=2] [ref=e88]
+              - button "Mark as Read" [ref=e89]
+            - generic [ref=e91]:
+              - paragraph [ref=e92]:
+                - strong [ref=e93]: Introduction to 8086 architecture
+              - paragraph [ref=e94]: This section covers Introduction to 8086 architecture in the context of 8086 assembly language programming.
+              - paragraph [ref=e95]: Understanding Introduction to 8086 architecture is essential for mastering assembly language programming. In 8086 assembly, this concept forms the foundation for writing efficient programs.
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - generic [ref=e98]:
+                - generic [ref=e99]: "4"
+                - heading "Assembly language basics and syntax" [level=2] [ref=e100]
+              - button "Mark as Read" [ref=e101]
+            - generic [ref=e103]:
+              - paragraph [ref=e104]:
+                - strong [ref=e105]: Assembly language basics and syntax
+              - paragraph [ref=e106]: This section covers Assembly language basics and syntax in the context of 8086 assembly language programming.
+              - paragraph [ref=e107]: Understanding Assembly language basics and syntax is essential for mastering assembly language programming. In 8086 assembly, this concept forms the foundation for writing efficient programs.
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: "5"
+                - heading "Registers and memory concepts" [level=2] [ref=e112]
+              - button "Mark as Read" [ref=e113]
+            - generic [ref=e115]:
+              - paragraph [ref=e116]:
+                - strong [ref=e117]: Registers and memory concepts
+              - paragraph [ref=e118]: This section covers Registers and memory concepts in the context of 8086 assembly language programming.
+              - paragraph [ref=e119]: Understanding Registers and memory concepts is essential for mastering assembly language programming. In 8086 assembly, this concept forms the foundation for writing efficient programs.
+  - contentinfo [ref=e120]: ACS2906 Assembly Language Learning Platform

@@ -329,7 +329,7 @@ export function InstructionHangman({ className, onBack }: InstructionHangmanProp
       const newStats: GameStats = {
         ...stats,
         gamesPlayed: stats.gamesPlayed + 1,
-        highScore: Math.max(stats.highScore, newState.score + scoreChange),
+        highScore: Math.max(stats.highScore, newState.score),
         totalCorrect: stats.totalCorrect + (isCorrect ? 1 : 0),
         totalWrong: stats.totalWrong + (isCorrect ? 0 : 1),
       }
@@ -337,7 +337,7 @@ export function InstructionHangman({ className, onBack }: InstructionHangmanProp
       saveGameStats(newStats)
       
       // Update unified game scores for dashboard
-      updateGameScore('instruction-hangman', newState.score + scoreChange, {
+      updateGameScore('instruction-hangman', newState.score, {
         totalCorrect: isCorrect ? 1 : 0,
         totalWrong: isCorrect ? 0 : 1,
       })

@@ -1,0 +1,238 @@
+- generic [ref=e210]:
+  - button [ref=e211]:
+    - img [ref=e212]
+  - complementary [ref=e213]:
+    - generic [ref=e214]:
+      - link "Back to Course Map" [ref=e215] [cursor=pointer]:
+        - /url: /course-map
+        - img [ref=e216]
+        - text: Back to Course Map
+      - navigation [ref=e218]:
+        - heading "Sections" [level=3] [ref=e219]
+        - button "1 MOV, XCHG, LEA instructions" [ref=e220]:
+          - generic [ref=e221]: "1"
+          - generic [ref=e222]: MOV, XCHG, LEA instructions
+        - button "2 ADD, SUB, CMP instructions" [ref=e223]:
+          - generic [ref=e224]: "2"
+          - generic [ref=e225]: ADD, SUB, CMP instructions
+        - button "3 INC, DEC, NEG instructions" [ref=e226]:
+          - generic [ref=e227]: "3"
+          - generic [ref=e228]: INC, DEC, NEG instructions
+        - button "4 Flags register and conditional flags" [ref=e229]:
+          - generic [ref=e230]: "4"
+          - generic [ref=e231]: Flags register and conditional flags
+        - button "5 Arithmetic operations and overflow" [ref=e232]:
+          - generic [ref=e233]: "5"
+          - generic [ref=e234]: Arithmetic operations and overflow
+        - button "6 Hello World and template programs" [ref=e235]:
+          - generic [ref=e236]: "6"
+          - generic [ref=e237]: Hello World and template programs
+      - link "Try in Simulator" [ref=e238] [cursor=pointer]:
+        - /url: /simulator
+        - img [ref=e239]
+        - text: Try in Simulator
+  - main [ref=e242]:
+    - generic [ref=e243]:
+      - generic [ref=e244]:
+        - generic [ref=e245]: "4"
+        - heading "Data Transfer and Arithmetic Instructions" [level=1] [ref=e247]
+      - generic [ref=e248]:
+        - generic [ref=e249]: intermediate
+        - generic [ref=e250]: High Exam Relevance
+    - generic [ref=e251]:
+      - generic [ref=e252]:
+        - generic [ref=e253]:
+          - generic [ref=e254]:
+            - generic [ref=e255]: "1"
+            - heading "MOV, XCHG, LEA instructions" [level=2] [ref=e256]
+          - button "Mark as Read" [ref=e257]
+        - generic [ref=e259]:
+          - paragraph [ref=e260]:
+            - strong [ref=e261]: MOV, XCHG, LEA instructions
+          - paragraph [ref=e262]: This section covers MOV, XCHG, LEA instructions in the context of 8086 assembly language programming.
+          - 'heading "Example: ADD and SUB Instructions" [level=3] [ref=e263]'
+          - paragraph [ref=e264]: ADD, SUB, and NEG modify the destination operand and update CPU flags.
+          - generic [ref=e266]:
+            - code [ref=e268]:
+              - generic [ref=e269]: ; Arithmetic operations
+              - generic [ref=e270]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">5 ; AX = 5
+              - generic [ref=e271]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">3 ; BX = 3
+              - generic [ref=e272]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = AX + BX = 8
+              - generic [ref=e273]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">SUB dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">2 ; AX = AX - 2 = 6
+              - generic [ref=e274]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">NEG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; AX = -AX = -6
+            - generic [ref=e275]:
+              - button "Copy code" [ref=e276]:
+                - img [ref=e277]
+              - link "Try in Simulator" [ref=e280] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e281]
+          - blockquote [ref=e284]:
+            - paragraph [ref=e285]:
+              - text: 💡
+              - strong [ref=e286]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.
+      - generic [ref=e287]:
+        - generic [ref=e288]:
+          - generic [ref=e289]:
+            - generic [ref=e290]: "2"
+            - heading "ADD, SUB, CMP instructions" [level=2] [ref=e291]
+          - button "Mark as Read" [ref=e292]
+        - generic [ref=e294]:
+          - paragraph [ref=e295]:
+            - strong [ref=e296]: ADD, SUB, CMP instructions
+          - paragraph [ref=e297]: This section covers ADD, SUB, CMP instructions in the context of 8086 assembly language programming.
+          - 'heading "Example: ADD and SUB Instructions" [level=3] [ref=e298]'
+          - paragraph [ref=e299]: ADD, SUB, and NEG modify the destination operand and update CPU flags.
+          - generic [ref=e301]:
+            - code [ref=e303]:
+              - generic [ref=e304]: ; Arithmetic operations
+              - generic [ref=e305]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">5 ; AX = 5
+              - generic [ref=e306]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">3 ; BX = 3
+              - generic [ref=e307]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = AX + BX = 8
+              - generic [ref=e308]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">SUB dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">2 ; AX = AX - 2 = 6
+              - generic [ref=e309]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">NEG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; AX = -AX = -6
+            - generic [ref=e310]:
+              - button "Copy code" [ref=e311]:
+                - img [ref=e312]
+              - link "Try in Simulator" [ref=e315] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e316]
+          - blockquote [ref=e319]:
+            - paragraph [ref=e320]:
+              - text: 💡
+              - strong [ref=e321]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.
+      - generic [ref=e322]:
+        - generic [ref=e323]:
+          - generic [ref=e324]:
+            - generic [ref=e325]: "3"
+            - heading "INC, DEC, NEG instructions" [level=2] [ref=e326]
+          - button "Mark as Read" [ref=e327]
+        - generic [ref=e329]:
+          - paragraph [ref=e330]:
+            - strong [ref=e331]: INC, DEC, NEG instructions
+          - paragraph [ref=e332]: This section covers INC, DEC, NEG instructions in the context of 8086 assembly language programming.
+          - 'heading "Example: ADD and SUB Instructions" [level=3] [ref=e333]'
+          - paragraph [ref=e334]: ADD, SUB, and NEG modify the destination operand and update CPU flags.
+          - generic [ref=e336]:
+            - code [ref=e338]:
+              - generic [ref=e339]: ; Arithmetic operations
+              - generic [ref=e340]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">5 ; AX = 5
+              - generic [ref=e341]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">3 ; BX = 3
+              - generic [ref=e342]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = AX + BX = 8
+              - generic [ref=e343]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">SUB dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">2 ; AX = AX - 2 = 6
+              - generic [ref=e344]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">NEG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; AX = -AX = -6
+            - generic [ref=e345]:
+              - button "Copy code" [ref=e346]:
+                - img [ref=e347]
+              - link "Try in Simulator" [ref=e350] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e351]
+          - blockquote [ref=e354]:
+            - paragraph [ref=e355]:
+              - text: 💡
+              - strong [ref=e356]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.
+      - generic [ref=e357]:
+        - generic [ref=e358]:
+          - generic [ref=e359]:
+            - generic [ref=e360]: "4"
+            - heading "Flags register and conditional flags" [level=2] [ref=e361]
+          - button "Mark as Read" [ref=e362]
+        - generic [ref=e364]:
+          - paragraph [ref=e365]:
+            - strong [ref=e366]: Flags register and conditional flags
+          - paragraph [ref=e367]: This section covers Flags register and conditional flags in the context of 8086 assembly language programming.
+          - 'heading "Example: ADD and SUB Instructions" [level=3] [ref=e368]'
+          - paragraph [ref=e369]: ADD, SUB, and NEG modify the destination operand and update CPU flags.
+          - generic [ref=e371]:
+            - code [ref=e373]:
+              - generic [ref=e374]: ; Arithmetic operations
+              - generic [ref=e375]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">5 ; AX = 5
+              - generic [ref=e376]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">3 ; BX = 3
+              - generic [ref=e377]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = AX + BX = 8
+              - generic [ref=e378]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">SUB dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">2 ; AX = AX - 2 = 6
+              - generic [ref=e379]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">NEG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; AX = -AX = -6
+            - generic [ref=e380]:
+              - button "Copy code" [ref=e381]:
+                - img [ref=e382]
+              - link "Try in Simulator" [ref=e385] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e386]
+          - blockquote [ref=e389]:
+            - paragraph [ref=e390]:
+              - text: 💡
+              - strong [ref=e391]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.
+      - generic [ref=e392]:
+        - generic [ref=e393]:
+          - generic [ref=e394]:
+            - generic [ref=e395]: "5"
+            - heading "Arithmetic operations and overflow" [level=2] [ref=e396]
+          - button "Mark as Read" [ref=e397]
+        - generic [ref=e399]:
+          - paragraph [ref=e400]:
+            - strong [ref=e401]: Arithmetic operations and overflow
+          - paragraph [ref=e402]: This section covers Arithmetic operations and overflow in the context of 8086 assembly language programming.
+          - 'heading "Example: ADD and SUB Instructions" [level=3] [ref=e403]'
+          - paragraph [ref=e404]: ADD, SUB, and NEG modify the destination operand and update CPU flags.
+          - generic [ref=e406]:
+            - code [ref=e408]:
+              - generic [ref=e409]: ; Arithmetic operations
+              - generic [ref=e410]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">5 ; AX = 5
+              - generic [ref=e411]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">3 ; BX = 3
+              - generic [ref=e412]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = AX + BX = 8
+              - generic [ref=e413]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">SUB dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">2 ; AX = AX - 2 = 6
+              - generic [ref=e414]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">NEG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; AX = -AX = -6
+            - generic [ref=e415]:
+              - button "Copy code" [ref=e416]:
+                - img [ref=e417]
+              - link "Try in Simulator" [ref=e420] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e421]
+          - blockquote [ref=e424]:
+            - paragraph [ref=e425]:
+              - text: 💡
+              - strong [ref=e426]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.
+      - generic [ref=e427]:
+        - generic [ref=e428]:
+          - generic [ref=e429]:
+            - generic [ref=e430]: "6"
+            - heading "Hello World and template programs" [level=2] [ref=e431]
+          - button "Mark as Read" [ref=e432]
+        - generic [ref=e434]:
+          - paragraph [ref=e435]:
+            - strong [ref=e436]: Hello World and template programs
+          - paragraph [ref=e437]: This section covers Hello World and template programs in the context of 8086 assembly language programming.
+          - 'heading "Example: Hello World" [level=3] [ref=e438]'
+          - paragraph [ref=e439]: Classic Hello World using DOS interrupt 21h function 09h.
+          - generic [ref=e441]:
+            - code [ref=e443]:
+              - generic [ref=e444]: ; Hello World Program
+              - generic [ref=e445]: .MODEL SMALL
+              - generic [ref=e446]: .STACK dark:text-amber-400">100h
+              - generic [ref=e447]: .DATA
+              - generic [ref=e448]: msg DB 'Hello, World!$'
+              - generic [ref=e449]: .CODE
+              - generic [ref=e450]: MAIN PROC
+              - generic [ref=e451]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, @DATA
+              - generic [ref=e452]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DS, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX
+              - generic [ref=e453]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AH, dark:text-amber-400">09h
+              - generic [ref=e454]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">LEA dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DX, msg
+              - generic [ref=e455]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INT dark:text-amber-400">21h
+              - generic [ref=e456]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AH, dark:text-amber-400">4Ch
+              - generic [ref=e457]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INT dark:text-amber-400">21h
+              - generic [ref=e458]: MAIN ENDP
+              - generic [ref=e459]: END MAIN
+            - generic [ref=e460]:
+              - button "Copy code" [ref=e461]:
+                - img [ref=e462]
+              - link "Try in Simulator" [ref=e465] [cursor=pointer]:
+                - /url: /simulator
+                - img [ref=e466]
+          - blockquote [ref=e469]:
+            - paragraph [ref=e470]:
+              - text: 💡
+              - strong [ref=e471]: "Tip:"
+              - text: Try modifying the values in the code above and observe how the registers change.

@@ -1,0 +1,51 @@
+{
+  "featureId": "example-code-viewer",
+  "reviewedAt": "2026-03-30T23:15:00.000Z",
+  "commitId": "ce5fe04",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The ExampleCodeViewer feature has a critical runtime issue: it imports examples.json which does not exist in data/processed/. Additionally, the 'Run in Simulator' button does not pre-load code as specified in expected behavior.",
+    "issues": [
+      {
+        "file": "src/components/example/ExampleDetail.tsx",
+        "line": 16,
+        "severity": "blocking",
+        "description": "Critical: imports examples.json which does not exist in data/processed/. The file is referenced at line 16 but running 'dir data/processed' shows only concept-taxonomy.json, course-map.json, instruction-index.json, and question-bank.json. This will cause runtime errors when navigating to example detail pages."
+      },
+      {
+        "file": "src/components/example/ExampleDetail.tsx",
+        "line": 239,
+        "severity": "blocking",
+        "description": "Run in Simulator button links to /simulator without pre-loading the example code. Expected behavior states 'Simulator button pre-loads code' but the implementation just uses a simple Link to '/simulator' with no code parameter. Phase 5 (simulator-core) is not yet complete, but the button should at minimum pass the code via search params or hash."
+      },
+      {
+        "file": "src/components/example/ExampleDetail.tsx",
+        "line": 107,
+        "severity": "non_blocking",
+        "description": "XSS risk: dangerouslySetInnerHTML is used after basic HTML escaping, but the regex-based syntax highlighter could potentially allow malicious input through. Consider using a well-tested library like highlight.js or prism-react-renderer instead of custom regex replacements."
+      },
+      {
+        "file": "src/components/example/ExampleDetail.tsx",
+        "line": 143,
+        "severity": "non_blocking",
+        "description": "Related examples computation runs on every render. The relatedExamples should be memoized with useMemo since examples data doesn't change."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Worker skill 'frontend-worker' does not exist in .factory/skills/. Only 'backend-worker' exists. The skillFeedback shows 'followedProcedure: true' but there's no SKILL.md to verify what procedure was expected.",
+      "evidence": ".factory/skills/ directory only contains 'backend-worker' subdirectory. The feature's skillName is 'frontend-worker'."
+    },
+    {
+      "area": "knowledge",
+      "observation": "The worker discovered that examples.json was needed but apparently assumed it existed. The data/processed folder was not validated to contain the required files before implementation.",
+      "evidence": "examples.json is imported by ExampleDetail.tsx but does not exist in data/processed/. The feature's preconditions state 'data/processed/examples.json exists' but this was not verified."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review FAIL: The ExampleCodeViewer has two blocking issues - missing examples.json data file causing runtime errors, and the 'Run in Simulator' button not pre-loading code. Additionally, the frontend-worker skill is missing from shared state, making it impossible to verify procedure adherence. The related examples section added in this commit (ce5fe04) is well-implemented with weighted scoring, but depends on the missing examples.json file."
+}

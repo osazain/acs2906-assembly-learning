@@ -1,0 +1,40 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e85]:
+      - generic [ref=e87]:
+        - generic [ref=e129]: Question 6 of 10
+        - generic [ref=e130]: 5 answered
+      - generic [ref=e94]:
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - generic [ref=e135]: Procedures
+            - generic [ref=e136]: CALL/RET
+            - generic [ref=e137]: Easy
+          - generic [ref=e138]:
+            - generic [ref=e183]: CALL
+            - generic [ref=e184]: RET
+            - generic [ref=e185]: PUSH
+            - generic [ref=e186]: POP
+        - heading "What values are pushed to the stack when CALL MyProc executes?" [level=2] [ref=e187]
+      - generic [ref=e103]:
+        - button "Skip" [active] [ref=e142]:
+          - img [ref=e143]
+          - text: Skip
+        - button "Submit Answer" [disabled] [ref=e145]
+      - group [ref=e146]:
+        - generic "Need a hint?" [ref=e147] [cursor=pointer]
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

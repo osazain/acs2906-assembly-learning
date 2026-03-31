@@ -1,7 +1,7 @@
 {
   "milestone": "phase3",
-  "round": 1,
-  "status": "fail",
+  "round": 2,
+  "status": "pass",
   "validatorsRun": {
     "test": {
       "passed": true,
@@ -25,42 +25,46 @@
     }
   },
   "reviewsSummary": {
-    "total": 5,
-    "passed": 4,
-    "failed": 1,
-    "failedFeatures": ["diagnostic-mode"]
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": [],
+    "reviewNotes": "Re-run after prior synthesis found 2 blocking issues in diagnostic-mode. fix-diagnostic-bugs (commit 0ca217b) addressed both issues."
   },
-  "blockingIssues": [
-    {
-      "featureId": "diagnostic-mode",
-      "severity": "blocking",
-      "file": "src/components/assessment/DiagnosticMode.tsx",
-      "line": 680,
-      "description": "Remediation link construction is broken - always resolves to '#/course-map' regardless of ref type. The ternary condition is misplaced inside an if/else block."
-    },
-    {
-      "featureId": "diagnostic-mode",
-      "severity": "blocking",
-      "file": "src/components/assessment/DiagnosticMode.tsx",
-      "line": 425,
-      "description": "handleSkip has fragile control flow when skipping the final question - finishDiagnostic() is called directly after setting skip state without proper sequencing."
-    }
-  ],
+  "blockingIssues": [],
+  "fixVerification": {
+    "originalFailedFeatures": ["diagnostic-mode"],
+    "fixFeatures": ["fix-diagnostic-bugs"],
+    "findings": [
+      {
+        "fixFeature": "fix-diagnostic-bugs",
+        "originalIssue": "handleSkip had fragile async flow when skipping final question (line 425)",
+        "fix": "Uses sessionRef.current and finishDiagnosticRef.current() to avoid stale closure",
+        "status": "adequately_fixed"
+      },
+      {
+        "fixFeature": "fix-diagnostic-bugs",
+        "originalIssue": "Remediation link construction broken at line 680 - always resolves to '#/course-map'",
+        "fix": "Code at lines 584 and 1195 shows correct ternary: ref.type === 'lecture' ? `#/lecture/${ref.id}` : '#/course-map'",
+        "status": "adequately_fixed"
+      }
+    ]
+  },
   "appliedUpdates": [],
   "suggestedGuidanceUpdates": [
     {
       "target": "services.yaml",
       "suggestion": "Document agent-browser commands for browser automation testing. Currently only the preview service (vite preview on port 4173) is documented, but phase3 features require browser automation via agent-browser.",
-      "evidence": "diagnostic-mode review used agent-browser commands (open, click) but services.yaml only documents preview server.",
+      "evidence": "Phase3 features (diagnostic-mode, drill-mode) use agent-browser for validation but services.yaml only documents preview server.",
       "isSystemic": true
     },
     {
       "target": "AGENTS.md",
       "suggestion": "Document the db module location (src/lib/db.ts) and schema. Currently AGENTS.md only says 'IndexedDB via Dexie for local persistence' without specifying the path or database structure.",
-      "evidence": "Multiple workers discovered db.ts through imports rather than documentation. MasteryDashboard.tsx and DrillMode.tsx import from @/lib/db.",
+      "evidence": "Multiple workers discovered db.ts through imports rather than documentation.",
       "isSystemic": true
     }
   ],
   "rejectedObservations": [],
-  "previousRound": null
+  "previousRound": ".factory/validation/phase3/scrutiny/synthesis.json (round 1)"
 }

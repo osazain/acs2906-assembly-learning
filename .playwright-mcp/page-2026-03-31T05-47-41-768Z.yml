@@ -1,0 +1,34 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - generic [ref=e285]:
+        - generic [ref=e286]:
+          - img [ref=e287]
+          - textbox "Search lectures, examples, instructions, concepts..." [ref=e290]
+          - generic [ref=e291]: ESC
+        - generic [ref=e310]:
+          - generic [ref=e311]:
+            - generic [ref=e312]: ↑↓
+            - text: Navigate
+          - generic [ref=e313]:
+            - generic [ref=e314]: ↵
+            - text: Select
+          - generic [ref=e315]:
+            - generic [ref=e316]: ESC
+            - text: Close
+  - main [ref=e20]:
+    - generic [ref=e232]:
+      - img [ref=e233]
+      - heading "Drills Coming Soon" [level=2] [ref=e237]
+      - paragraph [ref=e238]: Practice drills will be available after Phase 1.
+      - link "Back to Course Map" [ref=e239] [cursor=pointer]:
+        - /url: /#/course-map
+        - img [ref=e240]
+        - text: Back to Course Map
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

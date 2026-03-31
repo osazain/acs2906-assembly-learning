@@ -1,0 +1,611 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - img [ref=e23]
+        - heading "8086 Simulator" [level=1] [ref=e26]
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - img [ref=e31]
+              - generic [ref=e33]: Load Example
+            - generic [ref=e34]: 14 presets available
+          - generic [ref=e36]:
+            - button "Select an example preset..." [active] [ref=e37]:
+              - generic [ref=e38]: Select an example preset...
+              - img [ref=e39]
+            - generic [ref=e547]:
+              - button "HelloWorld.asm beginner MOV, LEA, INT" [ref=e548]:
+                - generic [ref=e549]:
+                  - generic [ref=e550]: HelloWorld.asm
+                  - generic [ref=e551]:
+                    - generic [ref=e552]: beginner
+                    - generic [ref=e553]: MOV, LEA, INT
+              - button "Template.asm beginner MOV, INT" [ref=e554]:
+                - generic [ref=e555]:
+                  - generic [ref=e556]: Template.asm
+                  - generic [ref=e557]:
+                    - generic [ref=e558]: beginner
+                    - generic [ref=e559]: MOV, INT
+              - button "Addition.asm beginner MOV, ADD, NEG" [ref=e560]:
+                - generic [ref=e561]:
+                  - generic [ref=e562]: Addition.asm
+                  - generic [ref=e563]:
+                    - generic [ref=e564]: beginner
+                    - generic [ref=e565]: MOV, ADD, NEG
+              - button "Buff2.asm intermediate MOV, INT, LEA" [ref=e566]:
+                - generic [ref=e567]:
+                  - generic [ref=e568]: Buff2.asm
+                  - generic [ref=e569]:
+                    - generic [ref=e570]: intermediate
+                    - generic [ref=e571]: MOV, INT, LEA
+              - button "Buffered.asm beginner MOV, INT, LEA" [ref=e572]:
+                - generic [ref=e573]:
+                  - generic [ref=e574]: Buffered.asm
+                  - generic [ref=e575]:
+                    - generic [ref=e576]: beginner
+                    - generic [ref=e577]: MOV, INT, LEA
+              - button "demo.asm intermediate MOV, ADD, SUB..." [ref=e578]:
+                - generic [ref=e579]:
+                  - generic [ref=e580]: demo.asm
+                  - generic [ref=e581]:
+                    - generic [ref=e582]: intermediate
+                    - generic [ref=e583]: MOV, ADD, SUB...
+              - button "proc.asm advanced PUSH, POP, CALL..." [ref=e584]:
+                - generic [ref=e585]:
+                  - generic [ref=e586]: proc.asm
+                  - generic [ref=e587]:
+                    - generic [ref=e588]: advanced
+                    - generic [ref=e589]: PUSH, POP, CALL...
+              - button "forloop.asm beginner MOV, LOOP, ADD" [ref=e590]:
+                - generic [ref=e591]:
+                  - generic [ref=e592]: forloop.asm
+                  - generic [ref=e593]:
+                    - generic [ref=e594]: beginner
+                    - generic [ref=e595]: MOV, LOOP, ADD
+              - button "ifelse.asm beginner CMP, JE, JNE..." [ref=e596]:
+                - generic [ref=e597]:
+                  - generic [ref=e598]: ifelse.asm
+                  - generic [ref=e599]:
+                    - generic [ref=e600]: beginner
+                    - generic [ref=e601]: CMP, JE, JNE...
+              - button "Exchange.asm beginner MOV, XCHG" [ref=e602]:
+                - generic [ref=e603]:
+                  - generic [ref=e604]: Exchange.asm
+                  - generic [ref=e605]:
+                    - generic [ref=e606]: beginner
+                    - generic [ref=e607]: MOV, XCHG
+              - button "Compare.asm intermediate CMP" [ref=e608]:
+                - generic [ref=e609]:
+                  - generic [ref=e610]: Compare.asm
+                  - generic [ref=e611]:
+                    - generic [ref=e612]: intermediate
+                    - generic [ref=e613]: CMP
+              - button "RegisterSwap.asm beginner MOV" [ref=e614]:
+                - generic [ref=e615]:
+                  - generic [ref=e616]: RegisterSwap.asm
+                  - generic [ref=e617]:
+                    - generic [ref=e618]: beginner
+                    - generic [ref=e619]: MOV
+              - button "ArithmeticDemo.asm intermediate MOV, ADD, SUB..." [ref=e620]:
+                - generic [ref=e621]:
+                  - generic [ref=e622]: ArithmeticDemo.asm
+                  - generic [ref=e623]:
+                    - generic [ref=e624]: intermediate
+                    - generic [ref=e625]: MOV, ADD, SUB...
+              - button "whileloop.asm intermediate MOV, CMP, JGE..." [ref=e626]:
+                - generic [ref=e627]:
+                  - generic [ref=e628]: whileloop.asm
+                  - generic [ref=e629]:
+                    - generic [ref=e630]: intermediate
+                    - generic [ref=e631]: MOV, CMP, JGE...
+        - generic [ref=e41]:
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: Assembly Code
+              - generic [ref=e46]: 0 instructions
+            - table [ref=e48]:
+              - rowgroup [ref=e49]:
+                - row "1" [ref=e50]:
+                  - cell "1" [ref=e51]:
+                    - generic [ref=e53]: "1"
+                  - cell [ref=e54]
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - heading "Execution Controls" [level=3] [ref=e58]
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - button "Step" [disabled] [ref=e61]:
+                    - img [ref=e62]
+                    - text: Step
+                  - button "Run" [ref=e64]:
+                    - img [ref=e65]
+                    - text: Run
+                  - button "Halt" [ref=e67]:
+                    - img [ref=e68]
+                    - text: Halt
+                  - button "Reset" [ref=e70]:
+                    - img [ref=e71]
+                    - text: Reset
+                - generic [ref=e74]:
+                  - generic [ref=e75]: "Speed:"
+                  - generic [ref=e76]:
+                    - button "Step" [ref=e77]
+                    - button "Slow" [ref=e78]
+                    - button "Normal" [ref=e79]
+                    - button "Fast" [ref=e80]
+                - generic [ref=e81]: Ready
+            - generic [ref=e82]:
+              - heading "Registers" [level=3] [ref=e84]
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - generic [ref=e87]:
+                    - generic [ref=e88]: AX
+                    - generic [ref=e89]: "0000"
+                  - generic [ref=e90]:
+                    - generic [ref=e91]: BX
+                    - generic [ref=e92]: "0000"
+                  - generic [ref=e93]:
+                    - generic [ref=e94]: CX
+                    - generic [ref=e95]: "0000"
+                  - generic [ref=e96]:
+                    - generic [ref=e97]: DX
+                    - generic [ref=e98]: "0000"
+                  - generic [ref=e99]:
+                    - generic [ref=e100]: SI
+                    - generic [ref=e101]: "0000"
+                  - generic [ref=e102]:
+                    - generic [ref=e103]: DI
+                    - generic [ref=e104]: "0000"
+                  - generic [ref=e105]:
+                    - generic [ref=e106]: BP
+                    - generic [ref=e107]: "0000"
+                  - generic [ref=e108]:
+                    - generic [ref=e109]: SP
+                    - generic [ref=e110]: FFFE
+                  - generic [ref=e111]:
+                    - generic [ref=e112]: CS
+                    - generic [ref=e113]: "0000"
+                  - generic [ref=e114]:
+                    - generic [ref=e115]: DS
+                    - generic [ref=e116]: "0000"
+                  - generic [ref=e117]:
+                    - generic [ref=e118]: ES
+                    - generic [ref=e119]: "0000"
+                  - generic [ref=e120]:
+                    - generic [ref=e121]: SS
+                    - generic [ref=e122]: "0000"
+                  - generic [ref=e123]:
+                    - generic [ref=e124]: IP
+                    - generic [ref=e125]: "0000"
+                - generic [ref=e127]: 8-bit Registers
+                - generic [ref=e128]:
+                  - generic [ref=e129]:
+                    - generic [ref=e130]: AL
+                    - generic [ref=e131]: "00"
+                  - generic [ref=e132]:
+                    - generic [ref=e133]: AH
+                    - generic [ref=e134]: "00"
+                  - generic [ref=e135]:
+                    - generic [ref=e136]: BL
+                    - generic [ref=e137]: "00"
+                  - generic [ref=e138]:
+                    - generic [ref=e139]: BH
+                    - generic [ref=e140]: "00"
+                  - generic [ref=e141]:
+                    - generic [ref=e142]: CL
+                    - generic [ref=e143]: "00"
+                  - generic [ref=e144]:
+                    - generic [ref=e145]: CH
+                    - generic [ref=e146]: "00"
+                  - generic [ref=e147]:
+                    - generic [ref=e148]: DL
+                    - generic [ref=e149]: "00"
+                  - generic [ref=e150]:
+                    - generic [ref=e151]: DH
+                    - generic [ref=e152]: "00"
+            - generic [ref=e153]:
+              - heading "Flags" [level=3] [ref=e155]
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - generic [ref=e158]: Status Flags
+                  - generic [ref=e159]:
+                    - generic "Carry Flag" [ref=e160]:
+                      - generic [ref=e161]: CF
+                      - generic [ref=e162]: "0"
+                    - generic "Parity Flag" [ref=e163]:
+                      - generic [ref=e164]: PF
+                      - generic [ref=e165]: "0"
+                    - generic "Auxiliary Carry" [ref=e166]:
+                      - generic [ref=e167]: AF
+                      - generic [ref=e168]: "0"
+                    - generic "Zero Flag" [ref=e169]:
+                      - generic [ref=e170]: ZF
+                      - generic [ref=e171]: "0"
+                    - generic "Sign Flag" [ref=e172]:
+                      - generic [ref=e173]: SF
+                      - generic [ref=e174]: "0"
+                - generic [ref=e175]:
+                  - generic [ref=e176]: Control Flags
+                  - generic [ref=e177]:
+                    - generic "Trap Flag" [ref=e178]:
+                      - generic [ref=e179]: TF
+                      - generic [ref=e180]: "0"
+                    - generic "Interrupt Enable" [ref=e181]:
+                      - generic [ref=e182]: IF
+                      - generic [ref=e183]: "1"
+                    - generic "Direction Flag" [ref=e184]:
+                      - generic [ref=e185]: DF
+                      - generic [ref=e186]: "0"
+                    - generic "Overflow Flag" [ref=e187]:
+                      - generic [ref=e188]: OF
+                      - generic [ref=e189]: "0"
+                - generic [ref=e191]:
+                  - generic [ref=e192]: "CF: Set when unsigned overflow occurs"
+                  - generic [ref=e193]: "PF: Set when result has even parity"
+                  - generic [ref=e194]: "AF: Set for BCD arithmetic adjustments"
+                  - generic [ref=e195]: "ZF: Set when result is zero"
+                  - generic [ref=e196]: "SF: Set when result is negative"
+                  - generic [ref=e197]: "OF: Set when signed overflow occurs"
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - heading "Memory" [level=3] [ref=e201]
+              - generic [ref=e202]: DS:0000
+            - generic [ref=e203]:
+              - button "Hex" [ref=e204]
+              - button "Dec" [ref=e205]
+          - generic [ref=e206]:
+            - generic [ref=e207]:
+              - button "-256" [ref=e208]
+              - button "-16" [ref=e209]
+              - textbox [ref=e210]: "0000"
+              - button "+16" [ref=e211]
+              - button "+256" [ref=e212]
+            - table [ref=e213]:
+              - rowgroup [ref=e214]:
+                - row "Addr 0 1 2 3 4 5 6 7 8 9 A B C D E F ASCII" [ref=e215]:
+                  - columnheader "Addr" [ref=e216]
+                  - columnheader "0" [ref=e217]
+                  - columnheader "1" [ref=e218]
+                  - columnheader "2" [ref=e219]
+                  - columnheader "3" [ref=e220]
+                  - columnheader "4" [ref=e221]
+                  - columnheader "5" [ref=e222]
+                  - columnheader "6" [ref=e223]
+                  - columnheader "7" [ref=e224]
+                  - columnheader "8" [ref=e225]
+                  - columnheader "9" [ref=e226]
+                  - columnheader "A" [ref=e227]
+                  - columnheader "B" [ref=e228]
+                  - columnheader "C" [ref=e229]
+                  - columnheader "D" [ref=e230]
+                  - columnheader "E" [ref=e231]
+                  - columnheader "F" [ref=e232]
+                  - columnheader "ASCII" [ref=e233]
+              - rowgroup [ref=e234]:
+                - row "0000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e235]:
+                  - cell "0000" [ref=e236]
+                  - cell "00" [ref=e237] [cursor=pointer]
+                  - cell "00" [ref=e238] [cursor=pointer]
+                  - cell "00" [ref=e239] [cursor=pointer]
+                  - cell "00" [ref=e240] [cursor=pointer]
+                  - cell "00" [ref=e241] [cursor=pointer]
+                  - cell "00" [ref=e242] [cursor=pointer]
+                  - cell "00" [ref=e243] [cursor=pointer]
+                  - cell "00" [ref=e244] [cursor=pointer]
+                  - cell "00" [ref=e245] [cursor=pointer]
+                  - cell "00" [ref=e246] [cursor=pointer]
+                  - cell "00" [ref=e247] [cursor=pointer]
+                  - cell "00" [ref=e248] [cursor=pointer]
+                  - cell "00" [ref=e249] [cursor=pointer]
+                  - cell "00" [ref=e250] [cursor=pointer]
+                  - cell "00" [ref=e251] [cursor=pointer]
+                  - cell "00" [ref=e252] [cursor=pointer]
+                  - cell "................" [ref=e253]
+                - row "0010 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e254]:
+                  - cell "0010" [ref=e255]
+                  - cell "00" [ref=e256] [cursor=pointer]
+                  - cell "00" [ref=e257] [cursor=pointer]
+                  - cell "00" [ref=e258] [cursor=pointer]
+                  - cell "00" [ref=e259] [cursor=pointer]
+                  - cell "00" [ref=e260] [cursor=pointer]
+                  - cell "00" [ref=e261] [cursor=pointer]
+                  - cell "00" [ref=e262] [cursor=pointer]
+                  - cell "00" [ref=e263] [cursor=pointer]
+                  - cell "00" [ref=e264] [cursor=pointer]
+                  - cell "00" [ref=e265] [cursor=pointer]
+                  - cell "00" [ref=e266] [cursor=pointer]
+                  - cell "00" [ref=e267] [cursor=pointer]
+                  - cell "00" [ref=e268] [cursor=pointer]
+                  - cell "00" [ref=e269] [cursor=pointer]
+                  - cell "00" [ref=e270] [cursor=pointer]
+                  - cell "00" [ref=e271] [cursor=pointer]
+                  - cell "................" [ref=e272]
+                - row "0020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e273]:
+                  - cell "0020" [ref=e274]
+                  - cell "00" [ref=e275] [cursor=pointer]
+                  - cell "00" [ref=e276] [cursor=pointer]
+                  - cell "00" [ref=e277] [cursor=pointer]
+                  - cell "00" [ref=e278] [cursor=pointer]
+                  - cell "00" [ref=e279] [cursor=pointer]
+                  - cell "00" [ref=e280] [cursor=pointer]
+                  - cell "00" [ref=e281] [cursor=pointer]
+                  - cell "00" [ref=e282] [cursor=pointer]
+                  - cell "00" [ref=e283] [cursor=pointer]
+                  - cell "00" [ref=e284] [cursor=pointer]
+                  - cell "00" [ref=e285] [cursor=pointer]
+                  - cell "00" [ref=e286] [cursor=pointer]
+                  - cell "00" [ref=e287] [cursor=pointer]
+                  - cell "00" [ref=e288] [cursor=pointer]
+                  - cell "00" [ref=e289] [cursor=pointer]
+                  - cell "00" [ref=e290] [cursor=pointer]
+                  - cell "................" [ref=e291]
+                - row "0030 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e292]:
+                  - cell "0030" [ref=e293]
+                  - cell "00" [ref=e294] [cursor=pointer]
+                  - cell "00" [ref=e295] [cursor=pointer]
+                  - cell "00" [ref=e296] [cursor=pointer]
+                  - cell "00" [ref=e297] [cursor=pointer]
+                  - cell "00" [ref=e298] [cursor=pointer]
+                  - cell "00" [ref=e299] [cursor=pointer]
+                  - cell "00" [ref=e300] [cursor=pointer]
+                  - cell "00" [ref=e301] [cursor=pointer]
+                  - cell "00" [ref=e302] [cursor=pointer]
+                  - cell "00" [ref=e303] [cursor=pointer]
+                  - cell "00" [ref=e304] [cursor=pointer]
+                  - cell "00" [ref=e305] [cursor=pointer]
+                  - cell "00" [ref=e306] [cursor=pointer]
+                  - cell "00" [ref=e307] [cursor=pointer]
+                  - cell "00" [ref=e308] [cursor=pointer]
+                  - cell "00" [ref=e309] [cursor=pointer]
+                  - cell "................" [ref=e310]
+                - row "0040 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e311]:
+                  - cell "0040" [ref=e312]
+                  - cell "00" [ref=e313] [cursor=pointer]
+                  - cell "00" [ref=e314] [cursor=pointer]
+                  - cell "00" [ref=e315] [cursor=pointer]
+                  - cell "00" [ref=e316] [cursor=pointer]
+                  - cell "00" [ref=e317] [cursor=pointer]
+                  - cell "00" [ref=e318] [cursor=pointer]
+                  - cell "00" [ref=e319] [cursor=pointer]
+                  - cell "00" [ref=e320] [cursor=pointer]
+                  - cell "00" [ref=e321] [cursor=pointer]
+                  - cell "00" [ref=e322] [cursor=pointer]
+                  - cell "00" [ref=e323] [cursor=pointer]
+                  - cell "00" [ref=e324] [cursor=pointer]
+                  - cell "00" [ref=e325] [cursor=pointer]
+                  - cell "00" [ref=e326] [cursor=pointer]
+                  - cell "00" [ref=e327] [cursor=pointer]
+                  - cell "00" [ref=e328] [cursor=pointer]
+                  - cell "................" [ref=e329]
+                - row "0050 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e330]:
+                  - cell "0050" [ref=e331]
+                  - cell "00" [ref=e332] [cursor=pointer]
+                  - cell "00" [ref=e333] [cursor=pointer]
+                  - cell "00" [ref=e334] [cursor=pointer]
+                  - cell "00" [ref=e335] [cursor=pointer]
+                  - cell "00" [ref=e336] [cursor=pointer]
+                  - cell "00" [ref=e337] [cursor=pointer]
+                  - cell "00" [ref=e338] [cursor=pointer]
+                  - cell "00" [ref=e339] [cursor=pointer]
+                  - cell "00" [ref=e340] [cursor=pointer]
+                  - cell "00" [ref=e341] [cursor=pointer]
+                  - cell "00" [ref=e342] [cursor=pointer]
+                  - cell "00" [ref=e343] [cursor=pointer]
+                  - cell "00" [ref=e344] [cursor=pointer]
+                  - cell "00" [ref=e345] [cursor=pointer]
+                  - cell "00" [ref=e346] [cursor=pointer]
+                  - cell "00" [ref=e347] [cursor=pointer]
+                  - cell "................" [ref=e348]
+                - row "0060 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e349]:
+                  - cell "0060" [ref=e350]
+                  - cell "00" [ref=e351] [cursor=pointer]
+                  - cell "00" [ref=e352] [cursor=pointer]
+                  - cell "00" [ref=e353] [cursor=pointer]
+                  - cell "00" [ref=e354] [cursor=pointer]
+                  - cell "00" [ref=e355] [cursor=pointer]
+                  - cell "00" [ref=e356] [cursor=pointer]
+                  - cell "00" [ref=e357] [cursor=pointer]
+                  - cell "00" [ref=e358] [cursor=pointer]
+                  - cell "00" [ref=e359] [cursor=pointer]
+                  - cell "00" [ref=e360] [cursor=pointer]
+                  - cell "00" [ref=e361] [cursor=pointer]
+                  - cell "00" [ref=e362] [cursor=pointer]
+                  - cell "00" [ref=e363] [cursor=pointer]
+                  - cell "00" [ref=e364] [cursor=pointer]
+                  - cell "00" [ref=e365] [cursor=pointer]
+                  - cell "00" [ref=e366] [cursor=pointer]
+                  - cell "................" [ref=e367]
+                - row "0070 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e368]:
+                  - cell "0070" [ref=e369]
+                  - cell "00" [ref=e370] [cursor=pointer]
+                  - cell "00" [ref=e371] [cursor=pointer]
+                  - cell "00" [ref=e372] [cursor=pointer]
+                  - cell "00" [ref=e373] [cursor=pointer]
+                  - cell "00" [ref=e374] [cursor=pointer]
+                  - cell "00" [ref=e375] [cursor=pointer]
+                  - cell "00" [ref=e376] [cursor=pointer]
+                  - cell "00" [ref=e377] [cursor=pointer]
+                  - cell "00" [ref=e378] [cursor=pointer]
+                  - cell "00" [ref=e379] [cursor=pointer]
+                  - cell "00" [ref=e380] [cursor=pointer]
+                  - cell "00" [ref=e381] [cursor=pointer]
+                  - cell "00" [ref=e382] [cursor=pointer]
+                  - cell "00" [ref=e383] [cursor=pointer]
+                  - cell "00" [ref=e384] [cursor=pointer]
+                  - cell "00" [ref=e385] [cursor=pointer]
+                  - cell "................" [ref=e386]
+                - row "0080 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e387]:
+                  - cell "0080" [ref=e388]
+                  - cell "00" [ref=e389] [cursor=pointer]
+                  - cell "00" [ref=e390] [cursor=pointer]
+                  - cell "00" [ref=e391] [cursor=pointer]
+                  - cell "00" [ref=e392] [cursor=pointer]
+                  - cell "00" [ref=e393] [cursor=pointer]
+                  - cell "00" [ref=e394] [cursor=pointer]
+                  - cell "00" [ref=e395] [cursor=pointer]
+                  - cell "00" [ref=e396] [cursor=pointer]
+                  - cell "00" [ref=e397] [cursor=pointer]
+                  - cell "00" [ref=e398] [cursor=pointer]
+                  - cell "00" [ref=e399] [cursor=pointer]
+                  - cell "00" [ref=e400] [cursor=pointer]
+                  - cell "00" [ref=e401] [cursor=pointer]
+                  - cell "00" [ref=e402] [cursor=pointer]
+                  - cell "00" [ref=e403] [cursor=pointer]
+                  - cell "00" [ref=e404] [cursor=pointer]
+                  - cell "................" [ref=e405]
+                - row "0090 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e406]:
+                  - cell "0090" [ref=e407]
+                  - cell "00" [ref=e408] [cursor=pointer]
+                  - cell "00" [ref=e409] [cursor=pointer]
+                  - cell "00" [ref=e410] [cursor=pointer]
+                  - cell "00" [ref=e411] [cursor=pointer]
+                  - cell "00" [ref=e412] [cursor=pointer]
+                  - cell "00" [ref=e413] [cursor=pointer]
+                  - cell "00" [ref=e414] [cursor=pointer]
+                  - cell "00" [ref=e415] [cursor=pointer]
+                  - cell "00" [ref=e416] [cursor=pointer]
+                  - cell "00" [ref=e417] [cursor=pointer]
+                  - cell "00" [ref=e418] [cursor=pointer]
+                  - cell "00" [ref=e419] [cursor=pointer]
+                  - cell "00" [ref=e420] [cursor=pointer]
+                  - cell "00" [ref=e421] [cursor=pointer]
+                  - cell "00" [ref=e422] [cursor=pointer]
+                  - cell "00" [ref=e423] [cursor=pointer]
+                  - cell "................" [ref=e424]
+                - row "00A0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e425]:
+                  - cell "00A0" [ref=e426]
+                  - cell "00" [ref=e427] [cursor=pointer]
+                  - cell "00" [ref=e428] [cursor=pointer]
+                  - cell "00" [ref=e429] [cursor=pointer]
+                  - cell "00" [ref=e430] [cursor=pointer]
+                  - cell "00" [ref=e431] [cursor=pointer]
+                  - cell "00" [ref=e432] [cursor=pointer]
+                  - cell "00" [ref=e433] [cursor=pointer]
+                  - cell "00" [ref=e434] [cursor=pointer]
+                  - cell "00" [ref=e435] [cursor=pointer]
+                  - cell "00" [ref=e436] [cursor=pointer]
+                  - cell "00" [ref=e437] [cursor=pointer]
+                  - cell "00" [ref=e438] [cursor=pointer]
+                  - cell "00" [ref=e439] [cursor=pointer]
+                  - cell "00" [ref=e440] [cursor=pointer]
+                  - cell "00" [ref=e441] [cursor=pointer]
+                  - cell "00" [ref=e442] [cursor=pointer]
+                  - cell "................" [ref=e443]
+                - row "00B0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e444]:
+                  - cell "00B0" [ref=e445]
+                  - cell "00" [ref=e446] [cursor=pointer]
+                  - cell "00" [ref=e447] [cursor=pointer]
+                  - cell "00" [ref=e448] [cursor=pointer]
+                  - cell "00" [ref=e449] [cursor=pointer]
+                  - cell "00" [ref=e450] [cursor=pointer]
+                  - cell "00" [ref=e451] [cursor=pointer]
+                  - cell "00" [ref=e452] [cursor=pointer]
+                  - cell "00" [ref=e453] [cursor=pointer]
+                  - cell "00" [ref=e454] [cursor=pointer]
+                  - cell "00" [ref=e455] [cursor=pointer]
+                  - cell "00" [ref=e456] [cursor=pointer]
+                  - cell "00" [ref=e457] [cursor=pointer]
+                  - cell "00" [ref=e458] [cursor=pointer]
+                  - cell "00" [ref=e459] [cursor=pointer]
+                  - cell "00" [ref=e460] [cursor=pointer]
+                  - cell "00" [ref=e461] [cursor=pointer]
+                  - cell "................" [ref=e462]
+                - row "00C0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e463]:
+                  - cell "00C0" [ref=e464]
+                  - cell "00" [ref=e465] [cursor=pointer]
+                  - cell "00" [ref=e466] [cursor=pointer]
+                  - cell "00" [ref=e467] [cursor=pointer]
+                  - cell "00" [ref=e468] [cursor=pointer]
+                  - cell "00" [ref=e469] [cursor=pointer]
+                  - cell "00" [ref=e470] [cursor=pointer]
+                  - cell "00" [ref=e471] [cursor=pointer]
+                  - cell "00" [ref=e472] [cursor=pointer]
+                  - cell "00" [ref=e473] [cursor=pointer]
+                  - cell "00" [ref=e474] [cursor=pointer]
+                  - cell "00" [ref=e475] [cursor=pointer]
+                  - cell "00" [ref=e476] [cursor=pointer]
+                  - cell "00" [ref=e477] [cursor=pointer]
+                  - cell "00" [ref=e478] [cursor=pointer]
+                  - cell "00" [ref=e479] [cursor=pointer]
+                  - cell "00" [ref=e480] [cursor=pointer]
+                  - cell "................" [ref=e481]
+                - row "00D0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e482]:
+                  - cell "00D0" [ref=e483]
+                  - cell "00" [ref=e484] [cursor=pointer]
+                  - cell "00" [ref=e485] [cursor=pointer]
+                  - cell "00" [ref=e486] [cursor=pointer]
+                  - cell "00" [ref=e487] [cursor=pointer]
+                  - cell "00" [ref=e488] [cursor=pointer]
+                  - cell "00" [ref=e489] [cursor=pointer]
+                  - cell "00" [ref=e490] [cursor=pointer]
+                  - cell "00" [ref=e491] [cursor=pointer]
+                  - cell "00" [ref=e492] [cursor=pointer]
+                  - cell "00" [ref=e493] [cursor=pointer]
+                  - cell "00" [ref=e494] [cursor=pointer]
+                  - cell "00" [ref=e495] [cursor=pointer]
+                  - cell "00" [ref=e496] [cursor=pointer]
+                  - cell "00" [ref=e497] [cursor=pointer]
+                  - cell "00" [ref=e498] [cursor=pointer]
+                  - cell "00" [ref=e499] [cursor=pointer]
+                  - cell "................" [ref=e500]
+                - row "00E0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e501]:
+                  - cell "00E0" [ref=e502]
+                  - cell "00" [ref=e503] [cursor=pointer]
+                  - cell "00" [ref=e504] [cursor=pointer]
+                  - cell "00" [ref=e505] [cursor=pointer]
+                  - cell "00" [ref=e506] [cursor=pointer]
+                  - cell "00" [ref=e507] [cursor=pointer]
+                  - cell "00" [ref=e508] [cursor=pointer]
+                  - cell "00" [ref=e509] [cursor=pointer]
+                  - cell "00" [ref=e510] [cursor=pointer]
+                  - cell "00" [ref=e511] [cursor=pointer]
+                  - cell "00" [ref=e512] [cursor=pointer]
+                  - cell "00" [ref=e513] [cursor=pointer]
+                  - cell "00" [ref=e514] [cursor=pointer]
+                  - cell "00" [ref=e515] [cursor=pointer]
+                  - cell "00" [ref=e516] [cursor=pointer]
+                  - cell "00" [ref=e517] [cursor=pointer]
+                  - cell "00" [ref=e518] [cursor=pointer]
+                  - cell "................" [ref=e519]
+                - row "00F0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................" [ref=e520]:
+                  - cell "00F0" [ref=e521]
+                  - cell "00" [ref=e522] [cursor=pointer]
+                  - cell "00" [ref=e523] [cursor=pointer]
+                  - cell "00" [ref=e524] [cursor=pointer]
+                  - cell "00" [ref=e525] [cursor=pointer]
+                  - cell "00" [ref=e526] [cursor=pointer]
+                  - cell "00" [ref=e527] [cursor=pointer]
+                  - cell "00" [ref=e528] [cursor=pointer]
+                  - cell "00" [ref=e529] [cursor=pointer]
+                  - cell "00" [ref=e530] [cursor=pointer]
+                  - cell "00" [ref=e531] [cursor=pointer]
+                  - cell "00" [ref=e532] [cursor=pointer]
+                  - cell "00" [ref=e533] [cursor=pointer]
+                  - cell "00" [ref=e534] [cursor=pointer]
+                  - cell "00" [ref=e535] [cursor=pointer]
+                  - cell "00" [ref=e536] [cursor=pointer]
+                  - cell "00" [ref=e537] [cursor=pointer]
+                  - cell "................" [ref=e538]
+        - generic [ref=e539]:
+          - heading "Edit Code" [level=3] [ref=e541]
+          - generic [ref=e542]:
+            - textbox "Enter 8086 assembly code here..." [ref=e543]
+            - generic [ref=e544]: "Supports: MOV, ADD, SUB, INC, DEC, CMP, JMP, JE, JNE, LOOP, PUSH, POP, CALL, RET, and more. Labels end with colon (:) and can be used as jump targets."
+  - contentinfo [ref=e545]: ACS2906 Assembly Language Learning Platform

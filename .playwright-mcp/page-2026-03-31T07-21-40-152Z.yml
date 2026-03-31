@@ -1,0 +1,180 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - img [ref=e88]
+          - text: Practice Drill
+        - heading "Drill Mode" [level=1] [ref=e92]
+        - paragraph [ref=e93]: Test your knowledge with targeted practice questions. Select your filters and start drilling.
+      - button "Drill Settings" [ref=e95]:
+        - generic [ref=e96]:
+          - img [ref=e97]
+          - generic [ref=e100]: Drill Settings
+        - img [ref=e101]
+      - generic [ref=e103]:
+        - generic [ref=e105]:
+          - img [ref=e106]
+          - generic [ref=e108]: Filter Questions
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]: Topic
+            - combobox [ref=e112] [cursor=pointer]:
+              - option "All Topics" [selected]
+              - option "Advanced Topics"
+              - option "Assembly Basics"
+              - option "Control Flow"
+              - option "Data Representation"
+              - option "I/O Operations"
+              - option "Procedures"
+          - generic [ref=e113]:
+            - generic [ref=e114]: Concept
+            - combobox [ref=e115] [cursor=pointer]:
+              - option "All Concepts" [selected]
+              - option "adc-instruction"
+              - option "add-instruction"
+              - option "array-operations"
+              - option "binary-number-system"
+              - option "bit-manipulation"
+              - option "bit-vs-byte"
+              - option "boolean-logic"
+              - option "bp-register"
+              - option "call-instruction"
+              - option "carry-flag"
+              - option "cbw"
+              - option "cmp-instruction"
+              - option "cmps"
+              - option "conditional-jumps"
+              - option "cwd"
+              - option "cx-register"
+              - option "data-transfer-rules"
+              - option "di-register"
+              - option "div-instruction"
+              - option "division-by-zero"
+              - option "dos-interrupts"
+              - option "ds-segment"
+              - option "effective-address"
+              - option "es-segment"
+              - option "flag-register"
+              - option "general-purpose-registers"
+              - option "hexadecimal"
+              - option "imul-instruction"
+              - option "indexed-addressing"
+              - option "int-21h"
+              - option "lahf"
+              - option "lea-instruction"
+              - option "little-endian"
+              - option "lods"
+              - option "loop-instructions"
+              - option "mov-instruction"
+              - option "mul-instruction"
+              - option "multiplication-optimization"
+              - option "negation"
+              - option "not-instruction"
+              - option "or-instruction"
+              - option "overflow-flag"
+              - option "parameter-passing"
+              - option "pop-instruction"
+              - option "program-counter"
+              - option "push-instruction"
+              - option "recursive-procedures"
+              - option "register-classes"
+              - option "rep-prefix"
+              - option "ret-instruction"
+              - option "rotate-instructions"
+              - option "sahf"
+              - option "scasb"
+              - option "segment-registers"
+              - option "shift-instructions"
+              - option "si-register"
+              - option "sign-extension"
+              - option "signed-numbers"
+              - option "stack-frame"
+              - option "stos"
+              - option "string-instructions"
+              - option "string-output"
+              - option "test-instruction"
+              - option "twos-complement"
+              - option "unconditional-jump"
+              - option "word-size"
+              - option "xchg-instruction"
+              - option "xor-instruction"
+          - generic [ref=e116]:
+            - generic [ref=e117]: Instruction
+            - combobox [ref=e118] [cursor=pointer]:
+              - option "All Instructions" [selected]
+              - option "ADC"
+              - option "ADD"
+              - option "AND"
+              - option "CALL"
+              - option "CBW"
+              - option "CMP"
+              - option "CMPSB"
+              - option "CWD"
+              - option "DIV"
+              - option "IMUL"
+              - option "INT"
+              - option "JB"
+              - option "JCXZ"
+              - option "JE"
+              - option "JL"
+              - option "JMP"
+              - option "JNE"
+              - option "LAHF"
+              - option "LEA"
+              - option "LODSB"
+              - option "LOOP"
+              - option "LOOPE"
+              - option "LOOPNE"
+              - option "LOOPNZ"
+              - option "LOOPZ"
+              - option "MOV"
+              - option "MOVSB"
+              - option "MOVSW"
+              - option "MUL"
+              - option "NEG"
+              - option "NOT"
+              - option "OR"
+              - option "POP"
+              - option "PUSH"
+              - option "REP"
+              - option "RET"
+              - option "ROL"
+              - option "ROR"
+              - option "SAHF"
+              - option "SAR"
+              - option "SCASB"
+              - option "SHL"
+              - option "STOSB"
+              - option "SUB"
+              - option "TEST"
+              - option "XCHG"
+              - option "XOR"
+          - generic [ref=e119]:
+            - generic [ref=e120]: Difficulty
+            - combobox [ref=e121] [cursor=pointer]:
+              - option "All Levels" [selected]
+              - option "Beginner"
+              - option "Easy"
+              - option "Medium"
+              - option "Hard"
+              - option "Expert"
+        - generic [ref=e122]: 59 questions match your filters
+      - button "Start Drill (10 questions)" [ref=e124]:
+        - img [ref=e125]
+        - text: Start Drill (10 questions)
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

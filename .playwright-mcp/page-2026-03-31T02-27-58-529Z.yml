@@ -1,0 +1,56 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e6]
+      - text: Master 8086 Assembly Language
+    - heading "ACS2906 Learning Platform" [level=1] [ref=e8]
+    - paragraph [ref=e9]: A source-grounded, mastery-based study system for Assembly Language Programming.
+    - generic [ref=e10]:
+      - link "Start Learning" [ref=e11] [cursor=pointer]:
+        - /url: /course-map
+        - img [ref=e12]
+        - text: Start Learning
+      - link "Try Simulator" [ref=e14] [cursor=pointer]:
+        - /url: /simulator
+        - img [ref=e15]
+        - text: Try Simulator
+  - generic [ref=e18]:
+    - heading "What You Will Learn" [level=2] [ref=e19]
+    - generic [ref=e20]:
+      - link "10 Lectures Comprehensive coverage from data representation to advanced procedures" [ref=e21] [cursor=pointer]:
+        - /url: /lectures
+        - img [ref=e23]
+        - heading "10 Lectures" [level=3] [ref=e25]
+        - paragraph [ref=e26]: Comprehensive coverage from data representation to advanced procedures
+      - link "50+ Examples Hand-crafted assembly examples with annotations and simulator presets" [ref=e27] [cursor=pointer]:
+        - /url: /examples
+        - img [ref=e29]
+        - heading "50+ Examples" [level=3] [ref=e31]
+        - paragraph [ref=e32]: Hand-crafted assembly examples with annotations and simulator presets
+      - link "Interactive Simulator Run 8086 assembly code step-by-step with register visualization" [ref=e33] [cursor=pointer]:
+        - /url: /simulator
+        - img [ref=e35]
+        - heading "Interactive Simulator" [level=3] [ref=e38]
+        - paragraph [ref=e39]: Run 8086 assembly code step-by-step with register visualization
+      - link "Practice Drills Targeted practice with instant feedback and remediation" [ref=e40] [cursor=pointer]:
+        - /url: /drills
+        - img [ref=e42]
+        - heading "Practice Drills" [level=3] [ref=e46]
+        - paragraph [ref=e47]: Targeted practice with instant feedback and remediation
+      - link "Learning Games Gamified practice for instructions, registers, and flags" [ref=e48] [cursor=pointer]:
+        - /url: /games
+        - img [ref=e50]
+        - heading "Learning Games" [level=3] [ref=e52]
+        - paragraph [ref=e53]: Gamified practice for instructions, registers, and flags
+      - link "Mastery Tracking Track your progress and identify areas for improvement" [ref=e54] [cursor=pointer]:
+        - /url: /progress
+        - img [ref=e56]
+        - heading "Mastery Tracking" [level=3] [ref=e58]
+        - paragraph [ref=e59]: Track your progress and identify areas for improvement
+  - generic [ref=e60]:
+    - heading "Ready to Master Assembly?" [level=2] [ref=e61]
+    - paragraph [ref=e62]: Start with the Course Map to see how all the pieces fit together.
+    - link "Explore Course Map" [ref=e63] [cursor=pointer]:
+      - /url: /course-map
+      - img [ref=e64]
+      - text: Explore Course Map

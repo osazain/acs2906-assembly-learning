@@ -73,3 +73,16 @@ When reviewing existing /WebPlatform assets, classify each major file as:
 - refactor and keep
 - replace
 Document rationale before replacing working parts.
+
+## Git workflow rules
+- After completing a major fix or milestone, run tests/checks first.
+- If the change is stable, commit it.
+- After committing, push the current branch to origin.
+- Do not push if the app is clearly broken or if the current task is only partially done.
+
+Commit style:
+- feat: for new features
+- fix: for bug fixes
+- refactor: for internal cleanup
+- docs: for documentation
+- chore: for setup/config work

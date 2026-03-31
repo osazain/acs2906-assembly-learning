@@ -1,0 +1,50 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e85]:
+      - generic [ref=e87]:
+        - generic [ref=e129]: Question 8 of 10
+        - generic [ref=e130]: 7 answered
+      - generic [ref=e94]:
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - generic [ref=e135]: Assembly Basics
+            - generic [ref=e136]: LEA Instruction
+            - generic [ref=e137]: Medium
+          - generic [ref=e189]: LEA
+        - generic [ref=e140]:
+          - heading "What does LEA BX, [SI+10] do?" [level=2] [ref=e190]
+          - generic [ref=e191]:
+            - button "A Loads the value at memory location SI+10 into BX" [ref=e192] [cursor=pointer]:
+              - generic [ref=e193]: A
+              - generic [ref=e194]: Loads the value at memory location SI+10 into BX
+            - button "B Loads the offset address SI+10 into BX" [ref=e195] [cursor=pointer]:
+              - generic [ref=e196]: B
+              - generic [ref=e197]: Loads the offset address SI+10 into BX
+            - button "C Adds 10 to SI and stores in BX" [ref=e198] [cursor=pointer]:
+              - generic [ref=e199]: C
+              - generic [ref=e200]: Adds 10 to SI and stores in BX
+            - button "D Loads SI+10 into BX as a signed value" [ref=e201] [cursor=pointer]:
+              - generic [ref=e202]: D
+              - generic [ref=e203]: Loads SI+10 into BX as a signed value
+      - generic [ref=e103]:
+        - button "Skip" [active] [ref=e142]:
+          - img [ref=e143]
+          - text: Skip
+        - button "Submit Answer" [disabled] [ref=e145]
+      - group [ref=e146]:
+        - generic "Need a hint?" [ref=e147] [cursor=pointer]
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

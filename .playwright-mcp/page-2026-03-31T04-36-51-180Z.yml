@@ -1,0 +1,211 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - img [ref=e88]
+          - text: ACS2906 Assembly Language
+        - heading "Course Map" [level=1] [ref=e91]
+        - paragraph [ref=e92]: Navigate through 10 comprehensive lectures covering everything from data representation to advanced assembly programming.
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - img [ref=e95]
+          - generic [ref=e97]:
+            - strong [ref=e98]: "10"
+            - text: Lectures
+        - generic [ref=e99]:
+          - img [ref=e100]
+          - generic [ref=e102]:
+            - strong [ref=e103]: "14"
+            - text: Examples
+        - generic [ref=e104]:
+          - img [ref=e105]
+          - generic [ref=e109]:
+            - strong [ref=e110]: "4"
+            - text: High-Exam-Relevance
+      - generic [ref=e111]:
+        - link "1 Introduction to Assembly Language Number systems (binary, hexadecimal, decimal) Data representation fundamentals Introduction to 8086 architecture +2 more medium foundational 0 examples" [ref=e112] [cursor=pointer]:
+          - /url: /lecture/1
+          - generic [ref=e113]:
+            - generic [ref=e114]: "1"
+            - heading "Introduction to Assembly Language" [level=3] [ref=e116]
+          - generic [ref=e117]:
+            - generic "Number systems (binary, hexadecimal, decimal)" [ref=e118]
+            - generic "Data representation fundamentals" [ref=e119]
+            - generic "Introduction to 8086 architecture" [ref=e120]
+            - generic [ref=e121]: +2 more
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - generic [ref=e124]: medium
+              - generic [ref=e125]: foundational
+            - generic [ref=e126]:
+              - generic [ref=e127]: 0 examples
+              - img [ref=e128]
+        - link "2 Data Representation and Arithmetic Signed and unsigned numbers Two's complement representation Binary and hexadecimal arithmetic +2 more medium foundational 0 examples" [ref=e130] [cursor=pointer]:
+          - /url: /lecture/2
+          - generic [ref=e131]:
+            - generic [ref=e132]: "2"
+            - heading "Data Representation and Arithmetic" [level=3] [ref=e134]
+          - generic [ref=e135]:
+            - generic "Signed and unsigned numbers" [ref=e136]
+            - generic "Two's complement representation" [ref=e137]
+            - generic "Binary and hexadecimal arithmetic" [ref=e138]
+            - generic [ref=e139]: +2 more
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - generic [ref=e142]: medium
+              - generic [ref=e143]: foundational
+            - generic [ref=e144]:
+              - generic [ref=e145]: 0 examples
+              - img [ref=e146]
+        - link "3 Basic Assembly Programming MOV instruction and data transfer Register usage and classification Memory addressing modes +2 more High Exam intermediate 0 examples" [ref=e148] [cursor=pointer]:
+          - /url: /lecture/3
+          - generic [ref=e149]:
+            - generic [ref=e150]: "3"
+            - heading "Basic Assembly Programming" [level=3] [ref=e152]
+          - generic [ref=e153]:
+            - generic "MOV instruction and data transfer" [ref=e154]
+            - generic "Register usage and classification" [ref=e155]
+            - generic "Memory addressing modes" [ref=e156]
+            - generic [ref=e157]: +2 more
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - generic [ref=e160]: High Exam
+              - generic [ref=e161]: intermediate
+            - generic [ref=e162]:
+              - generic [ref=e163]: 0 examples
+              - img [ref=e164]
+        - link "4 Data Transfer and Arithmetic Instructions MOV, XCHG, LEA instructions ADD, SUB, CMP instructions INC, DEC, NEG instructions +3 more High Exam intermediate 6 examples" [ref=e166] [cursor=pointer]:
+          - /url: /lecture/4
+          - generic [ref=e167]:
+            - generic [ref=e168]: "4"
+            - heading "Data Transfer and Arithmetic Instructions" [level=3] [ref=e170]
+          - generic [ref=e171]:
+            - generic "MOV, XCHG, LEA instructions" [ref=e172]
+            - generic "ADD, SUB, CMP instructions" [ref=e173]
+            - generic "INC, DEC, NEG instructions" [ref=e174]
+            - generic [ref=e175]: +3 more
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - generic [ref=e178]: High Exam
+              - generic [ref=e179]: intermediate
+            - generic [ref=e180]:
+              - generic [ref=e181]: 6 examples
+              - img [ref=e182]
+        - link "5 Input/Output Operations DOS interrupt 21h functions Keyboard input (AH=01h, AH=0Ah) Screen output (AH=02h, AH=09h) +3 more medium intermediate 0 examples" [ref=e184] [cursor=pointer]:
+          - /url: /lecture/5
+          - generic [ref=e185]:
+            - generic [ref=e186]: "5"
+            - heading "Input/Output Operations" [level=3] [ref=e188]
+          - generic [ref=e189]:
+            - generic "DOS interrupt 21h functions" [ref=e190]
+            - generic "Keyboard input (AH=01h, AH=0Ah)" [ref=e191]
+            - generic "Screen output (AH=02h, AH=09h)" [ref=e192]
+            - generic [ref=e193]: +3 more
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - generic [ref=e196]: medium
+              - generic [ref=e197]: intermediate
+            - generic [ref=e198]:
+              - generic [ref=e199]: 0 examples
+              - img [ref=e200]
+        - link "6 Control Flow and Loops Unconditional jump (JMP) Conditional jumps (JE, JNE, JL, JLE, JG, JGE) CMP instruction and flag combinations +3 more High Exam intermediate 6 examples" [ref=e202] [cursor=pointer]:
+          - /url: /lecture/6
+          - generic [ref=e203]:
+            - generic [ref=e204]: "6"
+            - heading "Control Flow and Loops" [level=3] [ref=e206]
+          - generic [ref=e207]:
+            - generic "Unconditional jump (JMP)" [ref=e208]
+            - generic "Conditional jumps (JE, JNE, JL, JLE, JG, JGE)" [ref=e209]
+            - generic "CMP instruction and flag combinations" [ref=e210]
+            - generic [ref=e211]: +3 more
+          - generic [ref=e212]:
+            - generic [ref=e213]:
+              - generic [ref=e214]: High Exam
+              - generic [ref=e215]: intermediate
+            - generic [ref=e216]:
+              - generic [ref=e217]: 6 examples
+              - img [ref=e218]
+        - link "7 Procedures and Subroutines CALL and RET instructions Stack operations (PUSH, POP) Stack frame and BP register +3 more High Exam advanced 2 examples" [ref=e220] [cursor=pointer]:
+          - /url: /lecture/7
+          - generic [ref=e221]:
+            - generic [ref=e222]: "7"
+            - heading "Procedures and Subroutines" [level=3] [ref=e224]
+          - generic [ref=e225]:
+            - generic "CALL and RET instructions" [ref=e226]
+            - generic "Stack operations (PUSH, POP)" [ref=e227]
+            - generic "Stack frame and BP register" [ref=e228]
+            - generic [ref=e229]: +3 more
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - generic [ref=e232]: High Exam
+              - generic [ref=e233]: advanced
+            - generic [ref=e234]:
+              - generic [ref=e235]: 2 examples
+              - img [ref=e236]
+        - link "8 String Operations MOVSB, MOVSW, LODSB, LODSW STOSB, STOSW instructions REP prefix and repetition +2 more medium advanced 0 examples" [ref=e238] [cursor=pointer]:
+          - /url: /lecture/8
+          - generic [ref=e239]:
+            - generic [ref=e240]: "8"
+            - heading "String Operations" [level=3] [ref=e242]
+          - generic [ref=e243]:
+            - generic "MOVSB, MOVSW, LODSB, LODSW" [ref=e244]
+            - generic "STOSB, STOSW instructions" [ref=e245]
+            - generic "REP prefix and repetition" [ref=e246]
+            - generic [ref=e247]: +2 more
+          - generic [ref=e248]:
+            - generic [ref=e249]:
+              - generic [ref=e250]: medium
+              - generic [ref=e251]: advanced
+            - generic [ref=e252]:
+              - generic [ref=e253]: 0 examples
+              - img [ref=e254]
+        - link "9 Arrays and Data Structures Array declaration and initialization Indexed addressing modes Bubble sort and selection sort +2 more medium advanced 0 examples" [ref=e256] [cursor=pointer]:
+          - /url: /lecture/9
+          - generic [ref=e257]:
+            - generic [ref=e258]: "9"
+            - heading "Arrays and Data Structures" [level=3] [ref=e260]
+          - generic [ref=e261]:
+            - generic "Array declaration and initialization" [ref=e262]
+            - generic "Indexed addressing modes" [ref=e263]
+            - generic "Bubble sort and selection sort" [ref=e264]
+            - generic [ref=e265]: +2 more
+          - generic [ref=e266]:
+            - generic [ref=e267]:
+              - generic [ref=e268]: medium
+              - generic [ref=e269]: advanced
+            - generic [ref=e270]:
+              - generic [ref=e271]: 0 examples
+              - img [ref=e272]
+        - link "10 Advanced Topics and Review Macros and assembly directives Modular programming Bit manipulation instructions +2 more low advanced 0 examples" [ref=e274] [cursor=pointer]:
+          - /url: /lecture/10
+          - generic [ref=e275]:
+            - generic [ref=e276]: "10"
+            - heading "Advanced Topics and Review" [level=3] [ref=e278]
+          - generic [ref=e279]:
+            - generic "Macros and assembly directives" [ref=e280]
+            - generic "Modular programming" [ref=e281]
+            - generic "Bit manipulation instructions" [ref=e282]
+            - generic [ref=e283]: +2 more
+          - generic [ref=e284]:
+            - generic [ref=e285]:
+              - generic [ref=e286]: low
+              - generic [ref=e287]: advanced
+            - generic [ref=e288]:
+              - generic [ref=e289]: 0 examples
+              - img [ref=e290]
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

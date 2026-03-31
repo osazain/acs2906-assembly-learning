@@ -1,0 +1,96 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+  - main [ref=e20]:
+    - generic [ref=e211]:
+      - generic [ref=e212]:
+        - generic [ref=e213]:
+          - img [ref=e214]
+          - text: Drill Complete!
+        - heading "Results Summary" [level=1] [ref=e220]
+      - generic [ref=e221]:
+        - generic [ref=e222]:
+          - generic [ref=e223]: "10"
+          - generic [ref=e224]: Total Questions
+        - generic [ref=e225]:
+          - generic [ref=e226]: "0"
+          - generic [ref=e227]: Correct
+        - generic [ref=e228]:
+          - generic [ref=e229]: "0"
+          - generic [ref=e230]: Incorrect
+        - generic [ref=e231]:
+          - generic [ref=e232]: "10"
+          - generic [ref=e233]: Skipped
+      - generic [ref=e234]:
+        - generic [ref=e235]:
+          - generic [ref=e236]: 0%
+          - generic [ref=e237]: Overall Accuracy
+        - generic [ref=e239]:
+          - generic [ref=e240]: 2m 2s
+          - generic [ref=e241]: Time Taken
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - button "Overview" [ref=e244]:
+            - img [ref=e245]
+            - text: Overview
+          - button "By Concept" [ref=e248]:
+            - img [ref=e249]
+            - text: By Concept
+          - button "Misconceptions" [ref=e253]:
+            - img [ref=e254]
+            - text: Misconceptions
+          - button "Remediation" [ref=e264]:
+            - img [ref=e265]
+            - text: Remediation
+        - generic [ref=e269]:
+          - generic [ref=e270]:
+            - generic [ref=e271]:
+              - img [ref=e272]
+              - text: Areas Needing Improvement
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - generic [ref=e276]: mov-instruction
+                - generic [ref=e279]: 0%
+              - generic [ref=e280]:
+                - generic [ref=e281]: general-purpose-registers
+                - generic [ref=e284]: 0%
+              - generic [ref=e285]:
+                - generic [ref=e286]: lahf
+                - generic [ref=e289]: 0%
+              - generic [ref=e290]:
+                - generic [ref=e291]: sahf
+                - generic [ref=e294]: 0%
+              - generic [ref=e295]:
+                - generic [ref=e296]: flag-register
+                - generic [ref=e299]: 0%
+          - generic [ref=e300]:
+            - button "Add Weak Areas to Review Queue" [ref=e301]:
+              - img [ref=e302]
+              - text: Add Weak Areas to Review Queue
+            - button "Export JSON" [ref=e303]:
+              - img [ref=e304]
+              - text: Export JSON
+            - button "Share" [ref=e307]:
+              - img [ref=e308]
+              - text: Share
+      - generic [ref=e314]:
+        - button "Try Again" [ref=e315]:
+          - img [ref=e316]
+          - text: Try Again
+        - link "Back to Course Map" [ref=e319] [cursor=pointer]:
+          - /url: /#/course-map
+          - img [ref=e320]
+          - text: Back to Course Map
+  - contentinfo [ref=e84]: ACS2906 Assembly Language Learning Platform

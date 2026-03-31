@@ -1,0 +1,57 @@
+{
+  "featureId": "diagnostic-mode",
+  "reviewedAt": "2026-03-31T08:00:00.000Z",
+  "commitId": "c93e53f",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "DiagnosticMode implements the 3-screen flow (topic selection, diagnostic session, report) with adaptive difficulty and mistake pattern detection. However, there are two blocking bugs: (1) remediation link construction is broken - always resolves to #/course-map regardless of ref type; (2) handleSkip marks the question as skipped but then calls finishDiagnostic() directly without properly advancing, potentially losing the skip state.",
+    "issues": [
+      {
+        "file": "src/components/assessment/DiagnosticMode.tsx",
+        "line": 680,
+        "severity": "blocking",
+        "description": "Remediation link is always '#/course-map' - the ternary condition `ref.type === 'lecture' ? '#/lecture/' + ref.id : '#/course-map'` is the consequent of another if statement, so it always evaluates to '#/course-map'. Should be: link constructed outside the if/else, or the condition restructured."
+      },
+      {
+        "file": "src/components/assessment/DiagnosticMode.tsx",
+        "line": 425,
+        "severity": "blocking",
+        "description": "handleSkip: when at the last question (currentIndex === questions.length - 1), finishDiagnostic() is called but the current question's status has only been set to 'skipped' locally before the if/else check. The finishDiagnostic captures session.questions which should include the skipped status, but the logic flow is fragile - if any error occurs between setSession and finishDiagnostic, the skip could be lost."
+      },
+      {
+        "file": "src/components/assessment/DiagnosticMode.tsx",
+        "line": 180,
+        "severity": "non_blocking",
+        "description": "No validation when selected topics have zero available questions. If all selected topics have 0 questions, initialQuestions would be empty and session starts with 0 questions. Should add guard: if (initialQuestions.length === 0) return or show error."
+      },
+      {
+        "file": "src/components/assessment/DiagnosticMode.tsx",
+        "line": 240,
+        "severity": "non_blocking",
+        "description": "Adaptive question selection relies on difficulty matching (+/- 1) which means it may not find questions if currentDifficulty is at extremes and few questions exist at those levels. The fallback to random selection from available questions works but the weighting toward weak topics could cause repeated questions from same topic."
+      },
+      {
+        "file": "src/components/assessment/DiagnosticMode.tsx",
+        "line": 600,
+        "severity": "non_blocking",
+        "description": "weakAreas sorting by accuracy could include areas with very few attempts (1 question) making accuracy artificially extreme. Code filters concepts with data.total >= 2 but topics are not similarly filtered."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "services",
+      "observation": "Worker used agent-browser commands for browser automation testing (open, click) but these are not documented in .factory/services.yaml. Only the preview service (vite preview on port 4173) is documented. For phase 3 validation, browser automation via agent-browser is essential but the services.yaml only covers preview server.",
+      "evidence": "Handoff verification.commands shows agent-browser open http://localhost:4173/#/diagnostics and agent-browser click commands. services.yaml only documents preview service."
+    },
+    {
+      "area": "conventions",
+      "observation": "The AGENTS.md mentions Dexie/IndexedDB for local persistence but does not document the db module location or schema. Workers discovered db.ts at src/lib/db.ts through imports, not through documentation. The MasteryDashboard.tsx and DrillMode.tsx also import from @/lib/db but AGENTS.md only says 'IndexedDB via Dexie for local persistence'.",
+      "evidence": "DiagnosticMode.tsx imports { db, getOrCreateUserId } from '@/lib/db'. AGENTS.md does not specify the path or schema."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "DiagnosticMode feature is mostly well-implemented with proper 3-screen UX, adaptive difficulty, and mistake pattern detection. However, there are two blocking bugs: (1) remediation links in the report always point to #/course-map due to a code structure issue, and (2) the skip flow for the final question has a fragile control flow. The feature requires fixes before it can be considered passing."
+}

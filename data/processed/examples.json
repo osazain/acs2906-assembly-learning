@@ -1,0 +1,488 @@
+{
+  "examples": [
+    {
+      "id": "helloworld",
+      "filename": "HelloWorld.asm",
+      "lectureIds": [4],
+      "sectionIds": ["data-transfer"],
+      "concepts": ["mov-instruction", "dos-interrupts", "int-21h", "string-output"],
+      "instructions": ["MOV", "INT"],
+      "code": "; Hello World Program\n; Demonstrates basic string output using DOS interrupt 21h\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    MSG DB 'Hello, World!$'\n\n.CODE\nMAIN PROC\n    ; Initialize data segment\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display string using DOS function 09h\n    MOV AH, 09H\n    LEA DX, MSG\n    INT 21H\n    \n    ; Return to DOS\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 8,
+          "type": "comment",
+          "text": "String must end with $ for DOS function 09h",
+          "linkedConcept": "string-output"
+        },
+        {
+          "line": 13,
+          "type": "instruction",
+          "text": "MOV AX, @DATA loads the data segment address into AX, then copies to DS",
+          "linkedConcept": "mov-instruction"
+        },
+        {
+          "line": 17,
+          "type": "instruction",
+          "text": "AH=09h is DOS function to display string at DS:DX",
+          "linkedConcept": "dos-interrupts"
+        },
+        {
+          "line": 18,
+          "type": "instruction",
+          "text": "LEA loads effective address of MSG into DX",
+          "linkedConcept": "lea-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to initialize DS before using string data",
+        "Not ending the string with '$' - function 09h uses $ as terminator",
+        "Using AH=01h instead of AH=09h for string output"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q001", "q002", "q010"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/HelloWorld.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "template",
+      "filename": "Template.asm",
+      "lectureIds": [4],
+      "sectionIds": ["data-transfer"],
+      "concepts": ["mov-instruction", "program-structure", "register-classes"],
+      "instructions": ["MOV"],
+      "code": "; Basic Assembly Template\n; Standard program structure for 8086 assembly\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Data segment variables go here\n    \n.CODE\nMAIN PROC\n    ; Initialize data segment\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Main program logic goes here\n    \n    ; Exit to DOS\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 5,
+          "type": "comment",
+          "text": ".MODEL SMALL defines a small memory model (code + data < 64KB)",
+          "linkedConcept": "program-structure"
+        },
+        {
+          "line": 7,
+          "type": "comment",
+          "text": "STACK 100H reserves 256 bytes for the stack",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 15,
+          "type": "instruction",
+          "text": "Always initialize DS before accessing data segment variables",
+          "linkedConcept": "mov-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to initialize DS register",
+        "Not ending program with INT 21h/AH=4Ch",
+        "Confusing .DATA and .CODE segment order"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q001", "q003"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/Template.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.98,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "addition",
+      "filename": "Addition.asm",
+      "lectureIds": [4],
+      "sectionIds": ["arithmetic"],
+      "concepts": ["mov-instruction", "add-instruction", "carry-flag", "arithmetic-overflow"],
+      "instructions": ["MOV", "ADD"],
+      "code": "; Addition Program\n; Demonstrates adding two numbers and storing the result\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    NUM1 DB 25\n    NUM2 DB 17\n    RESULT DB ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Load first number into AL\n    MOV AL, NUM1\n    \n    ; Add second number\n    ADD AL, NUM2\n    \n    ; Store result (CF will be set if overflow occurred)\n    MOV RESULT, AL\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 16,
+          "type": "instruction",
+          "text": "ADD modifies the destination (AL), source (NUM2) unchanged",
+          "linkedConcept": "add-instruction"
+        },
+        {
+          "line": 16,
+          "type": "flag",
+          "text": "ADD sets CF=1 if unsigned overflow occurred",
+          "linkedConcept": "carry-flag"
+        },
+        {
+          "line": 17,
+          "type": "comment",
+          "text": "RESULT receives AL, which holds the sum",
+          "linkedConcept": "mov-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Using ADD on two memory operands directly (one must be register)",
+        "Not checking CF after unsigned addition to detect overflow",
+        "Assuming result fits in destination when adding large numbers"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q004", "q005", "q011"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/Addition.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.97,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "buff2",
+      "filename": "Buff2.asm",
+      "lectureIds": [4, 5],
+      "sectionIds": ["io-operations", "data-transfer"],
+      "concepts": ["input-buffer", "keyboard-input", "mov-instruction"],
+      "instructions": ["MOV", "INT"],
+      "code": "; Buffered Input Example\n; Reads a single character with buffer\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    CHAR DB ?\n    PROMPT DB 'Enter a character: $'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display prompt\n    MOV AH, 09H\n    LEA DX, PROMPT\n    INT 21H\n    \n    ; Read character (function 01h - echo input)\n    MOV AH, 01H\n    INT 21H\n    MOV CHAR, AL\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "AH=01h reads one character from stdin into AL, also echoes to screen",
+          "linkedConcept": "keyboard-input"
+        },
+        {
+          "line": 23,
+          "type": "instruction",
+          "text": "Character returned in AL is stored to CHAR variable",
+          "linkedConcept": "mov-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Using function 01h without checking if character was actually read",
+        "Not providing user feedback before reading input",
+        "Confusing AH and AL when setting up INT 21h functions"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q006", "q007"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/Buff2.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.92,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "buffered",
+      "filename": "Buffered.asm",
+      "lectureIds": [5],
+      "sectionIds": ["io-operations"],
+      "concepts": ["input-buffer", "string-output", "dos-interrupts"],
+      "instructions": ["MOV", "INT", "LEA"],
+      "code": "; Buffered String Input\n; Reads a string using buffered input (function 0Ah)\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    BUFFER DB 80\n           DB ?\n           DB 80 DUP(?)\n    PROMPT DB 'Enter your name: $'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display prompt\n    MOV AH, 09H\n    LEA DX, PROMPT\n    INT 21H\n    \n    ; Read string using buffered input\n    MOV AH, 0AH\n    LEA DX, BUFFER\n    INT 21H\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 10,
+          "type": "memory",
+          "text": "Buffer format: [MAX LENGTH][ACTUAL LENGTH][DATA...]",
+          "linkedConcept": "input-buffer"
+        },
+        {
+          "line": 25,
+          "type": "instruction",
+          "text": "AH=0Ah reads string into buffer, Enter terminates",
+          "linkedConcept": "keyboard-input"
+        }
+      ],
+      "commonMistakes": [
+        "Not reserving enough space in buffer for input",
+        "Forgetting that first byte is maximum length, second is actual length",
+        "Not initializing buffer before use"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q006", "q008"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/Buffered.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.91,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "demo",
+      "filename": "demo.asm",
+      "lectureIds": [4, 6],
+      "sectionIds": ["arithmetic", "control-flow"],
+      "concepts": ["add-instruction", "sub-instruction", "carry-flag", "conditional-jumps"],
+      "instructions": ["MOV", "ADD", "SUB", "CMP", "JNE", "INT"],
+      "code": "; Demo Program - Arithmetic and Comparison\n; Shows basic arithmetic operations and conditional logic\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    A DB 10\n    B DB 3\n    RESULT DB ?\n    MSG1 DB 'A > B$'\n    MSG2 DB 'A <= B$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Compare A and B\n    MOV AL, A\n    CMP AL, B\n    \n    ; If AL > B, skip the subtraction\n    JA SKIP_SUB\n    \n    ; Subtract: A - B\n    SUB AL, B\n    MOV RESULT, AL\n    JMP DONE\n    \nSKIP_SUB:\n    ; Add: A + B\n    ADD AL, B\n    MOV RESULT, AL\n    \nDONE:\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 24,
+          "type": "instruction",
+          "text": "CMP performs subtraction but doesn't store result, only updates flags",
+          "linkedConcept": "cmp-instruction"
+        },
+        {
+          "line": 27,
+          "type": "instruction",
+          "text": "JA jumps if unsigned AL > B (CF=0 and ZF=0)",
+          "linkedConcept": "conditional-jumps"
+        },
+        {
+          "line": 33,
+          "type": "instruction",
+          "text": "SUB sets OF, SF, ZF, AF, PF, CF based on result",
+          "linkedConcept": "sub-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing JA (unsigned) with JG (signed)",
+        "Forgetting that CMP only affects flags, doesn't store result",
+        "Using CMP then wrong jump condition"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q004", "q005", "q012", "q013"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/demo.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.94,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "proc",
+      "filename": "proc.asm",
+      "lectureIds": [7],
+      "sectionIds": ["procedures"],
+      "concepts": ["call-instruction", "ret-instruction", "push-instruction", "pop-instruction", "stack-frame"],
+      "instructions": ["CALL", "RET", "PUSH", "POP", "MOV", "INT"],
+      "code": "; Procedure Example\n; Demonstrates procedure call with stack operations\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    RESULT DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Call the procedure\n    MOV AX, 5\n    PUSH AX              ; Pass parameter on stack\n    CALL SQUARE\n    POP CX               ; Clean up stack\n    MOV RESULT, DX\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\n\n; Procedure to calculate square\n; Parameter: AX (value to square)\n; Returns: DX (result)\nSQUARE PROC\n    PUSH BP\n    MOV BP, SP\n    \n    MOV AX, [BP+4]      ; Get parameter\n    MUL AX               ; AX * AX -> DX:AX\n    MOV DX, AX           ; Store result in DX\n    \n    POP BP\n    RET\nSQUARE ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 20,
+          "type": "instruction",
+          "text": "PUSH decrements SP by 2 and copies AX to stack",
+          "linkedConcept": "push-instruction"
+        },
+        {
+          "line": 21,
+          "type": "instruction",
+          "text": "CALL pushes return address and jumps to SQUARE",
+          "linkedConcept": "call-instruction"
+        },
+        {
+          "line": 34,
+          "type": "instruction",
+          "text": "MUL without operand uses AX as implicit operand",
+          "linkedConcept": "mul-instruction"
+        },
+        {
+          "line": 37,
+          "type": "instruction",
+          "text": "RET pops return address and jumps back to caller",
+          "linkedConcept": "ret-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Not balancing stack - push/pop mismatch causes corruption",
+        "Forgetting to preserve BP register in procedure",
+        "Using AX instead of [BP+4] to access stack parameters"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["q020", "q021", "q022"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/proc.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.96,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "forloop",
+      "filename": "forloop.asm",
+      "lectureIds": [6],
+      "sectionIds": ["control-flow"],
+      "concepts": ["loop-instructions", "cx-register", "unconditional-jump", "add-instruction"],
+      "instructions": ["MOV", "ADD", "LOOP", "INT"],
+      "code": "; For Loop Example\n; Counts from 1 to 10 using LOOP instruction\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    COUNT DB 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Initialize counter\n    MOV CX, 10          ; Loop 10 times\n    \nLOOP_START:\n    INC COUNT           ; Increment count variable\n    \n    ; Could do more work here\n    \n    LOOP LOOP_START     ; CX--, if CX != 0 jump to LOOP_START\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 18,
+          "type": "instruction",
+          "text": "CX is the counter register used implicitly by LOOP",
+          "linkedConcept": "cx-register"
+        },
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "LOOP decrements CX, jumps if CX != 0",
+          "linkedConcept": "loop-instructions"
+        },
+        {
+          "line": 19,
+          "type": "instruction",
+          "text": "INC adds 1 to operand, doesn't affect CF",
+          "linkedConcept": "add-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to initialize CX before LOOP",
+        "Modifying CX inside the loop unexpectedly",
+        "Using LOOP with CX=0 (will loop 65536 times!)"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q014", "q015"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/forloop.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "ifelse",
+      "filename": "ifelse.asm",
+      "lectureIds": [6],
+      "sectionIds": ["control-flow"],
+      "concepts": ["conditional-jumps", "cmp-instruction", "je-instruction", "jne-instruction"],
+      "instructions": ["CMP", "JE", "JNE", "JMP", "MOV", "INT"],
+      "code": "; If-Else Example\n; Demonstrates conditional branching\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    X DB 5\n    Y DB 10\n    MSG_EQ DB 'X equals Y$'\n    MSG_NE DB 'X not equal to Y$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Compare X and Y\n    MOV AL, X\n    CMP AL, Y\n    \n    ; If equal, display equality message\n    JE EQUAL\n    \n    ; Else branch - display not equal message\n    MOV AH, 09H\n    LEA DX, MSG_NE\n    INT 21H\n    JMP DONE\n    \nEQUAL:\n    MOV AH, 09H\n    LEA DX, MSG_EQ\n    INT 21H\n    \nDONE:\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 20,
+          "type": "instruction",
+          "text": "CMP sets flags based on AL - Y (result not stored)",
+          "linkedConcept": "cmp-instruction"
+        },
+        {
+          "line": 23,
+          "type": "instruction",
+          "text": "JE jumps if ZF=1 (equal), otherwise continues",
+          "linkedConcept": "je-instruction"
+        },
+        {
+          "line": 28,
+          "type": "instruction",
+          "text": "JMP unconditionally transfers control to label",
+          "linkedConcept": "unconditional-jump"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting that CMP doesn't store result",
+        "Using JE for signed comparison when JA/JB needed",
+        "Not using JMP to skip else block after then block executes"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q012", "q013", "q016"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/ifelse.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.94,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "recurs",
+      "filename": "recurs.asm",
+      "lectureIds": [7],
+      "sectionIds": ["procedures"],
+      "concepts": ["recursive-procedures", "call-instruction", "ret-instruction", "stack-frame"],
+      "instructions": ["CALL", "RET", "PUSH", "POP", "CMP", "JE", "JNE", "MOV", "ADD", "INT"],
+      "code": "; Recursive Procedure Example\n; Calculates factorial using recursion\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    RESULT DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Calculate 5! = 120\n    MOV AX, 5\n    PUSH AX\n    CALL FACTORIAL\n    POP AX\n    MOV RESULT, DX\n    \n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\n\n; FACTORIAL procedure\n; Input: n on stack (word)\n; Output: DX = n!\nFACTORIAL PROC\n    PUSH BP\n    MOV BP, SP\n    \n    MOV CX, [BP+4]      ; Get n\n    \n    ; Base case: if n <= 1, return 1\n    CMP CX, 1\n    JLE BASE_CASE\n    \n    ; Recursive case: n * factorial(n-1)\n    PUSH CX\n    DEC CX\n    PUSH CX\n    CALL FACTORIAL\n    POP CX               ; Clean up parameter\n    \n    ; Multiply result by n\n    MOV AX, DX\n    MOV DX, [BP+4]\n    MUL DX               ; AX * DX -> DX:AX\n    \n    POP BP\n    RET\n    \nBASE_CASE:\n    MOV DX, 1\n    POP BP\n    RET\nFACTORIAL ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 34,
+          "type": "instruction",
+          "text": "Stack frame preserves return address and BP",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 40,
+          "type": "instruction",
+          "text": "Base case prevents infinite recursion",
+          "linkedConcept": "recursive-procedures"
+        },
+        {
+          "line": 45,
+          "type": "instruction",
+          "text": "Each recursive call pushes new return address",
+          "linkedConcept": "call-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting base case - causes infinite recursion and stack overflow",
+        "Not cleaning up stack parameters before RET",
+        "Losing track of which registers are preserved across calls"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["q020", "q021", "q023"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/recurs.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.93,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "sort",
+      "filename": "sort.asm",
+      "lectureIds": [6],
+      "sectionIds": ["control-flow"],
+      "concepts": ["conditional-jumps", "je-instruction", "loop-instructions", "memory-addressing"],
+      "instructions": ["CMP", "JE", "JNE", "LOOP", "MOV", "INT", "ADD", "SUB"],
+      "code": "; Bubble Sort Example\n; Sorts an array of bytes using bubble sort\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ARRAY DB 5, 3, 8, 1, 9, 2\n    N DB 6\n    TEMP DB ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Outer loop: N-1 passes\n    MOV CH, N\n    DEC CH               ; Passes = N-1\n    \nOUTER_LOOP:\n    MOV CL, N\n    DEC CL               ; Comparisons per pass = N-1\n    LEA SI, ARRAY        ; Point to start of array\n    \nINNER_LOOP:\n    MOV AL, [SI]         ; Get current element\n    CMP AL, [SI+1]       ; Compare with next\n    JBE NO_SWAP          ; Skip if AL <= next\n    \n    ; Swap: exchange [SI] and [SI+1]\n    MOV TEMP, AL\n    MOV AL, [SI+1]\n    MOV [SI], AL\n    MOV AL, TEMP\n    MOV [SI+1], AL\n    \nNO_SWAP:\n    INC SI\n    LOOP INNER_LOOP\n    \n    DEC CH\n    JNZ OUTER_LOOP\n    \n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 33,
+          "type": "memory",
+          "text": "[SI] uses register indirect addressing",
+          "linkedConcept": "memory-addressing"
+        },
+        {
+          "line": 36,
+          "type": "instruction",
+          "text": "JBE jumps if unsigned AL <= [SI+1]",
+          "linkedConcept": "je-instruction"
+        },
+        {
+          "line": 40,
+          "type": "instruction",
+          "text": "Three MOVs required to swap values in memory",
+          "linkedConcept": "mov-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Not decrementing comparison count in inner loop correctly",
+        "Using signed jump (JLE) instead of unsigned (JBE) for array indices",
+        "Forgetting that LOOP uses CX, corrupting outer loop counter"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["q017", "q018", "q019"],
+      "provenance": {
+        "sourceFile": "WebPlatform/examples/sort.asm",
+        "sourceType": "web-platform-asset",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "reviewed"
+      }
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2026-03-30T00:00:00.000Z",
+    "totalExamples": 11,
+    "lectureCoverage": [4, 5, 6, 7],
+    "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT"],
+    "difficultyDistribution": {
+      "beginner": 4,
+      "intermediate": 4,
+      "advanced": 3
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "featureId": "simulator-breakpoints",
+  "reviewedAt": "2026-03-31T14:00:00.000Z",
+  "commitId": "33a83a1",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Breakpoint implementation is structurally sound. Breakpoints can be set/cleared on executable lines, execution pauses correctly when a breakpoint is hit, and UI shows breakpoint indicators and controls.",
+    "issues": [
+      {
+        "file": "src/components/simulator/SimulatorCore.tsx",
+        "line": 293,
+        "severity": "non_blocking",
+        "description": "The reset() function does not clear breakpoints, while loadPreset() does. This means breakpoints persist across CPU resets. While potentially intentional (user preference), it could cause confusion if users expect reset to fully clear state. This is a minor design inconsistency rather than a bug."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The codebase uses a mix of React state and refs for managing execution state. cpuStateRef is used in run() to avoid stale closures, which is a correct pattern but not documented in AGENTS.md. This pattern appears in other simulator features (simulator-core, simulator-speed).",
+      "evidence": "SimulatorCore.tsx lines 79-88: cpuStateRef and isRunningRef are used to avoid stale closures in the run() timeout chain"
+    },
+    {
+      "area": "conventions",
+      "observation": "The step() function both mutates cpuState in place AND calls setCpuState with a spread copy. This mutation pattern works due to JavaScript reference semantics but could be confusing. The pattern appears to be consistent across simulator features.",
+      "evidence": "SimulatorCore.tsx lines 142-144: executeInstruction mutates cpuState, then setCpuState creates a shallow copy with updated memory reference"
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Breakpoint feature implementation passes review. Breakpoints can be set/cleared via CodeEditor click, execution correctly pauses when a breakpoint is hit, and UI displays breakpoint status. One non-blocking design inconsistency noted: reset() doesn't clear breakpoints while loadPreset() does."
+}

@@ -1,0 +1,51 @@
+{
+  "featureId": "simulator-core",
+  "reviewedAt": "2026-03-31T13:15:00Z",
+  "commitId": "c5eccfd",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The simulator-core implementation provides a solid 8086 instruction execution engine with register/flag display and step/run controls. However, there is a blocking bug where React state is never updated after instruction execution, causing the UI to not reflect execution results.",
+    "issues": [
+      {
+        "file": "src/components/simulator/SimulatorCore.tsx",
+        "line": 130,
+        "severity": "blocking",
+        "description": "The `step` function calls `executeInstruction(instruction, cpuState, labels)` which mutates cpuState in place, but `setCpuState` is NEVER called. This means React state never updates after execution. The UI components (RegisterDisplay, FlagDisplay, MemoryView) receive their props from React state, which never changes. The registersModified and flagsModified calculations work internally because they compare old values (captured before mutation) with new values (from the mutated object), but this state is only used for highlight styling - the actual display values come from cpuState which never triggers a re-render. This bug was fixed in commit 518582b with: `setCpuState({ ...cpuState, memory: new Uint8Array(cpuState.memory) })`"
+      },
+      {
+        "file": "src/components/simulator/SimulatorCore.tsx",
+        "line": 220,
+        "severity": "non_blocking",
+        "description": "The `run` function has a stale closure issue. It references `isRunning` and `cpuState.halted` directly in the runStep callback, but these values can change between when `run` was called and when `runStep` executes. This was partially addressed in later commits by using refs (isRunningRef, cpuStateRef)."
+      },
+      {
+        "file": "src/lib/simulator/executor.ts",
+        "line": 15,
+        "severity": "non_blocking",
+        "description": "The `updateCarryAdd` function uses formula `(a + b) >= mask` where mask is 1 << size. For 8-bit operations this should be `(a + b) > max` to correctly detect unsigned overflow. However, the executor always passes size=16 for ADD/ADC/SBB operations, so 16-bit carry is correct. 8-bit operations are effectively zero-extended to 16-bit, making this a minor issue."
+      },
+      {
+        "file": "src/lib/simulator/executor.ts",
+        "line": 318,
+        "severity": "non_blocking",
+        "description": "SHL/SHR shift count uses `getOperandValue(countStr, state)` which would return an immediate value. Real 8086 allows CL register for variable shift counts. Current implementation only supports immediate values. This is a simplification but acceptable for a learning simulator."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The handoff described successful verification with 'npm run lint', 'npm run build', and manual Playwright testing, but the memory view not updating bug was only caught by the scrutiny validator in a later commit (518582b). This suggests manual testing didn't exercise the memory view UI component thoroughly.",
+      "evidence": "Commit 518582b message: 'fix(simulator): trigger re-render after instruction execution to update memory view'. The original step function at c5eccfd did not call setCpuState."
+    },
+    {
+      "area": "conventions",
+      "observation": "The worker followed the skill procedure correctly (lint, build, manual test) but the manual test only verified register values (AX changed correctly), not that ALL UI components update. The test didn't catch the memory view bug because memory wasn't being displayed/verified.",
+      "evidence": "Handoff verification shows 'AX=0005 after MOV AX,5' etc. - only register values were checked, not MemoryView component."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The simulator-core feature implementation provides a comprehensive 8086 instruction execution engine with proper register/flag display and step/run/halt controls. The code quality is good with proper separation of concerns (cpu.ts, executor.ts, parser.ts, and UI components). However, there is a blocking bug where the `step` function mutates cpuState in place but never calls `setCpuState`, causing React to never re-render the UI after instruction execution. This means RegisterDisplay, FlagDisplay, and MemoryView would not update to reflect execution results. This bug was fixed in commit 518582b. The feature partially fulfills its requirements (P5-SIM-001 to P5-SIM-005) but the blocking bug means the feature as delivered at c5eccfd would not work correctly in production."
+}

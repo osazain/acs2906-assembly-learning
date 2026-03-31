@@ -1,0 +1,33 @@
+{
+  "featureId": "simulator-memory",
+  "reviewedAt": "2026-03-31T13:50:00.000Z",
+  "commitId": "518582b2d95e1061a337305259768921a4b6c99c",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Memory view implementation is correct and functional. MemoryView.tsx properly displays address-value pairs with navigation, hex/decimal toggle, and ASCII representation. SimulatorCore.tsx fix correctly triggers React re-render after instruction execution by calling setCpuState with a cloned memory array, ensuring useMemo in MemoryView recalculates with updated values.",
+    "issues": [
+      {
+        "file": "src/components/simulator/SimulatorCore.tsx",
+        "line": 198,
+        "severity": "non_blocking",
+        "description": "Minor code organization issue: cpuStateRef.current is set AFTER setCpuState, but cpuStateRef points to the OLD cpuState object (the one before setCpuState created a new object). However, this does not cause bugs in practice because: (1) step() returns cpuState directly which has the mutated values, and (2) run() uses the return value from step() rather than cpuStateRef.current for the actual execution flow. The ref timing is slightly off but functionally harmless."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The project uses cpuStateRef as a side channel to access current CPU state in closures, but this pattern is not documented in AGENTS.md. When using setCpuState to trigger re-renders, the original state object is not updated - a new object is created. The ref pattern works because executeInstruction mutates state in place, but the interaction between setCpuState and refs is implicit.",
+      "evidence": "SimulatorCore.tsx uses cpuStateRef to avoid stale closures in the run() loop, but AGENTS.md does not document this pattern or the implicit mutation-based state update strategy."
+    },
+    {
+      "area": "skills",
+      "observation": "The agent-browser skill was used for interactive testing but is not documented in .factory/services.yaml. The services.yaml only documents 'preview' service. For simulator features that require visual verification, agent-browser is needed but not registered as a service.",
+      "evidence": "Handoff shows: 'agent-browser --session 7aa23afeeed7 open http://localhost:4173/#/simulator' was used for verification. services.yaml has no agent-browser entry."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The simulator-memory feature passes review. MemoryView.tsx displays address-value pairs with navigation controls, hex/decimal toggle, and ASCII representation. The fix in SimulatorCore.tsx correctly calls setCpuState with a cloned memory array after executeInstruction to trigger re-renders. A minor ref timing issue exists but is functionally harmless. Two shared state observations were noted: (1) cpuStateRef pattern not documented, (2) agent-browser skill usage not in services.yaml."
+}

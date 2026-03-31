@@ -1,15 +1,107 @@
-import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
+import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
-import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap } from 'lucide-react'
+import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
 import { LectureReader } from '@/components/lecture/LectureReader'
 import { ExampleExplorer } from '@/components/example/ExampleExplorer'
 import { ExampleDetail } from '@/components/example/ExampleDetail'
+import { GlobalSearch } from '@/components/layout/GlobalSearch'
 import type { CourseMapLecture } from '@/lib/types'
 
-const rootRoute = createRootRoute()
+const rootRoute = createRootRoute({
+  component: AppLayout,
+})
+
+function AppLayout() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  const navItems = [
+    { title: 'Course Map', href: '/course-map', icon: BookOpen },
+    { title: 'Lectures', href: '/lectures', icon: FileText },
+    { title: 'Examples', href: '/examples', icon: FlaskConical },
+    { title: 'Simulator', href: '/simulator', icon: Cpu },
+    { title: 'Drills', href: '/drills', icon: Target },
+    { title: 'Games', href: '/games', icon: Gamepad2 },
+    { title: 'Progress', href: '/progress', icon: BarChart3 },
+    { title: 'Settings', href: '/settings', icon: Settings },
+  ]
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between gap-4">
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors"
+          >
+            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 font-bold text-lg">
+            <Cpu className="h-6 w-6 text-primary" />
+            <span className="hidden sm:inline">ACS2906</span>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className="px-3 py-1.5 text-sm rounded-md hover:bg-muted transition-colors"
+              >
+                {item.title}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Search trigger */}
+          <GlobalSearch />
+        </div>
+      </header>
+
+      {/* Mobile sidebar */}
+      {isSidebarOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+          <aside className="fixed left-0 top-14 bottom-0 z-40 w-64 border-r bg-background lg:hidden">
+            <nav className="p-4 space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors"
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.title}
+                </Link>
+              ))}
+            </nav>
+          </aside>
+        </>
+      )}
+
+      {/* Main content */}
+      <main className="flex-1 container py-6">
+        <Outlet />
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t py-4 text-center text-sm text-muted-foreground">
+        ACS2906 Assembly Language Learning Platform
+      </footer>
+    </div>
+  )
+}
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,

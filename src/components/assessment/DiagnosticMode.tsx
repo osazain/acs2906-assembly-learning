@@ -196,9 +196,6 @@ export function DiagnosticMode() {
   const sessionRef = useRef<DiagnosticSession | null>(session)
   sessionRef.current = session
   
-  // Use ref to store finishDiagnostic to avoid forward reference issues
-  const finishDiagnosticRef = useRef<(() => Promise<void>) | null>(null)
-  
   // Load saved diagnostic session on mount
   useEffect(() => {
     const savedSession = loadDiagnosticSession()
@@ -536,11 +533,8 @@ export function DiagnosticMode() {
         return updated
       })
     } else {
-      // End diagnostic - use the ref to call finishDiagnostic
-      // This ensures we get the latest version with updated sessionRef.current
-      if (finishDiagnosticRef.current) {
-        finishDiagnosticRef.current()
-      }
+      // End diagnostic - call finishDiagnostic directly (it's async so we don't await)
+      finishDiagnostic()
     }
   }, [questionStartTime, selectNextQuestion])
 
@@ -691,9 +685,6 @@ export function DiagnosticMode() {
     
     // Clear localStorage session as diagnostic is complete
     clearDiagnosticSession()
-    
-    // Store reference for callers that need the current function
-    finishDiagnosticRef.current = finishDiagnostic
   }, []) // No dependencies - uses sessionRef.current internally
 
   // Handle next question
@@ -706,10 +697,8 @@ export function DiagnosticMode() {
       setShowFeedback(false)
       setQuestionStartTime(Date.now())
     } else {
-      // No more questions, finish diagnostic - use ref
-      if (finishDiagnosticRef.current) {
-        finishDiagnosticRef.current()
-      }
+      // No more questions, finish diagnostic - call directly (it's async so we don't await)
+      finishDiagnostic()
     }
   }, [session])
 

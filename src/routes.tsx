@@ -14,6 +14,7 @@ import { MasteryDashboard } from '@/components/mastery/MasteryDashboard'
 import { GamesHub } from '@/components/games/GamesHub'
 import { InstructionHangman } from '@/components/games/InstructionHangman'
 import { RegisterRally } from '@/components/games/RegisterRally'
+import { FlagFrenzy } from '@/components/games/FlagFrenzy'
 import type { CourseMapLecture } from '@/lib/types'
 
 // Games layout component that renders Outlet for child routes
@@ -270,6 +271,12 @@ const registerRallyRoute = createRoute({
   component: RegisterRallyPage,
 })
 
+const flagFrenzyRoute = createRoute({
+  getParentRoute: () => gamesRoute,
+  path: 'flag-frenzy',
+  component: FlagFrenzyPage,
+})
+
 const simulatorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/simulator',
@@ -445,6 +452,10 @@ function RegisterRallyPage() {
   return <RegisterRally onBack={() => window.location.hash = '#/games'} />
 }
 
+function FlagFrenzyPage() {
+  return <FlagFrenzy onBack={() => window.location.hash = '#/games'} />
+}
+
 function SimulatorPage() {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -582,6 +593,7 @@ const gamesRouteTree = gamesRoute.addChildren([
   gamesIndexRoute,
   instructionHangmanRoute,
   registerRallyRoute,
+  flagFrenzyRoute,
 ])
 
 const routeTree = rootRoute.addChildren([

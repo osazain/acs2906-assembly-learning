@@ -63,7 +63,7 @@ const GAMES: Game[] = [
     title: 'Flag Frenzy',
     description: 'Predict CPU flag states after operations. Master ZF, SF, CF, OF, and more.',
     icon: 'frenzy',
-    status: 'coming-soon',
+    status: 'available',
     estimatedMinutes: 5,
     concepts: ['flags', 'zf', 'sf', 'cf', 'of', 'pf', 'af', 'df'],
   },

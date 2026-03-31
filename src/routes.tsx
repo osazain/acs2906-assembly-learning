@@ -10,6 +10,7 @@ import { ExampleDetail } from '@/components/example/ExampleDetail'
 import { GlobalSearch } from '@/components/layout/GlobalSearch'
 import { DrillMode } from '@/components/assessment/DrillMode'
 import { DiagnosticMode } from '@/components/assessment/DiagnosticMode'
+import { MasteryDashboard } from '@/components/mastery/MasteryDashboard'
 import type { CourseMapLecture } from '@/lib/types'
 
 const rootRoute = createRootRoute({
@@ -488,14 +489,21 @@ function SimulatorPage() {
 
 function ProgressPage() {
   return (
-    <div className="text-center py-12 space-y-4">
-      <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground" />
-      <h2 className="text-xl font-semibold">Progress Tracking Coming Soon</h2>
-      <p className="text-muted-foreground">Mastery dashboard will be available after Phase 6.</p>
-      <Link to="/course-map" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-        <ArrowRight className="h-4 w-4" />
-        Back to Course Map
-      </Link>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 text-sm font-medium">
+          <BarChart3 className="h-4 w-4" />
+          Mastery Dashboard
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight">Your Progress</h1>
+        <p className="text-muted-foreground max-w-xl mx-auto">
+          Track your mastery of assembly language concepts and instructions. Complete drills to build your progress.
+        </p>
+      </div>
+
+      {/* Mastery Dashboard */}
+      <MasteryDashboard />
     </div>
   )
 }

@@ -129,10 +129,13 @@ export async function updateMastery(
   correct: boolean,
   timeMs: number
 ): Promise<void> {
-  const key = { userId, topicType, topicId }
-  const existing = await db.mastery.where(key).first()
-  
   const now = new Date().toISOString()
+  
+  // Query using the compound index [userId+topicType+topicId]
+  const existing = await db.mastery
+    .where('[userId+topicType+topicId]')
+    .equals([userId, topicType, topicId])
+    .first()
   
   if (existing) {
     const metrics = existing.metrics
@@ -179,4 +182,41 @@ function calculateStrengthLevel(
   if (accuracy >= 0.75) return 'proficient'
   if (accuracy >= 0.5) return 'developing'
   return 'beginning'
+}
+
+export async function getMasteryRecord(
+  userId: string,
+  topicType: MasteryRecord['topicType'],
+  topicId: string
+): Promise<MasteryRecord | undefined> {
+  return db.mastery
+    .where('[userId+topicType+topicId]')
+    .equals([userId, topicType, topicId])
+    .first()
+}
+
+export async function addMistakePattern(
+  userId: string,
+  topicType: MasteryRecord['topicType'],
+  topicId: string,
+  patterns: string[]
+): Promise<void> {
+  const record = await getMasteryRecord(userId, topicType, topicId)
+  if (record && record.id) {
+    const updatedPatterns = [...new Set([...record.mistakePatterns, ...patterns])]
+    await db.mastery.update(record.id, {
+      mistakePatterns: updatedPatterns
+    })
+  }
+}
+
+export async function getAllMasteryRecords(userId: string): Promise<MasteryRecord[]> {
+  return db.mastery.where('userId').equals(userId).toArray()
+}
+
+export async function getMasteryByType(
+  userId: string,
+  topicType: MasteryRecord['topicType']
+): Promise<MasteryRecord[]> {
+  return db.mastery.where('userId').equals(userId).and(r => r.topicType === topicType).toArray()
 }

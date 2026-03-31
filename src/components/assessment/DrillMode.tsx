@@ -19,6 +19,8 @@ import { cn } from '@/lib/utils'
 import questionBankData from '@/data/processed/question-bank.json'
 import type { AssessmentItem } from '@/lib/types'
 import { ResultsSummary, type DrillSessionResults } from './ResultsSummary'
+import { db, getOrCreateUserId, updateMastery, addMistakePattern } from '@/lib/db'
+import type { AnswerRecord } from '@/lib/db'
 
 // ============================================================================
 // Types
@@ -187,12 +189,48 @@ export function DrillMode() {
   }, [showFeedback])
 
   // Handle submit
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     if (!session || selectedAnswer === null) return
 
     const currentQuestion = session.questions[session.currentIndex]
     const isCorrect = selectedAnswer === currentQuestion.answer
     const timeMs = Date.now() - questionStartTime
+
+    // Record answer to IndexedDB and update mastery
+    try {
+      const userId = await getOrCreateUserId()
+
+      // Record the answer
+      const answerRecord: AnswerRecord = {
+        userId,
+        questionId: currentQuestion.id,
+        answeredAt: new Date().toISOString(),
+        correct: isCorrect,
+        timeMs,
+        selectedOption: selectedAnswer,
+      }
+      await db.answers.add(answerRecord)
+
+      // Update mastery for each concept in the question
+      for (const concept of currentQuestion.concepts) {
+        await updateMastery(userId, 'concept', concept, isCorrect, timeMs)
+      }
+
+      // Update mastery for each instruction in the question
+      for (const instruction of currentQuestion.instructions) {
+        await updateMastery(userId, 'instruction', instruction, isCorrect, timeMs)
+      }
+
+      // If incorrect, track mistake patterns
+      if (!isCorrect && currentQuestion.misconceptionTags.length > 0) {
+        // Track mistake patterns for each concept
+        for (const concept of currentQuestion.concepts) {
+          await addMistakePattern(userId, 'concept', concept, currentQuestion.misconceptionTags)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to record answer to IndexedDB:', error)
+    }
 
     setSession(prev => {
       if (!prev) return prev

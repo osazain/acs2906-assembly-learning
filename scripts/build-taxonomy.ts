@@ -1,0 +1,1028 @@
+/**
+ * Build Concept Taxonomy Script
+ * Generates data/processed/concept-taxonomy.json with course concept hierarchy
+ */
+
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+interface ConceptCategory {
+  id: string;
+  name: string;
+  parentId?: string;
+  description: string;
+  lectureIds: number[];
+  conceptIds: string[];
+}
+
+interface Concept {
+  id: string;
+  name: string;
+  categoryId: string;
+  description: string;
+  lectureIds: number[];
+  exampleIds: string[];
+  assessmentItemIds: string[];
+  relatedConcepts: string[];
+}
+
+interface MisconceptionEntry {
+  description: string;
+  indicators: string[];
+  commonIn: string[];
+  remediationFor: { type: string; id: string; description: string }[];
+  relatedMisconceptions: string[];
+}
+
+interface ConceptTaxonomy {
+  categories: ConceptCategory[];
+  concepts: Record<string, Concept>;
+  misconceptions: Record<string, MisconceptionEntry>;
+  metadata: {
+    generatedAt: string;
+    generator: string;
+    sourceVersion: string;
+  };
+}
+
+// Define categories - must include: Data Representation, Assembly Basics, I/O, Control Flow, Procedures, Advanced Topics
+const categories: ConceptCategory[] = [
+  {
+    id: 'data-representation',
+    name: 'Data Representation',
+    description: 'Binary, hexadecimal, decimal conversion, signed/unsigned numbers, two\'s complement representation',
+    lectureIds: [1, 2, 4],
+    conceptIds: []
+  },
+  {
+    id: 'assembly-basics',
+    name: 'Assembly Basics',
+    description: 'Core assembly language fundamentals: registers, memory, instruction syntax, basic operations',
+    lectureIds: [3, 4],
+    conceptIds: []
+  },
+  {
+    id: 'io-operations',
+    name: 'I/O Operations',
+    description: 'Input/output operations using DOS interrupts, keyboard input, screen output, file I/O concepts',
+    lectureIds: [3, 5],
+    conceptIds: []
+  },
+  {
+    id: 'control-flow',
+    name: 'Control Flow',
+    description: 'Conditional and unconditional jumps, loops, comparison operations, program flow control',
+    lectureIds: [4, 6],
+    conceptIds: []
+  },
+  {
+    id: 'procedures',
+    name: 'Procedures',
+    description: 'Subroutines, function calls, return instructions, stack frames, parameter passing conventions',
+    lectureIds: [7],
+    conceptIds: []
+  },
+  {
+    id: 'advanced-topics',
+    name: 'Advanced Topics',
+    description: 'String operations, arrays, recursion, bit manipulation, advanced addressing modes',
+    lectureIds: [8, 9, 10],
+    conceptIds: []
+  }
+];
+
+// Define 30+ assembly-specific concepts
+const concepts: Record<string, Concept> = {
+  // Data Representation (lecture 1, 2, 4)
+  'binary-number-system': {
+    id: 'binary-number-system',
+    name: 'Binary Number System',
+    categoryId: 'data-representation',
+    description: 'Base-2 numeral system used by computers, understanding bits, bytes, and binary patterns',
+    lectureIds: [1, 2],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['hexadecimal', 'decimal-conversion', 'bit-vs-byte']
+  },
+  'hexadecimal': {
+    id: 'hexadecimal',
+    name: 'Hexadecimal Representation',
+    categoryId: 'data-representation',
+    description: 'Base-16 number system, hex digits 0-9 and A-F, easier binary representation',
+    lectureIds: [1, 2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['binary-number-system', 'decimal-conversion']
+  },
+  'decimal-conversion': {
+    id: 'decimal-conversion',
+    name: 'Decimal Conversion',
+    categoryId: 'data-representation',
+    description: 'Converting between binary, hex, and decimal representations',
+    lectureIds: [1, 2],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['binary-number-system', 'hexadecimal', 'signed-numbers']
+  },
+  'signed-numbers': {
+    id: 'signed-numbers',
+    name: 'Signed Number Representation',
+    categoryId: 'data-representation',
+    description: 'Representing positive and negative numbers, sign bit, MSB significance',
+    lectureIds: [2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['twos-complement', 'decimal-conversion']
+  },
+  'twos-complement': {
+    id: 'twos-complement',
+    name: 'Two\'s Complement',
+    categoryId: 'data-representation',
+    description: 'Standard method for signed integer representation in 8086, negation via invert and add 1',
+    lectureIds: [2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['signed-numbers', 'arithmetic-overflow']
+  },
+  'bit-vs-byte': {
+    id: 'bit-vs-byte',
+    name: 'Bits and Bytes',
+    categoryId: 'data-representation',
+    description: 'Fundamental data units: bit (0/1), byte (8 bits), word (16 bits), doubleword (32 bits)',
+    lectureIds: [1, 2],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['binary-number-system', 'word-size']
+  },
+  'word-size': {
+    id: 'word-size',
+    name: 'Word Size and Data Sizes',
+    categoryId: 'data-representation',
+    description: '8086 data sizes: byte (8-bit), word (16-bit), doubleword (32-bit), quadword considerations',
+    lectureIds: [2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['bit-vs-byte', 'register-classes']
+  },
+  'arithmetic-overflow': {
+    id: 'arithmetic-overflow',
+    name: 'Arithmetic Overflow',
+    categoryId: 'data-representation',
+    description: 'Condition when arithmetic result exceeds storage capacity, OF flag significance',
+    lectureIds: [2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['twos-complement', 'flag-register', 'signed-numbers']
+  },
+
+  // Assembly Basics (lecture 3, 4)
+  'general-purpose-registers': {
+    id: 'general-purpose-registers',
+    name: 'General Purpose Registers',
+    categoryId: 'assembly-basics',
+    description: 'AX, BX, CX, DX registers and their special purposes, AL/AH, BL/BH splits',
+    lectureIds: [3, 4],
+    exampleIds: ['HelloWorld.asm', 'Addition.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['segment-registers', 'register-classes', 'mov-instruction']
+  },
+  'segment-registers': {
+    id: 'segment-registers',
+    name: 'Segment Registers',
+    categoryId: 'assembly-basics',
+    description: 'CS, DS, ES, SS segment registers, segment:offset addressing scheme',
+    lectureIds: [3, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['general-purpose-registers', 'memory-addressing', 'effective-address']
+  },
+  'flag-register': {
+    id: 'flag-register',
+    name: 'Flag Register',
+    categoryId: 'assembly-basics',
+    description: '8086 flag register (FLAGS), status flags: ZF, SF, CF, OF, AF, PF, PF, IF, DF',
+    lectureIds: [3, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['conditional-jumps', 'arithmetic-overflow', 'cmp-instruction']
+  },
+  'register-classes': {
+    id: 'register-classes',
+    name: 'Register Classification',
+    categoryId: 'assembly-basics',
+    description: 'Understanding register naming conventions, 8-bit vs 16-bit register halves',
+    lectureIds: [3],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['general-purpose-registers', 'word-size']
+  },
+  'memory-addressing': {
+    id: 'memory-addressing',
+    name: 'Memory Addressing',
+    categoryId: 'assembly-basics',
+    description: 'Understanding memory as byte-addressable array, data alignment, little-endian storage',
+    lectureIds: [3, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['segment-registers', 'effective-address', 'little-endian']
+  },
+  'effective-address': {
+    id: 'effective-address',
+    name: 'Effective Address',
+    categoryId: 'assembly-basics',
+    description: 'Offset portion of a memory address, calculated from base, index, displacement',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['segment-registers', 'addressing-modes', 'lea-instruction']
+  },
+  'little-endian': {
+    id: 'little-endian',
+    name: 'Little Endian Storage',
+    categoryId: 'assembly-basics',
+    description: '8086 memory storage format where least significant byte comes first',
+    lectureIds: [2, 4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['memory-addressing', 'word-size']
+  },
+  'mov-instruction': {
+    id: 'mov-instruction',
+    name: 'MOV Instruction',
+    categoryId: 'assembly-basics',
+    description: 'Basic data transfer instruction, copy from source to destination, restrictions',
+    lectureIds: [4],
+    exampleIds: ['HelloWorld.asm', 'Template.asm', 'Addition.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['xchg-instruction', 'general-purpose-registers', 'data-transfer-rules']
+  },
+  'xchg-instruction': {
+    id: 'xchg-instruction',
+    name: 'XCHG Instruction',
+    categoryId: 'assembly-basics',
+    description: 'Exchange values between two registers or register and memory',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['mov-instruction']
+  },
+  'lea-instruction': {
+    id: 'lea-instruction',
+    name: 'LEA Instruction',
+    categoryId: 'assembly-basics',
+    description: 'Load Effective Address - copy offset address rather than memory contents',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['effective-address', 'mov-instruction']
+  },
+  'data-transfer-rules': {
+    id: 'data-transfer-rules',
+    name: 'Data Transfer Restrictions',
+    categoryId: 'assembly-basics',
+    description: 'MOV limitations: no memory-to-memory, same size operands, segment register rules',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['mov-instruction']
+  },
+
+  // I/O Operations (lecture 3, 5)
+  'dos-interrupts': {
+    id: 'dos-interrupts',
+    name: 'DOS Interrupts',
+    categoryId: 'io-operations',
+    description: 'Software interrupts for system services, INT instruction, AH register function numbers',
+    lectureIds: [3, 5],
+    exampleIds: ['HelloWorld.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['int-21h', 'keyboard-input', 'screen-output']
+  },
+  'int-21h': {
+    id: 'int-21h',
+    name: 'INT 21h DOS Function Calls',
+    categoryId: 'io-operations',
+    description: 'Primary DOS API interrupt, AH register selects function, return values in registers',
+    lectureIds: [3, 5],
+    exampleIds: ['HelloWorld.asm', 'Buffered.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['dos-interrupts', 'string-output', 'keyboard-input']
+  },
+  'keyboard-input': {
+    id: 'keyboard-input',
+    name: 'Keyboard Input',
+    categoryId: 'io-operations',
+    description: 'DOS keyboard input functions: character input, string input, buffer management',
+    lectureIds: [3, 5],
+    exampleIds: ['Buff2.asm', 'Buffered.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['int-21h', 'screen-output', 'input-buffer']
+  },
+  'screen-output': {
+    id: 'screen-output',
+    name: 'Screen Output',
+    categoryId: 'io-operations',
+    description: 'DOS character and string display functions, DOS print functions',
+    lectureIds: [3, 5],
+    exampleIds: ['HelloWorld.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['int-21h', 'string-output', 'video-memory']
+  },
+  'string-output': {
+    id: 'string-output',
+    name: 'String Output',
+    categoryId: 'io-operations',
+    description: 'Outputting null-terminated strings using DOS function 9, $ terminator convention',
+    lectureIds: [5],
+    exampleIds: ['HelloWorld.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['int-21h', 'screen-output']
+  },
+  'input-buffer': {
+    id: 'input-buffer',
+    name: 'Input Buffering',
+    categoryId: 'io-operations',
+    description: 'Using memory buffers for string input, max length specification, Carriage Return handling',
+    lectureIds: [5],
+    exampleIds: ['Buff2.asm', 'Buffered.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['keyboard-input', 'int-21h']
+  },
+  'video-memory': {
+    id: 'video-memory',
+    name: 'Video Memory Access',
+    categoryId: 'io-operations',
+    description: 'Direct video memory writing for fast output, segment B8000h for color text mode',
+    lectureIds: [5],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['screen-output', 'memory-addressing']
+  },
+
+  // Control Flow (lecture 4, 6)
+  'unconditional-jump': {
+    id: 'unconditional-jump',
+    name: 'Unconditional Jump (JMP)',
+    categoryId: 'control-flow',
+    description: 'Unconditional transfer of control to another location, near and far jumps',
+    lectureIds: [4, 6],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['conditional-jumps', 'loop-instructions', 'program-counter']
+  },
+  'conditional-jumps': {
+    id: 'conditional-jumps',
+    name: 'Conditional Jump Instructions',
+    categoryId: 'control-flow',
+    description: 'JE/JZ, JNE/JNZ, JL/JNGE, JLE/JNG, JG/JNLE, JA, JB, JC, JCXZ based on flag states',
+    lectureIds: [4, 6],
+    exampleIds: ['ifelse.asm', 'forloop.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['cmp-instruction', 'flag-register', 'unconditional-jump']
+  },
+  'cmp-instruction': {
+    id: 'cmp-instruction',
+    name: 'CMP Instruction',
+    categoryId: 'control-flow',
+    description: 'Comparison instruction that subtracts operands and sets flags without storing result',
+    lectureIds: [4, 6],
+    exampleIds: ['ifelse.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['flag-register', 'conditional-jumps', 'sub-instruction']
+  },
+  'loop-instructions': {
+    id: 'loop-instructions',
+    name: 'Loop Instructions',
+    categoryId: 'control-flow',
+    description: 'LOOP, LOOPE/LOOPZ, LOOPNE/LOOPNZ, JCXZ - decrement CX and conditionally jump',
+    lectureIds: [6],
+    exampleIds: ['forloop.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['unconditional-jump', 'cx-register', 'conditional-jumps']
+  },
+  'cx-register': {
+    id: 'cx-register',
+    name: 'CX Register (Counter)',
+    categoryId: 'control-flow',
+    description: 'Primary use as loop counter, LODSW/STOSW implicitly use CX',
+    lectureIds: [6],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['loop-instructions', 'general-purpose-registers']
+  },
+  'program-counter': {
+    id: 'program-counter',
+    name: 'Program Counter (IP/EIP)',
+    categoryId: 'control-flow',
+    description: 'Instruction pointer register, holds offset of next instruction to execute',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['unconditional-jump', 'segment-registers', 'control-transfer']
+  },
+  'control-transfer': {
+    id: 'control-transfer',
+    name: 'Control Transfer',
+    categoryId: 'control-flow',
+    description: 'Mechanisms to change instruction execution sequence, jumps, calls, interrupts',
+    lectureIds: [4, 6],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['unconditional-jump', 'conditional-jumps', 'procedures']
+  },
+  'branch-prediction': {
+    id: 'branch-prediction',
+    name: 'Branch Prediction Concepts',
+    categoryId: 'control-flow',
+    description: 'Understanding how conditional branches affect CPU pipeline, avoiding pipeline stalls',
+    lectureIds: [6],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['conditional-jumps', 'loop-instructions']
+  },
+
+  // Procedures (lecture 7)
+  'call-instruction': {
+    id: 'call-instruction',
+    name: 'CALL Instruction',
+    categoryId: 'procedures',
+    description: 'Call a procedure, pushes return address onto stack, transfers control to target',
+    lectureIds: [7],
+    exampleIds: ['proc.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['ret-instruction', 'stack-frame', 'push-instruction']
+  },
+  'ret-instruction': {
+    id: 'ret-instruction',
+    name: 'RET Instruction',
+    categoryId: 'procedures',
+    description: 'Return from procedure, pops return address from stack, transfers control back',
+    lectureIds: [7],
+    exampleIds: ['proc.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['call-instruction', 'pop-instruction', 'stack-frame']
+  },
+  'stack-frame': {
+    id: 'stack-frame',
+    name: 'Stack Frame',
+    categoryId: 'procedures',
+    description: 'Activation record on stack containing return address, parameters, local variables',
+    lectureIds: [7],
+    exampleIds: ['proc.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['push-instruction', 'pop-instruction', 'bp-register']
+  },
+  'push-instruction': {
+    id: 'push-instruction',
+    name: 'PUSH Instruction',
+    categoryId: 'procedures',
+    description: 'Push value onto stack, decrements SP by 2, copies operand to SS:[SP]',
+    lectureIds: [7],
+    exampleIds: ['proc.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['pop-instruction', 'stack-frame', 'call-instruction']
+  },
+  'pop-instruction': {
+    id: 'pop-instruction',
+    name: 'POP Instruction',
+    categoryId: 'procedures',
+    description: 'Pop value from stack into operand, copies from SS:[SP], increments SP by 2',
+    lectureIds: [7],
+    exampleIds: ['proc.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['push-instruction', 'stack-frame', 'ret-instruction']
+  },
+  'bp-register': {
+    id: 'bp-register',
+    name: 'BP Register (Base Pointer)',
+    categoryId: 'procedures',
+    description: 'Frame pointer register, provides stable reference to stack frame, accessing parameters',
+    lectureIds: [7],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['stack-frame', 'general-purpose-registers']
+  },
+  'parameter-passing': {
+    id: 'parameter-passing',
+    name: 'Parameter Passing Conventions',
+    categoryId: 'procedures',
+    description: 'Passing arguments via registers, stack, or memory, caller/callee responsibility',
+    lectureIds: [7],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['stack-frame', 'bp-register', 'call-instruction']
+  },
+  'recursive-procedures': {
+    id: 'recursive-procedures',
+    name: 'Recursive Procedures',
+    categoryId: 'procedures',
+    description: 'Procedures that call themselves, each recursion needs new stack frame',
+    lectureIds: [7],
+    exampleIds: ['recurs.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['call-instruction', 'stack-frame', 'recursion-concept']
+  },
+
+  // Advanced Topics (lecture 8, 9, 10)
+  'string-instructions': {
+    id: 'string-instructions',
+    name: 'String Instructions',
+    categoryId: 'advanced-topics',
+    description: 'MOVS, CMPS, SCAS, LODS, STOS, INS, OUTS - operate on strings of bytes/words',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['rep-prefix', 'si-register', 'di-register']
+  },
+  'rep-prefix': {
+    id: 'rep-prefix',
+    name: 'REP/REPE/REPNE Prefixes',
+    categoryId: 'advanced-topics',
+    description: 'Repeat string instruction CX times, optionally checking flags for CMPS/SCAS',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['string-instructions', 'cx-register']
+  },
+  'si-register': {
+    id: 'si-register',
+    name: 'SI Register (Source Index)',
+    categoryId: 'advanced-topics',
+    description: 'Source index register for string operations, automatically incremented by string instructions',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['di-register', 'string-instructions', 'ds-segment']
+  },
+  'di-register': {
+    id: 'di-register',
+    name: 'DI Register (Destination Index)',
+    categoryId: 'advanced-topics',
+    description: 'Destination index register for string operations, automatically incremented',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['si-register', 'string-instructions', 'es-segment']
+  },
+  'ds-segment': {
+    id: 'ds-segment',
+    name: 'DS Segment (Data Segment)',
+    categoryId: 'advanced-topics',
+    description: 'Default segment for source data in string operations, can be overridden',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['segment-registers', 'si-register']
+  },
+  'es-segment': {
+    id: 'es-segment',
+    name: 'ES Segment (Extra Segment)',
+    categoryId: 'advanced-topics',
+    description: 'Required segment for destination in string operations, cannot be overridden',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['segment-registers', 'di-register']
+  },
+  'array-operations': {
+    id: 'array-operations',
+    name: 'Array Operations',
+    categoryId: 'advanced-topics',
+    description: 'Processing arrays in assembly using indexed addressing, base+index computations',
+    lectureIds: [8, 9],
+    exampleIds: ['sort.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['addressing-modes', 'indexed-addressing', 'loop-instructions']
+  },
+  'addressing-modes': {
+    id: 'addressing-modes',
+    name: 'Addressing Modes',
+    categoryId: 'advanced-topics',
+    description: 'Immediate, register, direct, indirect, based, indexed, based-indexed addressing',
+    lectureIds: [4, 8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['effective-address', 'memory-addressing', 'indexed-addressing']
+  },
+  'indexed-addressing': {
+    id: 'indexed-addressing',
+    name: 'Indexed Addressing',
+    categoryId: 'advanced-topics',
+    description: 'Memory addressing using [BX+SI], [BP+DI], etc. for array element access',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['addressing-modes', 'array-operations', 'base-index']
+  },
+  'base-index': {
+    id: 'base-index',
+    name: 'Based-Indexed Addressing',
+    categoryId: 'advanced-topics',
+    description: 'Addressing mode combining base register and index register: [BX+SI], [BP+DI]',
+    lectureIds: [8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['indexed-addressing', 'bx-register', 'si-register']
+  },
+  'bx-register': {
+    id: 'bx-register',
+    name: 'BX Register (Base)',
+    categoryId: 'advanced-topics',
+    description: 'Base register often used for address calculations, can be base for [BX+SI] addressing',
+    lectureIds: [4, 8],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['base-index', 'general-purpose-registers']
+  },
+  'bit-manipulation': {
+    id: 'bit-manipulation',
+    name: 'Bit Manipulation',
+    categoryId: 'advanced-topics',
+    description: 'AND, OR, XOR, NOT, TEST instructions for bit-level operations and masking',
+    lectureIds: [9],
+    exampleIds: ['logical.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['shift-instructions', 'boolean-logic', 'masking']
+  },
+  'shift-instructions': {
+    id: 'shift-instructions',
+    name: 'Shift Instructions',
+    categoryId: 'advanced-topics',
+    description: 'SAL, SAR, SHL, SHR logical and arithmetic shifts, rotate instructions ROL, ROR',
+    lectureIds: [9],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['bit-manipulation', 'rotate-instructions', 'multiplication-optimization']
+  },
+  'rotate-instructions': {
+    id: 'rotate-instructions',
+    name: 'Rotate Instructions',
+    categoryId: 'advanced-topics',
+    description: 'ROL, ROR, RCL, RCR rotate bits through/around CF flag',
+    lectureIds: [9],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['shift-instructions', 'flag-register']
+  },
+  'boolean-logic': {
+    id: 'boolean-logic',
+    name: 'Boolean Logic Operations',
+    categoryId: 'advanced-topics',
+    description: 'AND, OR, XOR truth tables, using logic operations for masking and flag manipulation',
+    lectureIds: [9],
+    exampleIds: ['logical.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['bit-manipulation', 'test-instruction']
+  },
+  'test-instruction': {
+    id: 'test-instruction',
+    name: 'TEST Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Bitwise AND that sets flags without storing result, useful for conditional jumps',
+    lectureIds: [9],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['cmp-instruction', 'boolean-logic', 'conditional-jumps']
+  },
+  'recursion-concept': {
+    id: 'recursion-concept',
+    name: 'Recursion Concept',
+    categoryId: 'advanced-topics',
+    description: 'Understanding recursive algorithms, base case, recursive case, stack usage for each call',
+    lectureIds: [7, 10],
+    exampleIds: ['recurs.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['recursive-procedures', 'stack-frame', 'call-instruction']
+  },
+  'sorting-algorithms': {
+    id: 'sorting-algorithms',
+    name: 'Sorting Algorithms',
+    categoryId: 'advanced-topics',
+    description: 'Implementing sorting algorithms in assembly: bubble sort, selection sort with nested loops',
+    lectureIds: [10],
+    exampleIds: ['sort.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['array-operations', 'loop-instructions', 'conditional-jumps']
+  },
+  'multiplication-optimization': {
+    id: 'multiplication-optimization',
+    name: 'Multiplication Optimization',
+    categoryId: 'advanced-topics',
+    description: 'Using SHL for powers of 2, MUL/IMUL for general multiplication, performance considerations',
+    lectureIds: [9],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['shift-instructions', 'mul-instruction', 'imul-instruction']
+  },
+  'mul-instruction': {
+    id: 'mul-instruction',
+    name: 'MUL Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Unsigned multiplication: AX = AL*operand, DX:AX = AX*operand',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['imul-instruction', 'multiplication-optimization', 'div-instruction']
+  },
+  'imul-instruction': {
+    id: 'imul-instruction',
+    name: 'IMUL Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Signed multiplication, similar to MUL but interprets operands as signed integers',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['mul-instruction', 'multiplication-optimization', 'idiv-instruction']
+  },
+  'div-instruction': {
+    id: 'div-instruction',
+    name: 'DIV Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Unsigned division: AX/operand -> quotient in AL, remainder in AH; DX:AX/operand -> quotient in AX, remainder in DX',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['idiv-instruction', 'mul-instruction', 'division-by-zero']
+  },
+  'idiv-instruction': {
+    id: 'idiv-instruction',
+    name: 'IDIV Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Signed division, same operands as DIV but interprets values as signed',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['div-instruction', 'imul-instruction']
+  },
+  'division-by-zero': {
+    id: 'division-by-zero',
+    name: 'Division by Zero',
+    categoryId: 'advanced-topics',
+    description: 'Assembly does not check for division by zero - programmer responsibility, CPU exception',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['div-instruction', 'idiv-instruction']
+  },
+  'masking': {
+    id: 'masking',
+    name: 'Bit Masking',
+    categoryId: 'advanced-topics',
+    description: 'Using AND with mask to isolate specific bits, OR to set bits, XOR to toggle bits',
+    lectureIds: [9],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['bit-manipulation', 'boolean-logic', 'test-instruction']
+  },
+  'sub-instruction': {
+    id: 'sub-instruction',
+    name: 'SUB Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Subtract destination from source, stores result in destination, affects flags',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['add-instruction', 'cmp-instruction', 'arithmetic-overflow']
+  },
+  'add-instruction': {
+    id: 'add-instruction',
+    name: 'ADD Instruction',
+    categoryId: 'advanced-topics',
+    description: 'Add source to destination, stores result in destination, affects flags',
+    lectureIds: [4],
+    exampleIds: ['Addition.asm'],
+    assessmentItemIds: [],
+    relatedConcepts: ['sub-instruction', 'adc-instruction', 'arithmetic-overflow']
+  },
+  'adc-instruction': {
+    id: 'adc-instruction',
+    name: 'ADC Instruction (Add with Carry)',
+    categoryId: 'advanced-topics',
+    description: 'Add source plus CF to destination, used for multi-word addition',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['add-instruction', 'sbb-instruction', 'carry-flag']
+  },
+  'carry-flag': {
+    id: 'carry-flag',
+    name: 'Carry Flag (CF)',
+    categoryId: 'advanced-topics',
+    description: 'Status flag set when unsigned arithmetic produces carry out of MSB, used in multi-word ops',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['flag-register', 'adc-instruction', 'overflow-flag']
+  },
+  'overflow-flag': {
+    id: 'overflow-flag',
+    name: 'Overflow Flag (OF)',
+    categoryId: 'advanced-topics',
+    description: 'Status flag set when signed arithmetic produces result too large for destination',
+    lectureIds: [4],
+    exampleIds: [],
+    assessmentItemIds: [],
+    relatedConcepts: ['flag-register', 'arithmetic-overflow', 'carry-flag']
+  }
+};
+
+// Define misconceptions
+const misconceptions: Record<string, MisconceptionEntry> = {
+  'misconception:register-confusion': {
+    description: 'Confusing which register does what, especially AL vs AH vs AX vs EAX',
+    indicators: ['Using wrong register size', 'Results in unexpected values', 'AH contains wrong data'],
+    commonIn: ['beginners', 'switching-from-high-level-languages'],
+    remediationFor: [
+      { type: 'lecture', id: '3', description: 'Lecture 3 covers register basics' },
+      { type: 'lecture', id: '4', description: 'Lecture 4 reinforces register usage' }
+    ],
+    relatedMisconceptions: ['misconception:word-size', 'misconception:data-transfer-size']
+  },
+  'misconception:word-size': {
+    description: 'Not understanding that word (16-bit) contains two bytes with reversed order',
+    indicators: ['Confused about byte order', 'Little endian errors', 'AX not behaving as expected'],
+    commonIn: ['beginners', 'coming-from-other-architectures'],
+    remediationFor: [
+      { type: 'lecture', id: '2', description: 'Lecture 2 covers data representation' },
+      { type: 'lecture', id: '4', description: 'Lecture 4 reinforces word concepts' }
+    ],
+    relatedMisconceptions: ['misconception:register-confusion', 'misconception:little-endian']
+  },
+  'misconception:little-endian': {
+    description: 'Not understanding that 8086 stores least significant byte at lowest address',
+    indicators: ['Multi-byte value printing wrong', 'Array indexing errors', 'String display issues'],
+    commonIn: ['beginners', 'coming-from-big-endian-systems'],
+    remediationFor: [
+      { type: 'lecture', id: '2', description: 'Lecture 2 covers little endian' },
+      { type: 'example', id: 'HelloWorld.asm', description: 'HelloWorld shows string storage' }
+    ],
+    relatedMisconceptions: ['misconception:word-size']
+  },
+  'misconception:sign-extension': {
+    description: 'Confusing sign extension with zero extension for negative numbers',
+    indicators: ['CBW/CWD confusion', 'Negative numbers compare incorrectly', 'IMUL results unexpected'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '4', description: 'Lecture 4 covers signed operations' },
+      { type: 'instruction', id: 'MOVSX', description: 'MOVSX for sign extension' }
+    ],
+    relatedMisconceptions: ['misconception:signed-numbers', 'misconception:twos-complement']
+  },
+  'misconception:signed-numbers': {
+    description: 'Thinking signed numbers are stored differently than unsigned in two\'s complement',
+    indicators: ['Treating negative numbers as unsigned', 'CMP results misinterpreted', 'JB vs JL confusion'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '2', description: 'Lecture 2 covers signed representation' },
+      { type: 'lecture', id: '4', description: 'Lecture 4 covers signed operations' }
+    ],
+    relatedMisconceptions: ['misconception:twos-complement', 'misconception:sign-extension']
+  },
+  'misconception:twos-complement': {
+    description: 'Not understanding how negation works in two\'s complement',
+    indicators: ['Negation produces wrong value', 'NOT + 1 method unclear', 'Overflow detection issues'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '2', description: 'Lecture 2 covers two\'s complement' }
+    ],
+    relatedMisconceptions: ['misconception:signed-numbers', 'misconception:sign-extension']
+  },
+  'misconception:memory-to-memory': {
+    description: 'Assuming MOV can copy directly between two memory locations',
+    indicators: [' assembler error on MOV [bx], [si]', 'Using memory as both operands', 'Undefined behavior'],
+    commonIn: ['beginners', 'coming-from-c'],
+    remediationFor: [
+      { type: 'lecture', id: '4', description: 'Lecture 4 covers MOV restrictions' },
+      { type: 'instruction', id: 'MOV', description: 'MOV instruction details' }
+    ],
+    relatedMisconceptions: ['misconception:register-confusion']
+  },
+  'misconception:conditional-jumps': {
+    description: 'Confusing JNE with JN(E) and JL vs JN(L), not understanding flag semantics',
+    indicators: ['Loop executing wrong number of times', 'If-else going to wrong branch', 'Comparison logic reversed'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '6', description: 'Lecture 6 covers jumps in detail' },
+      { type: 'example', id: 'ifelse.asm', description: 'ifelse example shows comparisons' }
+    ],
+    relatedMisconceptions: ['misconception:flag-register', 'misconception:cmp-instruction']
+  },
+  'misconception:flag-register': {
+    description: 'Not understanding how individual flags are set or used',
+    indicators: ['JB vs JC confusion', 'OF meaning unclear', 'ZF not behaving as expected'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '4', description: 'Lecture 4 covers flag register' }
+    ],
+    relatedMisconceptions: ['misconception:conditional-jumps', 'misconception:cmp-instruction']
+  },
+  'misconception:cmp-instruction': {
+    description: 'Thinking CMP stores the result of subtraction or changes destination',
+    indicators: ['CMP modifying registers unexpectedly', 'CMP followed by wrong jump', 'Understanding CMP as SUB'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '6', description: 'Lecture 6 covers CMP in depth' },
+      { type: 'example', id: 'ifelse.asm', description: 'ifelse example' }
+    ],
+    relatedMisconceptions: ['misconception:flag-register', 'misconception:sub-instruction']
+  },
+  'misconception:stack-discipline': {
+    description: 'Not maintaining proper stack discipline: push/pop mismatch',
+    indicators: ['Stack overflow', 'RET popping wrong address', 'Unbalanced PUSH and POP', 'Corrupted return addresses'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '7', description: 'Lecture 7 covers stack operations' },
+      { type: 'example', id: 'proc.asm', description: 'proc.asm shows proper stack use' }
+    ],
+    relatedMisconceptions: ['misconception:call-ret', 'misconception:stack-frame']
+  },
+  'misconception:call-ret': {
+    description: 'Not understanding that CALL pushes return address and RET pops it',
+    indicators: ['Using RET without CALL', 'Stack gets corrupted', 'Program jumps to wrong location'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '7', description: 'Lecture 7 covers CALL/RET' },
+      { type: 'example', id: 'proc.asm', description: 'proc.asm shows CALL/RET' }
+    ],
+    relatedMisconceptions: ['misconception:stack-discipline', 'misconception:stack-frame']
+  },
+  'misconception:stack-frame': {
+    description: 'Not understanding stack frame setup/teardown and BP usage',
+    indicators: ['Accessing parameters incorrectly', 'Local variables overlapping', 'Return to wrong address'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '7', description: 'Lecture 7 covers stack frames' }
+    ],
+    relatedMisconceptions: ['misconception:stack-discipline', 'misconception:bp-register']
+  },
+  'misconception:loop-counter': {
+    description: 'Loop not executing correct number of times due to CX initialization or modification',
+    indicators: ['Loop runs one too many or too few times', 'CX being modified inside loop', 'JCXZ behaving unexpectedly'],
+    commonIn: ['beginners'],
+    remediationFor: [
+      { type: 'lecture', id: '6', description: 'Lecture 6 covers loops' },
+      { type: 'example', id: 'forloop.asm', description: 'forloop example' }
+    ],
+    relatedMisconceptions: ['misconception:cx-register', 'misconception:conditional-jumps']
+  },
+  'misconception:segment-override': {
+    description: 'Not understanding default segment registers and when to use segment overrides',
+    indicators: ['String operations reading wrong memory', 'Unexpected values in DI/SI', 'ES/DS confusion'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '8', description: 'Lecture 8 covers string ops and segments' }
+    ],
+    relatedMisconceptions: ['misconception:ds-segment', 'misconception:es-segment']
+  },
+  'misconception:logic-vs-arithmetic-shift': {
+    description: 'Confusing SHR (logical, fill with 0) with SAR (arithmetic, preserve sign)',
+    indicators: ['Negative numbers shifting incorrectly', 'SAR vs SHR chosen wrong', 'Sign bit handling incorrect'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '9', description: 'Lecture 9 covers shifts' }
+    ],
+    relatedMisconceptions: ['misconception:shift-instructions', 'misconception:signed-numbers']
+  },
+  'misconception:array-indexing': {
+    description: 'Not accounting for element size when computing array offsets',
+    indicators: ['Accessing wrong array element', 'Off-by-one element errors', 'Byte vs word confusion in arrays'],
+    commonIn: ['intermediate-students'],
+    remediationFor: [
+      { type: 'lecture', id: '8', description: 'Lecture 8 covers indexed addressing' },
+      { type: 'example', id: 'sort.asm', description: 'sort.asm for array examples' }
+    ],
+    relatedMisconceptions: ['misconception:word-size', 'misconception:addressing-modes']
+  }
+};
+
+// Link categories to concepts
+for (const cat of categories) {
+  cat.conceptIds = Object.values(concepts)
+    .filter(c => c.categoryId === cat.id)
+    .map(c => c.id);
+}
+
+// Build taxonomy
+const taxonomy: ConceptTaxonomy = {
+  categories,
+  concepts,
+  misconceptions,
+  metadata: {
+    generatedAt: new Date().toISOString(),
+    generator: 'build-taxonomy.ts',
+    sourceVersion: '1.0'
+  }
+};
+
+// Write to file
+const outputPath = path.join(__dirname, '..', 'data', 'processed', 'concept-taxonomy.json');
+fs.writeFileSync(outputPath, JSON.stringify(taxonomy, null, 2), 'utf-8');
+
+console.log(`Concept taxonomy written to ${outputPath}`);
+console.log(`Categories: ${taxonomy.categories.length}`);
+console.log(`Concepts: ${Object.keys(taxonomy.concepts).length}`);
+console.log(`Misconceptions: ${Object.keys(taxonomy.misconceptions).length}`);

@@ -1,0 +1,2304 @@
+{
+  "questions": [
+    {
+      "id": "QB-001",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Data Representation",
+      "subtopic": "Hexadecimal",
+      "concepts": [
+        "hexadecimal",
+        "binary-number-system"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What is the hexadecimal equivalent of the binary number 11001010?",
+      "answer": "CA",
+      "options": [
+        "A5",
+        "CA",
+        "D3",
+        "B2"
+      ],
+      "hints": [
+        "Convert each 4-bit nibble to hex",
+        "1100 = C, 1010 = A"
+      ],
+      "explanation": "Binary 11001010 groups into 1100 (12 = C) and 1010 (10 = A), giving CA in hexadecimal.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "1",
+          "description": "Introduction to number systems"
+        },
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Hexadecimal representation"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:binary-conversion"
+      ]
+    },
+    {
+      "id": "QB-002",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Data Representation",
+      "subtopic": "Binary Number System",
+      "concepts": [
+        "binary-number-system",
+        "bit-vs-byte"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "How many bits are in a byte?",
+      "answer": "8",
+      "options": [
+        "4",
+        "8",
+        "16",
+        "32"
+      ],
+      "hints": [
+        "A byte is the smallest addressable unit of memory"
+      ],
+      "explanation": "A byte consists of 8 bits and is the standard unit of memory addressing in 8086.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "1",
+          "description": "Number systems basics"
+        },
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Data sizes"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-003",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Data Representation",
+      "subtopic": "Two's Complement",
+      "concepts": [
+        "twos-complement",
+        "signed-numbers"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In two's complement representation, the bit pattern 10000000 represents -128 in an 8-bit signed number.",
+      "answer": "True",
+      "hints": [
+        "Consider the MSB (most significant bit) in signed representation"
+      ],
+      "explanation": "In 8-bit two's complement, 10000000 is -128. The MSB is 1, indicating a negative number, and -128 is the most negative value representable in 8-bit signed arithmetic.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Two's complement representation"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:twos-complement",
+        "misconception:signed-numbers"
+      ]
+    },
+    {
+      "id": "QB-004",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Data Representation",
+      "subtopic": "Little Endian",
+      "concepts": [
+        "little-endian",
+        "word-size"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A 16-bit word containing the value 0x1234 is stored in memory starting at address 100. What bytes would be at addresses 100 and 101?",
+      "answer": "Address 100: 0x34, Address 101: 0x12",
+      "hints": [
+        "Remember: little-endian stores the least significant byte first"
+      ],
+      "explanation": "In little-endian format (used by 8086), the least significant byte comes first. So 0x1234 is stored as 0x34 at address 100 and 0x12 at address 101.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Little endian storage"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Word size and data sizes"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:little-endian",
+        "misconception:word-size"
+      ]
+    },
+    {
+      "id": "QB-005",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Data Representation",
+      "subtopic": "Signed Numbers",
+      "concepts": [
+        "signed-numbers",
+        "twos-complement"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "What is the range of values representable in an 8-bit signed number using two's complement?",
+      "answer": "-128 to +127",
+      "options": [
+        "-256 to +255",
+        "-128 to +127",
+        "-127 to +128",
+        "0 to 255"
+      ],
+      "hints": [
+        "One pattern is reserved for zero",
+        "MSB indicates sign"
+      ],
+      "explanation": "8-bit signed numbers range from -128 (10000000) to +127 (01111111). The MSB being 1 indicates a negative value in two's complement.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Signed number representation"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:signed-numbers"
+      ]
+    },
+    {
+      "id": "QB-006",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Assembly Basics",
+      "subtopic": "Registers",
+      "concepts": [
+        "general-purpose-registers",
+        "register-classes"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 1,
+      "prompt": "Which of the following is NOT a general-purpose register in 8086?",
+      "answer": "IP",
+      "options": [
+        "AX",
+        "BX",
+        "IP",
+        "CX"
+      ],
+      "hints": [
+        "IP is the Instruction Pointer, not a general-purpose register"
+      ],
+      "explanation": "IP (Instruction Pointer) is a special-purpose register that holds the offset of the next instruction. AX, BX, and CX are all general-purpose registers.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "3",
+          "description": "Register classification"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "General purpose registers"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:register-confusion"
+      ]
+    },
+    {
+      "id": "QB-007",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Assembly Basics",
+      "subtopic": "MOV Instruction",
+      "concepts": [
+        "mov-instruction",
+        "general-purpose-registers"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 1,
+      "prompt": "After executing: MOV AX, 5 then MOV BX, AX, what values are in AX and BX?",
+      "answer": "AX = 5, BX = 5",
+      "hints": [
+        "MOV copies the value, it doesn't remove it from the source"
+      ],
+      "explanation": "MOV AX, 5 stores 5 in AX. Then MOV BX, AX copies the value from AX into BX. Both registers now contain 5.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "MOV instruction basics"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:register-confusion"
+      ]
+    },
+    {
+      "id": "QB-008",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Assembly Basics",
+      "subtopic": "Data Transfer Rules",
+      "concepts": [
+        "data-transfer-rules",
+        "mov-instruction"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 2,
+      "prompt": "Which of the following is a valid MOV instruction in 8086 assembly?",
+      "answer": "MOV AX, [BX]",
+      "options": [
+        "MOV [BX], [SI]",
+        "MOV AX, [BX]",
+        "MOV 5, AX",
+        "MOV CS, DS"
+      ],
+      "hints": [
+        "Cannot move memory to memory",
+        "Cannot move immediate to segment register directly",
+        "CS cannot be destination"
+      ],
+      "explanation": "MOV AX, [BX] is valid - it moves a value from memory at the address in BX into AX. Memory-to-memory moves are not allowed in 8086.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "MOV instruction restrictions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:memory-to-memory"
+      ]
+    },
+    {
+      "id": "QB-009",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Assembly Basics",
+      "subtopic": "Register Classes",
+      "concepts": [
+        "register-classes",
+        "word-size"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "When you modify AL, the upper 8 bits of AX (AH) are affected.",
+      "answer": "False",
+      "hints": [
+        "Think about how registers are split in 8086"
+      ],
+      "explanation": "AX is composed of AH (upper 8 bits) and AL (lower 8 bits). Modifying AL only changes the lower 8 bits; AH remains unchanged.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "3",
+          "description": "Register classes and naming"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:register-confusion",
+        "misconception:word-size"
+      ]
+    },
+    {
+      "id": "QB-010",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Assembly Basics",
+      "subtopic": "XCHG Instruction",
+      "concepts": [
+        "xchg-instruction"
+      ],
+      "instructions": [
+        "XCHG"
+      ],
+      "difficulty": 2,
+      "prompt": "If AX contains 1234h and BX contains 5678h, what are the values after executing XCHG AX, BX?",
+      "answer": "AX = 5678h, BX = 1234h",
+      "hints": [
+        "XCHG swaps the values of its operands"
+      ],
+      "explanation": "XCHG exchanges the values in AX and BX. After the instruction, AX contains 5678h and BX contains 1234h.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "XCHG instruction"
+        },
+        {
+          "type": "example",
+          "id": "HelloWorld.asm",
+          "description": "Basic register operations"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-011",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Assembly Basics",
+      "subtopic": "LEA Instruction",
+      "concepts": [
+        "lea-instruction",
+        "effective-address"
+      ],
+      "instructions": [
+        "LEA"
+      ],
+      "difficulty": 3,
+      "prompt": "What does LEA BX, [SI+10] do?",
+      "answer": "Loads the offset address SI+10 into BX",
+      "options": [
+        "Loads the value at memory location SI+10 into BX",
+        "Loads the offset address SI+10 into BX",
+        "Adds 10 to SI and stores in BX",
+        "Loads SI+10 into BX as a signed value"
+      ],
+      "hints": [
+        "LEA stands for Load Effective Address",
+        "It calculates an address, not dereferencing it"
+      ],
+      "explanation": "LEA computes the effective address (offset) of [SI+10] and loads that offset into BX. Unlike MOV, it does not read memory.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "LEA instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Effective address calculation"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:lea-instruction"
+      ]
+    },
+    {
+      "id": "QB-012",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "I/O Operations",
+      "subtopic": "DOS Interrupts",
+      "concepts": [
+        "dos-interrupts",
+        "int-21h"
+      ],
+      "instructions": [
+        "INT"
+      ],
+      "difficulty": 1,
+      "prompt": "What does INT 21h represent in 8086 assembly?",
+      "answer": "DOS function call interrupt",
+      "options": [
+        "Hardware interrupt",
+        "DOS function call interrupt",
+        "BIOS interrupt",
+        "Debug interrupt"
+      ],
+      "hints": [
+        "INT 21h is the primary DOS API entry point"
+      ],
+      "explanation": "INT 21h is the DOS function call interrupt. AH register specifies which function to call.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "3",
+          "description": "DOS interrupts introduction"
+        },
+        {
+          "type": "lecture",
+          "id": "5",
+          "description": "INT 21h functions"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-013",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "I/O Operations",
+      "subtopic": "String Output",
+      "concepts": [
+        "string-output",
+        "int-21h"
+      ],
+      "instructions": [
+        "INT"
+      ],
+      "difficulty": 2,
+      "prompt": "To output a character to the screen using DOS, what should be in AH and DL before calling INT 21h?",
+      "answer": "AH = 02h, DL = character code",
+      "hints": [
+        "Function 02h outputs a character",
+        "DL contains the character to output"
+      ],
+      "explanation": "DOS function 02h outputs the character in DL to the screen. AH must be set to 02h to select this function.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "5",
+          "description": "Character output function"
+        },
+        {
+          "type": "example",
+          "id": "HelloWorld.asm",
+          "description": "Character output"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-014",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Control Flow",
+      "subtopic": "Conditional Jumps",
+      "concepts": [
+        "conditional-jumps",
+        "flag-register"
+      ],
+      "instructions": [
+        "JE",
+        "JNE",
+        "CMP"
+      ],
+      "difficulty": 2,
+      "prompt": "After CMP AX, BX where AX = 10 and BX = 10, which jump instruction will execute?",
+      "answer": "JE (Jump if Equal)",
+      "options": [
+        "JL",
+        "JG",
+        "JE",
+        "JB"
+      ],
+      "hints": [
+        "CMP subtracts BX from AX without storing result",
+        "JE checks ZF"
+      ],
+      "explanation": "CMP AX, BX subtracts BX from AX. Since both are 10, the result is 0 and ZF is set to 1. JE (Jump if Equal, also JZ) jumps when ZF = 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Conditional jumps"
+        },
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "CMP instruction"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:conditional-jumps",
+        "misconception:cmp-instruction"
+      ]
+    },
+    {
+      "id": "QB-015",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Control Flow",
+      "subtopic": "LOOP Instruction",
+      "concepts": [
+        "loop-instructions",
+        "cx-register"
+      ],
+      "instructions": [
+        "LOOP",
+        "MOV"
+      ],
+      "difficulty": 2,
+      "prompt": "How many times will the loop body execute?\n\nMOV CX, 5\nstart:\n  ; some code\n  LOOP start",
+      "answer": "5 times",
+      "hints": [
+        "LOOP decrements CX and jumps if CX != 0",
+        "Count starts from initial CX value"
+      ],
+      "explanation": "LOOP decrements CX and jumps to the label if CX is not zero. Starting with CX = 5, the loop executes 5 times (5, 4, 3, 2, 1, then exits when CX becomes 0).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "LOOP instruction"
+        },
+        {
+          "type": "example",
+          "id": "forloop.asm",
+          "description": "Loop example"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:loop-counter",
+        "misconception:cx-register"
+      ]
+    },
+    {
+      "id": "QB-016",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Control Flow",
+      "subtopic": "Unconditional Jump",
+      "concepts": [
+        "unconditional-jump",
+        "program-counter"
+      ],
+      "instructions": [
+        "JMP"
+      ],
+      "difficulty": 1,
+      "prompt": "What is the key difference between JMP and JE instructions?",
+      "answer": "JMP transfers control unconditionally; JE only transfers control when ZF = 1",
+      "options": [
+        "JMP is faster than JE",
+        "JMP can only jump forward; JE can jump backward",
+        "JMP transfers control unconditionally; JE only transfers control when ZF = 1",
+        "There is no difference"
+      ],
+      "hints": [
+        "JE is a conditional jump that depends on flags"
+      ],
+      "explanation": "JMP is an unconditional jump that always transfers control. JE (Jump if Equal) is conditional - it only jumps when the Zero Flag is set.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Unconditional vs conditional jumps"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:conditional-jumps"
+      ]
+    },
+    {
+      "id": "QB-017",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Control Flow",
+      "subtopic": "CMP Instruction",
+      "concepts": [
+        "cmp-instruction"
+      ],
+      "instructions": [
+        "CMP"
+      ],
+      "difficulty": 2,
+      "prompt": "The CMP instruction modifies the destination operand.",
+      "answer": "False",
+      "hints": [
+        "Think about what CMP actually does"
+      ],
+      "explanation": "CMP performs a subtraction (dest - src) but does NOT store the result. It only sets the flags based on the result. The destination operand is unchanged.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "CMP instruction behavior"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:cmp-instruction"
+      ]
+    },
+    {
+      "id": "QB-018",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Control Flow",
+      "subtopic": "Signed vs Unsigned Comparisons",
+      "concepts": [
+        "conditional-jumps",
+        "flag-register"
+      ],
+      "instructions": [
+        "CMP",
+        "JL",
+        "JB"
+      ],
+      "difficulty": 3,
+      "prompt": "AX = FFFFh (-1 as signed), BX = 1. After CMP AX, BX, which jump would be taken for signed comparison?",
+      "answer": "JL (Jump if Less - signed)",
+      "hints": [
+        "FFFFh as signed is -1, which is less than 1",
+        "JL checks SF != OF"
+      ],
+      "explanation": "As signed values: -1 < 1, so SF (sign flag) will differ from OF (overflow flag) after the subtraction, making JL take the jump.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Signed vs unsigned jumps"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Flag register"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:conditional-jumps",
+        "misconception:signed-numbers"
+      ]
+    },
+    {
+      "id": "QB-019",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Control Flow",
+      "subtopic": "LOOPNZ",
+      "concepts": [
+        "loop-instructions",
+        "cx-register"
+      ],
+      "instructions": [
+        "LOOPNZ",
+        "LOOPNE"
+      ],
+      "difficulty": 3,
+      "prompt": "What is the final value of CX after this code?\n\nMOV CX, 3\nMOV AX, 0\nstart:\n  INC AX\n  CMP AX, 2\n  LOOPNZ start",
+      "answer": "CX = 1",
+      "hints": [
+        "LOOPNZ exits when CX = 0 OR ZF = 1",
+        "LOOPNZ decrements CX first, then checks conditions"
+      ],
+      "explanation": "LOOPNZ decrements CX then checks if CX != 0 AND ZF = 0. When AX becomes 2, ZF = 1, so LOOPNZ exits even though CX is still 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "LOOPNZ/LOOPNE instructions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:loop-counter"
+      ]
+    },
+    {
+      "id": "QB-020",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Control Flow",
+      "subtopic": "JCXZ Instruction",
+      "concepts": [
+        "cx-register",
+        "conditional-jumps"
+      ],
+      "instructions": [
+        "JCXZ"
+      ],
+      "difficulty": 2,
+      "prompt": "When does JCXZ jump?",
+      "answer": "When CX = 0",
+      "options": [
+        "When CX != 0",
+        "When CX = 0",
+        "When ZF = 1",
+        "When CF = 1"
+      ],
+      "hints": [
+        "JCXZ = Jump if CX is Zero"
+      ],
+      "explanation": "JCXZ jumps when the CX register equals zero, regardless of any flags. It's often used at the start of a loop to handle the special case of CX being zero before LOOP decrements it.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "JCXZ instruction"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:cx-register"
+      ]
+    },
+    {
+      "id": "QB-021",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures",
+      "subtopic": "CALL/RET",
+      "concepts": [
+        "call-instruction",
+        "ret-instruction"
+      ],
+      "instructions": [
+        "CALL",
+        "RET",
+        "PUSH",
+        "POP"
+      ],
+      "difficulty": 2,
+      "prompt": "What values are pushed to the stack when CALL MyProc executes?",
+      "answer": "The offset of the next instruction (return address)",
+      "hints": [
+        "CALL transfers control but needs to know where to return"
+      ],
+      "explanation": "CALL pushes the return address (the offset of the instruction following CALL) onto the stack before jumping to the procedure. RET pops this address to return.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "CALL instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack mechanics"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:call-ret"
+      ]
+    },
+    {
+      "id": "QB-022",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures",
+      "subtopic": "Stack Operations",
+      "concepts": [
+        "push-instruction",
+        "pop-instruction",
+        "stack-frame"
+      ],
+      "instructions": [
+        "PUSH",
+        "POP"
+      ],
+      "difficulty": 2,
+      "prompt": "After executing PUSH AX followed by PUSH BX, what is on the top of the stack?",
+      "answer": "BX",
+      "options": [
+        "AX",
+        "BX",
+        "AX and BX",
+        "Undefined"
+      ],
+      "hints": [
+        "Stack grows downward in memory",
+        "Last pushed item is on top"
+      ],
+      "explanation": "PUSH AX places AX on top of the stack. Then PUSH BX places BX on top, making BX the current top of stack (most recently pushed).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "PUSH instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack operations"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-discipline"
+      ]
+    },
+    {
+      "id": "QB-023",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Procedures",
+      "subtopic": "Stack Frame",
+      "concepts": [
+        "stack-frame",
+        "bp-register"
+      ],
+      "instructions": [
+        "PUSH",
+        "POP",
+        "MOV"
+      ],
+      "difficulty": 3,
+      "prompt": "The BP register is typically used as a frame pointer to access parameters and local variables on the stack.",
+      "answer": "True",
+      "hints": [
+        "Frame pointer provides a stable reference point within a procedure"
+      ],
+      "explanation": "BP (Base Pointer) is commonly used as a frame pointer. It provides a stable reference point for accessing parameters and local variables, even as SP changes during the procedure.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack frames and BP register"
+        },
+        {
+          "type": "example",
+          "id": "proc.asm",
+          "description": "Procedure example"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-frame",
+        "misconception:bp-register"
+      ]
+    },
+    {
+      "id": "QB-024",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures",
+      "subtopic": "Recursive Procedures",
+      "concepts": [
+        "recursive-procedures",
+        "stack-frame",
+        "call-instruction"
+      ],
+      "instructions": [
+        "CALL",
+        "RET",
+        "PUSH",
+        "POP"
+      ],
+      "difficulty": 4,
+      "prompt": "In a recursive procedure with no base case check, what happens to the stack?",
+      "answer": "It grows until it overflows",
+      "hints": [
+        "Each recursive call pushes a return address",
+        "There's no pop to balance the pushes"
+      ],
+      "explanation": "Each recursive CALL pushes a return address onto the stack without popping it (until RET). Without a base case to stop recursing, the stack grows infinitely until it overflows, causing a stack overflow error.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Recursive procedures"
+        },
+        {
+          "type": "example",
+          "id": "recurs.asm",
+          "description": "Recursive example"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-discipline",
+        "misconception:call-ret"
+      ]
+    },
+    {
+      "id": "QB-025",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures",
+      "subtopic": "Parameter Passing",
+      "concepts": [
+        "parameter-passing",
+        "stack-frame"
+      ],
+      "instructions": [
+        "PUSH",
+        "POP",
+        "CALL",
+        "RET"
+      ],
+      "difficulty": 3,
+      "prompt": "In 8086, parameters are commonly passed to procedures via which method?",
+      "answer": "Registers or Stack",
+      "options": [
+        "Only registers",
+        "Only stack",
+        "Registers or Stack",
+        "Global variables only"
+      ],
+      "hints": [
+        "8086 has limited registers but supports stack-based parameter passing"
+      ],
+      "explanation": "Parameters can be passed via registers (fast, but limited number) or on the stack (more flexible, allows nested calls). The convention must be agreed upon between caller and callee.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Parameter passing conventions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:parameter-passing"
+      ]
+    },
+    {
+      "id": "QB-026",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "ADD Instruction",
+      "concepts": [
+        "add-instruction",
+        "carry-flag"
+      ],
+      "instructions": [
+        "ADD"
+      ],
+      "difficulty": 2,
+      "prompt": "AX = FFFFh, BX = 0001h. After ADD AX, BX, what are AX and the Carry Flag?",
+      "answer": "AX = 0000h, CF = 1",
+      "hints": [
+        "FFFFh + 0001h = 10000h, which overflows 16 bits"
+      ],
+      "explanation": "FFFFh + 0001h = 10000h. This exceeds 16 bits, so the low 16 bits (0000h) are stored in AX and CF is set to 1 to indicate the carry out.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "ADD instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Carry flag"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:carry-flag",
+        "misconception:arithmetic-overflow"
+      ]
+    },
+    {
+      "id": "QB-027",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "MUL Instruction",
+      "concepts": [
+        "mul-instruction"
+      ],
+      "instructions": [
+        "MUL"
+      ],
+      "difficulty": 3,
+      "prompt": "Executing MUL BL where AL = 10h (16) and BL = 04h (4). Where is the result stored?",
+      "answer": "AX = 0040h (64)",
+      "options": [
+        "AL",
+        "AX",
+        "DX:AX",
+        "BX:AX"
+      ],
+      "hints": [
+        "MUL with 8-bit operand uses AL"
+      ],
+      "explanation": "For 8-bit MUL (MUL r/m8), AL is multiplied by the operand, and the result is stored in AX. 16 × 4 = 64 = 40h, so AX = 0040h.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "MUL instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Multiplication"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-028",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "DIV Instruction",
+      "concepts": [
+        "div-instruction",
+        "division-by-zero"
+      ],
+      "instructions": [
+        "DIV"
+      ],
+      "difficulty": 3,
+      "prompt": "AX = 0010h (16), BL = 03h (3). After DIV BL, what are AL and AH?",
+      "answer": "AL = 05h (quotient = 5), AH = 01h (remainder = 1)",
+      "hints": [
+        "DIV BL divides AX by BL",
+        "Quotient goes to AL, remainder to AH"
+      ],
+      "explanation": "DIV BL divides AX (16) by BL (3). 16 ÷ 3 = 5 remainder 1. So AL = 5 (quotient) and AH = 1 (remainder).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "DIV instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Division"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-029",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Advanced Topics",
+      "subtopic": "ADC Instruction",
+      "concepts": [
+        "adc-instruction",
+        "carry-flag"
+      ],
+      "instructions": [
+        "ADC"
+      ],
+      "difficulty": 3,
+      "prompt": "ADC (Add with Carry) adds the source operand plus the Carry Flag to the destination.",
+      "answer": "True",
+      "hints": [
+        "ADC is used for multi-word arithmetic"
+      ],
+      "explanation": "ADC performs DEST = DEST + SRC + CF. This is essential for multi-word addition where a previous addition generated a carry.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "ADC instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Multi-word arithmetic"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:carry-flag"
+      ]
+    },
+    {
+      "id": "QB-030",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "NEG Instruction",
+      "concepts": [
+        "negation",
+        "twos-complement"
+      ],
+      "instructions": [
+        "NEG"
+      ],
+      "difficulty": 2,
+      "prompt": "What is NEG AX equivalent to in terms of other instructions?",
+      "answer": "NOT AX followed by INC AX",
+      "options": [
+        "NOT AX",
+        "NOT AX followed by INC AX",
+        "DEC AX",
+        "Two's complement is different"
+      ],
+      "hints": [
+        "Two's complement negation = invert bits + 1"
+      ],
+      "explanation": "NEG computes the two's complement negation, which equals NOT (logical NOT/invert) followed by INC (add 1).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "NEG instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "2",
+          "description": "Two's complement"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:twos-complement"
+      ]
+    },
+    {
+      "id": "QB-031",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "AND Instruction",
+      "concepts": [
+        "bit-manipulation",
+        "boolean-logic"
+      ],
+      "instructions": [
+        "AND"
+      ],
+      "difficulty": 2,
+      "prompt": "AX = 11001010b, BX = 11110000b. After AND AX, BX, what is AX?",
+      "answer": "11000000b (C0h)",
+      "hints": [
+        "AND produces 1 only when both bits are 1"
+      ],
+      "explanation": "Bitwise AND: 11001010 AND 11110000 = 11000000. Only positions where both operands have 1 keep 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "AND instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Boolean operations"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:bit-manipulation"
+      ]
+    },
+    {
+      "id": "QB-032",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "SHL vs SAR",
+      "concepts": [
+        "shift-instructions",
+        "signed-numbers"
+      ],
+      "instructions": [
+        "SHL",
+        "SAR"
+      ],
+      "difficulty": 3,
+      "prompt": "AX = FFFEh (-2 as signed 16-bit). After SAR AX, 1, what is AX?",
+      "answer": "FFFFh (-1)",
+      "options": [
+        "7FFFh",
+        "FFFFh",
+        "FFFEh",
+        "0FFFh"
+      ],
+      "hints": [
+        "SAR preserves the sign bit (arithmetic shift)",
+        "F in MSB indicates negative"
+      ],
+      "explanation": "SAR (Shift Arithmetic Right) preserves the sign bit. FFFEh has MSB = 1 (negative). After shifting right by 1 with sign extension, AX = FFFFh (-1).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "SAR instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Arithmetic vs logical shifts"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:logic-vs-arithmetic-shift",
+        "misconception:signed-numbers"
+      ]
+    },
+    {
+      "id": "QB-033",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "SHL for Multiplication",
+      "concepts": [
+        "multiplication-optimization",
+        "shift-instructions"
+      ],
+      "instructions": [
+        "SHL"
+      ],
+      "difficulty": 3,
+      "prompt": "What multiplication does SHL AX, 3 perform? What is the result for AX = 5?",
+      "answer": "AX * 8, result = 40 (28h)",
+      "hints": [
+        "SHL by N multiplies by 2^N"
+      ],
+      "explanation": "SHL AX, 3 shifts AX left by 3 bits, which is equivalent to multiplying by 2^3 = 8. 5 × 8 = 40 = 28h.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "SHL for multiplication"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Shift instructions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:multiplication-optimization"
+      ]
+    },
+    {
+      "id": "QB-034",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "XOR Instruction",
+      "concepts": [
+        "xor-instruction",
+        "bit-manipulation"
+      ],
+      "instructions": [
+        "XOR"
+      ],
+      "difficulty": 2,
+      "prompt": "What is XOR AX, AX commonly used for?",
+      "answer": "Setting AX to zero (more efficiently than MOV AX, 0)",
+      "options": [
+        "Testing bits",
+        "Swapping values",
+        "Setting AX to zero",
+        "Computing parity"
+      ],
+      "hints": [
+        "XOR a value with itself gives 0"
+      ],
+      "explanation": "XOR AX, AX produces 0 in AX and is typically shorter (2 bytes) and faster than MOV AX, 0 (3 bytes).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "XOR instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Boolean operations"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-035",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Advanced Topics",
+      "subtopic": "TEST Instruction",
+      "concepts": [
+        "test-instruction",
+        "bit-manipulation"
+      ],
+      "instructions": [
+        "TEST"
+      ],
+      "difficulty": 3,
+      "prompt": "After TEST AX, 0001h, what can we conclude about AX?",
+      "answer": "Whether the least significant bit of AX is 1 (sets ZF = 0) or 0 (sets ZF = 1)",
+      "hints": [
+        "TEST is AND without storing the result",
+        "It only affects flags"
+      ],
+      "explanation": "TEST performs a bitwise AND and sets flags based on the result, but doesn't modify AX. ZF = 1 means bit 0 was 0; ZF = 0 means bit 0 was 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "TEST instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Flag testing"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:test-instruction"
+      ]
+    },
+    {
+      "id": "QB-036",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "ROL vs ROR",
+      "concepts": [
+        "rotate-instructions"
+      ],
+      "instructions": [
+        "ROL",
+        "ROR"
+      ],
+      "difficulty": 2,
+      "prompt": "What is the key difference between ROL (Rotate Left) and SHL (Shift Logical Left)?",
+      "answer": "ROL wraps the MSB around to become the LSB; SHL fills LSB with zero",
+      "options": [
+        "ROL is faster than SHL",
+        "ROL wraps the MSB around to become the LSB; SHL fills LSB with zero",
+        "They are identical operations",
+        "SHL wraps around, ROL fills with zero"
+      ],
+      "hints": [
+        "Rotate vs Shift - what happens to the bit that falls off?"
+      ],
+      "explanation": "SHL shifts all bits left, dropping the MSB and filling LSB with 0. ROL rotates left, where the MSB wraps around to become the LSB.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Rotate instructions"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "ROL vs SHL"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-037",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "String Instructions",
+      "concepts": [
+        "string-instructions",
+        "si-register",
+        "di-register"
+      ],
+      "instructions": [
+        "MOVSB",
+        "MOVSW"
+      ],
+      "difficulty": 3,
+      "prompt": "In the string instructions, which registers hold the source and destination addresses?",
+      "answer": "SI (source) and DI (destination)",
+      "options": [
+        "DI and SI",
+        "SI and DI",
+        "BX and BP",
+        "AX and BX"
+      ],
+      "hints": [
+        "Source Index and Destination Index"
+      ],
+      "explanation": "SI (Source Index) holds the source address, and DI (Destination Index) holds the destination address for string operations.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String instructions"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "SI and DI registers"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-038",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Advanced Topics",
+      "subtopic": "REP Prefix",
+      "concepts": [
+        "rep-prefix",
+        "string-instructions",
+        "cx-register"
+      ],
+      "instructions": [
+        "REP",
+        "MOVSB"
+      ],
+      "difficulty": 3,
+      "prompt": "REP MOVSB repeats the MOVSB instruction CX times.",
+      "answer": "True",
+      "hints": [
+        "CX is the counter register"
+      ],
+      "explanation": "REP (Repeat) prefix causes the string instruction to execute CX times. CX is decremented after each repetition.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP prefix"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String operations"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:rep-prefix"
+      ]
+    },
+    {
+      "id": "QB-039",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "SCASB Instruction",
+      "concepts": [
+        "scasb",
+        "string-instructions",
+        "flag-register"
+      ],
+      "instructions": [
+        "SCASB"
+      ],
+      "difficulty": 4,
+      "prompt": "If AL = 41h ('A') and ES:DI points to 'PROGRAM', what will ZF be after SCASB?",
+      "answer": "ZF = 0 (first character 'P' = 50h is not equal to 41h)",
+      "hints": [
+        "SCASB compares AL with the byte at ES:DI",
+        "'P' = 50h, 'A' = 41h"
+      ],
+      "explanation": "SCASB subtracts the byte at ES:DI from AL without storing the result. Since 'P' (50h) ≠ 'A' (41h), ZF = 0.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "SCAS instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String scanning"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-040",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "Indexed Addressing",
+      "concepts": [
+        "indexed-addressing",
+        "array-operations"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "In [BX + SI], what is BX and what is SI?",
+      "answer": "BX is the base register, SI is the index register",
+      "options": [
+        "Both are base registers",
+        "BX is base, SI is index",
+        "SI is base, BX is index",
+        "Both are index registers"
+      ],
+      "hints": [
+        "Base + Index addressing mode"
+      ],
+      "explanation": "[BX + SI] is based-indexed addressing where BX provides the base address and SI provides the offset/index into the array.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Based-indexed addressing"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Array access"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:array-indexing"
+      ]
+    },
+    {
+      "id": "QB-041",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "Array Access",
+      "concepts": [
+        "array-operations",
+        "indexed-addressing",
+        "word-size"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 3,
+      "prompt": "An array of words starts at address 100. What address holds the 5th element (0-indexed)?",
+      "answer": "108 (100 + 5*2, since each word is 2 bytes)",
+      "hints": [
+        "Word elements are 2 bytes each",
+        "Array elements are stored consecutively"
+      ],
+      "explanation": "The 5th word (0-indexed) is at offset 5 × 2 = 10 bytes from the start. Address = 100 + 10 = 108.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Array indexing"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Word size considerations"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:array-indexing",
+        "misconception:word-size"
+      ]
+    },
+    {
+      "id": "QB-042",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Assembly Basics",
+      "subtopic": "Flag Register",
+      "concepts": [
+        "flag-register",
+        "overflow-flag",
+        "carry-flag"
+      ],
+      "instructions": [
+        "ADD",
+        "SUB"
+      ],
+      "difficulty": 2,
+      "prompt": "Which flag is set when an arithmetic operation produces a result too large for the destination?",
+      "answer": "Overflow Flag (OF)",
+      "options": [
+        "Carry Flag (CF)",
+        "Overflow Flag (OF)",
+        "Zero Flag (ZF)",
+        "Sign Flag (SF)"
+      ],
+      "hints": [
+        "OF is for signed arithmetic overflow"
+      ],
+      "explanation": "The Overflow Flag (OF) is set when a signed arithmetic operation produces a result that is too large (or too small) to fit in the destination.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Flag register"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Overflow flag"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:overflow-flag",
+        "misconception:arithmetic-overflow"
+      ]
+    },
+    {
+      "id": "QB-043",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Assembly Basics",
+      "subtopic": "Flag Register",
+      "concepts": [
+        "flag-register",
+        "carry-flag"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "The Carry Flag (CF) is set when an unsigned subtraction produces a borrow.",
+      "answer": "True",
+      "hints": [
+        "CF indicates unsigned overflow"
+      ],
+      "explanation": "CF is set when an unsigned operation generates a carry out of (or borrow into) the most significant bit. SUB sets CF when the destination is smaller than the source.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Carry flag"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Unsigned arithmetic"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:carry-flag"
+      ]
+    },
+    {
+      "id": "QB-044",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Control Flow",
+      "subtopic": "Nested Loops",
+      "concepts": [
+        "loop-instructions",
+        "cx-register",
+        "array-operations"
+      ],
+      "instructions": [
+        "LOOP",
+        "MOV",
+        "PUSH",
+        "POP"
+      ],
+      "difficulty": 4,
+      "prompt": "How should nested loops be implemented when both need CX?",
+      "answer": "Save outer CX to a variable or stack before inner loop, restore after",
+      "hints": [
+        "CX is used by LOOP and can't hold two counters"
+      ],
+      "explanation": "When nesting loops, the outer loop's CX must be preserved. Push CX before the inner loop and pop it after to restore the outer count.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Nested loops"
+        },
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Sorting algorithms"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:loop-counter",
+        "misconception:stack-discipline"
+      ]
+    },
+    {
+      "id": "QB-045",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "Segment Registers",
+      "concepts": [
+        "segment-registers",
+        "ds-segment",
+        "es-segment"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "Which segment register is used for the destination in string operations?",
+      "answer": "ES (Extra Segment)",
+      "options": [
+        "DS",
+        "CS",
+        "ES",
+        "SS"
+      ],
+      "hints": [
+        "ES is for destination, DS is for source by default"
+      ],
+      "explanation": "ES (Extra Segment) is the destination segment for string operations. DS is the default source segment, but ES cannot be overridden for the destination.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Segment registers"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "ES segment"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:segment-override"
+      ]
+    },
+    {
+      "id": "QB-046",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Advanced Topics",
+      "subtopic": "LAHF/SAHF",
+      "concepts": [
+        "lahf",
+        "sahf",
+        "flag-register"
+      ],
+      "instructions": [
+        "LAHF",
+        "SAHF"
+      ],
+      "difficulty": 3,
+      "prompt": "What does LAHF do?",
+      "answer": "Loads AH with SF, ZF, AF, PF, CF from the flag register",
+      "hints": [
+        "LAHF = Load AH From Flags"
+      ],
+      "explanation": "LAHF copies the status flags (SF, ZF, AF, PF, CF) into the lower 8 bits of AX (AH). It's used to preserve flag states.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "LAHF instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Flag manipulation"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-047",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures",
+      "subtopic": "CALL Types",
+      "concepts": [
+        "call-instruction"
+      ],
+      "instructions": [
+        "CALL"
+      ],
+      "difficulty": 2,
+      "prompt": "What is the difference between NEAR and FAR CALL?",
+      "answer": "NEAR transfers within same segment (CS unchanged); FAR changes CS",
+      "options": [
+        "NEAR is faster, FAR is slower",
+        "NEAR transfers within same segment; FAR changes both CS and IP",
+        "They are identical in 8086",
+        "FAR is only used for interrupts"
+      ],
+      "hints": [
+        "8086 has segmented memory"
+      ],
+      "explanation": "NEAR CALL only pushes IP (stays in same segment). FAR CALL pushes both CS and IP, allowing calls to different code segments.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "CALL types"
+        },
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Near vs far calls"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-048",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Control Flow",
+      "subtopic": "LOOPE vs LOOPZ",
+      "concepts": [
+        "loop-instructions"
+      ],
+      "instructions": [
+        "LOOPE",
+        "LOOPZ"
+      ],
+      "difficulty": 3,
+      "prompt": "LOOPE and LOOPZ are different instructions with different behavior.",
+      "answer": "False",
+      "hints": [
+        "Check if they have the same condition"
+      ],
+      "explanation": "LOOPE (Loop if Equal) and LOOPZ (Loop if Zero) are actually the same opcode with different mnemonics. Both loop while CX != 0 AND ZF = 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "LOOPE/LOOPZ"
+        },
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Loop instructions"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-049",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "CBW/CWD",
+      "concepts": [
+        "cbw",
+        "cwd",
+        "sign-extension"
+      ],
+      "instructions": [
+        "CBW",
+        "CWD"
+      ],
+      "difficulty": 3,
+      "prompt": "AX = FFFEh (-2). After CBW, what is AX?",
+      "answer": "FFFEh in AL (sign-extended to AX)",
+      "hints": [
+        "CBW extends AL into AH",
+        "FFh in AH because AL is negative"
+      ],
+      "explanation": "CBW converts a byte in AL to a word in AX by sign-extending. Since AL = FEh (-2), AH becomes FFh, making AX = FFFEh.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "CBW instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Sign extension"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:sign-extension",
+        "misconception:twos-complement"
+      ]
+    },
+    {
+      "id": "QB-050",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Assembly Basics",
+      "subtopic": "Instruction Syntax",
+      "concepts": [
+        "mov-instruction"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 1,
+      "prompt": "In the instruction MOV AX, [BX], what does the brackets mean?",
+      "answer": "Memory at the address in BX",
+      "options": [
+        "Register BX",
+        "Memory at address in BX",
+        "Immediate value BX",
+        "Indirect addressing"
+      ],
+      "explanation": "Brackets [] indicate indirect addressing - the instruction accesses memory at the address contained in BX.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Memory addressing modes"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Indirect addressing"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-051",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Assembly Basics",
+      "subtopic": "Segment Override",
+      "concepts": [
+        "segment-registers",
+        "effective-address"
+      ],
+      "instructions": [
+        "MOV"
+      ],
+      "difficulty": 3,
+      "prompt": "What segment register is used by default for [BX + 5]? How to override to CS?",
+      "answer": "DS by default; use CS:[BX + 5] for override",
+      "hints": [
+        "Default segments vary by register"
+      ],
+      "explanation": "[BX + 5] uses DS (Data Segment) by default. To use CS, you must explicitly specify CS:[BX + 5].",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Segment override prefix"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Default segments"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:segment-override"
+      ]
+    },
+    {
+      "id": "QB-052",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Control Flow",
+      "subtopic": "Jump Ranges",
+      "concepts": [
+        "unconditional-jump",
+        "program-counter"
+      ],
+      "instructions": [
+        "JMP"
+      ],
+      "difficulty": 3,
+      "prompt": "What is the maximum forward/backward range of a near jump in 8086?",
+      "answer": "-128 to +127 bytes (relative to IP after fetch)",
+      "options": [
+        "-32768 to +32767",
+        "-128 to +127",
+        "-256 to +255",
+        "Anywhere in the same segment"
+      ],
+      "hints": [
+        "Near relative jumps use 8-bit or 16-bit displacement"
+      ],
+      "explanation": "Short jumps (EB xx) have 8-bit displacement: -128 to +127. Near jumps (E9 xx xx) have 16-bit displacement.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Jump instruction encoding"
+        },
+        {
+          "type": "lecture",
+          "id": "6",
+          "description": "Near vs short jumps"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-053",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Advanced Topics",
+      "subtopic": "NOT Instruction",
+      "concepts": [
+        "not-instruction",
+        "bit-manipulation"
+      ],
+      "instructions": [
+        "NOT"
+      ],
+      "difficulty": 2,
+      "prompt": "AX = 0000h. After NOT AX, what is AX?",
+      "answer": "FFFFh",
+      "hints": [
+        "NOT inverts all bits"
+      ],
+      "explanation": "NOT is logical negation (one's complement) - it inverts all bits. 0000h becomes FFFFh.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "NOT instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Bit manipulation"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:twos-complement"
+      ]
+    },
+    {
+      "id": "QB-054",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "OR Instruction",
+      "concepts": [
+        "or-instruction",
+        "bit-manipulation"
+      ],
+      "instructions": [
+        "OR"
+      ],
+      "difficulty": 2,
+      "prompt": "What is 1010b OR 0101b?",
+      "answer": "1111b",
+      "options": [
+        "1111b",
+        "1010b",
+        "0101b",
+        "0000b"
+      ],
+      "hints": [
+        "OR produces 1 if either bit is 1"
+      ],
+      "explanation": "Bitwise OR: 1010 OR 0101 = 1111. Each bit position is 1 if either operand has a 1.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "OR instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Boolean operations"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-055",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures",
+      "subtopic": "Stack Balance",
+      "concepts": [
+        "push-instruction",
+        "pop-instruction",
+        "stack-frame"
+      ],
+      "instructions": [
+        "PUSH",
+        "POP"
+      ],
+      "difficulty": 3,
+      "prompt": "If SP = 1000h after a PUSH, what was SP before the PUSH?",
+      "answer": "FFFEh",
+      "hints": [
+        "PUSH decrements SP by 2 first"
+      ],
+      "explanation": "PUSH first decrements SP by 2 (SP = SP - 2), then copies the value to SS:[SP]. So if SP is 1000h after PUSH, it was FFFEh before.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "PUSH operation"
+        },
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack mechanics"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-discipline"
+      ]
+    },
+    {
+      "id": "QB-056",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Advanced Topics",
+      "subtopic": "IMUL",
+      "concepts": [
+        "imul-instruction",
+        "mul-instruction",
+        "signed-numbers"
+      ],
+      "instructions": [
+        "IMUL"
+      ],
+      "difficulty": 3,
+      "prompt": "IMUL produces different results than MUL for the same operands when the operands are negative.",
+      "answer": "True",
+      "hints": [
+        "MUL is unsigned, IMUL is signed"
+      ],
+      "explanation": "MUL treats operands as unsigned. IMUL interprets operands as signed two's complement. -2 × -3 = 6 in signed, but very different bit pattern in unsigned multiplication.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "IMUL instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "4",
+          "description": "Signed vs unsigned multiplication"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:signed-numbers"
+      ]
+    },
+    {
+      "id": "QB-057",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "CMPS",
+      "concepts": [
+        "cmps",
+        "string-instructions",
+        "flag-register"
+      ],
+      "instructions": [
+        "CMPSB"
+      ],
+      "difficulty": 3,
+      "prompt": "CMPSB compares bytes at DS:SI and ES:DI. What does it set flags based on?",
+      "answer": "DS:SI minus ES:DI (without storing result)",
+      "hints": [
+        "CMPS is like CMP but for memory"
+      ],
+      "explanation": "CMPSB computes (DS:SI) - (ES:DI) without storing the result, setting SF, ZF, AF, PF, CF, OF based on the comparison.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPS instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String comparison"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-058",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Advanced Topics",
+      "subtopic": "LODS",
+      "concepts": [
+        "lods",
+        "string-instructions",
+        "si-register"
+      ],
+      "instructions": [
+        "LODSB"
+      ],
+      "difficulty": 2,
+      "prompt": "What does LODSB do if SI points to memory location containing 41h?",
+      "answer": "AL = 41h, SI = SI + 1",
+      "hints": [
+        "LODS loads from DS:SI into AL/AX"
+      ],
+      "explanation": "LODSB loads the byte at DS:SI into AL and increments SI by 1 (by 2 for LODSW).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "LODS instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String loading"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-059",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Advanced Topics",
+      "subtopic": "STOS",
+      "concepts": [
+        "stos",
+        "string-instructions",
+        "di-register"
+      ],
+      "instructions": [
+        "STOSB"
+      ],
+      "difficulty": 2,
+      "prompt": "STOSB stores AL to ES:DI. What happens to DI?",
+      "answer": "DI is incremented by 1 (or decremented if DF = 1)",
+      "hints": [
+        "String instructions auto-increment/decrement based on direction flag"
+      ],
+      "explanation": "After STOSB, DI is incremented by 1 (or decremented if the Direction Flag DF is set to 1).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "STOS instruction"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String storing"
+        }
+      ],
+      "misconceptionTags": []
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-03-31T00:08:48.795Z",
+    "generator": "generate-question-bank.ts",
+    "sourceVersion": "1.0"
+  }
+}

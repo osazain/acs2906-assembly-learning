@@ -8,6 +8,7 @@ import { LectureReader } from '@/components/lecture/LectureReader'
 import { ExampleExplorer } from '@/components/example/ExampleExplorer'
 import { ExampleDetail } from '@/components/example/ExampleDetail'
 import { GlobalSearch } from '@/components/layout/GlobalSearch'
+import { DrillMode } from '@/components/assessment/DrillMode'
 import type { CourseMapLecture } from '@/lib/types'
 
 const rootRoute = createRootRoute({
@@ -390,17 +391,7 @@ function ExampleDetailPage() {
 }
 
 function DrillsPage() {
-  return (
-    <div className="text-center py-12 space-y-4">
-      <Target className="h-12 w-12 mx-auto text-muted-foreground" />
-      <h2 className="text-xl font-semibold">Drills Coming Soon</h2>
-      <p className="text-muted-foreground">Practice drills will be available after Phase 1.</p>
-      <Link to="/course-map" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-        <ArrowRight className="h-4 w-4" />
-        Back to Course Map
-      </Link>
-    </div>
-  )
+  return <DrillMode />
 }
 
 function GamesPage() {

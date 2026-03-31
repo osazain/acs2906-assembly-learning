@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { Search, BookOpen, FlaskConical, Cpu, Lightbulb, Clock, ArrowRight, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from '@/data/processed/course-map.json'
@@ -233,7 +232,6 @@ function saveRecentSearch(query: string, result?: SearchResult): void {
 // ============================================================================
 
 export function GlobalSearch() {
-  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -296,12 +294,18 @@ export function GlobalSearch() {
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      // Compute items fresh to ensure consistency
       const items = results.length > 0 ? results : recentSearches.map(r => r.result).filter(Boolean) as SearchResult[]
+      
+      // Ensure selectedIndex is within bounds
+      const safeIndex = items.length > 0 ? Math.min(selectedIndex, items.length - 1) : 0
 
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault()
-          setSelectedIndex(prev => Math.min(prev + 1, items.length - 1))
+          if (items.length > 0) {
+            setSelectedIndex(prev => Math.min(prev + 1, items.length - 1))
+          }
           break
         case 'ArrowUp':
           e.preventDefault()
@@ -309,12 +313,13 @@ export function GlobalSearch() {
           break
         case 'Enter':
           e.preventDefault()
-          if (items[selectedIndex]) {
-            const selected = items[selectedIndex]
+          if (items.length > 0 && items[safeIndex]) {
+            const selected = items[safeIndex]
             saveRecentSearch(query, selected)
             setRecentSearches(getRecentSearches())
             setIsOpen(false)
-            navigate({ to: selected.href })
+            // Use window.location for reliable navigation with hash-based routing
+            window.location.hash = `#${selected.href}`
           }
           break
         case 'Escape':
@@ -323,7 +328,7 @@ export function GlobalSearch() {
           break
       }
     },
-    [results, recentSearches, selectedIndex, query, navigate]
+    [results, recentSearches, selectedIndex, query]
   )
 
   // Handle recent search click
@@ -331,10 +336,10 @@ export function GlobalSearch() {
     (search: RecentSearch) => {
       if (search.result) {
         setIsOpen(false)
-        navigate({ to: search.result.href })
+        window.location.hash = `#${search.result.href}`
       }
     },
-    [navigate]
+    []
   )
 
   // Clear recent searches
@@ -482,7 +487,7 @@ export function GlobalSearch() {
                     saveRecentSearch(query, result)
                     setRecentSearches(getRecentSearches())
                     setIsOpen(false)
-                    navigate({ to: result.href })
+                    window.location.hash = `#${result.href}`
                   }}
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={cn(

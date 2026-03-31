@@ -72,6 +72,9 @@ function parseOperands(operandStr: string): string[] {
 // Data definition directives that can follow a label on the same line
 const DATA_DIRECTIVES = ['DB', 'DW', 'DD', 'BYTE', 'WORD', 'DWORD'];
 
+// Common assembler directives that don't start with dot
+const DOTLESS_DIRECTIVES = ['DB', 'DW', 'DD', 'PROC', 'ENDP', 'SEGMENT', 'ENDS', 'EQU', 'MODEL', 'STACK', 'DATA', 'CODE'];
+
 // Parse a single line into a parsed instruction
 function parseLine(line: string, lineNumber: number, currentAddress: number): { instruction: ParsedInstruction | null; label: string | null; addressAdvance: number } {
   const processed = preprocessLine(line);
@@ -91,14 +94,15 @@ function parseLine(line: string, lineNumber: number, currentAddress: number): { 
   const mnemonic = parts[0];
   const operandStr = parts.slice(1).join(' ');
   
-  // Check if first token is a label followed by a data directive (e.g., "msg DB 'Hello'")
+  // Check if first token is a label followed by a directive (data or other)
   // In this case, the first token is a label, not a mnemonic
   const firstOperand = parts[1]?.toUpperCase();
-  if (firstOperand && DATA_DIRECTIVES.includes(firstOperand)) {
-    // This line is a label definition with data directive on the same line
+  if (firstOperand && (DATA_DIRECTIVES.includes(firstOperand) || DOTLESS_DIRECTIVES.includes(firstOperand))) {
+    // This line is a label definition with directive on the same line
     // e.g., "msg DB 'Hello'" means label "msg" with data definition
+    // e.g., "MAIN PROC" means label "MAIN" with procedure directive
     const label = mnemonic;
-    // This is just data, not executable code, so skip it
+    // This is just data/proc definition, not executable code, so skip it
     return { instruction: null, label, addressAdvance: 0 };
   }
   
@@ -107,9 +111,8 @@ function parseLine(line: string, lineNumber: number, currentAddress: number): { 
     return { instruction: null, label: null, addressAdvance: 0 };
   }
   
-  // Also skip common assembler directives that don't start with dot
-  const dotlessDirectives = ['DB', 'DW', 'DD', 'PROC', 'ENDP', 'SEGMENT', 'ENDS', 'EQU', 'MODEL', 'STACK', 'DATA', 'CODE'];
-  if (dotlessDirectives.includes(mnemonic)) {
+  // Skip dotless directives (PROC, ENDP, SEGMENT, ENDS, EQU, etc.)
+  if (DOTLESS_DIRECTIVES.includes(mnemonic)) {
     return { instruction: null, label: null, addressAdvance: 0 };
   }
   

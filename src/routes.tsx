@@ -1,7 +1,7 @@
 import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link } from '@tanstack/react-router'
 import { createHashHistory } from '@tanstack/history'
 import { useState, useEffect } from 'react'
-import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X } from 'lucide-react'
+import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X, Stethoscope } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
 import { LectureReader } from '@/components/lecture/LectureReader'
@@ -9,6 +9,7 @@ import { ExampleExplorer } from '@/components/example/ExampleExplorer'
 import { ExampleDetail } from '@/components/example/ExampleDetail'
 import { GlobalSearch } from '@/components/layout/GlobalSearch'
 import { DrillMode } from '@/components/assessment/DrillMode'
+import { DiagnosticMode } from '@/components/assessment/DiagnosticMode'
 import type { CourseMapLecture } from '@/lib/types'
 
 const rootRoute = createRootRoute({
@@ -24,6 +25,7 @@ function AppLayout() {
     { title: 'Examples', href: '/examples', icon: FlaskConical },
     { title: 'Simulator', href: '/simulator', icon: Cpu },
     { title: 'Drills', href: '/drills', icon: Target },
+    { title: 'Diagnostics', href: '/diagnostics', icon: Stethoscope },
     { title: 'Games', href: '/games', icon: Gamepad2 },
     { title: 'Progress', href: '/progress', icon: BarChart3 },
     { title: 'Settings', href: '/settings', icon: Settings },
@@ -229,6 +231,12 @@ const drillsRoute = createRoute({
   component: DrillsPage,
 })
 
+const diagnosticsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/diagnostics',
+  component: DiagnosticsPage,
+})
+
 const gamesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/games',
@@ -394,6 +402,10 @@ function DrillsPage() {
   return <DrillMode />
 }
 
+function DiagnosticsPage() {
+  return <DiagnosticMode />
+}
+
 function GamesPage() {
   return (
     <div className="text-center py-12 space-y-4">
@@ -541,6 +553,7 @@ const routeTree = rootRoute.addChildren([
   examplesRoute,
   exampleDetailRoute,
   drillsRoute,
+  diagnosticsRoute,
   gamesRoute,
   simulatorRoute,
   progressRoute,

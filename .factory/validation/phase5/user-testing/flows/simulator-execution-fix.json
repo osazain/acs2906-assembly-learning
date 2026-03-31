@@ -1,0 +1,122 @@
+{
+  "groupId": "P5-SIM",
+  "testedAt": "2026-03-31T14:45:00.000Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "routing": "hash-based (/#/simulator)",
+    "browserSession": "single session, no shared state"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P5-SIM-004",
+      "title": "Step Button Executes One Instruction",
+      "status": "fail",
+      "steps": [
+        {
+          "action": "Load HelloWorld.asm preset and click Step",
+          "expected": "Step executes MOV instruction, registers update",
+          "observed": "Execution ErrorUnknown instruction: MAIN - simulator tries to execute 'MAIN PROC' as instruction instead of skipping to code"
+        },
+        {
+          "action": "Load Template.asm preset and click Step",
+          "expected": "Step executes MOV instruction",
+          "observed": "Execution ErrorUnknown instruction: MAIN - same issue with 'MAIN PROC' label"
+        },
+        {
+          "action": "Load Exchange.asm preset and click Step",
+          "expected": "Step executes MOV instruction",
+          "observed": "Execution ErrorUnknown instruction: MAIN - same issue"
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "phase5/simulator-fix/P5-SIM-004-helloworld-loaded.png",
+          "phase5/simulator-fix/P5-SIM-004-after-step1.png",
+          "phase5/simulator-fix/P5-SIM-004-template-loaded.png",
+          "phase5/simulator-fix/P5-SIM-004-exchange-step-error.png"
+        ],
+        "consoleErrors": "none",
+        "textContent": "Error: 'Unknown instruction: MAIN' when stepping on all tested presets (HelloWorld.asm, Template.asm, Exchange.asm). The simulator correctly skips .DATA segment definitions (after fix) but fails on label definitions like 'MAIN PROC' in the .CODE segment."
+      },
+      "issues": "Simulator bug: The fix for DATA segment directives (commit 55bed82) correctly skips data definitions like 'msg DB Hello' but does not handle label definitions like 'MAIN PROC'. When parsing 'MAIN PROC', the parser treats 'MAIN' as the mnemonic and 'PROC' as operand, but 'MAIN' is not a valid x86 instruction."
+    },
+    {
+      "id": "P5-SIM-005",
+      "title": "Run Button Executes Continuously, Halt Stops",
+      "status": "fail",
+      "steps": [
+        {
+          "action": "Load Exchange.asm preset and click Run",
+          "expected": "Continuous execution begins, Halt stops it",
+          "observed": "Run clicked shows 'Running...' state with Pause button, but execution immediately fails with 'Unknown instruction: MAIN'. Halt button works - clicking it stops execution and returns to Ready state."
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "phase5/simulator-fix/P5-SIM-005-run-running.png"
+        ],
+        "consoleErrors": "none",
+        "textContent": "Run button initiates 'Running...' state with Pause button visible. Halt button successfully stops execution and returns to Ready state. However, execution fails immediately due to P5-SIM-004 bug."
+      },
+      "issues": "Run/Halt button UI works correctly, but execution fails due to P5-SIM-004 bug (label parsing issue). The fix for DATA segment directives (commit 55bed82) did not fully resolve execution issues - it only partially fixed the problem."
+    },
+    {
+      "id": "P5-SIM-006",
+      "title": "Breakpoints Can Be Set, Pause Execution, Be Cleared",
+      "status": "blocked",
+      "steps": [
+        {
+          "action": "Attempt to set breakpoint and test execution pause",
+          "expected": "Breakpoints can be set on lines, execution pauses at breakpoint",
+          "observed": "Cannot verify - Step execution fails preventing breakpoint testing. No visible breakpoint UI elements found in the code editor area."
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "phase5/simulator-fix/P5-SIM-006-breakpoint-test.png",
+          "phase5/simulator-fix/P5-SIM-006-breakpoint-annotated.png",
+          "phase5/simulator-fix/P5-SIM-006-editor-annotated.png"
+        ],
+        "consoleErrors": "none"
+      },
+      "issues": "Blocked by P5-SIM-004 failure - cannot test breakpoint functionality when single-step execution is broken. No visible breakpoint controls in the UI - either breakpoint UI is missing or not discoverable through standard interaction."
+    },
+    {
+      "id": "P5-SIM-009",
+      "title": "Current Instruction Pointer Highlighted During Stepping",
+      "status": "blocked",
+      "steps": [
+        {
+          "action": "Step through code and observe instruction highlighting",
+          "expected": "Current IP highlighted in code editor during stepping",
+          "observed": "Cannot verify - Step execution fails with 'Unknown instruction: MAIN' before any instruction is executed. The status text shows 'Current instruction at line 11 Executing:MAIN PROC' but this is an error state, not actual execution."
+        }
+      ],
+      "evidence": {
+        "screenshots": [
+          "phase5/simulator-fix/P5-SIM-004-exchange-step-error.png"
+        ],
+        "consoleErrors": "none",
+        "textContent": "Status display shows 'Current instruction at line 11 Executing:MAIN PROC' but this is the error state. Cannot verify if proper highlighting works because execution fails."
+      },
+      "issues": "Blocked by P5-SIM-004 failure - cannot test instruction highlighting when stepping is broken. The display shows line 11 'MAIN PROC' but this is a label, not an executable instruction."
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Simulator still has fundamental bug with label definitions - 'MAIN PROC' label in .CODE segment is treated as instruction to execute",
+      "resolved": false,
+      "resolution": "Parser needs to recognize labels followed by directives (PROC, ENDP, SEGMENT, etc.) and skip them properly",
+      "affectedAssertions": ["P5-SIM-004", "P5-SIM-005", "P5-SIM-006", "P5-SIM-009"]
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Simulator cannot execute any example program because label definitions like 'MAIN PROC' are incorrectly treated as instructions. The fix in commit 55bed82 (skip DATA segment directives) partially addressed the issue but did not fix label handling in .CODE segment.",
+      "affectedAssertions": ["P5-SIM-004", "P5-SIM-005", "P5-SIM-006", "P5-SIM-009"],
+      "quickFixAttempted": "Tested 3 different example presets (HelloWorld.asm, Template.asm, Exchange.asm) - all exhibit the same bug where 'MAIN PROC' label is treated as instruction 'MAIN' with operand 'PROC'"
+    }
+  ],
+  "summary": "Tested 4 assertions for P5-SIM (P5-SIM-004, P5-SIM-005, P5-SIM-006, P5-SIM-009) after fix-simulator-execution was applied. 0 passed, 1 partial (P5-SIM-005 Run/Halt buttons work but execution fails), 3 blocked. Root cause: The fix (commit 55bed82) correctly skips .DATA segment definitions like 'msg DB Hello' but does not handle label definitions like 'MAIN PROC' in the .CODE segment. When parsing 'MAIN PROC', the parser treats 'MAIN' as the mnemonic (instruction) and 'PROC' as the operand, causing 'Unknown instruction: MAIN' error. The parser needs additional logic to detect when a line contains a label followed by a directive (PROC, ENDP, SEGMENT, ENDS, EQU, etc.) and skip the entire line."
+}

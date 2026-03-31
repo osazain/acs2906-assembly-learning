@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { Link } from '@tanstack/react-router'
 import { 
   FlaskConical, 
@@ -6,7 +6,6 @@ import {
   List as ListIcon, 
   Search, 
   X, 
-  ChevronDown,
   Filter,
   ChevronRight,
   AlertCircle
@@ -40,12 +39,100 @@ interface ExampleExplorerProps {
   onExampleClick?: (example: Example) => void
 }
 
+// Parse URL search params to get initial filter state
+function parseURLSearchParams(): { lecture: number | 'all'; difficulty: Difficulty; search: string } {
+  let lecture: number | 'all' = 'all'
+  let difficulty: Difficulty = 'all'
+  let search = ''
+
+  // Use the current window location
+  const hash = typeof window !== 'undefined' ? window.location.hash : ''
+  
+  if (hash && hash.includes('?')) {
+    const searchPart = hash.split('?')[1]
+    const params = new URLSearchParams(searchPart)
+    const lectureParam = params.get('lecture')
+    const difficultyParam = params.get('difficulty')
+    const searchParam = params.get('search')
+
+    if (lectureParam) {
+      lecture = lectureParam === 'all' ? 'all' : Number(lectureParam)
+    }
+    if (difficultyParam && ['beginner', 'intermediate', 'advanced'].includes(difficultyParam)) {
+      difficulty = difficultyParam as Difficulty
+    }
+    if (searchParam) {
+      search = searchParam
+    }
+  }
+
+  return { lecture, difficulty, search }
+}
+
 export function ExampleExplorer({ onExampleClick }: ExampleExplorerProps) {
+  // Initialize state from URL params using lazy initializer
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [selectedLecture, setSelectedLecture] = useState<number | 'all'>('all')
-  const [instructionSearch, setInstructionSearch] = useState('')
-  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('all')
+  const [selectedLecture, setSelectedLecture] = useState<number | 'all'>(() => {
+    // Only access window on client
+    if (typeof window === 'undefined') return 'all'
+    const params = parseURLSearchParams()
+    return params.lecture
+  })
+  const [instructionSearch, setInstructionSearch] = useState<string>(() => {
+    if (typeof window === 'undefined') return ''
+    return parseURLSearchParams().search
+  })
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(() => {
+    if (typeof window === 'undefined') return 'all'
+    return parseURLSearchParams().difficulty
+  })
   const [showFilters, setShowFilters] = useState(false)
+  
+  // Use ref to track first render (avoids setState in effect)
+  const isFirstRender = useRef(true)
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = parseURLSearchParams()
+      setSelectedLecture(params.lecture)
+      setInstructionSearch(params.search)
+      setSelectedDifficulty(params.difficulty)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  // Update URL when filters change (skip on first render since state is already initialized from URL)
+  const updateURL = useCallback((lecture: number | 'all', difficulty: Difficulty, search: string) => {
+    const params = new URLSearchParams()
+    if (lecture !== 'all') {
+      params.set('lecture', String(lecture))
+    }
+    if (difficulty !== 'all') {
+      params.set('difficulty', difficulty)
+    }
+    if (search.trim()) {
+      params.set('search', search.trim())
+    }
+
+    const baseHash = '#/examples'
+    const newHash = params.toString() ? `${baseHash}?${params.toString()}` : baseHash
+
+    if (window.location.hash !== newHash) {
+      window.history.pushState(null, '', newHash)
+    }
+  }, [])
+
+  // Sync state changes to URL (skip on first render)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    updateURL(selectedLecture, selectedDifficulty, instructionSearch)
+  }, [selectedLecture, selectedDifficulty, instructionSearch, updateURL])
 
   const examples = examplesData.examples as Example[]
 
@@ -186,21 +273,18 @@ export function ExampleExplorer({ onExampleClick }: ExampleExplorerProps) {
           {/* Lecture filter */}
           <div className="flex-1">
             <label className="text-sm font-medium mb-1.5 block">Lecture</label>
-            <div className="relative">
-              <select
-                value={selectedLecture}
-                onChange={(e) => setSelectedLecture(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full appearance-none rounded-lg border bg-background px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="all">All Lectures</option>
-                {lectures.map(lectureId => (
-                  <option key={lectureId} value={lectureId}>
-                    Lecture {lectureId}: {getLectureTitle(lectureId).slice(0, 30)}...
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            </div>
+            <select
+              value={selectedLecture}
+              onChange={(e) => setSelectedLecture(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+              className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
+            >
+              <option value="all">All Lectures</option>
+              {lectures.map(lectureId => (
+                <option key={lectureId} value={lectureId}>
+                  Lecture {lectureId}: {getLectureTitle(lectureId).slice(0, 30)}...
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Instruction search */}

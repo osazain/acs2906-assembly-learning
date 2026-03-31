@@ -1,4 +1,5 @@
 import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link } from '@tanstack/react-router'
+import { createHashHistory } from '@tanstack/history'
 import { useState, useEffect } from 'react'
 import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -555,7 +556,7 @@ const routeTree = rootRoute.addChildren([
   settingsRoute,
 ])
 
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree, history: createHashHistory() })
 
 declare module '@tanstack/react-router' {
   interface Register {

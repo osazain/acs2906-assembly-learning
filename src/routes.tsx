@@ -1,6 +1,5 @@
-import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/react-router'
+import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
 import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
@@ -418,15 +417,67 @@ function GamesPage() {
 }
 
 function SimulatorPage() {
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const encodedCode = searchParams.get('code')
+  const initialCode = encodedCode ? atob(encodedCode) : ''
+
   return (
-    <div className="text-center py-12 space-y-4">
-      <Cpu className="h-12 w-12 mx-auto text-muted-foreground" />
-      <h2 className="text-xl font-semibold">Simulator Coming Soon</h2>
-      <p className="text-muted-foreground">The 8086 simulator will be available after Phase 5.</p>
-      <Link to="/course-map" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-        <ArrowRight className="h-4 w-4" />
-        Back to Course Map
-      </Link>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <Cpu className="h-8 w-8 text-primary" />
+        <h1 className="text-2xl font-bold">8086 Simulator</h1>
+      </div>
+
+      {/* Code Input Section */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-muted/50 px-4 py-2 border-b flex items-center justify-between">
+          <span className="text-sm font-medium">Assembly Code</span>
+          {initialCode && (
+            <span className="text-xs text-muted-foreground">Code loaded from example</span>
+          )}
+        </div>
+        <div className="p-4">
+          {initialCode ? (
+            <pre className="font-mono text-sm bg-muted/30 p-4 rounded-lg overflow-x-auto">
+              <code>{initialCode}</code>
+            </pre>
+          ) : (
+            <textarea
+              className="w-full h-64 font-mono text-sm bg-muted/30 p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="Enter 8086 assembly code here, or load an example from the Examples page..."
+              defaultValue=""
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Placeholder for actual simulator controls */}
+      <div className="border rounded-lg p-6 text-center">
+        <Cpu className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+        <h2 className="text-xl font-semibold mb-2">Full Simulator Coming in Phase 5</h2>
+        <p className="text-muted-foreground max-w-md mx-auto">
+          The interactive 8086 simulator with step-through execution, register visualization, 
+          and memory browser will be available after Phase 5.
+        </p>
+        <div className="flex gap-3 justify-center mt-6">
+          <Link 
+            to="/examples" 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            <FlaskConical className="h-4 w-4" />
+            Browse Examples
+          </Link>
+          <Link 
+            to="/course-map" 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
+          >
+            <BookOpen className="h-4 w-4" />
+            Course Map
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

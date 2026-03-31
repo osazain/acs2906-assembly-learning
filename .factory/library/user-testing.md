@@ -284,3 +284,90 @@ Phase 3 has 29 assertions organized into 5 surfaces. Based on isolation analysis
 3. Complete the drill
 4. Verify session record has endTime
 5. Verify duration field is within 5 seconds of actual elapsed time
+
+# Phase 4: Game Systems
+
+## Validation Concurrency
+
+Phase 4 has 6 assertions organized into 3 surfaces. Based on isolation analysis:
+- Games Hub is independent (reads only)
+- Individual games (Hangman, Register Rally, Flag Frenzy) are independent (each manages own state)
+- Game persistence (localStorage + dashboard) requires game completion first
+- **Max concurrent validators: 2** (Games Hub + one game at a time due to localStorage interactions)
+
+## Flow Validator Guidance: Games Hub
+
+**URL**: `http://localhost:4173/#/games`
+
+**Assertions**: P4-GAME-001
+
+**What to test**:
+- Games hub page at /#/games loads correctly
+- All game cards displayed with titles and launch buttons
+- Game status indicators visible
+- Navigation to individual games works
+
+**Isolation**: Single browser session
+
+**Test approach**:
+1. Navigate to /#/games
+2. Verify page loads without errors
+3. Count game cards (expect 3: Instruction Hangman, Register Rally, Flag Frenzy)
+4. Verify each game has a title and launch button
+5. Click each launch button and verify navigation/launch
+
+## Flow Validator Guidance: Individual Games
+
+**URL**: Games launch from /#/games hub
+
+**Assertions**: P4-GAME-002 (Instruction Hangman), P4-GAME-003 (Register Rally), P4-GAME-004 (Flag Frenzy)
+
+**What to test (Hangman)**:
+- Masked instruction displayed with underscores/hints
+- Keyboard letter inputs accepted (A-Z)
+- Correct/incorrect feedback shown
+- Win/lose condition detected
+- Score updates correctly
+
+**What to test (Register Rally)**:
+- Matching interface renders (terms and definitions)
+- Clicking matches registers to descriptions
+- Correct matches score points
+- Incorrect matches show feedback
+- Game completion detected
+
+**What to test (Flag Frenzy)**:
+- Flag scenario displayed (e.g., "MOV AX, FFFFh")
+- Prediction inputs for flags (CF, OF, SF, ZF, AF, PF)
+- Feedback shows correct/incorrect predictions
+- Score tracks correctly
+
+**Isolation**: Single browser session, each game is independent
+
+**Test approach**:
+1. From /#/games, click launch button for each game
+2. Play through each game
+3. Verify game mechanics work as specified
+4. Complete game and verify score recorded
+
+## Flow Validator Guidance: Game Persistence & Dashboard
+
+**URL**: localStorage + `http://localhost:4173/#/progress`
+
+**Assertions**: P4-GAME-005, P4-GAME-006
+
+**What to test**:
+- Game scores saved to localStorage after completion
+- Scores persist after page reload
+- Game results reflected in mastery dashboard metrics
+- Dashboard shows game-related mastery updates
+
+**Isolation**: Single browser session, localStorage is shared across game sessions
+
+**Test approach**:
+1. Play a game to completion
+2. Check browser localStorage for game score entries
+3. Reload the page
+4. Verify scores persist in localStorage
+5. Navigate to /#/progress (dashboard)
+6. Verify game-related metrics appear

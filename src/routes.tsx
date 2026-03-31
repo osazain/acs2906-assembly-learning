@@ -5,6 +5,8 @@ import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, 
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
 import { LectureReader } from '@/components/lecture/LectureReader'
+import { ExampleExplorer } from '@/components/example/ExampleExplorer'
+import { ExampleDetail } from '@/components/example/ExampleDetail'
 import type { CourseMapLecture } from '@/lib/types'
 
 const rootRoute = createRootRoute()
@@ -120,6 +122,12 @@ const examplesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/examples',
   component: ExamplesPage,
+})
+
+const exampleDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/examples/$exampleId',
+  component: ExampleDetailPage,
 })
 
 const drillsRoute = createRoute({
@@ -281,17 +289,12 @@ function LecturesPage() {
 }
 
 function ExamplesPage() {
-  return (
-    <div className="text-center py-12 space-y-4">
-      <FlaskConical className="h-12 w-12 mx-auto text-muted-foreground" />
-      <h2 className="text-xl font-semibold">Examples Coming Soon</h2>
-      <p className="text-muted-foreground">Examples will be organized and searchable after Phase 1.</p>
-      <Link to="/course-map" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-        <ArrowRight className="h-4 w-4" />
-        Back to Course Map
-      </Link>
-    </div>
-  )
+  return <ExampleExplorer />
+}
+
+function ExampleDetailPage() {
+  const { exampleId } = exampleDetailRoute.useParams()
+  return <ExampleDetail exampleId={exampleId} />
 }
 
 function DrillsPage() {
@@ -401,6 +404,7 @@ const routeTree = rootRoute.addChildren([
   lectureDetailRoute,
   lecturesRoute,
   examplesRoute,
+  exampleDetailRoute,
   drillsRoute,
   gamesRoute,
   simulatorRoute,

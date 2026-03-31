@@ -1,0 +1,391 @@
+{
+  "examples": [
+    {
+      "id": "ex-001",
+      "filename": "HelloWorld.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-1"],
+      "concepts": ["string-output", "dos-interrupts", "data-segment"],
+      "instructions": ["MOV", "LEA", "INT"],
+      "code": "; Hello World Program\n; Demonstrates basic output using DOS interrupt 21h\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    msg DB 'Hello, World!$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AH, 09h        ; Function 09h - display string\n    LEA DX, msg        ; Load address of message\n    INT 21h            ; Call DOS\n    \n    MOV AH, 4Ch        ; Function 4Ch - terminate\n    XOR AL, AL         ; Return code 0\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 8, "type": "comment", "text": "String must end with '$' for DOS function 09h" },
+        { "line": 11, "type": "instruction", "text": "Initialize DS register with data segment address" },
+        { "line": 13, "type": "instruction", "text": "AH=09h displays the string at DS:DX until '$'" },
+        { "line": 14, "type": "register", "text": "DX points to the message string" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 100, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 },
+        "expectedOutput": "Hello, World!"
+      },
+      "commonMistakes": ["Forgetting to initialize DS", "Using CRLF instead of '$' terminator", "Wrong AH value for function"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q4-001", "q4-002"],
+      "provenance": {
+        "sourceFile": "examples/HelloWorld.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-002",
+      "filename": "Template.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-1"],
+      "concepts": ["program-structure", "segments", "procedure-definition"],
+      "instructions": ["MOV", "INT"],
+      "code": "; Basic 8086 Program Template\n; Standard structure for small model programs\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    ; Data segment - declare variables here\n    \n.CODE\nMAIN PROC\n    MOV AX, @DATA      ; Initialize data segment\n    MOV DS, AX\n    \n    ; Your code here\n    \n    MOV AH, 4Ch        ; Terminate program\n    XOR AL, AL\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 5, "type": "comment", "text": ".STACK defines stack size (100h = 256 bytes)" },
+        { "line": 11, "type": "instruction", "text": "@DATA is a special assembler operator" },
+        { "line": 17, "type": "instruction", "text": "Function 4Ch with AL=0 is the standard exit" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Missing .MODEL directive", "Forgetting to initialize DS", "Incorrect stack size"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q4-003"],
+      "provenance": {
+        "sourceFile": "examples/Template.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-003",
+      "filename": "Addition.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-2"],
+      "concepts": ["arithmetic", "register-arithmetic", "flags"],
+      "instructions": ["MOV", "ADD", "NEG"],
+      "code": "; Addition and Negation Operations\n; Demonstrates arithmetic instructions and flag effects\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    result DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AX, 5         ; AX = 5\n    MOV BX, 3         ; BX = 3\n    ADD AX, BX        ; AX = AX + BX = 8\n    \n    ; Store result\n    MOV result, AX\n    \n    ; Negate the result\n    NEG AX            ; AX = -AX = -8\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 14, "type": "instruction", "text": "ADD sets OF, SF, ZF, AF, PF, CF based on result" },
+        { "line": 18, "type": "instruction", "text": "NEG computes 0 - operand, sets OF, SF, ZF, AF, PF, CF" },
+        { "line": 18, "type": "flag", "text": "CF is always set by NEG (except when operand is 0)" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["ADD dest, dest (destination cannot be immediate)", "Sign overflow not handled", "Forgetting that NEG affects CF"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q4-004", "q4-005"],
+      "provenance": {
+        "sourceFile": "examples/Addition.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-004",
+      "filename": "Buff2.asm",
+      "lectureIds": [5],
+      "sectionIds": ["s5-2"],
+      "concepts": ["buffered-input", "keyboard-input", "string-manipulation"],
+      "instructions": ["MOV", "INT", "LEA"],
+      "code": "; Buffered Keyboard Input\n; Reads a string from keyboard using DOS function 0Ah\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    prompt DB 'Enter your name: $'\n    buffer DB 80             ; Maximum buffer size\n           DB ?              ; Actual size read (filled by DOS)\n           DB 80 DUP(?)      ; Buffer for input string\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display prompt\n    MOV AH, 09h\n    LEA DX, prompt\n    INT 21h\n    \n    ; Read string\n    MOV AH, 0Ah              ; Buffered input function\n    LEA DX, buffer\n    INT 21h\n    \n    ; Add CRLF\n    MOV AH, 02h\n    MOV DL, 0Dh              ; Carriage return\n    INT 21h\n    MOV DL, 0Ah              ; Line feed\n    INT 21h\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 8, "type": "comment", "text": "First byte: max characters (including CR)", "linkedConcept": "buffer-format" },
+        { "line": 9, "type": "comment", "text": "Second byte: filled by DOS with actual length read", "linkedConcept": "buffer-format" },
+        { "line": 10, "type": "comment", "text": "Remaining bytes: the actual string data", "linkedConcept": "buffer-format" },
+        { "line": 24, "type": "instruction", "text": "Function 0Ah reads until Enter key" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 },
+        "inputBuffer": "John"
+      },
+      "commonMistakes": ["Buffer too small for input", "Not checking actual length byte", "Forgetting to initialize buffer format"],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q5-001", "q5-002"],
+      "provenance": {
+        "sourceFile": "examples/Buff2.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.9,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "ex-005",
+      "filename": "Buffered.asm",
+      "lectureIds": [5],
+      "sectionIds": ["s5-3"],
+      "concepts": ["buffered-output", "string-output", "dos-interrupts"],
+      "instructions": ["MOV", "INT", "LEA"],
+      "code": "; Buffered String Output\n; Displays a string using DOS function 09h\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    msg1 DB 'First line$'\n    msg2 DB 'Second line$'\n    newline DB 0Dh, 0Ah, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display first message\n    MOV AH, 09h\n    LEA DX, msg1\n    INT 21h\n    \n    ; New line\n    LEA DX, newline\n    INT 21h\n    \n    ; Display second message\n    LEA DX, msg2\n    INT 21h\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 9, "type": "comment", "text": "newline is 0Dh (CR) + 0Ah (LF) + '$' terminator" },
+        { "line": 17, "type": "instruction", "text": "Function 09h outputs until '$' delimiter" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 },
+        "expectedOutput": "First line\\r\\nSecond line"
+      },
+      "commonMistakes": ["Forgetting '$' terminator", "Using 10 (LF) without 13 (CR)", "Buffer overflow with long strings"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q5-003"],
+      "provenance": {
+        "sourceFile": "examples/Buffered.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-006",
+      "filename": "demo.asm",
+      "lectureIds": [4, 6],
+      "sectionIds": ["s4-2", "s6-1"],
+      "concepts": ["arithmetic", "control-flow", "conditionals"],
+      "instructions": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE"],
+      "code": "; Demo Program: Arithmetic and Control Flow\n; Shows basic arithmetic and conditional branching\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    num1 DW 10\n    num2 DW 20\n    result DW ?\n    \n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Compare num1 and num2\n    MOV AX, num1\n    CMP AX, num2\n    JE equal\n    JL smaller\n    \n    ; Greater case (fall-through)\n    ADD AX, 5\n    JMP done\n    \nsmaller:\n    SUB AX, 5\n    JMP done\n    \nequal:\n    MOV AX, 100\n    \ndone:\n    MOV result, AX\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 19, "type": "instruction", "text": "CMP sets flags but does not modify operands" },
+        { "line": 20, "type": "instruction", "text": "JE jumps if ZF=1 (num1 == num2)" },
+        { "line": 21, "type": "instruction", "text": "JL jumps if SF≠OF (num1 < num2)" },
+        { "line": 25, "type": "flag", "text": "ADD/SUB modify OF, SF, ZF, AF, PF, CF" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Using CMP incorrectly with ADD", "Forgetting that JE checks ZF", "Mixing signed and unsigned jumps"],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q6-001", "q6-002"],
+      "provenance": {
+        "sourceFile": "examples/demo.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.9,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "ex-007",
+      "filename": "proc.asm",
+      "lectureIds": [7],
+      "sectionIds": ["s7-1", "s7-2"],
+      "concepts": ["procedures", "stack-operations", "parameter-passing"],
+      "instructions": ["PUSH", "POP", "CALL", "RET", "MOV", "ADD"],
+      "code": "; Procedure Example\n; Demonstrates procedure definition, CALL/RET, and stack\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    result DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Call square procedure with parameter in AX\n    MOV AX, 5\n    CALL square\n    MOV result, AX\n    \n    ; Call add procedure\n    PUSH 10         ; First parameter\n    PUSH 20         ; Second parameter\n    CALL addTwo\n    ADD SP, 4       ; Clean up stack (2 params × 2 bytes)\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\n\n; Squares the value in AX\n; Input: AX contains value to square\n; Output: AX contains result\nsquare PROC\n    PUSH BP\n    MOV BP, SP\n    MOV AX, [BP+4]   ; Get parameter (offset from BP+4)\n    MUL AX           ; AX = AX * AX\n    POP BP\n    RET             ; Near return\nsquare ENDP\n\n; Adds two parameters\n; Input: Stack contains two word parameters\n; Output: AX contains sum\naddTwo PROC\n    PUSH BP\n    MOV BP, SP\n    MOV AX, [BP+4]   ; First parameter\n    ADD AX, [BP+6]   ; Second parameter\n    POP BP\n    RET\naddTwo ENDP\n\nEND MAIN",
+      "annotations": [
+        { "line": 17, "type": "instruction", "text": "CALL pushes return address and jumps to procedure" },
+        { "line": 20, "type": "instruction", "text": "PUSH decrements SP by 2 and stores value" },
+        { "line": 35, "type": "comment", "text": "Stack frame: [BP+4]=param1, [BP+6]=param2, [BP+2]=return addr" },
+        { "line": 38, "type": "flag", "text": "MUL sets OF and CF to 1 if upper half of result is non-zero" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Forgetting to save/restore BP", "Incorrect stack cleanup", "MUL/IMUL clobber DX:AX", "RET without matching CALL"],
+      "difficulty": "advanced",
+      "relatedQuestions": ["q7-001", "q7-002", "q7-003"],
+      "provenance": {
+        "sourceFile": "examples/proc.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-008",
+      "filename": "forloop.asm",
+      "lectureIds": [6],
+      "sectionIds": ["s6-3"],
+      "concepts": ["loops", "loop-instructions", "iteration"],
+      "instructions": ["MOV", "LOOP", "ADD"],
+      "code": "; For Loop Example\n; Counts from 5 down to 1 using LOOP instruction\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    count DW 5\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV CX, count     ; CX = initial count (LOOP uses CX)\n    \nnext:\n    ; Body of loop - do something here\n    ; (In real code, you'd output or process)\n    \n    LOOP next         ; CX--, if CX != 0 jump to next\n    \n    ; After loop: CX = 0\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 14, "type": "instruction", "text": "CX must be initialized before LOOP" },
+        { "line": 18, "type": "instruction", "text": "LOOP decrements CX and jumps if CX ≠ 0" },
+        { "line": 18, "type": "comment", "text": "LOOP is atomic - no flag checking needed" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 5, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Modifying CX inside loop", "Using LOOP with CX=0 (infinite loop)", "Forgetting LOOPEQ/LOOPNE for early exit"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q6-003"],
+      "provenance": {
+        "sourceFile": "examples/forloop.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-009",
+      "filename": "ifelse.asm",
+      "lectureIds": [6],
+      "sectionIds": ["s6-2"],
+      "concepts": ["conditionals", "branching", "compare-instruction"],
+      "instructions": ["CMP", "JE", "JNE", "JL", "JG", "JMP"],
+      "code": "; If-Else Example\n; Compares two values and branches accordingly\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    val1 DW 25\n    val2 DW 30\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AX, val1\n    CMP AX, val2\n    JE equal_handler\n    JL less_handler\n    \n    ; Greater handler (AX > val2)\ngreater_handler:\n    ; Handle greater case\n    JMP end_comparison\n    \nless_handler:\n    ; Handle less case\n    JMP end_comparison\n    \nequal_handler:\n    ; Handle equal case\n    \nend_comparison:\n    ; Continue with program\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 16, "type": "instruction", "text": "JE (Jump if Equal) is alternate name for JZ" },
+        { "line": 17, "type": "instruction", "text": "JL tests signed less than (SF ≠ OF)" },
+        { "line": 22, "type": "comment", "text": "For unsigned, use JA (above) and JB (below)" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Using JL/JG for unsigned values", "Using JA/JB for signed values", "Forgetting to jump past else block"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q6-004", "q6-005"],
+      "provenance": {
+        "sourceFile": "examples/ifelse.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-010",
+      "filename": "Exchange.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-1"],
+      "concepts": ["data-transfer", "register-exchange", "temp-storage"],
+      "instructions": ["MOV", "XCHG"],
+      "code": "; Exchange Values using XCHG\n; Demonstrates swapping register values\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    temp DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AX, 1234h     ; AX = 0x1234\n    MOV BX, 5678h      ; BX = 0x5678\n    \n    ; Method 1: Using XCHG (simplest)\n    XCHG AX, BX        ; AX and BX are swapped\n    \n    ; Method 2: Using temp variable\n    ; MOV temp, AX\n    ; MOV AX, BX\n    ; MOV BX, temp\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 17, "type": "instruction", "text": "XCHG exchanges values of two registers or register and memory" },
+        { "line": 17, "type": "comment", "text": "XCHG cannot use immediate values as operands" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 4660, "BX": 22136, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["XCHG with two memory operands (illegal)", "Using XCHG with immediate value", "Forgetting that XCHG affects no flags"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q4-006"],
+      "provenance": {
+        "sourceFile": "examples/Exchange.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.9,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "ex-011",
+      "filename": "Compare.asm",
+      "lectureIds": [4, 6],
+      "sectionIds": ["s4-2", "s6-2"],
+      "concepts": ["compare", "flags", "conditional-jumps"],
+      "instructions": ["CMP"],
+      "code": "; Compare Instruction\n; CMP subtracts operands and sets flags but doesn't store result\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    val1 DW 100\n    val2 DW 50\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AX, val1\n    CMP AX, val2\n    ; Flags after CMP AX, 50:\n    ; ZF = 0 (not equal)\n    ; SF = 0 (AX > 50, no sign)\n    ; CF = 0 (no borrow needed, AX >= val2)\n    \n    JE equal          ; Jump if ZF=1\n    JNE not_equal     ; Jump if ZF=0\n    JL less           ; Jump if SF≠OF (signed less)\n    JLE less_equal    ; Jump if SF≠OF or ZF=1\n    JG greater        ; Jump if SF=OF and ZF=0\n    JGE greater_equal ; Jump if SF=OF\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 17, "type": "instruction", "text": "CMP is equivalent to SUB but result is discarded" },
+        { "line": 17, "type": "flag", "text": "CMP affects: OF, SF, ZF, AF, PF, CF (same as SUB)" },
+        { "line": 22, "type": "comment", "text": "JE/JNE are for both signed and unsigned" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 100, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Confusing signed and unsigned jumps", "Forgetting that CMP doesn't modify destination", "Using CMP incorrectly before LOOPZ/LOOPNZ"],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q6-006", "q6-007"],
+      "provenance": {
+        "sourceFile": "examples/Compare.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-012",
+      "filename": "RegisterSwap.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-1"],
+      "concepts": ["register-usage", "data-transfer", "temp-storage"],
+      "instructions": ["MOV"],
+      "code": "; Register Swap Without XCHG\n; Shows how to swap values using only MOV\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    temp DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV AX, 0AAAAh    ; First value\n    MOV BX, 0BBBBh    ; Second value\n    \n    ; Swap using temp storage\n    MOV temp, AX      ; temp = AX\n    MOV AX, BX        ; AX = BX\n    MOV BX, temp      ; BX = temp (= original AX)\n    \n    ; Now AX = 0BBBBh and BX = 0AAAAh\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 16, "type": "instruction", "text": "Temp variable needed when XCHG isn't suitable" },
+        { "line": 16, "type": "comment", "text": "This approach works with memory operands too" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 43690, "BX": 48059, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Forgetting to declare temp variable", "Overwriting temp before saving first value", "Using 8-bit registers for 16-bit values"],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q4-007"],
+      "provenance": {
+        "sourceFile": "examples/RegisterSwap.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.9,
+        "reviewedStatus": "reviewed"
+      }
+    },
+    {
+      "id": "ex-013",
+      "filename": "ArithmeticDemo.asm",
+      "lectureIds": [4],
+      "sectionIds": ["s4-2"],
+      "concepts": ["arithmetic", "flags", "overflow-detection"],
+      "instructions": ["MOV", "ADD", "SUB", "INC", "DEC", "NEG"],
+      "code": "; Arithmetic Operations Demo\n; Shows various arithmetic instructions and their effects\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    result DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Addition\n    MOV AX, 7\n    INC AX              ; AX = 8 (AX = AX + 1)\n    ADD AX, 2           ; AX = 10\n    \n    ; Subtraction  \n    DEC AX              ; AX = 9\n    SUB AX, 3           ; AX = 6\n    \n    ; Negation\n    NEG AX              ; AX = -6\n    \n    ; Check flags\n    ; After NEG: SF=1 (negative), ZF=0, CF=1, OF depends on operand\n    \n    MOV result, AX\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 16, "type": "instruction", "text": "INC/DEC affect OF, SF, ZF, AF, PF but NOT CF" },
+        { "line": 23, "type": "flag", "text": "NEG always sets CF=1 (except when operand=0)" },
+        { "line": 23, "type": "flag", "text": "NEG sets OF only when operand is MIN_INT" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 0, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Assuming INC/DEC affect CF", "Not handling overflow for NEG", "Using INC on CX in loops (affects LOOP)"],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q4-008", "q4-009"],
+      "provenance": {
+        "sourceFile": "examples/ArithmeticDemo.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    },
+    {
+      "id": "ex-014",
+      "filename": "whileloop.asm",
+      "lectureIds": [6],
+      "sectionIds": ["s6-3"],
+      "concepts": ["while-loop", "loops", "conditional-jumps"],
+      "instructions": ["MOV", "CMP", "JGE", "JMP", "ADD"],
+      "code": "; While Loop Example\n; Sums numbers from 1 to 10\n\n.MODEL SMALL\n.STACK 100h\n\n.DATA\n    sum   DW 0\n    counter DW 1\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    MOV CX, 10         ; Loop counter (not using LOOP)\n    \nwhile_loop:\n    CMP CX, 0          ; Check if counter > 0\n    JLE end_while      ; Exit if CX <= 0\n    \n    MOV AX, sum\n    ADD AX, counter     ; sum = sum + counter\n    MOV sum, AX\n    \n    DEC counter        ; counter--\n    JMP while_loop     ; Continue loop\n    \nend_while:\n    ; sum now contains 55 (1+2+3+...+10)\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        { "line": 17, "type": "instruction", "text": "While condition checked at top of loop" },
+        { "line": 18, "type": "instruction", "text": "JLE exits if counter <= 0" },
+        { "line": 24, "type": "comment", "text": "Result should be 55 after loop completes" }
+      ],
+      "simulatorPreset": {
+        "initialRegisters": { "AX": 0, "BX": 0, "CX": 10, "DX": 0, "SI": 0, "DI": 0, "BP": 0, "SP": 256, "CS": 0, "DS": 0, "ES": 0, "SS": 0, "IP": 0, "FLAGS": 0 }
+      },
+      "commonMistakes": ["Off-by-one errors in condition", "Forgetting to update loop variable", "Infinite loop when condition never becomes false"],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q6-008", "q6-009"],
+      "provenance": {
+        "sourceFile": "examples/whileloop.asm",
+        "sourceType": "asm",
+        "extractedBy": "content-ingestion-v0.1",
+        "extractionConfidence": 0.95,
+        "reviewedStatus": "verified"
+      }
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-03-31T00:00:00.000Z",
+    "generator": "content-ingestion-v0.1",
+    "sourceVersion": "1.0"
+  }
+}

@@ -14,12 +14,26 @@ import { RegisterDisplay } from './RegisterDisplay';
 import { FlagDisplay } from './FlagDisplay';
 import { CodeEditor } from './CodeEditor';
 import { MemoryView } from './MemoryView';
-import { AlertCircle, CheckCircle2, Info } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Info, ChevronDown, FlaskConical } from 'lucide-react';
+import examplesData from '@/data/processed/examples.json';
+import { cn } from '@/lib/utils';
 
 interface SimulatorCoreProps {
   initialCode?: string;
   onExecutionEnd?: () => void;
 }
+
+// Example type from examples.json
+type Example = {
+  id: string;
+  filename: string;
+  lectureIds: number[];
+  sectionIds: string[];
+  concepts: string[];
+  instructions: string[];
+  code: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+};
 
 interface ExecutionState {
   result: ExecuteResult | null;
@@ -46,6 +60,11 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     registersModified: {},
     flagsModified: {},
   });
+  
+  // Example presets
+  const examples = examplesData.examples as Example[];
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   // Breakpoint state - Set of line numbers with breakpoints
   const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set());
@@ -86,6 +105,39 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
     setBreakpoints(new Set());
     setHitBreakpoint(null);
   }, []);
+  
+  // Load example preset - resets CPU and loads example code
+  const loadPreset = useCallback((exampleId: string) => {
+    const example = examples.find(e => e.id === exampleId);
+    if (!example) return;
+    
+    // Stop any running execution
+    if (executionIntervalRef.current) {
+      clearTimeout(executionIntervalRef.current);
+      executionIntervalRef.current = null;
+    }
+    
+    // Reset CPU state
+    const initial = createInitialCPUState();
+    initial.IP = 0;
+    setCpuState(initial);
+    
+    // Load the example code
+    setCode(example.code);
+    setSelectedPreset(exampleId);
+    setIsHalted(false);
+    setIsRunning(false);
+    setExecutionResult({
+      result: null,
+      registersModified: {},
+      flagsModified: {},
+    });
+    setBreakpoints(new Set());
+    setHitBreakpoint(null);
+    
+    // Close dropdown
+    setIsDropdownOpen(false);
+  }, [examples]);
   
   // Parse code using useMemo to avoid cascading renders
   const { instructions: parsedInstructions, labels, errors: parseErrors } = useMemo(() => {
@@ -305,6 +357,100 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
           </div>
         </div>
       )}
+      
+      {/* Example Preset Selector */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-muted/50 px-4 py-2 border-b flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FlaskConical className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Load Example</span>
+          </div>
+          <span className="text-xs text-muted-foreground">
+            {examples.length} presets available
+          </span>
+        </div>
+        <div className="p-4">
+          {/* Custom Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => !isRunning && setIsDropdownOpen(!isDropdownOpen)}
+              disabled={isRunning}
+              className={cn(
+                'w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg border transition-colors text-left',
+                selectedPreset 
+                  ? 'bg-primary/5 border-primary/30 text-primary' 
+                  : 'bg-muted/30 border-border hover:bg-muted/50',
+                isRunning && 'opacity-50 cursor-not-allowed'
+              )}
+            >
+              <span className="truncate">
+                {selectedPreset 
+                  ? examples.find(e => e.id === selectedPreset)?.filename || 'Select example...'
+                  : 'Select an example preset...'}
+              </span>
+              <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform', isDropdownOpen && 'rotate-180')} />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <>
+                {/* Backdrop to close dropdown */}
+                <div 
+                  className="fixed inset-0 z-10" 
+                  onClick={() => setIsDropdownOpen(false)}
+                />
+                {/* Dropdown content */}
+                <div className="absolute top-full left-0 right-0 mt-1 bg-popover border rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
+                  {examples.map((example) => (
+                    <button
+                      key={example.id}
+                      onClick={() => loadPreset(example.id)}
+                      className={cn(
+                        'w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors first:rounded-t-lg last:rounded-b-lg',
+                        selectedPreset === example.id && 'bg-primary/10'
+                      )}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm truncate">{example.filename}</div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className={cn(
+                            'text-xs px-1.5 py-0.5 rounded',
+                            example.difficulty === 'beginner' && 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+                            example.difficulty === 'intermediate' && 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+                            example.difficulty === 'advanced' && 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
+                          )}>
+                            {example.difficulty}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {example.instructions.slice(0, 3).join(', ')}
+                            {example.instructions.length > 3 && '...'}
+                          </span>
+                        </div>
+                      </div>
+                      {selectedPreset === example.id && (
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          
+          {/* Selected example info */}
+          {selectedPreset && (
+            <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">
+                {examples.find(e => e.id === selectedPreset)?.instructions.length} instructions
+              </span>
+              <span>•</span>
+              <span>
+                Lectures: {examples.find(e => e.id === selectedPreset)?.lectureIds.join(', ')}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
       
       {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

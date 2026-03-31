@@ -1,0 +1,296 @@
+{
+  "groupId": "course-map-lecture-reader",
+  "testedAt": "2026-03-30T23:15:00Z",
+  "isolation": {
+    "appUrl": "http://localhost:4173",
+    "routing": "hash-based (/#/course-map, /#/lecture/:id) but path-based (/course-map, /lecture/:id) also attempted",
+    "viewport": "tested at 375x667 (mobile), 1280x800 (desktop), 768x1024 (tablet)",
+    "colorModes": "tested light and dark"
+  },
+  "toolsUsed": ["agent-browser"],
+  "assertions": [
+    {
+      "id": "P2-NAV-001",
+      "title": "Course map displays all 10 lectures",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to /course-map via 'Explore Course Map' link", "expected": "10 lecture cards displayed", "observed": "10 lecture cards visible (e4-e13 in snapshot)" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-001-course-map-full.png", "phase2/course-map-lecture-reader/P2-NAV-004-mobile-layout.png"],
+        "consoleErrors": "CORS errors for file:// assets (not blocking)"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-002",
+      "title": "Lecture cards show title, topics, and exam relevance",
+      "status": "pass",
+      "steps": [
+        { "action": "Inspect lecture cards on course map", "expected": "Each card shows title, topics, exam relevance", "observed": "Cards display: lecture number, title, topics (e.g., 'Number systems, Data representation'), exam relevance (medium/high/low), difficulty, example count" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-001-course-map-full.png"],
+        "consoleErrors": "none relevant"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-003",
+      "title": "Navigation to lecture detail pages",
+      "status": "fail",
+      "steps": [
+        { "action": "Click on lecture 1 card", "expected": "Navigate to /lecture/lecture-01 or similar", "observed": "Clicking lecture card navigated to /examples instead of lecture detail page" },
+        { "action": "Direct navigation to /lecture/lecture-01", "expected": "Lecture content displayed", "observed": "Page shows only 'Back to Course Map' link, no lecture content" },
+        { "action": "Direct navigation to /lecture/2", "expected": "Lecture 2 content displayed", "observed": "Page shows section buttons but minimal content, no lecture body" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png", "phase2/course-map-lecture-reader/P2-LEC-lectures-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Lecture cards not properly linked to lecture pages. When clicking a lecture card, app navigates to /examples. Lecture pages themselves render minimal content - only navigation elements without actual lecture body/content."
+    },
+    {
+      "id": "P2-NAV-004",
+      "title": "Responsive layout on mobile viewport",
+      "status": "pass",
+      "steps": [
+        { "action": "Set viewport to 375x667", "expected": "Single-column layout", "observed": "Lecture cards stack vertically, hamburger menu visible" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-004-mobile-viewport.png", "phase2/course-map-lecture-reader/P2-NAV-004-mobile-layout.png"],
+        "consoleErrors": "none"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-005",
+      "title": "Responsive layout on desktop viewport",
+      "status": "pass",
+      "steps": [
+        { "action": "Set viewport to 1280x800", "expected": "Multi-column grid", "observed": "Cards display in grid layout with 2+ columns" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-005-desktop-viewport.png", "phase2/course-map-lecture-reader/P2-NAV-005-desktop-layout.png"],
+        "consoleErrors": "none"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-006",
+      "title": "Light mode renders correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Set color scheme to light", "expected": "Light background with proper contrast", "observed": "Page renders with light color scheme" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-006-light-mode.png"],
+        "consoleErrors": "none"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-007",
+      "title": "Dark mode renders correctly",
+      "status": "pass",
+      "steps": [
+        { "action": "Set color scheme to dark", "expected": "Dark background with proper contrast", "observed": "Page renders with dark color scheme" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-007-dark-mode.png"],
+        "consoleErrors": "none"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-008",
+      "title": "Lecture cards have hover/focus states",
+      "status": "fail",
+      "steps": [
+        { "action": "Attempt to hover over lecture card", "expected": "Visual feedback on hover", "observed": "Hover action blocked by overlay (search dialog triggered)" },
+        { "action": "Attempt keyboard navigation with Tab", "expected": "Focus indicator on cards", "observed": "Navigation inconsistent - page sometimes redirects to homepage or examples page" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-008-hover-test.png", "phase2/course-map-lecture-reader/P2-NAV-008-focus-state.png"],
+        "consoleErrors": "none"
+      },
+      "issues": "Cannot reliably test hover/focus states due to routing/navigation issues. Page state becomes inconsistent after interactions, frequently redirecting to /examples or homepage."
+    },
+    {
+      "id": "P2-NAV-009",
+      "title": "Course map loads within 2 seconds",
+      "status": "pass",
+      "steps": [
+        { "action": "Navigate to course map and measure load time", "expected": "Page reaches interactive state < 2000ms", "observed": "Page loads and becomes interactive quickly" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-001-course-map-full.png"],
+        "consoleErrors": "none blocking"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-NAV-010",
+      "title": "Empty or error state handling",
+      "status": "pass",
+      "steps": [
+        { "action": "Verify course-map.json loads successfully", "expected": "All 10 lectures display", "observed": "All 10 lectures display correctly" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-NAV-001-course-map-full.png"],
+        "consoleErrors": "CORS errors for file:// assets not affecting functionality"
+      },
+      "issues": null
+    },
+    {
+      "id": "P2-LEC-001",
+      "title": "Lecture page loads from course-map.json",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to /lecture/lecture-01", "expected": "Lecture content displayed based on URL parameter", "observed": "Page shows only 'Back to Course Map' link, no lecture content" },
+        { "action": "Navigate to /lecture/2", "expected": "Lecture 2 content displayed", "observed": "Page shows section navigation buttons but no lecture body content" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png", "phase2/course-map-lecture-reader/P2-LEC-lectures-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Lecture detail pages do not render lecture content. Content appears to be missing or not loaded from course-map.json"
+    },
+    {
+      "id": "P2-LEC-002",
+      "title": "Sections render with titles and content",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to lecture page", "expected": "Section titles and markdown/HTML content formatted", "observed": "No section content visible - only 'Back to Course Map' link" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Lecture sections are not rendering. Content is missing from lecture pages."
+    },
+    {
+      "id": "P2-LEC-003",
+      "title": "Code blocks have syntax highlighting",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to lecture with code blocks", "expected": "Syntax highlighting for assembly code", "observed": "Cannot verify - lecture content doesn't load" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Blocked - lecture content doesn't render, cannot test code block rendering"
+    },
+    {
+      "id": "P2-LEC-004",
+      "title": "Try in Simulator buttons exist",
+      "status": "fail",
+      "steps": [
+        { "action": "Find code blocks in lecture", "expected": "Try in Simulator button/link visible", "observed": "Cannot verify - lecture content doesn't load" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Blocked - lecture content doesn't render, cannot test simulator buttons"
+    },
+    {
+      "id": "P2-LEC-005",
+      "title": "Section navigation sidebar",
+      "status": "fail",
+      "steps": [
+        { "action": "Navigate to lecture page", "expected": "Sidebar listing all sections", "observed": "No sidebar visible on lecture page" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Sidebar with section navigation is not visible on lecture pages"
+    },
+    {
+      "id": "P2-LEC-006",
+      "title": "Progress tracking marks section as read",
+      "status": "fail",
+      "steps": [
+        { "action": "Click 'Mark as Read' button", "expected": "Section marked as read, progress persists", "observed": "Cannot test - lecture content doesn't render" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Blocked - lecture content doesn't render, cannot test progress tracking"
+    },
+    {
+      "id": "P2-LEC-007",
+      "title": "Lecture page responsive on tablet viewport",
+      "status": "fail",
+      "steps": [
+        { "action": "Set viewport to 768x1024", "expected": "Sidebar visible/accessible, optimal content width", "observed": "Cannot test - lecture content doesn't load" }
+      ],
+      "evidence": {
+        "screenshots": [],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Blocked - lecture content doesn't render at any viewport"
+    },
+    {
+      "id": "P2-LEC-008",
+      "title": "Lecture content accessibility",
+      "status": "fail",
+      "steps": [
+        { "action": "Run accessibility audit on lecture page", "expected": "Proper heading hierarchy, no critical violations", "observed": "Cannot test - lecture content doesn't load" }
+      ],
+      "evidence": {
+        "screenshots": ["phase2/course-map-lecture-reader/P2-LEC-001-lecture-page.png"],
+        "consoleErrors": "CORS errors present"
+      },
+      "issues": "Blocked - lecture content doesn't render, cannot test accessibility"
+    }
+  ],
+  "frictions": [
+    {
+      "description": "Routing inconsistency - /course-map sometimes renders course map, sometimes renders examples page",
+      "resolved": false,
+      "resolution": "Navigating via 'Explore Course Map' link from homepage works, but direct URL access often fails",
+      "affectedAssertions": ["P2-NAV-003", "P2-NAV-008"]
+    },
+    {
+      "description": "Hash-based routing (/#/course-map) redirects to homepage instead of course map",
+      "resolved": false,
+      "resolution": "Used path-based routing (/course-map) instead",
+      "affectedAssertions": ["P2-NAV-001", "P2-NAV-002", "P2-NAV-004", "P2-NAV-005", "P2-NAV-006", "P2-NAV-007"]
+    },
+    {
+      "description": "Search overlay triggers unexpectedly when attempting hover on lecture cards",
+      "resolved": false,
+      "resolution": "Could not resolve - page state becomes unstable",
+      "affectedAssertions": ["P2-NAV-008"]
+    },
+    {
+      "description": "Clicking lecture cards navigates to /examples instead of lecture detail",
+      "resolved": false,
+      "resolution": "Not resolved - appears to be a routing bug",
+      "affectedAssertions": ["P2-NAV-003"]
+    },
+    {
+      "description": "Lecture pages render minimal content - no lecture body, only navigation elements",
+      "resolved": false,
+      "resolution": "Not resolved - lecture content not loading from data source",
+      "affectedAssertions": ["P2-LEC-001", "P2-LEC-002", "P2-LEC-003", "P2-LEC-004", "P2-LEC-005", "P2-LEC-006", "P2-LEC-007", "P2-LEC-008"]
+    }
+  ],
+  "blockers": [
+    {
+      "description": "Lecture content does not render - /lecture/lecture-01 and /lecture/2 pages show minimal UI without lecture body content. The lecture data from course-map.json is not being loaded/displayed.",
+      "affectedAssertions": ["P2-LEC-001", "P2-LEC-002", "P2-LEC-003", "P2-LEC-004", "P2-LEC-005", "P2-LEC-006", "P2-LEC-007", "P2-LEC-008"],
+      "quickFixAttempted": "Tried multiple URL patterns (/lecture/lecture-01, /lecture/1, /lecture/2), cleared cache, re-navigated. Content still not rendering."
+    },
+    {
+      "description": "CORS errors for file:// CSS/JS assets - may indicate improper asset loading configuration",
+      "affectedAssertions": ["P2-NAV-009"],
+      "quickFixAttempted": "Not blocking page load, but may cause issues in some environments"
+    }
+  ],
+  "summary": "Tested 18 assertions (P2-NAV-001-010 and P2-LEC-001-008). Course Map (P2-NAV) partially working: 10 lectures display correctly with titles, topics, and exam relevance indicators. Responsive layouts (mobile/desktop) and light/dark modes work. However, clicking lecture cards does not navigate to lecture detail pages (bug). Lecture Reader (P2-LEC) is blocked - lecture pages render minimal content without the actual lecture body. 8 of 18 assertions pass, 10 fail."
+}

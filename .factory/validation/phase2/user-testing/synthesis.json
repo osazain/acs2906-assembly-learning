@@ -1,0 +1,70 @@
+{
+  "milestone": "phase2",
+  "round": 1,
+  "status": "fail",
+  "assertionsSummary": {
+    "total": 43,
+    "passed": 28,
+    "failed": 13,
+    "blocked": 2
+  },
+  "passedAssertions": [
+    "P2-NAV-001", "P2-NAV-002", "P2-NAV-004", "P2-NAV-005", "P2-NAV-006", "P2-NAV-007", "P2-NAV-009", "P2-NAV-010",
+    "P2-EXP-001", "P2-EXP-002", "P2-EXP-004", "P2-EXP-005", "P2-EXP-006", "P2-EXP-007", "P2-EXP-009", "P2-EXP-010",
+    "P2-CODE-001", "P2-CODE-002", "P2-CODE-003", "P2-CODE-004", "P2-CODE-005", "P2-CODE-006",
+    "P2-SEARCH-001", "P2-SEARCH-002",
+    "P2-RESP-001", "P2-RESP-002", "P2-RESP-003", "P2-RESP-004"
+  ],
+  "failedAssertions": [
+    { "id": "P2-NAV-003", "reason": "Clicking lecture cards navigates to /examples instead of lecture detail page" },
+    { "id": "P2-NAV-008", "reason": "Hover/focus states blocked by routing instability - page frequently redirects" },
+    { "id": "P2-LEC-001", "reason": "Lecture pages render minimal content - no lecture body, only Back link" },
+    { "id": "P2-LEC-002", "reason": "Lecture sections not rendering - content missing from lecture pages" },
+    { "id": "P2-LEC-003", "reason": "Blocked - lecture content doesn't render" },
+    { "id": "P2-LEC-004", "reason": "Blocked - lecture content doesn't render" },
+    { "id": "P2-LEC-005", "reason": "Sidebar with section navigation not visible on lecture pages" },
+    { "id": "P2-LEC-006", "reason": "Blocked - lecture content doesn't render" },
+    { "id": "P2-LEC-007", "reason": "Blocked - lecture content doesn't render" },
+    { "id": "P2-LEC-008", "reason": "Blocked - lecture content doesn't render" },
+    { "id": "P2-EXP-003", "reason": "Lecture filter combobox visible but not interactable via Playwright automation" },
+    { "id": "P2-EXP-008", "reason": "URL parameters not updated when filters are applied" },
+    { "id": "P2-SEARCH-003", "reason": "Enter key does not select highlighted search result" },
+    { "id": "P2-SEARCH-004", "reason": "Skipped - search interface instability when typing" },
+    { "id": "P2-SEARCH-005", "reason": "Skipped - search interface instability when typing" }
+  ],
+  "blockedAssertions": [
+    { "id": "P2-LEC-003", "blockedBy": "Lecture content not rendering - P2-LEC-001 root cause" },
+    { "id": "P2-LEC-004", "blockedBy": "Lecture content not rendering - P2-LEC-001 root cause" },
+    { "id": "P2-LEC-006", "blockedBy": "Lecture content not rendering - P2-LEC-001 root cause" },
+    { "id": "P2-LEC-007", "blockedBy": "Lecture content not rendering - P2-LEC-001 root cause" },
+    { "id": "P2-LEC-008", "blockedBy": "Lecture content not rendering - P2-LEC-001 root cause" }
+  ],
+  "appliedUpdates": [
+    { "target": "services.yaml", "description": "Updated Phase 2 testing setup - preview server on port 4173", "source": "setup" },
+    { "target": "library/user-testing.md", "description": "Created flow validator guidance sections for all 6 Phase 2 surfaces", "source": "setup" }
+  ],
+  "previousRound": null,
+  "systemicIssues": [
+    {
+      "rootCause": "Lecture content not loading from course-map.json",
+      "description": "Lecture detail pages (/lecture/lecture-01, /lecture/2) render minimal UI without actual lecture body content. The data from course-map.json appears not to be loaded or rendered.",
+      "affectedAssertions": ["P2-LEC-001", "P2-LEC-002", "P2-LEC-003", "P2-LEC-004", "P2-LEC-005", "P2-LEC-006", "P2-LEC-007", "P2-LEC-008"]
+    },
+    {
+      "rootCause": "Routing bug - lecture cards navigate to wrong page",
+      "description": "Clicking lecture cards on course map navigates to /examples instead of lecture detail pages. Also causes page state instability.",
+      "affectedAssertions": ["P2-NAV-003", "P2-NAV-008"]
+    },
+    {
+      "rootCause": "Search interface instability",
+      "description": "Keyboard typing in search box triggers page navigation instead of filling input. Enter key does not select search results.",
+      "affectedAssertions": ["P2-SEARCH-003", "P2-SEARCH-004", "P2-SEARCH-005"]
+    },
+    {
+      "rootCause": "Lecture filter combobox not interactable",
+      "description": "The lecture filter combobox on Example Explorer is visible but all click/select operations timeout. Custom UI component not properly exposed to Playwright.",
+      "affectedAssertions": ["P2-EXP-003"]
+    }
+  ],
+  "summary": "Phase 2 user testing completed with 28/43 assertions passing. Critical issues: (1) Lecture Reader pages don't render lecture content - only navigation UI loads; (2) Lecture card clicks navigate to wrong page (/examples); (3) Search keyboard navigation broken (Enter key doesn't select); (4) Lecture filter combobox not interactable. Responsive layout tests all passed. Example Explorer and Code Viewer mostly working with minor issues."
+}

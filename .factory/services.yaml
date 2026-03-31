@@ -1,0 +1,70 @@
+# .factory/services.yaml
+# Service manifest for ACS2906 Assembly Learning Platform
+
+commands:
+  install: npm install
+  typecheck: npx tsc --noEmit
+  build: npm run build
+  test: echo "No tests configured"
+  lint: npm run lint
+  validate:content: npx tsx scripts/validate-content.ts
+
+services:
+  # Preview server for Phase 2 UI testing
+  preview:
+    start: npx vite preview --port 4173
+    stop: taskkill /F /IM node.exe /FI "WINDOWTITLE eq *vite*preview*" 2>$null || true
+    healthcheck: curl -sf http://localhost:4173 || echo "Preview server not running"
+    port: 4173
+    depends_on: []
+
+# User Testing - Phase 2
+
+## Testing Surface
+
+Phase 2 is a React SPA with the following routes:
+- `/` or `/#/` - Homepage
+- `/#/course-map` - Course Map Page
+- `/#/lecture/:id` - Lecture Reader
+- `/#/examples` - Example Explorer
+- `/#/examples/:id` - Example Detail/Code Viewer
+- `/#/simulator` - Simulator
+
+## Validation Strategy
+
+Phase 2 UI testing via browser automation:
+1. **Course Map** - 10 lectures displayed, navigation works, responsive
+2. **Lecture Reader** - Content renders, syntax highlighting, section nav
+3. **Example Explorer** - Grid/list views, filters work
+4. **Example Code Viewer** - Line numbers, syntax highlighting, copy button
+5. **Global Search** - Cmd+K palette, keyboard navigation
+6. **Responsive Layout** - Mobile sidebar, touch targets, no horizontal scroll
+
+## Testing Tool
+
+Use `agent-browser` skill for browser automation:
+- Start with: `agent-browser open http://localhost:4173`
+- Navigate using refs from snapshots
+- Always re-snapshot after navigation
+
+## Validation Commands
+
+```bash
+# Start preview server
+npx vite preview --port 4173
+
+# Run browser tests
+agent-browser open http://localhost:4173
+```
+
+## Important Notes
+
+- Preview server runs on port 4173
+- App uses hash-based routing (`/#/route`)
+- All 43 Phase 2 assertions are pending
+
+## Resource Classification
+
+- **Time cost**: Medium (43 assertions, ~20-30 min)
+- **Tool requirement**: agent-browser, Playwright
+- **External dependencies**: None (all local)

@@ -54,7 +54,7 @@ const GAMES: Game[] = [
     title: 'Register Rally',
     description: 'Match registers to their use cases. Learn the purpose of each 8086 register.',
     icon: 'rally',
-    status: 'coming-soon',
+    status: 'available',
     estimatedMinutes: 5,
     concepts: ['registers', 'ax', 'bx', 'cx', 'dx', 'sp', 'bp', 'si', 'di'],
   },

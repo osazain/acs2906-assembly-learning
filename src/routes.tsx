@@ -13,6 +13,7 @@ import { DiagnosticMode } from '@/components/assessment/DiagnosticMode'
 import { MasteryDashboard } from '@/components/mastery/MasteryDashboard'
 import { GamesHub } from '@/components/games/GamesHub'
 import { InstructionHangman } from '@/components/games/InstructionHangman'
+import { RegisterRally } from '@/components/games/RegisterRally'
 import type { CourseMapLecture } from '@/lib/types'
 
 // Games layout component that renders Outlet for child routes
@@ -263,6 +264,12 @@ const instructionHangmanRoute = createRoute({
   component: InstructionHangmanPage,
 })
 
+const registerRallyRoute = createRoute({
+  getParentRoute: () => gamesRoute,
+  path: 'register-rally',
+  component: RegisterRallyPage,
+})
+
 const simulatorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/simulator',
@@ -434,6 +441,10 @@ function InstructionHangmanPage() {
   return <InstructionHangman onBack={() => window.location.hash = '#/games'} />
 }
 
+function RegisterRallyPage() {
+  return <RegisterRally onBack={() => window.location.hash = '#/games'} />
+}
+
 function SimulatorPage() {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -570,6 +581,7 @@ function SettingsPage() {
 const gamesRouteTree = gamesRoute.addChildren([
   gamesIndexRoute,
   instructionHangmanRoute,
+  registerRallyRoute,
 ])
 
 const routeTree = rootRoute.addChildren([

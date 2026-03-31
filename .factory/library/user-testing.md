@@ -153,3 +153,134 @@ Phase 2 has 43 assertions organized into 6 surfaces. Based on the isolation anal
 3. Check all tap targets
 4. Test at 768px, 1280px
 5. Verify no horizontal scroll
+
+# Phase 3: Assessment Engine
+
+## Validation Concurrency
+
+Phase 3 has 29 assertions organized into 5 surfaces. Based on isolation analysis:
+- All surfaces share the same IndexedDB (Dexie)
+- Assessment flows (drill, diagnostic) write to same DB tables
+- **Max concurrent validators: 2** to avoid DB conflicts
+
+## Flow Validator Guidance: Drill Mode
+
+**URL**: `http://localhost:4173/#/drills`
+
+**Assertions**: P3-DRILL-001 to P3-DRILL-010
+
+**What to test**:
+- Topic/concept/instruction filter selection with counts
+- Question card displays prompt properly
+- Multiple choice shows 4 options
+- Submit button processes answer
+- Immediate feedback shows correct/incorrect
+- Explanation with remediation links
+- Progress bar updates per question
+- Skip question functionality
+- Drill settings (count, difficulty, timer)
+- End-of-drill summary with stats
+
+**Isolation**: Single browser session, IndexedDB for mastery records
+
+**Test approach**:
+1. Navigate to /#/drills
+2. Verify filter panel with topics, concepts, instructions
+3. Apply a filter and start drill
+4. Answer questions, verify feedback
+5. Test skip functionality
+6. Complete drill, verify summary
+7. Check IndexedDB for answer records
+
+## Flow Validator Guidance: Diagnostic Mode
+
+**URL**: `http://localhost:4173/#/diagnostics`
+
+**Assertions**: P3-DIAG-001 to P3-DIAG-006
+
+**What to test**:
+- Initial topic selection screen shows all lectures
+- Adaptive question selection based on answers
+- Mistake pattern detection
+- Diagnostic report generation with accuracy breakdown
+- Remediation links in report
+- Diagnostic history saved to IndexedDB
+
+**Isolation**: Single browser session, shared IndexedDB
+
+**Test approach**:
+1. Navigate to /#/diagnostics
+2. Verify topic selection UI
+3. Start diagnostic, answer several questions
+4. Verify difficulty adapts
+5. Complete diagnostic
+6. View report with weaknesses
+7. Click remediation links
+8. Check IndexedDB for diagnostic history
+
+## Flow Validator Guidance: Results Summary
+
+**URL**: Shown after drill/diagnostic completion
+
+**Assertions**: P3-RESULT-001 to P3-RESULT-005
+
+**What to test**:
+- Per-concept accuracy breakdown displayed
+- Misconception detection and labeling
+- Remediation queue generated with priorities
+- "Add to Review Queue" action works
+- Export/share results functionality
+
+**Isolation**: Single browser session, reads from drill/diagnostic results
+
+**Test approach**:
+1. Complete a drill with intentional errors
+2. View results summary
+3. Verify per-concept accuracy shown
+4. Verify misconception labels appear
+5. Check remediation queue
+6. Test "Add to Review Queue"
+7. Test export results button
+
+## Flow Validator Guidance: Mastery Tracking
+
+**URL**: Dashboard visible at `http://localhost:4173/#/progress`
+
+**Assertions**: P3-MAST-001 to P3-MAST-005
+
+**What to test**:
+- Answers recorded to IndexedDB via Dexie
+- Mastery records updated after drill
+- Strength levels calculated per concept
+- Mistake patterns tracked in DB
+- Mastery visible on dashboard as percentages
+
+**Isolation**: Single browser session, IndexedDB is source of truth
+
+**Test approach**:
+1. Complete several drill questions on same concept
+2. Open browser DevTools, check IndexedDB
+3. Verify answer records exist in Dexie DB
+4. Navigate to /#/progress (dashboard)
+5. Verify mastery values displayed for concepts practiced
+6. Check strength levels update
+
+## Flow Validator Guidance: Study Sessions
+
+**URL**: Session data stored in IndexedDB, visible in dashboard
+
+**Assertions**: P3-SESSION-001 to P3-SESSION-003
+
+**What to test**:
+- Session record created on drill begin with startTime
+- Session record updated with endTime and stats on completion
+- Duration tracked accurately (within 5 seconds)
+
+**Isolation**: Single browser session, IndexedDB
+
+**Test approach**:
+1. Start a drill
+2. Immediately check IndexedDB for session record with startTime
+3. Complete the drill
+4. Verify session record has endTime
+5. Verify duration field is within 5 seconds of actual elapsed time

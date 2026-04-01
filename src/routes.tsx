@@ -29,6 +29,52 @@ const rootRoute = createRootRoute({
 
 function AppLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('acs2906_theme') as 'light' | 'dark' | 'system') || 'system'
+    }
+    return 'system'
+  })
+
+  // Apply theme on mount and when theme changes
+  useEffect(() => {
+    localStorage.setItem('acs2906_theme', theme)
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else if (theme === 'light') {
+      document.documentElement.classList.remove('dark')
+    } else {
+      // system preference
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  }, [theme])
+
+  // Listen for system theme changes when in system mode
+  useEffect(() => {
+    if (theme !== 'system') return
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => {
+      if (mediaQuery.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [theme])
+
+  const cycleTheme = () => {
+    setTheme(prev => {
+      if (prev === 'light') return 'dark'
+      if (prev === 'dark') return 'system'
+      return 'light'
+    })
+  }
 
   const navItems = [
     { title: 'Course Map', href: '/course-map', icon: BookOpen },
@@ -39,7 +85,6 @@ function AppLayout() {
     { title: 'Diagnostics', href: '/diagnostics', icon: Stethoscope },
     { title: 'Games', href: '/games', icon: Gamepad2 },
     { title: 'Progress', href: '/progress', icon: BarChart3 },
-    { title: 'Settings', href: '/settings', icon: Settings },
   ]
 
   return (
@@ -76,6 +121,23 @@ function AppLayout() {
 
           {/* Search trigger */}
           <GlobalSearch />
+          {/* Theme toggle */}
+          <button
+            onClick={cycleTheme}
+            className="p-3 rounded-md hover:bg-muted transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+            title={`Theme: ${theme}`}
+          >
+            {theme === 'light' && <Sun className="h-5 w-5" />}
+            {theme === 'dark' && <Moon className="h-5 w-5" />}
+            {theme === 'system' && (
+              <span className="h-5 w-5 flex items-center justify-center">
+                <span className="relative w-4 h-4">
+                  <Sun className="h-4 w-4 absolute inset-0" />
+                  <Moon className="h-4 w-4 absolute inset-0 opacity-50" />
+                </span>
+              </span>
+            )}
+          </button>
         </div>
       </header>
 
@@ -99,6 +161,23 @@ function AppLayout() {
                   {item.title}
                 </Link>
               ))}
+              <div className="h-px bg-border my-2" />
+              <button
+                onClick={() => { cycleTheme(); setIsSidebarOpen(false); }}
+                className="flex items-center gap-3 px-4 py-3 text-sm rounded-md hover:bg-muted transition-colors min-h-[48px] w-full"
+              >
+                {theme === 'light' && <Sun className="h-5 w-5 shrink-0" />}
+                {theme === 'dark' && <Moon className="h-5 w-5 shrink-0" />}
+                {theme === 'system' && (
+                  <span className="h-5 w-5 shrink-0 flex items-center justify-center">
+                    <span className="relative w-4 h-4">
+                      <Sun className="h-4 w-4 absolute inset-0" />
+                      <Moon className="h-4 w-4 absolute inset-0 opacity-50" />
+                    </span>
+                  </span>
+                )}
+                <span>Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+              </button>
             </nav>
           </aside>
         </>

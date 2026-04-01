@@ -1,0 +1,47 @@
+{
+  "featureId": "extract-lecture-7-8",
+  "reviewedAt": "2026-04-01T05:05:00.000Z",
+  "commitId": "cff47588c64e7b300e0f4bee84a7550e3babb2be",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Lecture 7 (Procedures and Stack Frames) and Lecture 8 (String Operations) content was successfully extracted and added to lectures.json. Lecture 7 contains 9 sections covering CALL/RET, PUSH/POP, stack frames, parameter passing, recursion, arrays, and floating-point operations. Lecture 8 contains 8 sections covering MOVS, LODS, STOS, CMPS, SCAS, REP prefixes, and direction flag control. Content includes proper provenance metadata, concept tags, and instruction references.",
+    "issues": [
+      {
+        "file": "data/processed/lectures.json",
+        "severity": "non_blocking",
+        "description": "Lecture 7 section 'Extending 8-bit to 16-bit Programs' appears to reference Lecture 4 content (ADD, SUB, INC, DEC). While this creates cross-lecture references which may be intentional, it could indicate content organization inconsistency."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "severity": "non_blocking",
+        "description": "Several assessment items arrays are empty (e.g., l7-s4 assessmentItems: [], l8-s2 assessmentItems: []). These could be populated later with quiz questions referencing the content."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "severity": "non_blocking",
+        "description": "Some example arrays are empty (l8-s1 through l8-s8 all have examples: []). Example files referenced in instruction-index.json (e.g., 'string-copy.asm') should be linked if they exist."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "The feature specifies skillName 'frontend-worker' which does not exist in the available skills list. The worker transcript shows: 'Skill invocation failed: Skill \"frontend-worker\" not found'. Despite this, the worker proceeded manually and completed the feature successfully.",
+      "evidence": "features.json shows skillName: 'frontend-worker' but the skill is not in the available skills. Transcript shows error at session dacd4c50-5fb5-4a5e-b0e9-4683cde04327."
+    },
+    {
+      "area": "skills",
+      "observation": "The handoff's skillFeedback.followedProcedure is set to true despite the skill not existing. This appears inconsistent - if the skill doesn't exist, the procedure couldn't have been followed.",
+      "evidence": "handoff.json shows skillFeedback: { followedProcedure: true, deviations: [], suggestedChanges: [] } but transcript shows skill invocation failed."
+    },
+    {
+      "area": "conventions",
+      "observation": "The worker created new lecture content manually rather than following a documented extraction procedure. This is acceptable as a fallback but suggests the content extraction process is not well-documented in shared state.",
+      "evidence": "Worker manually extracted PDF content using python script and created lecture sections following the existing pattern. No existing script or procedure was referenced."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Feature extract-lecture-7-8 completed successfully. Lecture 7 (Procedures and Stack Frames - 9 sections) and Lecture 8 (String Operations - 8 sections) content was added to lectures.json with proper provenance metadata, concept tags, and instruction references. All 611 content validation assertions pass. Build succeeds. The skill 'frontend-worker' referenced in the feature does not exist, but the worker successfully completed the task manually. No blocking issues found."
+}

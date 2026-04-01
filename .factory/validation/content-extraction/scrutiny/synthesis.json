@@ -1,0 +1,80 @@
+{
+  "milestone": "content-extraction",
+  "round": 1,
+  "status": "fail",
+  "validatorsRun": {
+    "test": { "passed": true, "command": "echo \"No tests configured\"", "exitCode": 0 },
+    "typecheck": { "passed": true, "command": "npx tsc --noEmit", "exitCode": 0 },
+    "lint": { "passed": true, "command": "npm run lint", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 5,
+    "passed": 3,
+    "failed": 1,
+    "missingReports": 2,
+    "failedFeatures": ["extract-lecture-9-10"]
+  },
+  "blockingIssues": [
+    {
+      "featureId": "extract-lecture-9-10",
+      "severity": "blocking",
+      "description": "Lecture 9 content mismatch: Feature expects 'modular programming, recursion, BIOS/DOS interrupts, TSRs' but extracted 'Memory Hierarchy (cont)' with caching content - Computer Systems content, not Assembly Language",
+      "source": "extract-lecture-9-10.json"
+    },
+    {
+      "featureId": "extract-lecture-9-10",
+      "severity": "blocking",
+      "description": "Lecture 10 content mismatch: Feature expects 'comprehensive review, real-world examples, exam preparation' but extracted 'Exceptional Control Flow' with Virtual Memory, Page Tables, TLB - Operating Systems/Architecture content, not Assembly exam prep",
+      "source": "extract-lecture-9-10.json"
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add validation step to verify extracted content semantically matches feature description, not just structural format. The content validation (611 assertions) only validates JSON structure, not semantic correctness.",
+      "evidence": "extract-lecture-9-10 review shows content validation passed but wrong content was extracted (Memory Hierarchy instead of modular programming)",
+      "isSystemic": true
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify that content features should use 'data-processing-worker' or a dedicated content-extraction skill rather than 'frontend-worker' which implies UI work.",
+      "evidence": "Features extract-lecture-*-* all specify 'frontend-worker' skill but work involves PDF parsing and JSON generation",
+      "isSystemic": true
+    },
+    {
+      "target": "validation-contract.md",
+      "suggestion": "Add VAL-CONTENT-* assertions that verify semantic alignment between feature description and extracted content, not just structural validation.",
+      "evidence": "Current VAL-LECT-* assertions verify content displays but not whether the content matches what the feature description promised to extract",
+      "isSystemic": true
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Duplicate lectures.json files in data/processed/ and src/data/processed/",
+      "reason": "Non-blocking issue already documented by extract-lecture-1-2 review. Will be handled by fix features if needed."
+    }
+  ],
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "The 'frontend-worker' skill specified in all content-extraction features does not exist. Workers proceeded manually following established patterns.",
+      "evidence": "features.json shows skillName: 'frontend-worker' for all 5 content features but skill is not in available skills list",
+      "action": "recommend"
+    },
+    {
+      "area": "conventions",
+      "observation": "Some commits mix unrelated changes (e.g., commit d3161da contains lecture extraction, UI fixes mission updates, and scrutiny reviews)",
+      "evidence": "extract-lecture-1-2 review notes commit d3161da violates AGENTS.md small PRs guidance",
+      "action": "recommend"
+    },
+    {
+      "area": "data",
+      "observation": "Two review reports (extract-lecture-3-4, extract-lecture-5-6) were not written to disk despite Task tool reporting success",
+      "evidence": "reviews/ directory contains only 3 of 5 expected JSON files",
+      "action": "recommend"
+    }
+  ],
+  "previousRound": null,
+  "notes": "extract-lecture-9-10 has CRITICAL content mismatch - extracted CS:APP Computer Systems content (Memory Hierarchy, Exceptional Control Flow) instead of Assembly Language Programming content (modular programming, BIOS/DOS interrupts, exam prep). This must be fixed before user testing can proceed."
+}

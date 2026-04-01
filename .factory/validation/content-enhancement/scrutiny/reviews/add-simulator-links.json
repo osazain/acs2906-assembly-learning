@@ -1,0 +1,45 @@
+{
+  "featureId": "add-simulator-links",
+  "reviewedAt": "2026-04-01T20:15:00.000Z",
+  "commitId": "e72b007",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The implementation adds 'Try in Simulator' buttons to assembly code blocks in lectures. When clicked, the button navigates to the simulator with the code pre-loaded via a base64-encoded URL query parameter. The implementation correctly handles hash-based routing and properly encodes/decodes the code.",
+    "issues": [
+      {
+        "file": "src/components/lecture/LectureReader.tsx",
+        "line": 391,
+        "severity": "non_blocking",
+        "description": "The handleTryInSimulator function is recreated on every render for each code block. While this works correctly, it could be memoized using useCallback for better performance. However, since the number of code blocks per lecture is typically small, this is not a blocking issue."
+      },
+      {
+        "file": "src/components/lecture/LectureReader.tsx",
+        "line": 392,
+        "severity": "non_blocking",
+        "description": "Using btoa() for encoding can fail with Unicode characters. If assembly code contains non-ASCII characters in comments, btoa() will throw. However, for typical ASCII-only assembly code, this works fine. Consider using a Unicode-safe encoder like base64url if non-ASCII support is needed."
+      },
+      {
+        "file": "src/routes.tsx",
+        "line": 522,
+        "severity": "non_blocking",
+        "description": "Using 'http://localhost' as a base URL for URL parsing is a workaround. While this works in practice since the hash is always on localhost, it could be more robust by using a relative URL approach. Not a blocking issue as it works correctly."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The worker used window.location.hash for navigation instead of the TanStack Router's navigate function. This is a pragmatic approach for cross-route navigation with query parameters in a hash-based routing context, but it's a pattern that isn't documented in AGENTS.md.",
+      "evidence": "handleTryInSimulator in LectureReader.tsx uses window.location.hash = `#/simulator?code=${encoded}` instead of using useNavigate() from @tanstack/react-router"
+    },
+    {
+      "area": "knowledge",
+      "observation": "The worker discovered that TanStack Router's useLocation().search does not correctly parse query parameters when using hash-based routing (createHashHistory). This is important knowledge that could help future developers avoid the same issue.",
+      "evidence": "SimulatorPage originally used useLocation() which failed to parse ?code= query param from hash URL. Worker fixed by parsing window.location.hash directly."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "The add-simulator-links feature implementation is complete and functional. The implementation correctly adds 'Try in Simulator' buttons to code blocks in lectures, and clicking them navigates to the simulator with the code pre-loaded. The feature fulfills VAL-CROSS-003. Build and lint validations pass. The implementation handles the hash-based routing correctly by parsing window.location.hash directly instead of relying on useLocation()."
+}

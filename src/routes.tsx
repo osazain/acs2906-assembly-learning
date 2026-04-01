@@ -1,7 +1,7 @@
-import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link } from '@tanstack/react-router'
+import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link, redirect } from '@tanstack/react-router'
 import { createHashHistory } from '@tanstack/history'
 import { useState, useEffect } from 'react'
-import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X, Stethoscope } from 'lucide-react'
+import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, Menu, X, Stethoscope } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
 import { LectureReader } from '@/components/lecture/LectureReader'
@@ -267,7 +267,10 @@ function IndexPage() {
 const courseMapRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/course-map',
-  component: CourseMapPage,
+  beforeLoad: () => {
+    throw redirect({ to: '/lectures' })
+  },
+  component: () => null,
 })
 
 const lectureDetailRoute = createRoute({
@@ -368,120 +371,6 @@ const progressRoute = createRoute({
   path: '/progress',
   component: ProgressPage,
 })
-
-function CourseMapPage() {
-  const lectures = courseMapData.lectures as CourseMapLecture[]
-
-  const getExamRelevanceStyles = (relevance: CourseMapLecture['examRelevance']) => {
-    switch (relevance) {
-      case 'high':
-        return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-      case 'medium':
-        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
-      case 'low':
-        return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-    }
-  }
-
-  const getDifficultyStyles = (difficulty: CourseMapLecture['difficulty']) => {
-    switch (difficulty) {
-      case 'foundational':
-        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-      case 'intermediate':
-        return 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-      case 'advanced':
-        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400'
-    }
-  }
-
-  return (
-    <div className="space-y-8">
-      {/* Header Section */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-          <GraduationCap className="h-4 w-4" />
-          ACS2906 Assembly Language
-        </div>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Course Map</h1>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          Navigate through 10 comprehensive lectures covering everything from data representation to advanced assembly programming.
-        </p>
-      </div>
-
-      {/* Stats Bar */}
-      <div className="flex flex-wrap justify-center gap-6 text-sm">
-        <div className="flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-primary" />
-          <span><strong>{lectures.length}</strong> Lectures</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <FlaskConical className="h-4 w-4 text-emerald-600" />
-          <span><strong>{lectures.reduce((sum, l) => sum + l.examples, 0)}</strong> Examples</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Target className="h-4 w-4 text-orange-600" />
-          <span><strong>{lectures.filter(l => l.examRelevance === 'high').length}</strong> High-Exam-Relevance</span>
-        </div>
-      </div>
-
-      {/* Lecture Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {lectures.map((lecture) => (
-          <Link
-            key={lecture.id}
-            to="/lecture/$lectureId"
-            params={{ lectureId: String(lecture.id) }}
-            className="group block p-5 rounded-xl border bg-card hover:bg-muted/50 hover:border-primary/50 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            {/* Card Header */}
-            <div className="flex items-start gap-3 mb-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 text-primary font-bold shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                {lecture.id}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm sm:text-base leading-tight group-hover:text-primary transition-colors">
-                  {lecture.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Topics */}
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {lecture.topics.slice(0, 3).map((topic) => (
-                <span
-                  key={topic}
-                  className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground truncate max-w-[150px]"
-                  title={topic}
-                >
-                  {topic}
-                </span>
-              ))}
-              {lecture.topics.length > 3 && (
-                <span className="text-xs text-muted-foreground">+{lecture.topics.length - 3} more</span>
-              )}
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-border">
-              <div className="flex items-center gap-2">
-                <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', getExamRelevanceStyles(lecture.examRelevance))}>
-                  {lecture.examRelevance === 'high' ? 'High Exam' : lecture.examRelevance}
-                </span>
-                <span className={cn('text-xs px-2 py-0.5 rounded-full', getDifficultyStyles(lecture.difficulty))}>
-                  {lecture.difficulty}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <span>{lecture.examples} examples</span>
-                <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 function LecturesPage() {
   const lectures = courseMapData.lectures as CourseMapLecture[]

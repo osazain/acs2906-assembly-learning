@@ -1,7 +1,7 @@
 import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link } from '@tanstack/react-router'
 import { createHashHistory } from '@tanstack/history'
 import { useState, useEffect } from 'react'
-import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Settings, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X, Stethoscope } from 'lucide-react'
+import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, GraduationCap, Menu, X, Stethoscope } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import courseMapData from './data/processed/course-map.json'
 import { LectureReader } from '@/components/lecture/LectureReader'
@@ -369,12 +369,6 @@ const progressRoute = createRoute({
   component: ProgressPage,
 })
 
-const settingsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/settings',
-  component: SettingsPage,
-})
-
 function CourseMapPage() {
   const lectures = courseMapData.lectures as CourseMapLecture[]
 
@@ -677,57 +671,6 @@ function ProgressPage() {
   )
 }
 
-function SettingsPage() {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(() => {
-    if (typeof window !== 'undefined') {
-      return (localStorage.getItem('acs2906_theme') as 'light' | 'dark' | 'system') || 'system'
-    }
-    return 'system'
-  })
-
-  useEffect(() => {
-    localStorage.setItem('acs2906_theme', theme)
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else if (theme === 'light') {
-      document.documentElement.classList.remove('dark')
-    } else {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    }
-  }, [theme])
-
-  return (
-    <div className="space-y-6 max-w-2xl">
-      <div className="flex items-center gap-2">
-        <Settings className="h-5 w-5 text-primary" />
-        <h1 className="text-2xl font-bold">Settings</h1>
-      </div>
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Appearance</h2>
-        <div className="flex gap-2">
-          <button onClick={() => setTheme('light')} className={cn('flex items-center gap-2 px-4 py-2 rounded-lg border', theme === 'light' ? 'border-primary bg-primary/10' : 'border-border')}>
-            <Sun className="h-4 w-4" /> Light
-          </button>
-          <button onClick={() => setTheme('dark')} className={cn('flex items-center gap-2 px-4 py-2 rounded-lg border', theme === 'dark' ? 'border-primary bg-primary/10' : 'border-border')}>
-            <Moon className="h-4 w-4" /> Dark
-          </button>
-          <button onClick={() => setTheme('system')} className={cn('flex items-center gap-2 px-4 py-2 rounded-lg border', theme === 'system' ? 'border-primary bg-primary/10' : 'border-border')}>
-            <Settings className="h-4 w-4" /> System
-          </button>
-        </div>
-      </section>
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">About</h2>
-        <p className="text-sm text-muted-foreground">ACS2906 Assembly Language Learning Platform v0.1.0</p>
-      </section>
-    </div>
-  )
-}
-
 // Add children to gamesRoute
 const gamesRouteTree = gamesRoute.addChildren([
   gamesIndexRoute,
@@ -748,7 +691,6 @@ const routeTree = rootRoute.addChildren([
   gamesRouteTree,
   simulatorRoute,
   progressRoute,
-  settingsRoute,
 ])
 
 const router = createRouter({ routeTree, history: createHashHistory() })

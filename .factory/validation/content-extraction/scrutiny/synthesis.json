@@ -1,6 +1,6 @@
 {
   "milestone": "content-extraction",
-  "round": 2,
+  "round": 3,
   "status": "fail",
   "validatorsRun": {
     "test": { "passed": true, "command": "echo 'No tests configured'", "exitCode": 0 },
@@ -13,7 +13,7 @@
     "passed": 4,
     "failed": 1,
     "failedFeatures": ["extract-lecture-9-10"],
-    "note": "No new reviews spawned - this is a re-run after fix feature fix-lecture-9-10-content remained pending. Blocking issue persists."
+    "note": "No new reviews spawned - this is re-run after prior synthesis. Fix feature fix-lecture-9-10-content remains pending (not completed). Blocking issue persists."
   },
   "blockingIssues": [
     {
@@ -21,7 +21,7 @@
       "severity": "blocking",
       "description": "Lecture 9 and 10 content extracted from wrong source PDFs (CS:APP Computer Systems instead of ACS2906 Assembly Language Programming). Lecture 9 contains 'Memory Hierarchy' (caching, TLB, virtual memory) instead of 'modular programming, recursion, BIOS/DOS interrupts, TSRs'. Lecture 10 contains 'Exceptional Control Flow' instead of 'comprehensive review, exam preparation'.",
       "stillExists": true,
-      "evidence": "Verified lectures.json still contains CS:APP content for Lectures 9 and 10. Fix feature fix-lecture-9-10-content is still pending (not completed)."
+      "evidence": "Verified lectures.json still contains CS:APP content: Lecture 9 title is 'Memory Hierarchy (cont)' and Lecture 10 title is 'Exceptional Control Flow'. Fix feature fix-lecture-9-10-content is still pending (not completed)."
     }
   ],
   "appliedUpdates": [],

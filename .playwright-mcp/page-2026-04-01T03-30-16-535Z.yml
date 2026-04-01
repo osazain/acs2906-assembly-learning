@@ -1,0 +1,77 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+      - 'button "Theme: system" [ref=e20]':
+        - generic [ref=e22]:
+          - img [ref=e23]
+          - img [ref=e29]
+  - main [ref=e31]:
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - img [ref=e35]
+          - text: Master 8086 Assembly Language
+        - heading "ACS2906 Learning Platform" [level=1] [ref=e37]
+        - paragraph [ref=e38]: A source-grounded, mastery-based study system for Assembly Language Programming.
+        - generic [ref=e39]:
+          - link "Start Learning" [ref=e40] [cursor=pointer]:
+            - /url: /#/course-map
+            - img [ref=e41]
+            - text: Start Learning
+          - link "Try Simulator" [ref=e43] [cursor=pointer]:
+            - /url: /#/simulator
+            - img [ref=e44]
+            - text: Try Simulator
+      - generic [ref=e47]:
+        - heading "What You Will Learn" [level=2] [ref=e48]
+        - generic [ref=e49]:
+          - link "10 Lectures Comprehensive coverage from data representation to advanced procedures" [ref=e50] [cursor=pointer]:
+            - /url: /#/lectures
+            - img [ref=e52]
+            - heading "10 Lectures" [level=3] [ref=e54]
+            - paragraph [ref=e55]: Comprehensive coverage from data representation to advanced procedures
+          - link "50+ Examples Hand-crafted assembly examples with annotations and simulator presets" [ref=e56] [cursor=pointer]:
+            - /url: /#/examples
+            - img [ref=e58]
+            - heading "50+ Examples" [level=3] [ref=e60]
+            - paragraph [ref=e61]: Hand-crafted assembly examples with annotations and simulator presets
+          - link "Interactive Simulator Run 8086 assembly code step-by-step with register visualization" [ref=e62] [cursor=pointer]:
+            - /url: /#/simulator
+            - img [ref=e64]
+            - heading "Interactive Simulator" [level=3] [ref=e67]
+            - paragraph [ref=e68]: Run 8086 assembly code step-by-step with register visualization
+          - link "Practice Drills Targeted practice with instant feedback and remediation" [ref=e69] [cursor=pointer]:
+            - /url: /#/drills
+            - img [ref=e71]
+            - heading "Practice Drills" [level=3] [ref=e75]
+            - paragraph [ref=e76]: Targeted practice with instant feedback and remediation
+          - link "Learning Games Gamified practice for instructions, registers, and flags" [ref=e77] [cursor=pointer]:
+            - /url: /#/games
+            - img [ref=e79]
+            - heading "Learning Games" [level=3] [ref=e81]
+            - paragraph [ref=e82]: Gamified practice for instructions, registers, and flags
+          - link "Mastery Tracking Track your progress and identify areas for improvement" [ref=e83] [cursor=pointer]:
+            - /url: /#/progress
+            - img [ref=e85]
+            - heading "Mastery Tracking" [level=3] [ref=e87]
+            - paragraph [ref=e88]: Track your progress and identify areas for improvement
+      - generic [ref=e89]:
+        - heading "Ready to Master Assembly?" [level=2] [ref=e90]
+        - paragraph [ref=e91]: Start with the Course Map to see how all the pieces fit together.
+        - link "Explore Course Map" [ref=e92] [cursor=pointer]:
+          - /url: /#/course-map
+          - img [ref=e93]
+          - text: Explore Course Map
+  - contentinfo [ref=e95]: ACS2906 Assembly Language Learning Platform

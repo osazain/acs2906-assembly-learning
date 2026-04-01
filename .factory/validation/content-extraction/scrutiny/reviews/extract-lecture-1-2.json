@@ -1,12 +1,12 @@
 {
   "featureId": "extract-lecture-1-2",
-  "reviewedAt": "2026-04-01T05:30:00.000Z",
+  "reviewedAt": "2026-04-01T13:00:00.000Z",
   "commitId": "d3161da",
-  "transcriptSkeletonReviewed": false,
+  "transcriptSkeletonReviewed": true,
   "diffReviewed": true,
   "status": "pass",
   "codeReview": {
-    "summary": "Implementation successfully creates lectures.json with content for Lectures 1 and 2, and updates LectureReader to load from JSON. All verification steps passed - lectures display with proper content, syntax highlighting, and section navigation.",
+    "summary": "Implementation successfully creates lectures.json with content for Lectures 1 and 2, and updates LectureReader to load from JSON. All verification steps passed - lectures display with proper content, syntax highlighting, and section navigation. The code follows React patterns, uses useMemo for performance, and properly handles fallback for lectures without full content.",
     "issues": []
   },
   "sharedStateObservations": [
@@ -17,15 +17,20 @@
     },
     {
       "area": "skills",
-      "observation": "Feature skillName is 'frontend-worker' but the skill doesn't exist in the skills registry. Worker proceeded manually based on AGENTS.md",
-      "evidence": "skillFeedback.deviations: skillName 'frontend-worker' was not found, proceeded manually"
+      "observation": "The frontend-worker SKILL.md was created in the same commit (d3161da) as this feature - this is a chicken-and-egg situation where the skill didn't exist when the feature started",
+      "evidence": "git show d3161da shows .factory/skills/frontend-worker/SKILL.md was added in same commit as lectures.json. The skillFeedback indicated worker followed procedure despite this."
     },
     {
       "area": "knowledge",
       "observation": "validation-contract.md lacks semantic content assertions (VAL-CONTENT-*) - only structural validation is performed. Worker extracted content from PDFs but there's no way to verify the content semantically matches the feature description",
       "evidence": "VAL-LECT-001, VAL-LECT-002, VAL-LECT-003 only verify 'lecture exists', 'has sections', 'code blocks' - not that content matches feature description (e.g., Lecture 1 should cover binary/hex numbering, Lecture 2 should cover registers MOV)"
+    },
+    {
+      "area": "data",
+      "observation": "Two copies of processed data files exist at different paths with different sizes: 'data/processed/lectures.json' (146910 bytes) vs 'src/data/processed/lectures.json' (84730 bytes). LectureReader imports from src/data/processed/lectures.json via @ alias. This duplication could cause maintenance/sync issues.",
+      "evidence": "LectureReader.tsx:4 imports from '@/data/processed/lectures.json'. Both files exist but have different sizes. This pattern also exists for other processed JSON files (concept-taxonomy.json, examples.json, question-bank.json)."
     }
   ],
   "addressesFailureFrom": null,
-  "summary": "Feature extract-lecture-1-2 PASSES review. Worker successfully extracted content for Lectures 1 and 2 into lectures.json and updated LectureReader component. Build passes, interactive verification confirmed lectures render correctly with syntax highlighting and section navigation. Non-blocking issues: commit contains unrelated changes (violates small PRs guidance), skillName doesn't exist (worker proceeded manually), and validation-contract lacks semantic content assertions."
+  "summary": "Feature extract-lecture-1-2 PASSES review. Worker successfully extracted content for Lectures 1 and 2 into lectures.json and updated LectureReader component. Build passes, interactive verification confirmed lectures render correctly with syntax highlighting and section navigation. Content includes numbering systems (binary/hex) for Lecture 1 and registers/MOV for Lecture 2 as specified. Non-blocking issues: commit contains unrelated changes (violates small PRs guidance), skill created in same commit (chicken-and-egg), validation-contract lacks semantic assertions, and duplicate data file locations with different sizes."
 }

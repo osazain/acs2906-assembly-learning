@@ -1,0 +1,625 @@
+PDF: C:\OsaZain_stuff\edu\ACS2906\Lectures\Lecture 5.pdf
+Number of pages: 61
+
+--- PAGE 1 ---
+Instructor: 
+David Bosc 
+Applied Computer Science 
+University of Winnipeg 
+Computer Architecture and 
+System Software 
+Lecture 05: Assembly Language cont. 
+ 
+1
+
+--- PAGE 2 ---
+Announcements 
+[X]Assignment 2 is out this week 
+[X]Due Friday, Feb 20th (during reading week) 
+[X]After today’s lecture, should be able to complete the 
+assignment 
+[X]Q1 & Q2: Frac 
+[X]Be sure to show your work in binary where applicable for 
+full marks 
+[X]Q3: Assembly Programming 
+[X]No lecture next week, as it is the midterm exam 
+[X]Details next slide section 
+[X]Open lab for As2 help if you want to get it done 
+before the break 
+2
+
+--- PAGE 3 ---
+Midterm Info 
+
+--- PAGE 4 ---
+Midterm Info 
+-February 9th/10th (depending on your section) 
+@6pm-8pm in your lecture room 
+-2 hours to complete 
+-In person, written by hand without outside notes, 
+calculators, handheld devices, etc. 
+-Worth 24% of final grade 
+-Covers lectures 1-3 (ie. no Assembly) 
+-Will have to show all your work, so bring pen, pencil, 
+eraser. 
+-Scrap paper will be provided 
+Ethical use of LLMs to study is recommended! 4
+
+--- PAGE 5 ---
+Studying - Tips 
+-Read the textbook 
+-Form a study group 
+-Email me questions if you’re unsure how to answer 
+-LLMs can be a great resource, but they won’t be marking 
+your tests 
+-Create personal reviews per lecture to have all content 
+in once place, easy access 
+-Read your reviews while you eat, before bed, break at 
+work, etc. 5
+
+--- PAGE 6 ---
+I/O in Assembly 
+
+--- PAGE 7 ---
+Interrupt Instructions 
+[X]INT operand 
+[X]Operand could be an immediate value, which is an interrupt 
+numbered by immediate byte (0 .. 255) 
+[X]Push to stack: flags, registers, CS, IP , IF = 0 and transfers control 
+to interrupt procedure 
+[X]IRET – return from an interrupt service routine 
+[X]Although there are 255 possible operands, the one we will 
+use 21h exclusively in this course.  This transfers control to the 
+operating system to allow the OS to run a subroutine. 
+7
+
+--- PAGE 8 ---
+Interrupt Instructions 
+◻Summary: 
+■Sometimes we need the operating system to call a 
+subroutine (ie. read user input, print out results) 
+■The OS is the interface between our program and the 
+hardware 
+■We use the int 21h  instruction to call the operating system 
+which executes a subroutine based on the code stored in the 
+ah register 
+◻For our example, if we want to read a character we 
+need to run subroutine #1, which has the following 
+requirements 8
+
+--- PAGE 9 ---
+Subroutine 1 
+◻Subroutine 1 reads one char of input from the user 
+◻Waits for user input at command line 
+◻When user presses a key, that character is stored in 
+register al (using ASCII) 
+◻Simplest form of user input.  No user prompting 
+mov ah, 1 ;Subroutine code 
+int 21h ;Call OS 9
+
+--- PAGE 10 ---
+Subroutine 2 
+◻Subroutine 2  displays the character in register dl
+◻Subroutine decodes number using ASCII 
+◻Prints to command line 
+mov dl, 34h     ;We want to display a char from 
+register dl 
+mov ah, 2h    ;Give the subroutine code 
+int 21h     ;Call the OS 
+10
+
+--- PAGE 11 ---
+Subroutine 9 
+◻Subroutine 9 displays multiple chars (strings) 
+◻Subroutine 9 looks at the memory address  
+specified by the contents of register dx
+◻The subroutine prints the contents of each 
+subsequent memory address until it hits the 
+terminating ‘ $’ character. 11
+
+--- PAGE 12 ---
+Strings in Assembly 
+◻Recall that strings can be defined in the following way
+ mystring db ‘Hello World.’ 
+◻For the following example, let’s modify this line 
+slightly: 
+mystring db ‘Hello World.’, 10, ’$’  
+◻Line-feed  (ASCII 10) is the control character that 
+brings the cursor down to the next line in the 
+terminal (\n) 
+◻Other machines require a Carriage-Return  (ASCII 
+13D) before the line-feed 
+◻‘$’ is a terminating character 12
+
+--- PAGE 13 ---
+Recall: Data transfer instructions 
+lea register, memory_address 
+◻Examples 
+lea dx, mystring 
+◻Result: dx contains the starting memory address of 
+string ‘mystring’ 
+◻mystring is ready to print (if it is terminated) 13
+
+--- PAGE 14 ---
+HelloWorld.asm 
+◻Let’s take a look at HelloWorld.asm to see the 
+subroutine in action 
+◻Let’s also try modifying to display a second string 
+on a new line. 
+◻Try editing specific characters within the string using 
+assembly instructions. 14
+
+--- PAGE 15 ---
+AdditionExample.asm 
+◻Let’s use our knowledge of subroutines and display 
+the results of addition 
+◻Initialize two variables var1, var2 as 2 and 4. 
+◻Add them together. 
+◻Print the results. 15
+
+--- PAGE 16 ---
+How to interpret output 
+[X]Displaying the number 6 returns ♠
+[X]Why? 16
+
+--- PAGE 17 ---
+How to interpret output 
+[X]Displaying the number 6 returns ♠
+ 
+[X]Why? 
+[X] ♠
+ has the ASCII encoding of 6 
+[X]If you are on Windows you can type characters from 
+the ASCII table by typing Alt+num at command line 
+[X]So how do we display the character ‘6’? 
+[X]The characters ‘1’,’2’,…’9’ all appear in the ASCII table 
+with offset of 48 (or 30h). 
+[X]Therefore adding 30h to our register before displaying 
+should fix our output 17
+
+--- PAGE 18 ---
+How to interpret output 
+◻Let’s try adding 5+5. What happens? 
+◻Let’s subtract 2-4. What happens? 18
+
+--- PAGE 19 ---
+How to interpret output 
+[X]Let’s try adding 5+5. What happens? 
+[X]There is no ASCII entry for ‘10’. Each digit has to be 
+decoded separately. In general, converting multi-digit 
+base 10 numbers to string format is a complicated 
+process that we’ll look into next class. 
+[X]Let’s subtract 2-4. What happens? 
+[X]0x02-0x04  = 0xFE. Adding the 30h offset results in 
+overflow.  0xFE+0x30 = 0x2E or (46)10.
+[X]This is the ASCII code for ‘.’ 19
+
+--- PAGE 20 ---
+Warning(!!) 
+[X]Sometimes int 21h  may overwrite the al register 
+[X]Preserve the al/ax register by 
+[X]Copying to another register 
+[X]Copying to memory (you can reserve unallocated space 
+in the data segment) 
+[X]Pushing to the stack (more on this later) 
+[X]If unsure, use the debugger to trace through 
+20
+
+--- PAGE 21 ---
+Assembly Template 
+
+--- PAGE 22 ---
+Preliminaries 
+[X]Assembly instructions are not case sensitive 
+[X]Comments are preceded by ‘;’ 
+[X];This is a comment 
+[X]No terminating character – each instruction is on its 
+own line. Operands of instructions separated by 
+comma 
+[X]mov ah, 9 ;first instruction 
+add ah, 9 ;second instruction 
+…
+[X]Code should be heavily commented, since ASM is 
+not easily readable 22
+
+--- PAGE 23 ---
+Template 
+◻I have already provided a template for you online 
+(template.asm). Let’s step through it slowly to see 
+what is going on. 23
+
+--- PAGE 24 ---
+Data Segment 
+[X]The data segment will hold all our variable 
+declarations 
+[X]Begins with data segment 
+[X]Ends with data ends 
+[X]Any variable declarations/memory allocations are 
+made in between these two statements 
+[X]We will not worry about dynamic memory allocation in 
+this course 24
+
+--- PAGE 25 ---
+Stack Segment 
+[X]Before any instructions we need to define the stack 
+segment 
+[X] stack1 segment  stack  starts the stack segment 
+[X]stack is a reserved name so we call the stack ‘stack1’ 
+[X] stack1 ends  ends the stack segment 
+[X]We will allocate 100 uninitialized bytes – for this 
+course we will never need more than this 
+[X] db 100 dup(?)  25
+
+--- PAGE 26 ---
+Code Segment 
+◻Start and end of the code segment: 
+code    segment 
+code    ends 
+◻Our instructions will be written between these 
+statements 
+◻Our first instructions need to name the various 
+segment registers and assign their locations in mem 
+assume  cs:code, ds:data, ss:stack1 26
+
+--- PAGE 27 ---
+Template 
+◻Now point the data and stack registers to their 
+proper segments 
+mov ax, data 
+mov ds, ax 
+mov ax, stack1 
+mov ss, ax 27
+
+--- PAGE 28 ---
+Template 
+◻Our next instruction: Start:
+◻The colon after ‘Start:’ defines it as a label
+◻In the future, we’ll use labels to jump ahead or 
+backwards in our code 
+◻The first label is required to tell the assembler your 
+code has begun. The label can be called anything 
+(start, begin, etc) 28
+
+--- PAGE 29 ---
+Template 
+◻We’ll end the label immediately after the code 
+segment (normally we will not end labels) 
+code ends 
+end start   🡨29
+
+--- PAGE 30 ---
+Template 
+◻Now we want to return control back to MS-DOS to 
+end the program with the subroutine code 4Ch, 
+which we’ll store in the ah register 
+mov ah, 4ch 
+ int 21h
+30
+
+--- PAGE 31 ---
+Addressing Modes 31
+
+--- PAGE 32 ---
+x86 Addressing Modes 
+[X]Specify the method for finding the memory address 
+of an operand 
+[X] e .g . using information held in registers and/or constants 
+contained within a machine instruction 
+[X]Specifies operands in an assembly language 
+program and is completely architecture dependent 32
+
+--- PAGE 33 ---
+Recall MOV 
+MOV AH, 08h 
+[X]h stands for hexadecimal 
+[X]MOV copies operand 2 into operand 1 
+[X]Source (data value 08h) is copied into destination 
+(register AH) 
+[X]Data 08h is provided in the instruction 
+[X]Called Immediate addressing mode 
+33
+
+--- PAGE 34 ---
+x86 Addressing Modes 
+[X]There are three basic types of operands: 
+[X]Immediate 
+[X]Constant integer (8, 16,  or 32 bits) 
+[X]Constant value is stored within the instruction 
+[X]Register 
+[X]Name of a register is specified 
+[X]Register number is encoded within the instruction 
+[X]Memory 
+[X]Reference to a location in memory 
+[X]Memory address is encoded within the instruction, or 
+[X]Register holds the address of a memory location 34
+
+--- PAGE 35 ---
+x86 Addressing Modes 
+[X]The Intel 8086 has about 9 data addressing modes: 
+[X]Immediate, register, direct, register indirect, based, 
+indexed, based indexed, string, and port addressing 
+[X]Definition names vary across books 
+[X]Register and immediate modes do not need to access 
+the external bus (faster) 
+[X]The syntax of the operand field determines the 
+addressing mode 35
+
+--- PAGE 36 ---
+Immediate Addressing Mode 
+MOV CX, 10 
+[X]Immediate data is coded directly in the instruction’s 
+machine code 
+[X]Note: CX contains 0xA because there is no h after 10 
+[X]The data is put in the operand field 
+[X]The constant in the operand field may be of byte or 
+word length 
+[X]Some assemblers need a ‘#’ before the constant 36
+
+--- PAGE 37 ---
+Immediate Addressing Mode Cont. 
+[X]The constant may be in hex., dec., binary, or text 
+[X]Default format is decimal 
+[X]Examples 
+[X]MOV CX, 65 
+[X]MOV CX, 41h 
+[X]MOV CX, 01000001b 
+[X]MOV CX, ‘A’ 
+[X]Advantage: No memory reference 
+[X]Disadvantage: Size of number is restricted to size of 
+address field 37
+
+--- PAGE 38 ---
+Direct Addressing Mode 
+MOV DS:[1234h], AL 
+[X]Copies AL using offset 1234h 
+[X]The operand is stored in a MEMORY location 
+[X]DS specifies data segment register 
+[X]An offset address is coded directly in the instruction 
+[X]The offset combined with DS forms the address where the 
+operand is located 38
+
+--- PAGE 39 ---
+Direct Addressing Mode Cont. 
+◻Ordinarily, DS: is assumed unless explicitly 
+overridden using a colon ( e .g . ES:[001h]) 
+◻Advantage: Single memory reference to access 
+data
+◻Disadvantage: Limited address space 39
+
+--- PAGE 40 ---
+Direct Addressing Mode Cont. 
+[X]Examples: 
+[X]Assume DS=10000h, ES=20000h, FRED=4567h 
+[X]MOV AX, [20h] ; load the contents at address 10020h 
+and 10021h into AL and AH respectively 
+[X]MOV DS:[1234h], AL ; copy AL to address 11234h 
+[X]MOV ES:[1234h], AL ; copy AL to address 21234h 
+[X]MOV FRED, AL ; copy AL to address 14567h 40
+
+--- PAGE 41 ---
+Register Addressing Mode 
+[X]Instruction gets its source data from a register 
+[X]Data can be either 8/16/32 bits in length 
+[X]Data resulting from the operation is stored in 
+another register 
+[X]Advantages: 
+[X]Only a small address field is needed in instruction 
+[X]No memory references are required 
+[X]Disadvantage: address space is very limited 41
+
+--- PAGE 42 ---
+Register Addressing Mode Cont. 
+[X]Examples: 
+[X]MOV AX, BX ; copy the 16 bit content of BX to AX 
+[X]MOV AL, BL ; copy the 8-bit content of BL to AL 
+[X]MOV SI, DI ; copy DI into SI 
+[X]MOV DS, AX ; copy AX into DS 
+[X]The following register to register transfers are not permitted. 
+[X]MOV BL, BX ; mixed sizes 
+[X]MOV CS, AX ; CS cannot be the destination 
+[X]MOV ES, DS ; Segment register to segment register forbidden 
+42
+
+--- PAGE 43 ---
+Register Indirect Addressing Mode 
+MOV CX, [BX] 
+◻Copies a word from memory with location specified by BX 
+◻Uses a register instead of a constant to specify the 16-bit 
+offset address of the operand 
+◻Offset address can only be in the following registers: BP , 
+BX, DI, SI. 
+◻The [ ] is needed to denote register indirect addressing 
+mode
+◻The DS register is the default segment address register 
+(except BP , which uses SS as the default register) 
+43
+
+--- PAGE 44 ---
+Register Indirect Addressing Mode 
+[X]In cases of ambiguity: assemblers need the presence of BYTE 
+PTR or WORD PTR directives to indicate the size of the data 
+addressed by the memory pointer 
+[X] e .g . MOV [DI], 10h  is ambiguous since assembler does not 
+know whether to save 10h to memory as a byte or a word 
+[X]Instead, use the following: 
+[X]MOV BYTE PTR [DI], 10h ; save 10h to memory 
+[X]MOV WORD PTR [DI], 10h ; save 0010h to memory 44
+
+--- PAGE 45 ---
+Register Indirect Addressing Mode 
+[X]Register indirect addressing is commonly used to access a 
+table of data in memory 
+[X]Examples: 
+[X]Assume BX=0222h, DS=10000h, SS=20000h, BP=0111h 
+[X]MOV CX, [BX] ; Copy a byte from address 10222h and 10223h 
+to CX
+[X]MOV [BP], DL ;  Copy a byte from register DL to address 20111h 
+[X]Remember: Indirect addressing using BP defaults to SS 45
+
+--- PAGE 46 ---
+Based Addressing Mode 
+[X]Operand is located at the address given by adding 8 or 16 
+bit displacement to either BX or BP and combing the result 
+with a segment register 
+[X]Displacement must be specified in the operand field 
+[X]Interpreted as signed 2’s complement value 
+[X]Examples 
+[X]Assume DS=10000h, SS=20000h, BP=0222h, BX=0111h 
+[X]MOV AX, [BP-2] ; Copy the content of 20220h and 20221h to AX 
+[X]MOV [BX+777h], AX ; Copy AL to 10888h and AH to 10889h 46
+
+--- PAGE 47 ---
+Indexed Addressing Mode 
+[X]Similar to based addressing except the index registers (SI or 
+DI) must be used instead 
+[X]Operand is located at the address given by adding 8 or 16 
+bit displacement to either SI or DI and combing the result 
+with a segment register 
+[X]Examples 
+[X]Assume DS=10000h, SI=222h, DI=111h 
+[X]MOV [DI-1], BL ; store the content of BL to 10110h 
+[X]MOV BX, [SI+1000h] ; Load BL with the contents of 11222h and 
+BH with the contents of 11223h 47
+
+--- PAGE 48 ---
+Indexed Addressing Mode Cont. 
+[X]Based and indexed addressing are aka REGISTER RELATIVE 
+addressing 
+[X]Other syntax may be permitted to indicate the displacement 
+[X] e .g . the following examples are all equivalent 
+[X]And they all result in the same assembled binary code 
+[X]Examples 
+[X]Assume FRED is a constant defined in the assembly code 
+[X]MOV [DI+FRED],  BL 
+[X]MOV [DI]+FRED,  BL 
+[X]MOV FRED[DI], BL 48
+
+--- PAGE 49 ---
+Based-Index-Relative Addressing 
+[X]The base and index registers are added to give the 
+segment offset of where the operand is located 
+[X]The base register (either BX or BP) is added to an index 
+register(DI or SI) as positive integers only 
+[X]Each register lies in the range 0 to 65535 
+[X]By default, the segment address is derived from DS except 
+the BP register, which is derived from SS 
+[X]A signed displacement may also be included to calculate the 
+offset49
+
+--- PAGE 50 ---
+Based-Index-Relative Addressing 
+[X]Examples 
+[X]Assume SS=10000h, SI=3333h, BP=2222h 
+[X]MOV AX, [SI+BP] ; Load the content of 15555h and 
+15556h to AL and AH respectively 
+[X]MOV AX, [SI+BP+1111h] ; Load the contents of 
+16666h and 16667h to AL and AH respectively 50
+
+--- PAGE 51 ---
+String Addressing Mode 
+◻A string is a series of bytes or words in sequential memory 
+locations 
+◻String instructions do not use any of the previous address 
+modes 
+◻Strings may be up to 64KB in length 
+◻String addressing modes uses SI, DI, DS, and ES registers 
+◻String instructions assume SI points to first byte of string to 
+be processed, and DI points to first byte of destination string 
+◻The use of a register my be implicit in the instruction 51
+
+--- PAGE 52 ---
+String Addressing Mode 
+[X]Example 
+[X]Assume DS=10000h, ES=20000h, SI=10h, DI=20h 
+[X]MOVSB ;  Move string byte from 10010h to 20020h 52
+
+--- PAGE 53 ---
+Port Addressing Mode 
+[X]8086 has separate input/output space 
+[X]Up to 65536 I/O ports are available 
+[X]The I/O ports may be addressed by a byte sized constant 
+[X]Limited to I/O ports in the range 0 to 255 
+[X]IN AL, 40h ; Put the content of I/O port 40h into AL 
+[X]OUT 80h, AL ; Send the contents of AL to I/O port 80h 
+[X]The I/O ports may be addressed using a register 
+[X]Full range of 65536 ports are accessible 
+[X]IN AL, DX ; Load AL with the byte from port address given by DX 
+[X]OUT DX, AX ; Send the word in AX to port address given by DX 53
+
+--- PAGE 54 ---
+Summary of Addressing Modes 
+[X]Operand needed for an instruction may be located: 
+[X]Immediately in the operand field, e .g . MOV AX, 1234h 
+[X]In a register (register addressing), e .g . MOV DS, AX 
+[X]In memory at a an offset specified by one of the following (disp is 
+a constant): 
+[X]The segment address is in DS (by default, except when BP is used) 
+[X]In memory locations given implicitly by string instructions 
+[X]At input/output ports specified by a register or a constant 
+54
+
+--- PAGE 55 ---
+Buffered Strings 
+
+--- PAGE 56 ---
+Buffered Keyboard Input 
+◻Called with subroutine code 0Ah 
+◻Reads an input string of characters that ends when 
+the user presses enter 
+◻Effective address of string should be stored in dx 
+◻Before we can call the subroutine, we’ll need space 
+to store the input string 
+56
+
+--- PAGE 57 ---
+Strings for buffered keyboard input
+[X]Normal string definition 
+myStr db ‘Hello World!’ 
+[X]This reserves a byte for each character: ‘H’, ‘e’, ‘l’…etc. 
+[X]Buffered string definition 
+[X] myBStr db 5, 6 dup(?) 
+[X]We specify the max number of characters we want to 
+read (5 in this example) 
+[X]We reserve 6 bytes for the 5 characters + enter key 
+(also called carriage return) 57
+
+--- PAGE 58 ---
+Buffered Keyboard Input 
+◻Memory structure of buffered keyboard input: 
+max | count | Buffer 
+   1 byte |1 byte| N bytes 
+where max = max number to characters read 
+   (including enter) 
+count = number of characters returned 
+   (not including enter) 
+   (value generated by subroutine) 
+Buffer = contents of string 
+     (provided by user) 58
+
+--- PAGE 59 ---
+Buffered String Overview 
+◻Define buffered string in data segment 
+◻Move code 10 ( 0Ah) to register ah
+◻Load effective address  of buffered string in 
+register dx
+(ie. dx contains address of ‘max’ byte) 
+◻Call OS with int 21h 59
+
+--- PAGE 60 ---
+Don’t forget the line feed! 
+◻Once the user has entered a string, we need to 
+make room on the command line for any other 
+input/output for later. 
+◻Use subroutine 2 to display the line feed character 
+ mov ah, 2 🡨 Display subroutine 
+ mov dl, 10 🡨  Line feed character 
+ int 21h60
+
+--- PAGE 61 ---
+Accessing memory 
+[X]Recall that we are only allowed to access memory 
+using index or base registers 
+[X]Si, di, bx index into  data segment 
+[X]Bp indexes into stack segment 
+61
+

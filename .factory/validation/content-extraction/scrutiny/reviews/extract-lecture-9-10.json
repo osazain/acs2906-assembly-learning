@@ -1,8 +1,8 @@
 {
   "featureId": "extract-lecture-9-10",
-  "reviewedAt": "2026-04-01T05:30:00.000Z",
+  "reviewedAt": "2026-04-01T12:00:00.000Z",
   "commitId": "734c12d",
-  "transcriptSkeletonReviewed": true,
+  "transcriptSkeletonReviewed": false,
   "diffReviewed": true,
   "status": "fail",
   "codeReview": {

@@ -1,0 +1,568 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - link "ACS2906" [ref=e8] [cursor=pointer]:
+        - /url: /#/
+        - img [ref=e9]
+        - generic [ref=e12]: ACS2906
+      - button "Search... ⌘ K" [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e17]: Search...
+        - generic [ref=e18]:
+          - generic [ref=e19]: ⌘
+          - text: K
+      - 'button "Theme: system" [ref=e20]':
+        - generic [ref=e22]:
+          - img [ref=e23]
+          - img [ref=e29]
+  - main [ref=e31]:
+    - generic [ref=e303]:
+      - button [ref=e304]:
+        - img [ref=e305]
+      - complementary [ref=e306]:
+        - generic [ref=e307]:
+          - link "Back to Course Map" [ref=e308] [cursor=pointer]:
+            - /url: /#/lectures
+            - img [ref=e309]
+            - text: Back to Course Map
+          - navigation [ref=e311]:
+            - heading "Sections" [level=3] [ref=e312]
+            - button "1 Register Overview" [ref=e647]:
+              - generic [ref=e648]: "1"
+              - generic [ref=e649]: Register Overview
+            - button "2 The MOV Instruction" [ref=e650]:
+              - generic [ref=e651]: "2"
+              - generic [ref=e652]: The MOV Instruction
+            - button "3 Memory Addressing Modes" [ref=e653]:
+              - generic [ref=e654]: "3"
+              - generic [ref=e655]: Memory Addressing Modes
+            - button "4 Data Transfer Examples" [ref=e656]:
+              - generic [ref=e657]: "4"
+              - generic [ref=e658]: Data Transfer Examples
+          - link "Try in Simulator" [ref=e328] [cursor=pointer]:
+            - /url: /#/simulator
+            - img [ref=e329]
+            - text: Try in Simulator
+      - main [ref=e332]:
+        - generic [ref=e333]:
+          - generic [ref=e334]:
+            - generic [ref=e335]: "2"
+            - heading "Data Representation and Arithmetic" [level=1] [ref=e659]
+          - generic [ref=e338]:
+            - generic [ref=e339]: foundational
+            - generic [ref=e340]: Medium Exam Relevance
+        - generic [ref=e341]:
+          - generic [ref=e660]:
+            - generic [ref=e661]:
+              - generic [ref=e662]:
+                - generic [ref=e663]: "1"
+                - heading "Register Overview" [level=2] [ref=e664]
+              - button "Mark as Read" [ref=e665]
+            - generic [ref=e667]:
+              - heading "8086 Register Set" [level=2] [ref=e668]
+              - paragraph [ref=e669]: The 8086 has a rich set of 16-bit registers, with some split into 8-bit halves for compatibility with the 8080.
+              - heading "General Purpose Registers" [level=3] [ref=e670]
+              - paragraph [ref=e671]: "These registers can hold data and participate in arithmetic and logical operations, but each has historical specializations:"
+              - heading "AX (Accumulator Register) - 16-bit" [level=4] [ref=e672]
+              - list [ref=e673]:
+                - listitem [ref=e674]: Primary accumulator for arithmetic operations
+                - listitem [ref=e675]: Used implicitly by MUL, DIV, CBW, CWD
+                - listitem [ref=e676]: Divided into AH (bits 8-15) and AL (bits 0-7)
+              - generic [ref=e678]:
+                - code [ref=e680]:
+                  - generic [ref=e681]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">1234h ; AX = 1234h (AH=12h, AL=34h)
+                  - generic [ref=e682]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AL, dark:text-amber-400">0FFh ; AX = 12FFh (AL modified)
+                  - generic [ref=e683]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AH, dark:text-amber-400">00h ; AX = 0034h (AH modified)
+                - generic [ref=e684]:
+                  - button "Copy code" [ref=e685]:
+                    - img [ref=e686]
+                  - link "Try in Simulator" [ref=e689] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e690]
+              - heading "BX (Base Register) - 16-bit" [level=4] [ref=e693]
+              - list [ref=e694]:
+                - listitem [ref=e695]: Base pointer for memory addressing
+                - listitem [ref=e696]: Divided into BH and BL
+                - listitem [ref=e697]: Used as a pointer register (base address)
+              - generic [ref=e699]:
+                - code [ref=e701]:
+                  - generic [ref=e702]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">1000h ; BX holds a base address
+                  - generic [ref=e703]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e704]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX] ; Load from address in BX
+                - generic [ref=e705]:
+                  - button "Copy code" [ref=e706]:
+                    - img [ref=e707]
+                  - link "Try in Simulator" [ref=e710] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e711]
+              - heading "CX (Counter Register) - 16-bit" [level=4] [ref=e714]
+              - list [ref=e715]:
+                - listitem [ref=e716]: Loop counter (used by LOOP instruction)
+                - listitem [ref=e717]: Shift and rotate count
+                - listitem [ref=e718]: Divided into CH and CL
+              - generic [ref=e720]:
+                - code [ref=e722]:
+                  - generic [ref=e723]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">CX, dark:text-amber-400">10 ; Set up counter for 10 iterations
+                  - generic [ref=e724]: "loop_start:"
+                  - generic [ref=e725]: ; loop body
+                  - generic [ref=e726]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">LOOP loop_start ; CX--, jump if CX != 0
+                - generic [ref=e727]:
+                  - button "Copy code" [ref=e728]:
+                    - img [ref=e729]
+                  - link "Try in Simulator" [ref=e732] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e733]
+              - heading "DX (Data Register) - 16-bit" [level=4] [ref=e736]
+              - list [ref=e737]:
+                - listitem [ref=e738]: I/O port addressing
+                - listitem [ref=e739]: MUL/DIV extended results
+                - listitem [ref=e740]: Divided into DH and DL
+              - generic [ref=e742]:
+                - code [ref=e744]:
+                  - generic [ref=e745]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DX, dark:text-amber-400">0FFh ; DX used as I/O port address
+                  - generic [ref=e746]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AH, dark:text-amber-400">09h
+                  - generic [ref=e747]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INT dark:text-amber-400">21h ; Display using port in DX
+                - generic [ref=e748]:
+                  - button "Copy code" [ref=e749]:
+                    - img [ref=e750]
+                  - link "Try in Simulator" [ref=e753] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e754]
+              - heading "Pointer and Index Registers" [level=3] [ref=e757]
+              - heading "SP (Stack Pointer) - 16-bit" [level=4] [ref=e758]
+              - list [ref=e759]:
+                - listitem [ref=e760]: Points to the current stack top
+                - listitem [ref=e761]: Modified by PUSH, POP, CALL, RET
+                - listitem [ref=e762]: Cannot be used directly in most operations
+              - heading "BP (Base Pointer) - 16-bit" [level=4] [ref=e763]
+              - list [ref=e764]:
+                - listitem [ref=e765]: Access stack-based parameters
+                - listitem [ref=e766]: More flexible than SP for memory access
+                - listitem [ref=e767]: Preserved across calls
+              - heading "SI (Source Index) - 16-bit" [level=4] [ref=e768]
+              - list [ref=e769]:
+                - listitem [ref=e770]: Source pointer for string operations
+                - listitem [ref=e771]: Memory offset addressing
+                - listitem [ref=e772]: Auto-incremented by string instructions
+              - heading "DI (Destination Index) - 16-bit" [level=4] [ref=e773]
+              - list [ref=e774]:
+                - listitem [ref=e775]: Destination pointer for string operations
+                - listitem [ref=e776]: Memory offset addressing
+                - listitem [ref=e777]: Auto-incremented by string instructions
+              - blockquote [ref=e778]:
+                - paragraph [ref=e779]:
+                  - text: 💡
+                  - strong [ref=e780]: "Tip:"
+                  - text: SI and DI are essential for string operations like MOVSB, CMPSB, and LODSB. The 8086 has dedicated hardware to process strings efficiently using these registers.
+          - generic [ref=e781]:
+            - generic [ref=e782]:
+              - generic [ref=e783]:
+                - generic [ref=e784]: "2"
+                - heading "The MOV Instruction" [level=2] [ref=e785]
+              - button "Mark as Read" [ref=e786]
+            - generic [ref=e788]:
+              - heading "MOV - Data Transfer Instruction" [level=2] [ref=e789]
+              - paragraph [ref=e790]: The MOV instruction is the most fundamental data transfer instruction. It copies data from a source to a destination.
+              - heading "Syntax" [level=3] [ref=e791]
+              - generic [ref=e793]:
+                - code [ref=e795]:
+                  - generic [ref=e796]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV destination, source
+                - generic [ref=e797]:
+                  - button "Copy code" [ref=e798]:
+                    - img [ref=e799]
+                  - link "Try in Simulator" [ref=e802] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e803]
+              - heading "Valid Operands" [level=3] [ref=e806]
+              - paragraph [ref=e807]:
+                - text: "| Destination | Source | Example | |-------------|--------|---------| | Register | Immediate |"
+                - code [ref=e808]: MOV AX, 1234h
+                - text: "| | Register | Register |"
+                - code [ref=e809]: MOV AX, BX
+                - text: "| | Register | Memory |"
+                - code [ref=e810]: MOV AX, [1000h]
+                - text: "| | Memory | Register |"
+                - code [ref=e811]: MOV [1000h], AX
+                - text: "| | Register | Segment reg |"
+                - code [ref=e812]: MOV AX, DS
+                - text: "| | Segment reg | Register |"
+                - code [ref=e813]: MOV DS, AX
+                - text: "| | Memory | Immediate |"
+                - code [ref=e814]: MOV BYTE PTR [BX], 0
+                - text: "|"
+              - heading "Examples" [level=3] [ref=e815]
+              - generic [ref=e817]:
+                - code [ref=e819]:
+                  - generic [ref=e820]: ; Immediate to register
+                  - generic [ref=e821]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">0 ; AX = 0
+                  - generic [ref=e822]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">CX, dark:text-amber-400">0FFFFh ; CX = 65535 (max unsigned word)
+                  - generic [ref=e823]: ; Register to register
+                  - generic [ref=e824]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; Copy BX value to AX
+                  - generic [ref=e825]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DI ; Copy DI value to SI
+                  - generic [ref=e826]: ; Memory operands
+                  - generic [ref=e827]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e828]: "[dark:text-amber-400\">1000h"
+                    - text: "] ; Load AX from memory address 1000h"
+                  - generic [ref=e829]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV
+                    - generic [ref=e830]: "[dark:text-amber-400\">2000h"
+                    - text: "], dark:text-amber-400\">600 dark:text-blue-dark:text-amber-400\">400 font-semibold\">DX ; Store DX to memory address 2000h"
+                  - generic [ref=e831]: ; With register indirect addressing
+                  - generic [ref=e832]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, dark:text-amber-400">1000h
+                  - generic [ref=e833]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e834]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX] ; Load from address in BX
+                - generic [ref=e835]:
+                  - button "Copy code" [ref=e836]:
+                    - img [ref=e837]
+                  - link "Try in Simulator" [ref=e840] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e841]
+              - heading "Important Restrictions" [level=3] [ref=e844]
+              - list [ref=e845]:
+                - listitem [ref=e846]:
+                  - paragraph [ref=e847]:
+                    - strong [ref=e848]: No memory-to-memory moves
+                  - generic [ref=e850]:
+                    - code [ref=e852]:
+                      - generic [ref=e853]: ; ILLEGAL!
+                      - generic [ref=e854]:
+                        - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV
+                        - generic [ref=e855]: "[dark:text-amber-400\">1000h"
+                        - text: "],"
+                        - generic [ref=e856]: "[dark:text-amber-400\">2000h"
+                        - text: "] ; Cannot!"
+                      - generic [ref=e857]: ; Must use register as intermediate
+                      - generic [ref=e858]:
+                        - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                        - generic [ref=e859]: "[dark:text-amber-400\">2000h"
+                        - text: "] ; Load to AX"
+                      - generic [ref=e860]:
+                        - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV
+                        - generic [ref=e861]: "[dark:text-amber-400\">1000h"
+                        - text: "], dark:text-amber-400\">600 dark:text-blue-dark:text-amber-400\">400 font-semibold\">AX ; Store from AX"
+                    - generic [ref=e862]:
+                      - button "Copy code" [ref=e863]:
+                        - img [ref=e864]
+                      - link "Try in Simulator" [ref=e867] [cursor=pointer]:
+                        - /url: /#/simulator
+                        - img [ref=e868]
+                - listitem [ref=e871]:
+                  - paragraph [ref=e872]:
+                    - strong [ref=e873]: CS cannot be destination
+                  - generic [ref=e875]:
+                    - code [ref=e877]:
+                      - generic [ref=e878]: ; ILLEGAL!
+                      - generic [ref=e879]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">CS, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; Cannot modify CS directly
+                    - generic [ref=e880]:
+                      - button "Copy code" [ref=e881]:
+                        - img [ref=e882]
+                      - link "Try in Simulator" [ref=e885] [cursor=pointer]:
+                        - /url: /#/simulator
+                        - img [ref=e886]
+                - listitem [ref=e889]:
+                  - paragraph [ref=e890]:
+                    - strong [ref=e891]: Immediate to segment register
+                  - generic [ref=e893]:
+                    - code [ref=e895]:
+                      - generic [ref=e896]: ; ILLEGAL!
+                      - generic [ref=e897]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DS, dark:text-amber-400">1000h ; Cannot load segment directly
+                      - generic [ref=e898]: ; Must use general register
+                      - generic [ref=e899]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">1000h
+                      - generic [ref=e900]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DS, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; Correct way
+                    - generic [ref=e901]:
+                      - button "Copy code" [ref=e902]:
+                        - img [ref=e903]
+                      - link "Try in Simulator" [ref=e906] [cursor=pointer]:
+                        - /url: /#/simulator
+                        - img [ref=e907]
+                - listitem [ref=e910]:
+                  - paragraph [ref=e911]:
+                    - strong [ref=e912]: Same size operands
+                  - generic [ref=e914]:
+                    - code [ref=e916]:
+                      - generic [ref=e917]: ; ILLEGAL!
+                      - generic [ref=e918]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BL ; 16-bit to 8-bit
+                      - generic [ref=e919]: ; Correct
+                      - generic [ref=e920]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AL, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BL ; 8-bit to 8-bit
+                      - generic [ref=e921]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; 16-bit to 16-bit
+                    - generic [ref=e922]:
+                      - button "Copy code" [ref=e923]:
+                        - img [ref=e924]
+                      - link "Try in Simulator" [ref=e927] [cursor=pointer]:
+                        - /url: /#/simulator
+                        - img [ref=e928]
+              - blockquote [ref=e931]:
+                - paragraph [ref=e932]:
+                  - text: 💡
+                  - strong [ref=e933]: "Tip:"
+                  - text: MOV doesn't affect any flags. It simply copies bits from source to destination.
+          - generic [ref=e934]:
+            - generic [ref=e935]:
+              - generic [ref=e936]:
+                - generic [ref=e937]: "3"
+                - heading "Memory Addressing Modes" [level=2] [ref=e938]
+              - button "Mark as Read" [ref=e939]
+            - generic [ref=e941]:
+              - heading "Addressing Modes in 8086" [level=2] [ref=e942]
+              - paragraph [ref=e943]: The 8086 supports multiple ways to specify the location of memory operands.
+              - heading "1. Immediate Addressing" [level=3] [ref=e944]
+              - paragraph [ref=e945]: "Data is embedded directly in the instruction:"
+              - generic [ref=e947]:
+                - code [ref=e949]:
+                  - generic [ref=e950]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">1234h ; Data is part of instruction
+                  - generic [ref=e951]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">CX, dark:text-amber-400">100 ; Decimal value
+                  - generic [ref=e952]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AL, 'A' ; ASCII code
+                - generic [ref=e953]:
+                  - button "Copy code" [ref=e954]:
+                    - img [ref=e955]
+                  - link "Try in Simulator" [ref=e958] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e959]
+              - heading "2. Register Addressing" [level=3] [ref=e962]
+              - paragraph [ref=e963]: "Data is in a register:"
+              - generic [ref=e965]:
+                - code [ref=e967]:
+                  - generic [ref=e968]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; Copy BX to AX
+                  - generic [ref=e969]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DI ; Copy DI to SI
+                - generic [ref=e970]:
+                  - button "Copy code" [ref=e971]:
+                    - img [ref=e972]
+                  - link "Try in Simulator" [ref=e975] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e976]
+              - heading "3. Direct Memory Addressing" [level=3] [ref=e979]
+              - paragraph [ref=e980]: "A constant address is specified:"
+              - generic [ref=e982]:
+                - code [ref=e984]:
+                  - generic [ref=e985]: .DATA
+                  - generic [ref=e986]: myVar DW dark:text-amber-400">0
+                  - generic [ref=e987]: .CODE
+                  - generic [ref=e988]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, [myVar] ; Load from label address
+                  - generic [ref=e989]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV
+                    - generic [ref=e990]: "[dark:text-amber-400\">1000h"
+                    - text: "], dark:text-amber-400\">600 dark:text-blue-dark:text-amber-400\">400 font-semibold\">AX ; Absolute address"
+                - generic [ref=e991]:
+                  - button "Copy code" [ref=e992]:
+                    - img [ref=e993]
+                  - link "Try in Simulator" [ref=e996] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e997]
+              - heading "4. Register Indirect Addressing" [level=3] [ref=e1000]
+              - paragraph [ref=e1001]: "Address is in a base or index register:"
+              - generic [ref=e1003]:
+                - code [ref=e1005]:
+                  - generic [ref=e1006]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, OFFSET myVar ; BX holds address
+                  - generic [ref=e1007]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1008]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX] ; Load from address in BX
+                - generic [ref=e1009]:
+                  - button "Copy code" [ref=e1010]:
+                    - img [ref=e1011]
+                  - link "Try in Simulator" [ref=e1014] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1015]
+              - paragraph [ref=e1018]:
+                - strong [ref=e1019]: "Valid registers for indirect:"
+              - list [ref=e1020]:
+                - listitem [ref=e1021]: BX, BP (base registers)
+                - listitem [ref=e1022]: SI, DI (index registers)
+              - heading "5. Based Relative Addressing" [level=3] [ref=e1023]
+              - paragraph [ref=e1024]: "Base register + constant offset:"
+              - generic [ref=e1026]:
+                - code [ref=e1028]:
+                  - generic [ref=e1029]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1030]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX+dark:text-amber-400">4] ; Address = BX + 4
+                  - generic [ref=e1031]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1032]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BP-dark:text-amber-400">2] ; Address = BP - 2
+                  - generic [ref=e1033]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1034]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX+dark:text-amber-400">100h] ; Address = BX + 256
+                - generic [ref=e1035]:
+                  - button "Copy code" [ref=e1036]:
+                    - img [ref=e1037]
+                  - link "Try in Simulator" [ref=e1040] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1041]
+              - heading "6. Indexed Relative Addressing" [level=3] [ref=e1044]
+              - paragraph [ref=e1045]: "Index register + constant offset:"
+              - generic [ref=e1047]:
+                - code [ref=e1049]:
+                  - generic [ref=e1050]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1051]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">SI+dark:text-amber-400">10h] ; Address = SI + 16
+                  - generic [ref=e1052]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1053]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">DI+dark:text-amber-400">1000h] ; Address = DI + 4096
+                - generic [ref=e1054]:
+                  - button "Copy code" [ref=e1055]:
+                    - img [ref=e1056]
+                  - link "Try in Simulator" [ref=e1059] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1060]
+              - heading "7. Base-Index Relative Addressing" [level=3] [ref=e1063]
+              - paragraph [ref=e1064]: "Base + Index + optional offset:"
+              - generic [ref=e1066]:
+                - code [ref=e1068]:
+                  - generic [ref=e1069]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1070]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX+dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI] ; Address = BX + SI
+                  - generic [ref=e1071]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX,
+                    - generic [ref=e1072]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">BX+dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DI+dark:text-amber-400">4] ; Address = BX + DI + 4
+                - generic [ref=e1073]:
+                  - button "Copy code" [ref=e1074]:
+                    - img [ref=e1075]
+                  - link "Try in Simulator" [ref=e1078] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1079]
+              - heading "Summary Table" [level=3] [ref=e1082]
+              - paragraph [ref=e1083]:
+                - text: "| Mode | Example | Address Calculation | |------|---------|-------------------| | Direct |"
+                - code [ref=e1084]: "[1000h]"
+                - text: "| Constant | | Register Indirect |"
+                - code [ref=e1085]: "[BX]"
+                - text: "| Register | | Based |"
+                - code [ref=e1086]: "[BX+4]"
+                - text: "| Register + constant | | Indexed |"
+                - code [ref=e1087]: "[SI+10h]"
+                - text: "| Index + constant | | Base-Index |"
+                - code [ref=e1088]: "[BX+SI]"
+                - text: "| Base + Index | | Based-Indexed |"
+                - code [ref=e1089]: "[BX+DI+4]"
+                - text: "| Base + Index + offset |"
+              - blockquote [ref=e1090]:
+                - paragraph [ref=e1091]:
+                  - text: 💡
+                  - strong [ref=e1092]: "Tip:"
+                  - text: BP defaults to the Stack Segment (SS), while BX, SI, and DI default to the Data Segment (DS). This is why
+                  - code [ref=e1093]: "[BP]"
+                  - text: accesses stack data.
+          - generic [ref=e1094]:
+            - generic [ref=e1095]:
+              - generic [ref=e1096]:
+                - generic [ref=e1097]: "4"
+                - heading "Data Transfer Examples" [level=2] [ref=e1098]
+              - button "Mark as Read" [ref=e1099]
+            - generic [ref=e1101]:
+              - heading "Practical Data Transfer Patterns" [level=2] [ref=e1102]
+              - heading "Setting Up Data Segment" [level=3] [ref=e1103]
+              - paragraph [ref=e1104]: "Every program must initialize DS before accessing data:"
+              - generic [ref=e1106]:
+                - code [ref=e1108]:
+                  - generic [ref=e1109]: .MODEL SMALL
+                  - generic [ref=e1110]: .STACK dark:text-amber-400">100h
+                  - generic [ref=e1111]: .DATA
+                  - generic [ref=e1112]: valuedark:text-amber-400">1 DW dark:text-amber-400">1234h
+                  - generic [ref=e1113]: valuedark:text-amber-400">2 DW dark:text-amber-400">5678h
+                  - generic [ref=e1114]: result DW ?
+                  - generic [ref=e1115]: .CODE
+                  - generic [ref=e1116]: MAIN PROC
+                  - generic [ref=e1117]: ; Initialize data segment (required!)
+                  - generic [ref=e1118]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, @DATA
+                  - generic [ref=e1119]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DS, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX
+                  - generic [ref=e1121]: ; Now we can access our data
+                  - generic [ref=e1122]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, valuedark:text-amber-400">1 ; MOV AX, [value1] - load from memory
+                  - generic [ref=e1123]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, valuedark:text-amber-400">2
+                  - generic [ref=e1124]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">ADD dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX ; AX = 1234h + 5678h = 68ACh
+                  - generic [ref=e1125]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV result, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; Store result
+                  - generic [ref=e1127]: ; Exit
+                  - generic [ref=e1128]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AH, dark:text-amber-400">4Ch
+                  - generic [ref=e1129]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INT dark:text-amber-400">21h
+                  - generic [ref=e1130]: MAIN ENDP
+                  - generic [ref=e1131]: END MAIN
+                - generic [ref=e1132]:
+                  - button "Copy code" [ref=e1133]:
+                    - img [ref=e1134]
+                  - link "Try in Simulator" [ref=e1137] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1138]
+              - heading "Swapping Two Values" [level=3] [ref=e1141]
+              - generic [ref=e1143]:
+                - code [ref=e1145]:
+                  - generic [ref=e1146]: .DATA
+                  - generic [ref=e1147]: X DW dark:text-amber-400">1234h
+                  - generic [ref=e1148]: Y DW dark:text-amber-400">5678h
+                  - generic [ref=e1149]: .CODE
+                  - generic [ref=e1150]: ; Swap X and Y using AX as temporary
+                  - generic [ref=e1151]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, X ; AX = 1234h
+                  - generic [ref=e1152]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">XCHG dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX, Y ; AX = 5678h, Y = 1234h
+                  - generic [ref=e1153]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV X, dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AX ; X = 5678h
+                - generic [ref=e1154]:
+                  - button "Copy code" [ref=e1155]:
+                    - img [ref=e1156]
+                  - link "Try in Simulator" [ref=e1159] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1160]
+              - heading "Loading an Address (LEA)" [level=3] [ref=e1163]
+              - paragraph [ref=e1164]: "LEA (Load Effective Address) puts the address, not the value, into a register:"
+              - generic [ref=e1166]:
+                - code [ref=e1168]:
+                  - generic [ref=e1169]: .DATA
+                  - generic [ref=e1170]: buffer DB dark:text-amber-400">80 DUP(?)
+                  - generic [ref=e1171]: .CODE
+                  - generic [ref=e1172]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">LEA dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, buffer ; BX = offset of buffer
+                  - generic [ref=e1174]: "; Compare to:"
+                  - generic [ref=e1175]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">BX, OFFSET buffer ; Same result!
+                  - generic [ref=e1177]: "; LEA is more flexible with displacement:"
+                  - generic [ref=e1178]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">LEA dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI, buffer
+                    - generic [ref=e1179]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">DI] ; SI = address of buffer + DI
+                - generic [ref=e1180]:
+                  - button "Copy code" [ref=e1181]:
+                    - img [ref=e1182]
+                  - link "Try in Simulator" [ref=e1185] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1186]
+              - heading "String Transfer" [level=3] [ref=e1189]
+              - generic [ref=e1191]:
+                - code [ref=e1193]:
+                  - generic [ref=e1194]: .DATA
+                  - generic [ref=e1195]: source DB 'Hello$'
+                  - generic [ref=e1196]: dest DB dark:text-amber-400">80 DUP(?)
+                  - generic [ref=e1197]: .CODE
+                  - generic [ref=e1198]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI, OFFSET source ; Source address
+                  - generic [ref=e1199]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DI, OFFSET dest ; Destination address
+                  - generic [ref=e1200]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">CX, dark:text-amber-400">5 ; Count = 5 bytes
+                  - generic [ref=e1202]: "next_char:"
+                  - generic [ref=e1203]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AL,
+                    - generic [ref=e1204]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">SI] ; Load from source
+                  - generic [ref=e1205]:
+                    - text: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">MOV
+                    - generic [ref=e1206]: "[dark:text-amber-400\">600"
+                    - text: dark:text-blue-dark:text-amber-400">400 font-semibold">DI], dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">AL ; Store to destination
+                  - generic [ref=e1207]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INC dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">SI
+                  - generic [ref=e1208]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">INC dark:text-amber-400">600 dark:text-blue-dark:text-amber-400">400 font-semibold">DI
+                  - generic [ref=e1209]: dark:text-amber-400">600 dark:text-purple-dark:text-amber-400">400 font-semibold">LOOP next_char
+                - generic [ref=e1210]:
+                  - button "Copy code" [ref=e1211]:
+                    - img [ref=e1212]
+                  - link "Try in Simulator" [ref=e1215] [cursor=pointer]:
+                    - /url: /#/simulator
+                    - img [ref=e1216]
+              - blockquote [ref=e1219]:
+                - paragraph [ref=e1220]:
+                  - text: 💡
+                  - strong [ref=e1221]: "Tip:"
+                  - text: The XCHG instruction swaps two operands. It's useful for swapping values without a temporary register.
+  - contentinfo [ref=e95]: ACS2906 Assembly Language Learning Platform

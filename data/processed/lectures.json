@@ -11,54 +11,117 @@
           "lectureId": 1,
           "title": "Numbering Systems",
           "content": "## Decimal, Binary, and Hexadecimal\n\nAssembly language programmers must be fluent in three numbering systems: **decimal** (base-10), **binary** (base-2), and **hexadecimal** (base-16).\n\n### Why These Systems Matter\n\n- **Decimal**: The number system humans use naturally\n- **Binary**: How computers represent all data—zeros and ones\n- **Hexadecimal**: A human-friendly way to represent binary data\n\n### Conversions\n\n| Decimal | Binary | Hexadecimal |\n|---------|--------|-------------|\n| 0 | 0000 | 0 |\n| 1 | 0001 | 1 |\n| 9 | 1001 | 9 |\n| 10 | 1010 | A |\n| 15 | 1111 | F |\n\n### Binary to Hexadecimal\n\nGroup binary digits in sets of four, starting from the right:\n\n```\nBinary:  11010110 00111101\nGroup:  1101 0110 0011 1101\nHex:     D    6    3    D\n```\n\n### Hexadecimal to Decimal\n\nEach hex digit represents 4 binary bits. The rightmost digit is worth 16^0, the next 16^1, and so on:\n\n```\n3D7h = (3 × 16^2) + (13 × 16^1) + (7 × 16^0)\n     = (3 × 256) + (13 × 16) + (7 × 1)\n     = 768 + 208 + 7\n     = 983\n```\n\n> 💡 **Tip:** The `h` suffix denotes hexadecimal in assembly (e.g., `FFh`).",
-          "concepts": ["number-systems", "binary", "hexadecimal", "decimal-conversion"],
+          "concepts": [
+            "number-systems",
+            "binary",
+            "hexadecimal",
+            "decimal-conversion"
+          ],
           "instructions": [],
-          "examples": ["binary-counting.asm"],
-          "assessmentItems": ["q-ns-001", "q-ns-002"]
+          "examples": [
+            "binary-counting.asm"
+          ],
+          "assessmentItems": [
+            "q-ns-001",
+            "q-ns-002"
+          ]
         },
         {
           "id": "l1-s2",
           "lectureId": 1,
           "title": "Data Representation Fundamentals",
           "content": "## How Computers Store Data\n\n### Bits and Bytes\n\n- **Bit**: A single binary digit (0 or 1)\n- **Byte**: 8 bits. The basic unit of memory addressing.\n- **Word**: 16 bits (2 bytes)\n- **Doubleword (DWORD)**: 32 bits (4 bytes)\n- **Quadword (QWORD)**: 64 bits (8 bytes)\n\n### Signed vs Unsigned Numbers\n\n#### Unsigned Numbers\n\nUnsigned numbers can represent 0 and positive integers only.\n\n| Size | Range |\n|------|-------|\n| Byte (8-bit) | 0 to 255 |\n| Word (16-bit) | 0 to 65,535 |\n\n#### Signed Numbers (Two's Complement)\n\nSigned numbers use the most significant bit (MSB) as a sign bit.\n\n- **0 in MSB**: Positive number\n- **1 in MSB**: Negative number\n\n| Size | Range |\n|------|-------|\n| Byte (8-bit) | -128 to +127 |\n| Word (16-bit) | -32,768 to +32,767 |\n\n### Two's Complement Representation\n\nTo find the negative of a number in two's complement:\n\n1. Invert all bits\n2. Add 1\n\n```asm\n; Example: Representing -42 in 8-bit two's complement\n; 42 in binary = 00101010\n\n; Step 1: Invert all bits\n; 00101010 → 11010101\n\n; Step 2: Add 1\n;     11010101\n; +        1\n; = 11010110\n\n; So -42 = 11010110 in two's complement\n```\n\n> 💡 **Tip:** The two's complement system allows the same addition circuitry to handle both positive and negative numbers without special cases.",
-          "concepts": ["bits", "bytes", "signed-numbers", "unsigned-numbers", "two-complement"],
+          "concepts": [
+            "bits",
+            "bytes",
+            "signed-numbers",
+            "unsigned-numbers",
+            "two-complement"
+          ],
           "instructions": [],
-          "examples": ["twoscomp.asm"],
-          "assessmentItems": ["q-dr-001", "q-dr-002"]
+          "examples": [
+            "twoscomp.asm"
+          ],
+          "assessmentItems": [
+            "q-dr-001",
+            "q-dr-002"
+          ]
         },
         {
           "id": "l1-s3",
           "lectureId": 1,
           "title": "8086 CPU Architecture",
           "content": "## The 8086 Microprocessor\n\nThe Intel 8086 is a 16-bit microprocessor introduced in 1978. It was the first member of the x86 family, which still powers modern computers.\n\n### Key Characteristics\n\n- **16-bit internal registers**: Can hold 16-bit values\n- **20-bit address bus**: Can address up to 1 MB of memory (2^20 = 1,048,576 bytes)\n- **8-bit external data bus** (8088 variant) or 16-bit (8086)\n- **Clock speeds**: 5 MHz, 8 MHz, or 10 MHz\n\n### Register Classification\n\n#### General Purpose Registers (16-bit)\n\n| Register | Name | Special Purpose |\n|----------|------|------------------|\n| AX | Accumulator | Primary for arithmetic operations |\n| BX | Base | Base pointer for memory addressing |\n| CX | Counter | Loop counts, shifts, rotations |\n| DX | Data | I/O operations, multiplication |\n| SP | Stack Pointer | Points to top of stack |\n| BP | Base Pointer | Stack frame reference |\n| SI | Source Index | String/source pointer |\n| DI | Destination Index | String/destination pointer |\n\n#### Segment Registers\n\n| Register | Purpose |\n|----------|---------|\n| CS | Code Segment - current code segment |\n| DS | Data Segment - default data segment |\n| SS | Stack Segment - stack segment |\n| ES | Extra Segment | string destination |\n\n> 💡 **Tip:** While called \"general purpose,\" each register has historical specializations that still influence optimal usage.",
-          "concepts": ["8086-architecture", "cpu-components", "registers", "memory-addressing"],
+          "concepts": [
+            "8086-architecture",
+            "cpu-components",
+            "registers",
+            "memory-addressing"
+          ],
           "instructions": [],
           "examples": [],
-          "assessmentItems": ["q-arch-001", "q-arch-002"]
+          "assessmentItems": [
+            "q-arch-001",
+            "q-arch-002"
+          ]
         },
         {
           "id": "l1-s4",
           "lectureId": 1,
           "title": "Assembly Language Basics",
           "content": "## Assembly Language Syntax\n\n### Structure of an Assembly Statement\n\nAn assembly instruction has up to four fields:\n\n```asm\n[label:]   mnemonic   [operands]   [;comment]\n```\n\n#### Examples:\n\n```asm\n; No label, single operand\nINC CX\n\n; Label with operand\nstart:  MOV AX, 0\n\n; Two operands\nADD AX, BX\n\n; Full format with label and comment\nloop_start:  DEC CX    ; Decrement counter\n```\n\n### Assembly Directives\n\nDirectives are instructions to the **assembler**, not the CPU:\n\n| Directive | Purpose |\n|-----------|---------|\n| `.MODEL` | Define memory model |\n| `.STACK` | Reserve stack space |\n| `.DATA` | Start data segment |\n| `.CODE` | Start code segment |\n| `PROC`/`ENDP` | Define procedure |\n| `SEGMENT`/`ENDS` | Define segment |\n| `EQU` | Define constant |\n| `DB`/`DW`/`DD` | Define byte/word/dword |\n\n### A Complete Program Structure\n\n```asm\n; ========================================\n; Simple Assembly Program Template\n; ========================================\n\n.MODEL SMALL        ; Small memory model (64KB code + 64KB data)\n.STACK 100h         ; 256-byte stack\n\n.DATA               ; Data segment begins\n    message DB 'Hello, World!$'\n\n.CODE               ; Code segment begins\nMAIN PROC\n    ; Initialize data segment\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display message\n    MOV AH, 09h\n    LEA DX, message\n    INT 21h\n    \n    ; Exit to DOS\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n> 💡 **Tip:** The `INT 21h` instruction invokes DOS services. Function 09h displays a string, and function 4Ch terminates the program.",
-          "concepts": ["assembly-syntax", "directives", "labels", "program-structure"],
-          "instructions": ["MOV", "INT"],
-          "examples": ["template.asm", "helloworld.asm"],
-          "assessmentItems": ["q-syntax-001", "q-syntax-002"]
+          "concepts": [
+            "assembly-syntax",
+            "directives",
+            "labels",
+            "program-structure"
+          ],
+          "instructions": [
+            "MOV",
+            "INT"
+          ],
+          "examples": [
+            "template.asm",
+            "helloworld.asm"
+          ],
+          "assessmentItems": [
+            "q-syntax-001",
+            "q-syntax-002"
+          ]
         },
         {
           "id": "l1-s5",
           "lectureId": 1,
           "title": "Memory Organization",
           "content": "## Memory in the 8086\n\n### Physical Memory Organization\n\nThe 8086 has a 20-bit address bus, allowing it to address 1 MB of memory (addresses 00000h to FFFFFh).\n\n### Segmented Memory Model\n\nBecause 8086 registers are only 16 bits, the processor uses **segmentation** to achieve 20-bit addressing:\n\n```\nPhysical Address = (Segment × 16) + Offset\n```\n\nThis is often written as:\n\n```\nSegment:Offset → Physical Address\n```\n\n### Segment Types\n\n| Segment | Register | Purpose |\n|---------|----------|---------|\n| Code | CS | Stores executable instructions |\n| Data | DS | Stores program variables |\n| Stack | SS | Stores stack data (PUSH/POP) |\n| Extra | ES | Additional data segment |\n\n### Calculating Physical Addresses\n\n```asm\n; Example: DS = 0400h, SI = 003Ch\n\n; Physical address = (DS × 16) + SI\n;                 = (0400h × 16) + 003Ch\n;                 = 04000h + 003Ch\n;                 = 0403Ch\n\n; In assembly, memory access using [DS:SI]\nMOV AL, [SI]    ; Loads byte at physical address 0403Ch\n```\n\n### Byte Ordering (Endianness)\n\nThe 8086 uses **little-endian** byte ordering:\n\n```asm\n; To store the word 1234h at address 1000h:\n\n; Address 1000h gets the LOW byte (34h)\n; Address 1001h gets the HIGH byte (12h)\n\n; Memory dump:\n; 1000h: 34 12\n```\n\n> 💡 **Tip:** The little-endian format means the least significant byte comes first in memory.",
-          "concepts": ["segmented-memory", "physical-address", "segment-offset", "endianness", "memory-model"],
+          "concepts": [
+            "segmented-memory",
+            "physical-address",
+            "segment-offset",
+            "endianness",
+            "memory-model"
+          ],
           "instructions": [],
           "examples": [],
-          "assessmentItems": ["q-mem-001", "q-mem-002"]
+          "assessmentItems": [
+            "q-mem-001",
+            "q-mem-002"
+          ]
         }
       ],
-      "concepts": ["number-systems", "binary", "hexadecimal", "data-representation", "8086-architecture", "assembly-syntax", "memory-organization"],
-      "instructions": ["MOV", "INT"],
+      "concepts": [
+        "number-systems",
+        "binary",
+        "hexadecimal",
+        "data-representation",
+        "8086-architecture",
+        "assembly-syntax",
+        "memory-organization"
+      ],
+      "instructions": [
+        "MOV",
+        "INT"
+      ],
       "difficulty": "foundational",
       "examRelevance": "medium",
       "provenance": {
@@ -81,44 +144,115 @@
           "lectureId": 2,
           "title": "Register Overview",
           "content": "## 8086 Register Set\n\nThe 8086 has a rich set of 16-bit registers, with some split into 8-bit halves for compatibility with the 8080.\n\n### General Purpose Registers\n\nThese registers can hold data and participate in arithmetic and logical operations, but each has historical specializations:\n\n#### AX (Accumulator Register) - 16-bit\n- Primary accumulator for arithmetic operations\n- Used implicitly by MUL, DIV, CBW, CWD\n- Divided into AH (bits 8-15) and AL (bits 0-7)\n\n```asm\nMOV AX, 1234h    ; AX = 1234h (AH=12h, AL=34h)\nMOV AL, 0FFh    ; AX = 12FFh (AL modified)\nMOV AH, 00h     ; AX = 0034h (AH modified)\n```\n\n#### BX (Base Register) - 16-bit\n- Base pointer for memory addressing\n- Divided into BH and BL\n- Used as a pointer register (base address)\n\n```asm\nMOV BX, 1000h   ; BX holds a base address\nMOV AX, [BX]    ; Load from address in BX\n```\n\n#### CX (Counter Register) - 16-bit\n- Loop counter (used by LOOP instruction)\n- Shift and rotate count\n- Divided into CH and CL\n\n```asm\nMOV CX, 10      ; Set up counter for 10 iterations\nloop_start:\n    ; loop body\n    LOOP loop_start   ; CX--, jump if CX != 0\n```\n\n#### DX (Data Register) - 16-bit\n- I/O port addressing\n- MUL/DIV extended results\n- Divided into DH and DL\n\n```asm\nMOV DX, 0FFh    ; DX used as I/O port address\nMOV AH, 09h\nINT 21h         ; Display using port in DX\n```\n\n### Pointer and Index Registers\n\n#### SP (Stack Pointer) - 16-bit\n- Points to the current stack top\n- Modified by PUSH, POP, CALL, RET\n- Cannot be used directly in most operations\n\n#### BP (Base Pointer) - 16-bit\n- Access stack-based parameters\n- More flexible than SP for memory access\n- Preserved across calls\n\n#### SI (Source Index) - 16-bit\n- Source pointer for string operations\n- Memory offset addressing\n- Auto-incremented by string instructions\n\n#### DI (Destination Index) - 16-bit\n- Destination pointer for string operations\n- Memory offset addressing\n- Auto-incremented by string instructions\n\n> 💡 **Tip:** SI and DI are essential for string operations like MOVSB, CMPSB, and LODSB.",
-          "concepts": ["register-classes", "ax-register", "bx-register", "cx-register", "dx-register", "sp-register", "bp-register", "si-register", "di-register"],
+          "concepts": [
+            "register-classes",
+            "ax-register",
+            "bx-register",
+            "cx-register",
+            "dx-register",
+            "sp-register",
+            "bp-register",
+            "si-register",
+            "di-register"
+          ],
           "instructions": [],
-          "examples": ["registers.asm"],
-          "assessmentItems": ["q-reg-001", "q-reg-002"]
+          "examples": [
+            "registers.asm"
+          ],
+          "assessmentItems": [
+            "q-reg-001",
+            "q-reg-002"
+          ]
         },
         {
           "id": "l2-s2",
           "lectureId": 2,
           "title": "The MOV Instruction",
           "content": "## MOV - Data Transfer Instruction\n\nThe MOV instruction is the most fundamental data transfer instruction. It copies data from a source to a destination.\n\n### Syntax\n\n```asm\nMOV destination, source\n```\n\n### Valid Operands\n\n| Destination | Source | Example |\n|-------------|--------|---------|\n| Register | Immediate | `MOV AX, 1234h` |\n| Register | Register | `MOV AX, BX` |\n| Register | Memory | `MOV AX, [1000h]` |\n| Memory | Register | `MOV [1000h], AX` |\n| Register | Segment reg | `MOV AX, DS` |\n| Segment reg | Register | `MOV DS, AX` |\n| Memory | Immediate | `MOV BYTE PTR [BX], 0` |\n\n### Examples\n\n```asm\n; Immediate to register\nMOV AX, 0          ; AX = 0\nMOV CX, 0FFFFh     ; CX = 65535 (max unsigned word)\n\n; Register to register\nMOV AX, BX         ; Copy BX value to AX\nMOV SI, DI         ; Copy DI value to SI\n\n; Memory operands\nMOV AX, [1000h]    ; Load AX from memory address 1000h\nMOV [2000h], DX    ; Store DX to memory address 2000h\n\n; With register indirect addressing\nMOV BX, 1000h\nMOV AX, [BX]       ; Load from address in BX\n```\n\n### Important Restrictions\n\n1. **No memory-to-memory moves**\n   ```asm\n   ; ILLEGAL!\n   MOV [1000h], [2000h]   ; Cannot!\n   \n   ; Must use register as intermediate\n   MOV AX, [2000h]        ; Load to AX\n   MOV [1000h], AX        ; Store from AX\n   ```\n\n2. **CS cannot be destination**\n   ```asm\n   ; ILLEGAL!\n   MOV CS, AX             ; Cannot modify CS directly\n   ```\n\n3. **Immediate to segment register**\n   ```asm\n   ; ILLEGAL!\n   MOV DS, 1000h          ; Cannot load segment directly\n   \n   ; Must use general register\n   MOV AX, 1000h\n   MOV DS, AX             ; Correct way\n   ```\n\n4. **Same size operands**\n   ```asm\n   ; ILLEGAL!\n   MOV AX, BL             ; 16-bit to 8-bit\n   \n   ; Correct\n   MOV AL, BL             ; 8-bit to 8-bit\n   MOV AX, BX             ; 16-bit to 16-bit\n   ```\n\n> 💡 **Tip:** MOV doesn't affect any flags. It simply copies bits from source to destination.",
-          "concepts": ["mov-instruction", "data-transfer", "register-operands", "memory-operands", "immediate-operands"],
-          "instructions": ["MOV"],
-          "examples": ["mov-examples.asm", "template.asm"],
-          "assessmentItems": ["q-mov-001", "q-mov-002"]
+          "concepts": [
+            "mov-instruction",
+            "data-transfer",
+            "register-operands",
+            "memory-operands",
+            "immediate-operands"
+          ],
+          "instructions": [
+            "MOV"
+          ],
+          "examples": [
+            "mov-examples.asm",
+            "template.asm"
+          ],
+          "assessmentItems": [
+            "q-mov-001",
+            "q-mov-002"
+          ]
         },
         {
           "id": "l2-s3",
           "lectureId": 2,
           "title": "Memory Addressing Modes",
           "content": "## Addressing Modes in 8086\n\nThe 8086 supports multiple ways to specify the location of memory operands.\n\n### 1. Immediate Addressing\n\nData is embedded directly in the instruction:\n\n```asm\nMOV AX, 1234h      ; Data is part of instruction\nMOV CX, 100        ; Decimal value\nMOV AL, 'A'        ; ASCII code\n```\n\n### 2. Register Addressing\n\nData is in a register:\n\n```asm\nMOV AX, BX         ; Copy BX to AX\nMOV SI, DI         ; Copy DI to SI\n```\n\n### 3. Direct Memory Addressing\n\nA constant address is specified:\n\n```asm\n.DATA\n    myVar DW 0\n.CODE\n    MOV AX, [myVar]        ; Load from label address\n    MOV [1000h], AX        ; Absolute address\n```\n\n### 4. Register Indirect Addressing\n\nAddress is in a base or index register:\n\n```asm\nMOV BX, OFFSET myVar       ; BX holds address\nMOV AX, [BX]               ; Load from address in BX\n```\n\n**Valid registers for indirect:**\n- BX, BP (base registers)\n- SI, DI (index registers)\n\n### 5. Based Relative Addressing\n\nBase register + constant offset:\n\n```asm\nMOV AX, [BX+4]             ; Address = BX + 4\nMOV AX, [BP-2]             ; Address = BP - 2\nMOV AX, [BX+100h]          ; Address = BX + 256\n```\n\n### 6. Indexed Relative Addressing\n\nIndex register + constant offset:\n\n```asm\nMOV AX, [SI+10h]           ; Address = SI + 16\nMOV AX, [DI+1000h]         ; Address = DI + 4096\n```\n\n### 7. Base-Index Relative Addressing\n\nBase + Index + optional offset:\n\n```asm\nMOV AX, [BX+SI]            ; Address = BX + SI\nMOV AX, [BX+DI+4]          ; Address = BX + DI + 4\n```\n\n> 💡 **Tip:** BP defaults to the Stack Segment (SS), while BX, SI, and DI default to the Data Segment (DS).",
-          "concepts": ["addressing-modes", "direct-addressing", "indirect-addressing", "based-addressing", "indexed-addressing", "base-index"],
-          "instructions": ["MOV", "LEA"],
-          "examples": ["addressing.asm"],
-          "assessmentItems": ["q-addr-001", "q-addr-002"]
+          "concepts": [
+            "addressing-modes",
+            "direct-addressing",
+            "indirect-addressing",
+            "based-addressing",
+            "indexed-addressing",
+            "base-index"
+          ],
+          "instructions": [
+            "MOV",
+            "LEA"
+          ],
+          "examples": [
+            "addressing.asm"
+          ],
+          "assessmentItems": [
+            "q-addr-001",
+            "q-addr-002"
+          ]
         },
         {
           "id": "l2-s4",
           "lectureId": 2,
           "title": "Data Transfer Examples",
           "content": "## Practical Data Transfer Patterns\n\n### Setting Up Data Segment\n\nEvery program must initialize DS before accessing data:\n\n```asm\n.MODEL SMALL\n.STACK 100h\n.DATA\n    value1 DW 1234h\n    value2 DW 5678h\n    result DW ?\n.CODE\nMAIN PROC\n    ; Initialize data segment (required!)\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Now we can access our data\n    MOV AX, value1      ; MOV AX, [value1] - load from memory\n    MOV BX, value2\n    ADD AX, BX          ; AX = 1234h + 5678h = 68ACh\n    MOV result, AX      ; Store result\n    \n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n### Swapping Two Values\n\n```asm\n.DATA\n    X DW 1234h\n    Y DW 5678h\n.CODE\n    ; Swap X and Y using AX as temporary\n    MOV AX, X          ; AX = 1234h\n    XCHG AX, Y         ; AX = 5678h, Y = 1234h\n    MOV X, AX          ; X = 5678h\n```\n\n### Loading an Address (LEA)\n\nLEA (Load Effective Address) puts the address, not the value, into a register:\n\n```asm\n.DATA\n    buffer DB 80 DUP(?)\n.CODE\n    LEA BX, buffer      ; BX = offset of buffer\n    \n    ; Compare to:\n    MOV BX, OFFSET buffer  ; Same result!\n    \n    ; LEA is more flexible with displacement:\n    LEA SI, buffer[DI]   ; SI = address of buffer + DI\n```\n\n> 💡 **Tip:** The XCHG instruction swaps two operands. It's useful for swapping values without a temporary register.",
-          "concepts": ["ds-initialization", "xchg-instruction", "lea-instruction", "swap-pattern", "address-calculation"],
-          "instructions": ["MOV", "XCHG", "LEA"],
-          "examples": ["dataswap.asm", "addressing.asm"],
-          "assessmentItems": ["q-dt-001", "q-dt-002"]
+          "concepts": [
+            "ds-initialization",
+            "xchg-instruction",
+            "lea-instruction",
+            "swap-pattern",
+            "address-calculation"
+          ],
+          "instructions": [
+            "MOV",
+            "XCHG",
+            "LEA"
+          ],
+          "examples": [
+            "dataswap.asm",
+            "addressing.asm"
+          ],
+          "assessmentItems": [
+            "q-dt-001",
+            "q-dt-002"
+          ]
         }
       ],
-      "concepts": ["register-classes", "mov-instruction", "addressing-modes", "data-transfer", "xchg-instruction", "lea-instruction"],
-      "instructions": ["MOV", "XCHG", "LEA"],
+      "concepts": [
+        "register-classes",
+        "mov-instruction",
+        "addressing-modes",
+        "data-transfer",
+        "xchg-instruction",
+        "lea-instruction"
+      ],
+      "instructions": [
+        "MOV",
+        "XCHG",
+        "LEA"
+      ],
       "difficulty": "foundational",
       "examRelevance": "high",
       "provenance": {
@@ -141,54 +275,145 @@
           "lectureId": 3,
           "title": "LEA - Load Effective Address",
           "content": "## LEA - Load Effective Address\n\nThe LEA instruction loads a register with the **offset address** (effective address) of a memory location, not the value stored there.\n\n### Syntax\n\n```asm\nLEA destination, source\n```\n\n### Key Difference: LEA vs MOV\n\n- **MOV** loads the **value** at an address\n- **LEA** loads the **address** itself\n\n```asm\n.DATA\n    buffer DB 80 DUP(?)\n.CODE\n    MOV BX, OFFSET buffer    ; BX = offset of buffer (same as LEA)\n    \n    ; But LEA can do more:\n    LEA BX, buffer           ; BX = offset of buffer\n    \n    ; LEA with displacement:\n    LEA SI, buffer[DI]       ; SI = offset of buffer + DI\n```\n\n### When to Use LEA\n\nLEA is essential when you need to compute addresses dynamically:\n\n```asm\n; Compute address of buffer[i] where i is in SI\nLEA DX, buffer[SI]       ; DX = offset of buffer[i]\n\n; Calculate address for table lookup\nLEA BX, lookupTable\nADD BX, SI               ; Add index offset\nMOV AX, [BX]             ; Load from computed address\n```\n\n### LEA vs OFFSET\n\nBoth can get the offset of a label:\n| Instruction | What it does | Example |\n|------------|--------------|---------|\n| `MOV reg, OFFSET label` | Assembler computes offset at assembly time | Static address |\n| `LEA reg, [mem]` | CPU computes effective address at runtime | Dynamic address |\n\n```asm\n; OFFSET is resolved at assembly time\nMOV BX, OFFSET table    ; Assembler puts constant in instruction\n\n; LEA computes at runtime\nLEA BX, table           ; CPU calculates address (same result, but flexible)\n\n; LEA allows computations OFFSET cannot:\nLEA BX, table[SI]       ; Cannot do this with OFFSET!\n```\n\n> 💡 **Tip:** Use LEA when you need to calculate addresses that depend on runtime values (indices, registers). Use OFFSET for static, fixed addresses known at assembly time.",
-          "concepts": ["lea-instruction", "effective-address", "address-calculation", "memory-addressing"],
-          "instructions": ["LEA"],
-          "examples": ["lea-examples.asm", "addressing.asm"],
-          "assessmentItems": ["q-lea-001", "q-lea-002"]
+          "concepts": [
+            "lea-instruction",
+            "effective-address",
+            "address-calculation",
+            "memory-addressing"
+          ],
+          "instructions": [
+            "LEA"
+          ],
+          "examples": [
+            "lea-examples.asm",
+            "addressing.asm"
+          ],
+          "assessmentItems": [
+            "q-lea-001",
+            "q-lea-002"
+          ]
         },
         {
           "id": "l3-s2",
           "lectureId": 3,
           "title": "XCHG - Exchange",
           "content": "## XCHG - Exchange Register/Memory Contents\n\nThe XCHG instruction swaps the contents of two operands.\n\n### Syntax\n\n```asm\nXCHG destination, source\n```\n\nBoth operands can be registers, or one can be memory:\n\n```asm\n; Register to register exchange\nXCHG AX, BX             ; Swap AX and BX\nXCHG SI, DI             ; Swap SI and DI\n\n; Cannot exchange memory directly:\n; XCHG [1000h], [2000h]  ; ILLEGAL!\n\n; Must use register as intermediary:\nMOV CX, [2000h]         ; CX = [2000h]\nXCHG [1000h], CX        ; Now swap with memory\nMOV [2000h], CX         ; Store original [1000h] to [2000h]\n```\n\n### Practical Example: Swapping Values\n\n```asm\n.DATA\n    X DW 1234h\n    Y DW 5678h\n.CODE\n    ; Swap X and Y using AX\n    MOV AX, X           ; AX = 1234h\n    XCHG AX, Y          ; AX = 5678h, Y = 1234h\n    MOV X, AX           ; X = 5678h\n    \n    ; Now X = 5678h and Y = 1234h\n```\n\n### XCHG with Accumulator\n\nXCHG with AX is optimized (1 byte opcode):\n\n```asm\nXCHG AX, BX             ; 1-byte opcode (87 C3) - fast!\nXCHG AX, CX             ; 1-byte opcode (87 C1) - fast!\nXCHG AX, DX             ; 1-byte opcode (87 C2) - fast!\nXCHG BX, CX             ; 2-byte opcode (87 CB) - slower\n```\n\n### Exchange vs MOV with Temp Register\n\n| Method | Code | Cycles (approx) |\n|--------|------|-----------------|\n| Using temp register | `MOV TMP, A / MOV A, B / MOV B, TMP` | 3 |\n| Using XCHG | `XCHG A, B` | 1-3 (depends on operand types) |\n\n```asm\n; Swap AX and BX\n; Method 1: Using temp register (3 MOVs)\nMOV CX, AX\nMOV AX, BX\nMOV BX, CX\n\n; Method 2: Using XCHG (1 instruction)\nXCHG AX, BX\n```\n\n> 💡 **Tip:** XCHG is particularly useful for swapping values without clobbering other registers. With the accumulator, it's also the fastest option.",
-          "concepts": ["xchg-instruction", "swap-pattern", "data-transfer"],
-          "instructions": ["XCHG"],
-          "examples": ["swap.asm", "xchg-examples.asm"],
-          "assessmentItems": ["q-xchg-001", "q-xchg-002"]
+          "concepts": [
+            "xchg-instruction",
+            "swap-pattern",
+            "data-transfer"
+          ],
+          "instructions": [
+            "XCHG"
+          ],
+          "examples": [
+            "swap.asm",
+            "xchg-examples.asm"
+          ],
+          "assessmentItems": [
+            "q-xchg-001",
+            "q-xchg-002"
+          ]
         },
         {
           "id": "l3-s3",
           "lectureId": 3,
           "title": "PUSH and POP - Stack Operations",
           "content": "## The Stack\n\nThe stack is a Last-In-First-Out (LIFO) data structure in memory, growing downward (toward lower addresses). The **Stack Pointer (SP)** register points to the current top of the stack.\n\n### Stack Organization\n\n```\nMemory (grows down)          After PUSH AX\n                         \n    Lower addresses          +--------+     SP points here\n    +--------+               |   AX   |     (new top)\n    |        |               +--------+\n    |        |   SP ->       | old SP |\n    +--------+               +--------+\n    |  PUSH  |  (before)    |        |\n    +--------+               +--------+\n\n    Higher addresses          Higher addresses\n```\n\n---\n\n## PUSH Instruction\n\nPUSH decrements SP by 2 (for 16-bit) and copies a register or memory word onto the stack.\n\n### Syntax\n\n```asm\nPUSH source\n```\n\n### Valid Operands\n\n| Operand | Example | Description |\n|---------|---------|--------------|\n| Register (16-bit) | `PUSH AX` | Push 16-bit register |\n| Segment register | `PUSH DS` | Push segment register |\n| Memory (word) | `PUSH [BX]` | Push word from memory |\n\n```asm\n; Push registers to save values\nPUSH AX              ; SP = SP - 2, then [SP] = AX\nPUSH BX              ; SP = SP - 2, then [SP] = BX\nPUSH CX              ; SP = SP - 2, then [SP] = CX\n\n; Push segment register\nPUSH DS\n\n; Push memory\nPUSH WORD PTR [SI]    ; Push word at [SI]\n```\n\n---\n\n## POP Instruction\n\nPOP copies the word at [SP] to the destination and increments SP by 2.\n\n### Syntax\n\n```asm\nPOP destination\n```\n\n### Valid Operands\n\n| Operand | Example | Description |\n|---------|---------|--------------|\n| Register (16-bit) | `POP DX` | Pop into 16-bit register |\n| Segment register (except CS) | `POP DS` | Pop into segment register |\n| Memory (word) | `POP [BP]` | Pop into memory |\n\n```asm\n; Pop in reverse order (LIFO!)\nPOP CX               ; DX = [SP], SP = SP + 2\nPOP BX               ; BX = [SP], SP = SP + 2\nPOP AX               ; AX = [SP], SP = SP + 2\n\n; Pop to memory\nPOP WORD PTR [DI]\n\n; Pop segment register\nPOP DS               ; (Cannot pop to CS!)\n```\n\n### Important: POP Cannot Pop into CS\n\n```asm\n; ILLEGAL!\nPOP CS               ; CS cannot be destination\n\n; Correct way to modify CS:\n; Use a far jump or call\n```\n\n---\n\n## Push/Pop Examples\n\n### Saving and Restoring Registers\n\n```asm\n; Function that modifies AX, BX, CX but must preserve them\nMY_FUNCTION PROC\n    PUSH AX             ; Save AX\n    PUSH BX             ; Save BX\n    PUSH CX             ; Save CX\n    \n    ; ... function body uses AX, BX, CX freely ...\n    \n    POP CX              ; Restore CX (LIFO: last pushed = first popped)\n    POP BX              ; Restore BX\n    POP AX              ; Restore AX\n    \n    RET\nMY_FUNCTION ENDP\n```\n\n### Swapping Values Using Stack\n\n```asm\n; Swap AX and BX using the stack\nPUSH AX\nMOV AX, BX\nPOP BX\n\n; Result: AX = original BX, BX = original AX\n```\n\n> 💡 **Tip:** Always pop in reverse order of pushing (LIFO). Forgetting this causes subtle bugs that are hard to track down.",
-          "concepts": ["stack-operations", "push-instruction", "pop-instruction", "sp-register", "lifo", "stack-frame"],
-          "instructions": ["PUSH", "POP"],
-          "examples": ["stack-ops.asm", "proc.asm"],
-          "assessmentItems": ["q-push-001", "q-push-002", "q-pop-001"]
+          "concepts": [
+            "stack-operations",
+            "push-instruction",
+            "pop-instruction",
+            "sp-register",
+            "lifo",
+            "stack-frame"
+          ],
+          "instructions": [
+            "PUSH",
+            "POP"
+          ],
+          "examples": [
+            "stack-ops.asm",
+            "proc.asm"
+          ],
+          "assessmentItems": [
+            "q-push-001",
+            "q-push-002",
+            "q-pop-001"
+          ]
         },
         {
           "id": "l3-s4",
           "lectureId": 3,
           "title": "IN and OUT - I/O Port Operations",
           "content": "## I/O Port Addressing\n\nThe 8086 can communicate with hardware devices through **I/O ports**. These are special addressable locations used for input and output operations.\n\n### Port Address Space\n\n- The 8086 supports up to 65,536 (64K) I/O ports\n- Port addresses are 8-bit or 16-bit\n- Port addresses are specified in DX (variable) or directly in instruction (fixed)\n\n---\n\n## IN - Input from Port\n\nThe IN instruction reads data from an I/O port into AL or AX.\n\n### Syntax\n\n```asm\nIN accumulator, port\n```\n\n### Fixed Port (8-bit address)\n\n```asm\n; Read from port with 8-bit address (0-255)\nIN AL, 60h             ; Read keyboard status (port 60h)\nIN AX, 61h             ; Read 16-bit value from port 61h\n\n; Read from port 60h (keyboard controller)\nIN AL, 60h\n; AL now contains the keyboard scan code or ASCII\n```\n\n### Variable Port (DX register)\n\n```asm\n; Read from port address in DX (0-65535)\nMOV DX, 3F8h           ; COM1 port address\nIN AL, DX              ; Read from COM1 data port\n\n; Read 16-bit port\nMOV DX, 200h           ; Game port\nIN AX, DX              ; Read 16-bit game port\n```\n\n---\n\n## OUT - Output to Port\n\nThe OUT instruction writes data from AL or AX to an I/O port.\n\n### Syntax\n\n```asm\nOUT port, accumulator\n```\n\n### Fixed Port (8-bit address)\n\n```asm\n; Write to port with 8-bit address\nOUT 20h, AL            ; Send to port 20h (interrupt controller)\nOUT 61h, AX            ; Write to port 61h\n\n; Control speaker\nIN AL, 61h              ; Get current port 61h value\nOR AL, 00000011b        ; Set bits 0 and 1 (speaker enable)\nOUT 61h, AL             ; Write back to speaker port\n```\n\n### Variable Port (DX register)\n\n```asm\n; Write to port address in DX\nMOV DX, 3F8h            ; COM1 data port\nOUT DX, AL              ; Send AL to COM1\n\n; Write to parallel port (LPT1)\nMOV DX, 378h            ; LPT1 data port\nOUT DX, AX              ; Send data to printer\n```\n\n---\n\n## Common I/O Ports\n\n| Port | Direction | Description |\n|------|-----------|-------------|\n| 60h | Input | Keyboard data/scan codes |\n| 61h | Input/Output | System control (speaker) |\n| 64h | Input/Output | Keyboard controller |\n| 3F8h | Input/Output | COM1 serial port (data) |\n| 3F9h | Input/Output | COM1 serial port (baud rate) |\n| 378h | Output | Parallel port (LPT1) data |\n\n---\n\n## DOS Interrupt 21h Functions vs Direct Port Access\n\n| Method | Pros | Cons |\n|--------|------|------|\n| INT 21h | Easy to use, portable | Slower, limited functionality |\n| Direct ports | Fast, full hardware control | Not portable, requires knowledge |\n\n```asm\n; Using DOS (portable, easier):\nMOV AH, 01h\nINT 21h              ; AL = character read\n\n; Using direct port access (hardware control):\nIN AL, 60h            ; Get keyboard scan code directly\n```\n\n> 💡 **Tip:** Use DOS functions for most programming. Direct port access is for system-level programming, hardware drivers, and when you need capabilities DOS doesn't provide.",
-          "concepts": ["io-ports", "in-instruction", "out-instruction", "port-addressing", "hardware-communication"],
-          "instructions": ["IN", "OUT"],
-          "examples": ["port-example.asm"],
-          "assessmentItems": ["q-io-001", "q-io-002"]
+          "concepts": [
+            "io-ports",
+            "in-instruction",
+            "out-instruction",
+            "port-addressing",
+            "hardware-communication"
+          ],
+          "instructions": [
+            "IN",
+            "OUT"
+          ],
+          "examples": [
+            "port-example.asm"
+          ],
+          "assessmentItems": [
+            "q-io-001",
+            "q-io-002"
+          ]
         },
         {
           "id": "l3-s5",
           "lectureId": 3,
           "title": "Data Transfer Patterns",
           "content": "## Practical Data Transfer Patterns\n\n### Setting Up Data Access\n\nEvery program must initialize DS before accessing data:\n\n```asm\n.MODEL SMALL\n.STACK 100h\n.DATA\n    prompt DB 'Enter value: $'\n    value DW ?\n.CODE\nMAIN PROC\n    ; Initialize data segment (required!)\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Now we can access our data\n    LEA DX, prompt      ; DX = offset of prompt\n    MOV AH, 09h\n    INT 21h             ; Display prompt\n    \n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n### Copying Data Between Memory Locations\n\n```asm\n.DATA\n    source DB 'Hello World!'\n    dest DB 12 DUP(?)\n.CODE\n    MOV SI, OFFSET source    ; SI = source address\n    MOV DI, OFFSET dest      ; DI = destination address\n    MOV CX, 12               ; Count = 12 bytes\n    \ncopy_loop:\n    MOV AL, [SI]             ; Load from source\n    MOV [DI], AL             ; Store to destination\n    INC SI\n    INC DI\n    LOOP copy_loop\n```\n\n### Using LEA for Address Calculations\n\n```asm\n.DATA\n    table DW 10, 20, 30, 40, 50\n    index DW 2               ; Want table[2] = 30\n.CODE\n    MOV BX, index            ; BX = 2\n    SHL BX, 1                ; BX = BX * 2 (word size)\n    LEA SI, table            ; SI = offset of table\n    ADD SI, BX               ; SI = offset of table[2]\n    MOV AX, [SI]             ; AX = 30\n```\n\n### Using XCHG for Quick Swaps\n\n```asm\n; Swap two memory values using stack\n.DATA\n    X DW 100\n    Y DW 200\n.CODE\n    ; Save registers\n    PUSH AX\n    \n    ; Swap X and Y\n    MOV AX, X\n    XCHG AX, Y               ; AX = 200, Y = 100\n    MOV X, AX                ; X = 200\n    \n    ; Restore\n    POP AX\n```\n\n### Complete Data Transfer Program\n\n```asm\n; Program demonstrating multiple data transfer instructions\n.MODEL SMALL\n.STACK 100h\n.DATA\n    num1 DW 1234h\n    num2 DW 5678h\n    result DW ?\n    temp DW ?\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Copy num1 to result\n    MOV AX, num1\n    MOV result, AX\n    \n    ; Copy num2 to temp, then swap with result\n    MOV AX, num2\n    MOV temp, AX\n    MOV AX, result\n    XCHG AX, temp\n    MOV result, AX\n    \n    ; Now result = 5678h, temp = 1234h\n    \n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n> 💡 **Tip:** Always initialize DS before accessing data segment variables. Use LEA for computed addresses, XCHG for swapping values efficiently, and PUSH/POP to preserve registers across calls.",
-          "concepts": ["ds-initialization", "data-transfer-patterns", "addressing", "swap-pattern", "register-preservation"],
-          "instructions": ["MOV", "LEA", "XCHG", "PUSH", "POP"],
-          "examples": ["data-transfer.asm", "helloworld.asm"],
-          "assessmentItems": ["q-dt-001", "q-dt-002", "q-dt-003"]
+          "concepts": [
+            "ds-initialization",
+            "data-transfer-patterns",
+            "addressing",
+            "swap-pattern",
+            "register-preservation"
+          ],
+          "instructions": [
+            "MOV",
+            "LEA",
+            "XCHG",
+            "PUSH",
+            "POP"
+          ],
+          "examples": [
+            "data-transfer.asm",
+            "helloworld.asm"
+          ],
+          "assessmentItems": [
+            "q-dt-001",
+            "q-dt-002",
+            "q-dt-003"
+          ]
         }
       ],
-      "concepts": ["lea-instruction", "xchg-instruction", "push-instruction", "pop-instruction", "in-instruction", "out-instruction", "stack-operations", "io-ports"],
-      "instructions": ["LEA", "XCHG", "PUSH", "POP", "IN", "OUT"],
+      "concepts": [
+        "lea-instruction",
+        "xchg-instruction",
+        "push-instruction",
+        "pop-instruction",
+        "in-instruction",
+        "out-instruction",
+        "stack-operations",
+        "io-ports"
+      ],
+      "instructions": [
+        "LEA",
+        "XCHG",
+        "PUSH",
+        "POP",
+        "IN",
+        "OUT"
+      ],
       "difficulty": "intermediate",
       "examRelevance": "high",
       "provenance": {
@@ -211,70 +436,557 @@
           "lectureId": 4,
           "title": "ADD and SUB Instructions",
           "content": "## ADD - Integer Addition\n\nThe ADD instruction adds the source operand to the destination operand and stores the result in the destination.\n\n### Syntax\n\n```asm\nADD destination, source\n```\n\n### Flags Affected\n\n- **CF** (Carry Flag) - Set if unsigned overflow occurred\n- **OF** (Overflow Flag) - Set if signed overflow occurred\n- **SF** (Sign Flag) - Set if result is negative\n- **ZF** (Zero Flag) - Set if result is zero\n- **AF** (Auxiliary Carry) - Set if carry from bit 3\n- **PF** (Parity Flag) - Set if even number of 1 bits\n\n### Examples\n\n```asm\n; Add immediate to register\nADD AX, 1              ; AX = AX + 1\nADD CX, 100h           ; CX = CX + 256\nADD DL, 5              ; DL = DL + 5\n\n; Add register to register\nADD AX, BX             ; AX = AX + BX\nADD SI, DI             ; SI = SI + DI\n\n; Add memory to register\nADD AX, [1000h]        ; AX = AX + word at [1000h]\nADD DL, [BX]           ; DL = DL + byte at [BX]\n\n; Add register to memory\nADD [SI], AX            ; word at [SI] = word at [SI] + AX\nADD [BX+4], CX          ; word at [BX+4] = word at [BX+4] + CX\n```\n\n### Restrictions\n\n- Cannot add memory to memory directly\n- Both operands cannot be segment registers\n- Operands must be same size\n\n---\n\n## SUB - Integer Subtraction\n\nThe SUB instruction subtracts the source operand from the destination operand.\n\n### Syntax\n\n```asm\nSUB destination, source\n```\n\n### Flags Affected\n\nSame as ADD (CF, OF, SF, ZF, AF, PF)\n\n### Examples\n\n```asm\n; Subtract immediate from register\nSUB AX, 1              ; AX = AX - 1\nSUB CX, 100h           ; CX = CX - 256\n\n; Subtract register from register\nSUB AX, BX             ; AX = AX - BX\nSUB SI, DI             ; SI = SI - DI\n\n; Subtract memory from register\nSUB AX, [1000h]        ; AX = AX - word at [1000h]\n\n; Subtract register from memory\nSUB [BX], AX            ; word at [BX] = word at [BX] - AX\n```\n\n---\n\n## Addition and Subtraction Examples\n\n### Adding Two Numbers\n\n```asm\n.DATA\n    num1 DW 1234h\n    num2 DW 5678h\n    sum DW ?\n.CODE\n    MOV AX, num1         ; AX = 1234h\n    ADD AX, num2         ; AX = 1234h + 5678h = 68ACh\n    MOV sum, AX          ; sum = 68ACh\n```\n\n### Subtracting with Carry Check\n\n```asm\n.DATA\n    minuend DW 1000h\n    subtrahend DW 2000h\n    difference DW ?\n.CODE\n    MOV AX, minuend      ; AX = 1000h\n    SUB AX, subtrahend   ; AX = 1000h - 2000h\n    ; CF will be set (unsigned borrow occurred)\n    MOV difference, AX\n```\n\n> 💡 **Tip:** After ADD or SUB, check CF to detect unsigned overflow, and OF for signed overflow.",
-          "concepts": ["add-instruction", "sub-instruction", "arithmetic", "carry-flag", "overflow-flag"],
-          "instructions": ["ADD", "SUB"],
-          "examples": ["addition.asm", "demo.asm"],
-          "assessmentItems": ["q-add-001", "q-add-002", "q-sub-001"]
+          "concepts": [
+            "add-instruction",
+            "sub-instruction",
+            "arithmetic",
+            "carry-flag",
+            "overflow-flag"
+          ],
+          "instructions": [
+            "ADD",
+            "SUB"
+          ],
+          "examples": [
+            "addition.asm",
+            "demo.asm"
+          ],
+          "assessmentItems": [
+            "q-add-001",
+            "q-add-002",
+            "q-sub-001"
+          ]
         },
         {
           "id": "l4-s2",
           "lectureId": 4,
           "title": "INC, DEC, and NEG Instructions",
           "content": "## INC - Increment\n\nThe INC instruction adds 1 to the operand.\n\n### Syntax\n\n```asm\nINC destination\n```\n\n### Valid Operands\n\n| Operand | Example | Description |\n|---------|---------|-------------|\n| Register (8/16-bit) | `INC AX`, `INC CL` | Increment register |\n| Memory | `INC BYTE PTR [BX]` | Increment byte in memory |\n\n### Flags Affected\n\n- OF, SF, ZF, AF, PF affected\n- **CF is NOT modified** (unlike ADD reg, 1)\n\n### Examples\n\n```asm\n; Increment registers\nINC AX                 ; AX = AX + 1\nINC CX                 ; CX = CX + 1\nINC BL                 ; BL = BL + 1\n\n; Increment memory\nINC WORD PTR [1000h]   ; word at [1000h] += 1\nINC BYTE PTR [SI]       ; byte at [SI] += 1\n\n; Common use: loop counter\nMOV CX, 10\ncounter_loop:\n    ; ... loop body ...\n    INC CX              ; CX doesn't affect CF, important for LOOP\n    LOOP counter_loop\n```\n\n---\n\n## DEC - Decrement\n\nThe DEC instruction subtracts 1 from the operand.\n\n### Syntax\n\n```asm\nDEC destination\n```\n\n### Flags Affected\n\n- OF, SF, ZF, AF, PF affected\n- **CF is NOT modified** (unlike SUB reg, 1)\n\n### Examples\n\n```asm\n; Decrement registers\nDEC AX                 ; AX = AX - 1\nDEC CX                 ; CX = CX - 1\n\n; Decrement memory\nDEC WORD PTR [1000h]   ; word at [1000h] -= 1\n\n; Count down loop\nMOV CX, 5\ncountdown:\n    ; ... work ...\n    DEC CX              ; CX = CX - 1, CF unchanged\n    JNZ countdown       ; Jump if CX != 0\n```\n\n---\n\n## NEG - Negate (Two's Complement)\n\nThe NEG instruction computes the two's complement negation of the operand.\n\n### Syntax\n\n```asm\nNEG destination\n```\n\n### What Neg Does\n\nNEG computes: `destination = 0 - destination`\n\nThis is equivalent to: invert all bits, then add 1\n\n### Flags Affected\n\n- CF is always set (except when operand is 0)\n- OF, SF, ZF, AF, PF affected\n\n### Examples\n\n```asm\n; Negate a register\nNEG AX                 ; AX = -AX\nNEG BL                 ; BL = -BL\n\n; Negate memory\nNEG WORD PTR [1000h]   ; [1000h] = -[1000h]\n\n; Common pattern: negate a value\nMOV AX, 42             ; AX = 42\nNEG AX                 ; AX = -42\n\n; Note: NEG of 0 leaves CF = 0\nMOV AX, 0\nNEG AX                 ; AX = 0, CF = 0\n```\n\n> 💡 **Tip:** Use INC/DEC for loop counters because they don't modify CF. This is important because LOOP checks CX without considering CF.",
-          "concepts": ["inc-instruction", "dec-instruction", "neg-instruction", "two's-complement", "arithmetic"],
-          "instructions": ["INC", "DEC", "NEG"],
-          "examples": ["incdec.asm", "forloop.asm"],
-          "assessmentItems": ["q-inc-001", "q-dec-001", "q-neg-001"]
+          "concepts": [
+            "inc-instruction",
+            "dec-instruction",
+            "neg-instruction",
+            "two's-complement",
+            "arithmetic"
+          ],
+          "instructions": [
+            "INC",
+            "DEC",
+            "NEG"
+          ],
+          "examples": [
+            "incdec.asm",
+            "forloop.asm"
+          ],
+          "assessmentItems": [
+            "q-inc-001",
+            "q-dec-001",
+            "q-neg-001"
+          ]
         },
         {
           "id": "l4-s3",
           "lectureId": 4,
           "title": "CMP - Compare Instruction",
           "content": "## CMP - Compare\n\nThe CMP instruction subtracts the source from the destination **but does not store the result**. It only updates the flags based on the result.\n\n### Syntax\n\n```asm\nCMP destination, source\n```\n\n### What CMP Does\n\nCMP performs: `destination - source`\n\nThen sets flags:\n- **ZF** = 1 if destination == source\n- **CF** = 1 if destination < source (unsigned)\n- **OF** = 1 if destination < source (signed, overflow)\n- **SF** = 1 if result is negative (destination < source, signed)\n\n### Flags After CMP\n\n| Condition | ZF | CF (unsigned) | SF/OF (signed) |\n|-----------|-----|---------------|----------------|\n| dest == src | 1 | 0 | OF = SF |\n| dest > src | 0 | 0 | OF = 0, SF = 0 |\n| dest < src | 0 | 1 | OF = 1, SF = 1 |\n\n### Examples\n\n```asm\n; Compare register with immediate\nMOV AX, 10\nCMP AX, 20              ; AX - 20 = -10 (negative)\n; SF = 1, ZF = 0, CF = 1\n\n; Compare two registers\nMOV CX, 100\nMOV DX, 50\nCMP CX, DX              ; CX - DX = 50 (positive, non-zero)\n; SF = 0, ZF = 0, CF = 0\n\n; Compare with memory\nMOV AX, [1000h]\nCMP AX, 0               ; Is AX zero?\nJE AX_IS_ZERO           ; Jump if equal (ZF = 1)\n```\n\n---\n\n## Conditional Jumps After CMP\n\n### Unsigned Comparisons\n\n| Jump | Meaning | Condition |\n|------|---------|-----------|\n| JA | Jump if Above | CF = 0 and ZF = 0 |\n| JAE | Jump if Above or Equal | CF = 0 |\n| JB | Jump if Below | CF = 1 |\n| JBE | Jump if Below or Equal | CF = 1 or ZF = 1 |\n| JE/JZ | Jump if Equal/Zero | ZF = 1 |\n| JNE/JNZ | Jump if Not Equal/Not Zero | ZF = 0 |\n\n### Signed Comparisons\n\n| Jump | Meaning | Condition |\n|------|---------|-----------|\n| JG | Jump if Greater | ZF = 0 and OF = SF |\n| JGE | Jump if Greater or Equal | OF = SF |\n| JL | Jump if Less | OF ≠ SF |\n| JLE | Jump if Less or Equal | ZF = 1 or OF ≠ SF |\n\n---\n\n## CMP Examples\n\n### Check if Value is Zero\n\n```asm\nMOV AX, value\nCMP AX, 0\nJE VALUE_IS_ZERO\n; Value is not zero\nJMP DONE\nVALUE_IS_ZERO:\n; Value is zero\nDONE:\n```\n\n### Compare and Branch (Unsigned)\n\n```asm\nMOV AL, age\nCMP AL, 18\nJAE CAN_VOTE             ; if age >= 18\n; Cannot vote\nJMP DONE\nCAN_VOTE:\n; Can vote\nDONE:\n```\n\n> 💡 **Tip:** For unsigned values, use JA/JB/JAE/JBE. For signed values, use JG/JL/JGE/JLE.",
-          "concepts": ["cmp-instruction", "compare", "conditional-jumps", "flags", "unsigned-comparison", "signed-comparison"],
-          "instructions": ["CMP", "JE", "JNE", "JA", "JB", "JG", "JL", "JAE", "JBE", "JGE", "JLE"],
-          "examples": ["ifelse.asm", "demo.asm", "compare.asm"],
-          "assessmentItems": ["q-cmp-001", "q-cmp-002", "q-cmp-003"]
+          "concepts": [
+            "cmp-instruction",
+            "compare",
+            "conditional-jumps",
+            "flags",
+            "unsigned-comparison",
+            "signed-comparison"
+          ],
+          "instructions": [
+            "CMP",
+            "JE",
+            "JNE",
+            "JA",
+            "JB",
+            "JG",
+            "JL",
+            "JAE",
+            "JBE",
+            "JGE",
+            "JLE"
+          ],
+          "examples": [
+            "ifelse.asm",
+            "demo.asm",
+            "compare.asm"
+          ],
+          "assessmentItems": [
+            "q-cmp-001",
+            "q-cmp-002",
+            "q-cmp-003"
+          ]
         },
         {
           "id": "l4-s4",
           "lectureId": 4,
           "title": "MUL and DIV - Multiplication and Division",
           "content": "## MUL - Unsigned Multiplication\n\nMUL performs unsigned multiplication. The instruction uses AX and/or DX as implicit operands.\n\n### Syntax\n\n```asm\nMUL source\n```\n\n### Operand Size and Result\n\n| Source | Operation | Result |\n|--------|-----------|--------|\n| 8-bit register/memory | AX = AL * source | 16-bit in AX |\n| 16-bit register/memory | DX:AX = AX * source | 32-bit in DX:AX |\n\n### Flags Affected\n\n- **CF = 1** if upper half of result is non-zero\n- **OF = 1** if upper half of result is non-zero\n- Other flags are undefined\n\n### 8-bit Multiplication\n\n```asm\n; AL * source -> AX\nMOV AL, 10h            ; AL = 16\nMOV BL, 20h            ; BL = 32\nMUL BL                 ; AX = AL * BL = 512 (0200h)\n; CF = 0 because AH = 0 (no overflow into AH)\n\nMOV AL, 80h            ; AL = 128\nMOV BL, 02h            ; BL = 2\nMUL BL                 ; AX = 256 (0100h)\n; CF = 1 because AH = 01h (non-zero upper byte)\n```\n\n### 16-bit Multiplication\n\n```asm\n; AX * source -> DX:AX\nMOV AX, 1000h          ; AX = 4096\nMOV BX, 1000h          ; BX = 4096\nMUL BX                 ; DX:AX = 1000h * 1000h = 1,0000,0000h\n; DX = 0001h, AX = 0000h\n; CF = 1 because DX != 0\n```\n\n---\n\n## DIV - Unsigned Division\n\nDIV performs unsigned division. AX and/or DX:AX are used as implicit operands.\n\n### Syntax\n\n```asm\nDIV source\n```\n\n### Operand Size and Result\n\n| Divisor | Dividend | Quotient | Remainder |\n|---------|----------|-----------|------------|\n| 8-bit | AX | AL | AH |\n| 16-bit | DX:AX | AX | DX |\n\n### Division by Zero\n\nIf divisor is 0, or quotient doesn't fit in destination, **Divide Error exception occurs**.\n\n### 8-bit Division\n\n```asm\n; AX / source -> AL (quotient), AH (remainder)\nMOV AX, 100            ; AX = 100\nMOV BL, 7              ; BL = 7\nDIV BL                 ; AL = 14 (100/7 = 14), AH = 2 (remainder)\n\nMOV AX, 256            ; AX = 256\nMOV BL, 10             ; BL = 10\nDIV BL                 ; AL = 25 (quotient), AH = 6 (remainder)\n```\n\n### 16-bit Division\n\n```asm\n; DX:AX / source -> AX (quotient), DX (remainder)\nMOV DX, 0              ; High word of dividend\nMOV AX, 1000h          ; AX = 4096, DX:AX = 4096\nMOV CX, 100h           ; CX = 256\nDIV CX                 ; AX = 16 (quotient), DX = 0 (remainder)\n```\n\n---\n\n## MUL/DIV Examples\n\n### Calculate Array Sum\n\n```asm\n.DATA\n    values DB 10, 20, 30, 40, 50\n    count DW 5\n    sum DW ?\n.CODE\n    MOV CX, count        ; Counter = 5\n    MOV SI, 0            ; Index = 0\n    XOR AX, AX           ; AX = 0 (sum)\n    \nsum_loop:\n    ADD AL, values[SI]   ; Add element (8-bit to 16-bit)\n    INC SI\n    LOOP sum_loop\n    \n    MOV sum, AX          ; Store result\n```\n\n### Division with Remainder Check\n\n```asm\n; Check if AX is divisible by 5\nMOV DX, 0\nMOV CX, 5\nDIV CX                 ; AX = quotient, DX = remainder\nCMP DX, 0\nJE DIVISIBLE_BY_5\n; Not divisible\nDIVISIBLE_BY_5:\n; Is divisible\n```\n\n> 💡 **Tip:** Always initialize DX to 0 before 16-bit division, and consider using CBW/CWD to sign-extend before signed IMUL/IDIV.",
-          "concepts": ["mul-instruction", "div-instruction", "imul-instruction", "idiv-instruction", "multiplication", "division", "dx-ax-registers"],
-          "instructions": ["MUL", "DIV", "IMUL", "IDIV"],
-          "examples": ["muldiv.asm", "mult.asm"],
-          "assessmentItems": ["q-mul-001", "q-div-001"]
+          "concepts": [
+            "mul-instruction",
+            "div-instruction",
+            "imul-instruction",
+            "idiv-instruction",
+            "multiplication",
+            "division",
+            "dx-ax-registers"
+          ],
+          "instructions": [
+            "MUL",
+            "DIV",
+            "IMUL",
+            "IDIV"
+          ],
+          "examples": [
+            "muldiv.asm",
+            "mult.asm"
+          ],
+          "assessmentItems": [
+            "q-mul-001",
+            "q-div-001"
+          ]
         },
         {
           "id": "l4-s5",
           "lectureId": 4,
           "title": "CBW and CWD - Sign Extension",
           "content": "## Why Sign Extension?\n\nWhen performing signed arithmetic, we often need to convert an 8-bit value to 16-bit, or a 16-bit value to 32-bit. Simply zero-extending (like MOVZX) doesn't work for negative numbers.\n\n### Example: The Problem\n\n```asm\n; We want to sign-extend AL to AX\nMOV AL, 80h             ; AL = -128 (signed)\n; AL = 10000000b\n; We want AX = 1111111110000000b = FFFF80h (not 0080h!)\n```\n\n---\n\n## CBW - Convert Byte to Word\n\nCBW sign-extends AL into AX.\n\n### Syntax\n\n```asm\nCBW\n```\n\n### Behavior\n\n- If AL bit 7 (sign bit) = 0: AH = 00h\n- If AL bit 7 = 1: AH = FFh\n\n### Examples\n\n```asm\n; Extend positive byte\nMOV AL, 7Fh             ; AL = +127 (0x7F)\nCBW                     ; AX = 007Fh (AH = 00)\n\n; Extend negative byte\nMOV AL, 80h             ; AL = -128 (0x80)\nCBW                     ; AX = FF80h (AH = FF)\n\nMOV AL, 0FFh            ; AL = -1 (0xFF)\nCBW                     ; AX = FFFFh (AH = FF)\n```\n\n---\n\n## CWD - Convert Word to Doubleword\n\nCWD sign-extends AX into DX:AX.\n\n### Syntax\n\n```asm\nCWD\n```\n\n### Behavior\n\n- If AX bit 15 (sign bit) = 0: DX = 0000h\n- If AX bit 15 = 1: DX = FFFFh\n\n### Examples\n\n```asm\n; Extend positive word\nMOV AX, 7FFFh           ; AX = +32767\nCWD                     ; DX:AX = 00007FFFh\n\n; Extend negative word\nMOV AX, 8000h           ; AX = -32768\nCWD                     ; DX:AX = FFFF8000h\n\nMOV AX, 0FFFFh          ; AX = -1\nCWD                     ; DX:AX = FFFFFFFFh\n```\n\n---\n\n## Why Use CBW/CWD?\n\n### For Signed Division\n\nBefore IDIV with a 16-bit divisor, DX must contain the sign extension of AX:\n\n```asm\n; Divide 32-bit signed value in DX:AX by 16-bit divisor in CX\n; Result: AX = quotient, DX = remainder\n\n; First ensure DX is sign extension of AX\nCWD                     ; Extend AX into DX\nIDIV CX                 ; Signed divide DX:AX by CX\n; AX = quotient, DX = remainder\n```\n\n> 💡 **Tip:** Use CBW before dividing AX by an 8-bit value with IDIV. Use CWD before dividing DX:AX by a 16-bit value with IDIV.",
-          "concepts": ["cbw-instruction", "cwd-instruction", "sign-extension", "cdq-instruction", "arithmetic-conversion"],
-          "instructions": ["CBW", "CWD", "CDQ"],
-          "examples": ["signext.asm", "idiv-example.asm"],
-          "assessmentItems": ["q-cbw-001", "q-cwd-001"]
+          "concepts": [
+            "cbw-instruction",
+            "cwd-instruction",
+            "sign-extension",
+            "cdq-instruction",
+            "arithmetic-conversion"
+          ],
+          "instructions": [
+            "CBW",
+            "CWD",
+            "CDQ"
+          ],
+          "examples": [
+            "signext.asm",
+            "idiv-example.asm"
+          ],
+          "assessmentItems": [
+            "q-cbw-001",
+            "q-cwd-001"
+          ]
         },
         {
           "id": "l4-s6",
           "lectureId": 4,
           "title": "The Flags Register",
           "content": "## The 8086 Flags Register\n\nThe FLAGS register is a 16-bit register where individual bits indicate the result of the previous operation.\n\n### Flags Layout\n\n```\nFlags Register (16-bit):\n\nBit:     15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0\n        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+\n        │  │  │  │OF│DF│IF│TF│SF│ZF│  │AF│  │PF│  │CF│\n        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+\n         │          │         │ │  │  │        │     │\n         │          │         │ │  │  │        │     └─ CF: Carry Flag\n         │          │         │ │  │  │        └─ PF: Parity Flag\n         │          │         │ │  │  └─ AF: Auxiliary Carry\n         │          │         │ │  └─ ZF: Zero Flag\n         │          │         │ └─ SF: Sign Flag\n         │          │         └─ OF: Overflow Flag\n         │          └─ IF: Interrupt Flag\n         └─ (reserved, undefined on 8086)\n```\n\n---\n\n## Conditional Flags\n\n### CF - Carry Flag\n\n- **Set** when unsigned result is too large (overflow out of MSB)\n- **Set** when subtracting (borrow is needed)\n- Check with: `JC` (jump if carry), `JNC` (jump if no carry)\n\n### ZF - Zero Flag\n\n- **Set** when result is zero\n- Check with: `JE`/`JZ` (jump if equal/zero), `JNE`/`JNZ` (jump if not equal/not zero)\n\n### SF - Sign Flag\n\n- **Set** when result is negative (MSB = 1 for signed interpretation)\n- Check with: `JS` (jump if negative), `JNS` (jump if positive)\n\n### OF - Overflow Flag\n\n- **Set** when signed result doesn't fit (MSB carry ≠ carry into MSB)\n- Check with: `JO` (jump if overflow), `JNO` (jump if no overflow)\n\n---\n\n## Flag Manipulation Instructions\n\n| Instruction | Effect |\n|-------------|--------|\n| CLC | CF = 0 |\n| STC | CF = 1 |\n| CMC | CF = NOT CF |\n| CLD | DF = 0 |\n| STD | DF = 1 |\n| CLI | IF = 0 |\n| STI | IF = 1 |\n| LAHF | Load FLAGS lower 8 into AH |\n| SAHF | Store AH into FLAGS lower 8 |\n| PUSHF | Push FLAGS to stack |\n| POPF | Pop stack into FLAGS |\n\n---\n\n## Flags and Conditional Execution\n\n### Unsigned Conditional Jumps\n\n| Instruction | Condition | Description |\n|-------------|-----------|-------------|\n| JA / JNBE | CF=0 and ZF=0 | Above / Not Below or Equal |\n| JAE / JNB | CF=0 | Above or Equal / Not Below |\n| JB / JNAE | CF=1 | Below / Not Above or Equal |\n| JC | CF=1 | Carry |\n| JNC | CF=0 | Not Carry |\n| JE / JZ | ZF=1 | Equal / Zero |\n| JNE / JNZ | ZF=0 | Not Equal / Not Zero |\n\n### Signed Conditional Jumps\n\n| Instruction | Condition | Description |\n|-------------|-----------|-------------|\n| JG / JNLE | ZF=0 and OF=SF | Greater / Not Less or Equal |\n| JGE / JNL | OF=SF | Greater or Equal / Not Less |\n| JL / JNGE | OF≠SF | Less / Not Greater or Equal |\n| JLE / JNG | ZF=1 or OF≠SF | Less or Equal / Not Greater |\n| JO | OF=1 | Overflow |\n| JNO | OF=0 | Not Overflow |\n| JS | SF=1 | Sign (negative) |\n| JNS | SF=0 | Not Sign (positive) |\n\n---\n\n## Flags Register Examples\n\n### Check Overflow After Addition\n\n```asm\nMOV AL, 127\nADD AL, 1               ; OF = 1 (signed overflow)\nJO OVERFLOW             ; Handle overflow\n\nOVERFLOW:\n; Recovery code here\n```\n\n### Use LAHF/SAHF to Preserve Flags\n\n```asm\n; Save current flags before calling subroutine\nLAHF                     ; AH = FLAGS\nPUSH AX\n\nCALL SUBROUTINE\n\n; Restore flags after\nPOP AX\nSAHF\n```\n\n> 💡 **Tip:** After arithmetic, check CF for unsigned overflow and OF for signed overflow. Use the appropriate conditional jump (JA/JB for unsigned, JG/JL for signed).",
-          "concepts": ["flags-register", "carry-flag", "zero-flag", "sign-flag", "overflow-flag", "parity-flag", "direction-flag", "conditional-jumps"],
-          "instructions": ["CLC", "STC", "CMC", "CLD", "STD", "LAHF", "SAHF", "PUSHF", "POPF"],
-          "examples": ["flags.asm", "demo.asm"],
-          "assessmentItems": ["q-flags-001", "q-flags-002", "q-flags-003"]
+          "concepts": [
+            "flags-register",
+            "carry-flag",
+            "zero-flag",
+            "sign-flag",
+            "overflow-flag",
+            "parity-flag",
+            "direction-flag",
+            "conditional-jumps"
+          ],
+          "instructions": [
+            "CLC",
+            "STC",
+            "CMC",
+            "CLD",
+            "STD",
+            "LAHF",
+            "SAHF",
+            "PUSHF",
+            "POPF"
+          ],
+          "examples": [
+            "flags.asm",
+            "demo.asm"
+          ],
+          "assessmentItems": [
+            "q-flags-001",
+            "q-flags-002",
+            "q-flags-003"
+          ]
         }
       ],
-      "concepts": ["add-instruction", "sub-instruction", "inc-instruction", "dec-instruction", "neg-instruction", "cmp-instruction", "mul-instruction", "div-instruction", "cbw-instruction", "cwd-instruction", "flags-register", "carry-flag", "overflow-flag", "sign-flag", "zero-flag"],
-      "instructions": ["ADD", "SUB", "INC", "DEC", "NEG", "CMP", "MUL", "DIV", "CBW", "CWD", "JC", "JNC", "JO", "JNO", "JE", "JNE", "JA", "JB", "JG", "JL"],
+      "concepts": [
+        "add-instruction",
+        "sub-instruction",
+        "inc-instruction",
+        "dec-instruction",
+        "neg-instruction",
+        "cmp-instruction",
+        "mul-instruction",
+        "div-instruction",
+        "cbw-instruction",
+        "cwd-instruction",
+        "flags-register",
+        "carry-flag",
+        "overflow-flag",
+        "sign-flag",
+        "zero-flag"
+      ],
+      "instructions": [
+        "ADD",
+        "SUB",
+        "INC",
+        "DEC",
+        "NEG",
+        "CMP",
+        "MUL",
+        "DIV",
+        "CBW",
+        "CWD",
+        "JC",
+        "JNC",
+        "JO",
+        "JNO",
+        "JE",
+        "JNE",
+        "JA",
+        "JB",
+        "JG",
+        "JL"
+      ],
       "difficulty": "intermediate",
       "examRelevance": "high",
       "provenance": {
         "sourceFile": "Lecture 4.pdf",
         "sourceType": "pdf",
         "sourceSectionOrLineRange": "1-56",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.85,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Logic and Bit Manipulation",
+      "sourceFile": "Lecture 6.pdf",
+      "pageCount": 34,
+      "sections": [
+        {
+          "id": "l5-s1",
+          "lectureId": 5,
+          "title": "Logical Instructions",
+          "content": "## Logical Instructions - AND, OR, XOR, NOT\n\nLogical instructions perform bitwise operations on their operands.\n\n### AND - Bitwise AND\n\nThe AND instruction performs a bitwise AND operation between each bit of the destination and source.\n\n```asm\nAND destination, source\n```\n\n**Truth Table:**\n| A | B | A AND B |\n|---|---|---------|\n| 0 | 0 | 0 |\n| 0 | 1 | 0 |\n| 1 | 0 | 0 |\n| 1 | 1 | 1 |\n\n**Common Uses:**\n- Clear specific bits (masking)\n- Test if a particular bit is set\n- Force specific bits to 0\n\n```asm\n; Clear the low 4 bits of AL, keep high 4 bits\nAND AL, 0F0h\n\n; Test if bit 0 is set\nAND AL, 01h\nJZ BIT_NOT_SET\n```\n\n### OR - Bitwise OR\n\nThe OR instruction performs a bitwise OR operation.\n\n```asm\nOR destination, source\n```\n\n**Truth Table:**\n| A | B | A OR B |\n|---|---|---------|\n| 0 | 0 | 0 |\n| 0 | 1 | 1 |\n| 1 | 0 | 1 |\n| 1 | 1 | 1 |\n\n**Common Uses:**\n- Set specific bits to 1\n- Combine flags\n- Force specific bits to 1\n\n```asm\n; Set the low 4 bits of AL\nOR AL, 0Fh\n\n; Set the sign and zero flags (commonly done)\nOR AX, AX  ; Sets SF, ZF based on AX value\n```\n\n### XOR - Bitwise XOR\n\nThe XOR instruction performs a bitwise exclusive OR operation.\n\n```asm\nXOR destination, source\n```\n\n**Truth Table:**\n| A | B | A XOR B |\n|---|---|---------|\n| 0 | 0 | 0 |\n| 0 | 1 | 1 |\n| 1 | 0 | 1 |\n| 1 | 1 | 0 |\n\n**Common Uses:**\n- Toggle specific bits\n- Clear a register (XOR with itself = 0)\n- Encryption/compression\n\n```asm\n; Toggle bits 0-3 of AL\nXOR AL, 0Fh\n\n; Fast way to clear a register (faster than MOV reg, 0)\nXOR AX, AX\n\n; Swap values without temp register\nXOR AX, BX\nXOR BX, AX\nXOR AX, BX\n```\n\n### NOT - Bitwise NOT (Complement)\n\nThe NOT instruction inverts all bits in the destination.\n\n```asm\nNOT destination\n```\n\n**Truth Table:**\n| A | NOT A |\n|---|-------|\n| 0 | 1 |\n| 1 | 0 |\n\n**Common Uses:**\n- Compute one's complement\n- Prepare for negation (NEG = NOT + 1)\n\n```asm\n; Invert all bits of AL\nNOT AL\n\n; AL = NOT AL (same as AL = -AL - 1)\n```\n\n### TEST - Bitwise AND without storing result\n\nThe TEST instruction performs AND but doesn't store the result - it only updates the flags.\n\n```asm\nTEST destination, source\n```\n\n**Common Uses:**\n- Test if specific bits are set or clear\n- Check conditions without modifying operands\n\n```asm\n; Test if bit 0 of AL is set\nTEST AL, 01h\nJNZ BIT_IS_SET\n\n; Test if AL is negative (bit 7 set)\nTEST AL, 80h\nJNZ AL_IS_NEGATIVE\n\n; Test if AL is zero\nTEST AL, AL\nJZ AL_IS_ZERO\n```\n\n### Flags Affected\n\nAll logical operations (AND, OR, XOR, NOT, TEST) affect flags as follows:\n- **ZF** = 1 if result is zero\n- **SF** = 1 if most significant bit is 1 (result negative)\n- **PF** = 1 if even number of 1 bits (parity even)\n- **OF** = 0 (overflow cleared)\n- **CF** = 0 (carry cleared)\n- **AF** = undefined\n\n> 💡 **Tip:** XOR'ing a register with itself is a common optimization to clear it - it's shorter (2 bytes) than `MOV AX, 0` (3 bytes) and sets up ZF correctly.",
+          "concepts": [
+            "and-instruction",
+            "or-instruction",
+            "xor-instruction",
+            "not-instruction",
+            "test-instruction",
+            "bitwise-operations",
+            "logical-operations"
+          ],
+          "instructions": [
+            "AND",
+            "OR",
+            "XOR",
+            "NOT",
+            "TEST"
+          ],
+          "examples": [
+            "logic-ops.asm",
+            "bitmask.asm"
+          ],
+          "assessmentItems": [
+            "q-logic-001",
+            "q-logic-002",
+            "q-logic-003"
+          ]
+        },
+        {
+          "id": "l5-s2",
+          "lectureId": 5,
+          "title": "Shift Instructions",
+          "content": "## Shift Instructions - SHL, SHR, SAL, SAR\n\nShift instructions move bits left or right within a register or memory location.\n\n### SHL - Shift Logical Left\n\nSHL shifts bits left, filling with zeros. Bits shifted out on the left go into the CF flag.\n\n```asm\nSHL destination, count\nSHL destination, CL\n```\n\n**Operation:**\n```\nBefore:  [ 1 1 1 1  0 0 0 0 ]  (AL = F0h)\n         MSB            LSB\n\nAfter SHL AL, 1:\n     CF [ 1 1 1 0  0 0 0 0 ] 0 (AL = E0h)\n       ^ bit lost\n```\n\n**Common Uses:**\n- Multiply by powers of 2 (unsigned)\n- Isolate bits in a register\n- Fast multiplication\n\n```asm\n; Multiply AX by 2 ( unsigned)\nSHL AX, 1\n\n; Multiply AX by 8\nSHL AX, 3\n\n; Multiply AL by 16\nSHL AL, 4\n```\n\n### SHR - Shift Logical Right\n\nSHR shifts bits right, filling with zeros on the left. Bits shifted out on the right go into CF.\n\n```asm\nSHR destination, count\nSHR destination, CL\n```\n\n**Operation:**\n```\nBefore:  [ 1 1 1 1  0 0 0 0 ]  (AL = F0h)\n         MSB            LSB\n\nAfter SHR AL, 1:\n     0 [ 0 1 1 1  1 0 0 0 ] CF\n                     ^ bit lost\n```\n\n**Common Uses:**\n- Divide by powers of 2 (unsigned)\n- Extract low bits\n- Fast division\n\n```asm\n; Divide AX by 2 (unsigned)\nSHR AX, 1\n\n; Divide AL by 4 (unsigned)\nSHR AL, 2\n```\n\n### SAL - Shift Arithmetic Left\n\nSAL is identical to SHL - shifts left, fills with zeros. Maintained for compatibility.\n\n```asm\nSAL destination, count\nSAL destination, CL\n```\n\n**Note:** SAL and SHL are actually the same operation in the 8086!\n\n### SAR - Shift Arithmetic Right\n\nSAR preserves the sign bit (MSB) when shifting. This is crucial for signed division by powers of 2.\n\n```asm\nSAR destination, count\nSAR destination, CL\n```\n\n**Operation:**\n```\nBefore:  [ 1 1 1 1  0 0 0 0 ]  (AL = F0h = -16 signed)\n         MSB            LSB\n\nAfter SAR AL, 1:\n     1 [ 1 1 1 1  1 0 0 0 ] CF\n     ^ sign bit preserved\n     Result: F8h = -8 (correct -16/2 = -8)\n```\n\n**Key Difference from SHR:**\n```asm\n; Example: -16 (0F0h) divided by 2\n\n; SHR (logical) - WRONG for signed\nMOV AL, 0F0h  ; AL = -16\nSHR AL, 1     ; AL = 78h = 120 (unsigned), not -8!\n\n; SAR (arithmetic) - CORRECT for signed  \nMOV AL, 0F0h  ; AL = -16\nSAR AL, 1     ; AL = 0F8h = -8 (correct!)\n```\n\n### Shift Count\n\nThe shift count can be:\n- Immediate value (1-31)\n- CL register (allows runtime count)\n\n```asm\n; Immediate shift\nSHL AX, 4\n\n; Variable shift (count in CL)\nMOV CL, 3\nSHL AX, CL\n```\n\n### Flags Affected\n\nAfter shift operations:\n- **CF** = last bit shifted out\n- **OF** = undefined for count > 1; for single shifts, OF = 1 if result sign changed\n- **ZF** = 1 if result is zero\n- **SF** = 1 if result is negative\n- **PF** = 1 if even parity\n- **AF** = undefined\n\n> 💡 **Tip:** Use SHL for unsigned multiplication by powers of 2. Use SAR for signed division by powers of 2. Never use SHR for signed values!",
+          "concepts": [
+            "shl-instruction",
+            "shr-instruction",
+            "sal-instruction",
+            "sar-instruction",
+            "shift-operations",
+            "bit-shifting",
+            "arithmetic-shift",
+            "logical-shift"
+          ],
+          "instructions": [
+            "SHL",
+            "SHR",
+            "SAL",
+            "SAR"
+          ],
+          "examples": [
+            "shift-ops.asm",
+            "mul-by-powers-of-2.asm"
+          ],
+          "assessmentItems": [
+            "q-shift-001",
+            "q-shift-002",
+            "q-shift-003"
+          ]
+        },
+        {
+          "id": "l5-s3",
+          "lectureId": 5,
+          "title": "Rotate Instructions",
+          "content": "## Rotate Instructions - ROL, ROR, RCL, RCR\n\nRotate instructions move bits in a circular fashion - bits shifted out one end enter at the other.\n\n### ROL - Rotate Left (without carry)\n\nROL rotates bits left, with the MSB wrapping around to LSB and also being copied to CF.\n\n```asm\nROL destination, count\nROL destination, CL\n```\n\n**Operation:**\n```\nBefore:  [ 1 1 1 1  0 0 0 0 ]  (AL = F0h)\n         MSB            LSB\n\nAfter ROL AL, 1:\n     CF [ 1 1 1 0  0 0 0 1 ] \n       ^ MSB goes to CF\n       ^ MSB also goes to LSB\n```\n\n**Example:**\n```asm\nMOV AL, 0F0h  ; AL = 11110000b\nROL AL, 1     ; AL = 11100001b = E1h, CF = 1\n```\n\n### ROR - Rotate Right (without carry)\n\nROR rotates bits right, with the LSB wrapping around to MSB and also being copied to CF.\n\n```asm\nROR destination, count\nROR destination, CL\n```\n\n**Operation:**\n```\nBefore:  [ 1 1 1 1  0 0 0 0 ]  (AL = F0h)\n         MSB            LSB\n\nAfter ROR AL, 1:\n     0 [ 0 1 1 1  1 0 0 0 ] CF\n     ^ LSB goes to MSB\n     ^ LSB also goes to CF\n```\n\n**Example:**\n```asm\nMOV AL, 0F0h  ; AL = 11110000b\nROR AL, 1     ; AL = 01111000b = 78h, CF = 0\n```\n\n### RCL - Rotate Through Carry Left\n\nRCL rotates bits left through the carry flag. The carry flag becomes part of the rotation.\n\n```asm\nRCL destination, count\nRCL destination, CL\n```\n\n**Operation:**\n```\nBefore:  CF = 1, AL = 11110000b\n\nAfter RCL AL, 1:\n     CF [ 1 1 1 0  0 0 0 0 ] \n     ^ CF becomes new LSB\n     ^ MSB goes to CF\n```\n\n**Example:**\n```asm\nSTC             ; Set CF = 1\nMOV AL, 0F0h    ; AL = 11110000b\nRCL AL, 1      ; AL = 11100001b, CF = 1\n```\n\n### RCR - Rotate Through Carry Right\n\nRCR rotates bits right through the carry flag.\n\n```asm\nRCR destination, count\nRCR destination, CL\n```\n\n**Operation:**\n```\nBefore:  CF = 0, AL = 11110000b\n\nAfter RCR AL, 1:\n     1 [ 0 1 1 1  1 0 0 0 ] CF\n     ^ CF becomes new MSB\n     ^ LSB goes to CF\n```\n\n### Shift vs Rotate Comparison\n\n```asm\n; SHL - bits disappear, zeros fill from right\nMOV AL, 10000000b  ; AL = 80h\nSHL AL, 1          ; AL = 00000000b, CF = 1\n\n; ROL - bits wrap around\nMOV AL, 10000000b  ; AL = 80h\nROL AL, 1          ; AL = 00000001b, CF = 1\n\n; RCL - bits wrap through carry\nSTC               ; CF = 1\nMOV AL, 10000000b  ; AL = 80h\nRCL AL, 1          ; AL = 00000011b, CF = 1\n```\n\n### Practical Uses\n\n**Multi-byte shifts (for values larger than 16 bits):**\n```asm\n; Shift DX:AX left by 1 (DX:AX = DX:AX * 2)\nSHL AX, 1\nRCL DX, 1\n```\n\n**Bit reversal:**\n```asm\n; Reverse bits in AL\nMOV CX, 8\nMOV BL, AL\nXOR AL, AL\nreverse_loop:\n    SHL AL, 1\n    RCR BL, 1\n    LOOP reverse_loop\n```\n\n### Flags Affected\n\n- **CF** = last bit rotated out\n- **OF** = undefined for multi-bit rotates; for single rotates, OF = 1 if result sign changed\n- **ZF**, **SF**, **PF** = affected based on result\n- **AF** = undefined\n\n> 💡 **Tip:** Use ROL/ROR for simple bit rotations. Use RCL/RCR when you need to rotate multi-word values or when the carry flag needs to participate in the rotation.",
+          "concepts": [
+            "rol-instruction",
+            "ror-instruction",
+            "rcl-instruction",
+            "rcr-instruction",
+            "rotate-operations",
+            "bit-rotation",
+            "carry-flag"
+          ],
+          "instructions": [
+            "ROL",
+            "ROR",
+            "RCL",
+            "RCR"
+          ],
+          "examples": [
+            "rotate-ops.asm",
+            "multi-word-shift.asm"
+          ],
+          "assessmentItems": [
+            "q-rotate-001",
+            "q-rotate-002",
+            "q-rotate-003"
+          ]
+        }
+      ],
+      "concepts": [
+        "and-instruction",
+        "or-instruction",
+        "xor-instruction",
+        "not-instruction",
+        "test-instruction",
+        "shl-instruction",
+        "shr-instruction",
+        "sal-instruction",
+        "sar-instruction",
+        "rol-instruction",
+        "ror-instruction",
+        "rcl-instruction",
+        "rcr-instruction",
+        "bitwise-operations",
+        "logical-operations",
+        "shift-operations",
+        "rotate-operations"
+      ],
+      "instructions": [
+        "AND",
+        "OR",
+        "XOR",
+        "NOT",
+        "TEST",
+        "SHL",
+        "SHR",
+        "SAL",
+        "SAR",
+        "ROL",
+        "ROR",
+        "RCL",
+        "RCR"
+      ],
+      "difficulty": "intermediate",
+      "examRelevance": "high",
+      "provenance": {
+        "sourceFile": "Lecture 6.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "26-34",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.85,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Control Flow and Branching",
+      "sourceFile": "Lecture 6.pdf",
+      "pageCount": 34,
+      "sections": [
+        {
+          "id": "l6-s1",
+          "lectureId": 6,
+          "title": "The CMP Instruction",
+          "content": "## CMP - Compare\n\nThe CMP instruction compares two operands by subtracting the source from the destination, but **does not store the result**. Only the flags are updated.\n\n```asm\nCMP destination, source\n```\n\n**What Happens:**\n- CMP performs: `destination - source`\n- Result is discarded\n- Flags reflect the hypothetical subtraction\n\n### Flags After CMP\n\n| Condition | ZF | CF (unsigned) | SF/OF (signed) |\n|-----------|-----|---------------|----------------|\n| dest == src | 1 | 0 | OF = SF |\n| dest > src | 0 | 0 | OF = 0, SF = 0 |\n| dest < src | 0 | 1 | OF = 1, SF = 1 |\n\n### Examples\n\n```asm\n; Compare register with immediate\nMOV AX, 10\nCMP AX, 20              ; AX - 20 = -10 (negative)\n; SF = 1, ZF = 0, CF = 1\n\n; Compare two registers\nMOV CX, 100\nMOV DX, 50\nCMP CX, DX              ; CX - DX = 50 (positive)\n; SF = 0, ZF = 0, CF = 0\n\n; Compare with memory\nMOV AX, [1000h]\nCMP AX, 0               ; Is AX zero?\nJE AX_IS_ZERO           ; Jump if equal (ZF = 1)\n```\n\n### CMP and TEST\n\n**TEST** is like CMP but performs AND instead of SUB:\n```asm\nTEST destination, source   ; destination AND source (flags only)\n```\n\n```asm\n; Test if bit 0 is set\nTEST AL, 01h\nJNZ BIT_ZERO_SET\n\n; Test if AL is negative (sign bit set)\nTEST AL, 80h\nJNZ AL_IS_NEGATIVE\n\n; Test if AL is zero (any register with itself)\nTEST AX, AX\nJZ AX_IS_ZERO\n```\n\n> 💡 **Tip:** After CMP, use unsigned jumps (JA, JB) for unsigned comparisons and signed jumps (JG, JL) for signed comparisons. Check CF for less-than in unsigned, and OF/SF for less-than in signed.",
+          "concepts": [
+            "cmp-instruction",
+            "compare",
+            "test-instruction",
+            "flags",
+            "unsigned-comparison",
+            "signed-comparison"
+          ],
+          "instructions": [
+            "CMP",
+            "TEST"
+          ],
+          "examples": [
+            "compare.asm",
+            "ifelse.asm"
+          ],
+          "assessmentItems": [
+            "q-cmp-001",
+            "q-cmp-002"
+          ]
+        },
+        {
+          "id": "l6-s2",
+          "lectureId": 6,
+          "title": "Unconditional Jump - JMP",
+          "content": "## JMP - Unconditional Jump\n\nThe JMP instruction transfers control to a different point in the program, regardless of any condition.\n\n```asm\nJMP target\nJMP label\nJMP register        ; Jump to address in register\nJMP mem_location    ; Jump to address in memory\n```\n\n### Types of Jumps\n\n#### Short Jump (Near/Far distinction)\n- Displacement is a signed byte (-128 to +127 bytes)\n- Machine code is 2 bytes (EB xx)\n\n```asm\nJMP short_label  ; 2-byte instruction\n```\n\n#### Near Jump\n- Displacement is a signed word (-32768 to +32767 bytes)\n- Machine code is 3 bytes (E9 xx xx)\n\n```asm\nJMP near_label   ; 3-byte instruction\n```\n\n#### Far Jump\n- Changes both CS and IP\n- Used for inter-segment jumps\n- Machine code is 5 bytes (EA xxxx xxxx)\n\n```asm\nJMP far_label    ; 5-byte instruction\n```\n\n### Examples\n\n#### Infinite Loop\n```asm\nMOV AX, 1\ninc_again:\nINC AX\nJMP inc_again    ; Always jumps back\n```\n\n#### Skip Code\n```asm\n; Skip the increment if CX is zero\nMOV CX, 0\nJMP skip_inc\nINC CX           ; This will be skipped\nskip_inc:\n; Execution continues here\n```\n\n#### Table-Driven Jump\n```asm\n; Jump table implementation\nMOV BX, OFFSET jump_table\nADD BX, CX       ; Index into table\nADD BX, CX       ; * 2 (word entries)\nMOV IP, [BX]     ; Far jump to address\n```\n\n### JMP vs CALL\n\n| Aspect | JMP | CALL |\n|--------|-----|------|\n| Returns? | No | Yes (via RET) |\n| Saves return address? | No | Yes (on stack) |\n| Used for | Loops, branches | Subroutines |\n\n> 💡 **Tip:** JMP doesn't save a return address. If you need to come back, use CALL/RET instead of JMP.",
+          "concepts": [
+            "jmp-instruction",
+            "unconditional-jump",
+            "control-flow",
+            "short-jump",
+            "near-jump",
+            "far-jump"
+          ],
+          "instructions": [
+            "JMP"
+          ],
+          "examples": [
+            "loops.asm",
+            "jmp-examples.asm"
+          ],
+          "assessmentItems": [
+            "q-jmp-001",
+            "q-jmp-002"
+          ]
+        },
+        {
+          "id": "l6-s3",
+          "lectureId": 6,
+          "title": "Conditional Jumps",
+          "content": "## Conditional Jump Instructions\n\nConditional jumps transfer control based on the state of CPU flags. If the condition is true, the jump occurs; otherwise, execution continues to the next instruction.\n\n```asm\nJ<condition> label\n```\n\n### Unsigned Conditional Jumps\n\nThese treat operands as unsigned integers.\n\n| Instruction | Meaning | Condition |\n|-------------|---------|-----------|\n| JA / JNBE | Jump if Above / Not Below or Equal | CF = 0 and ZF = 0 |\n| JAE / JNB | Jump if Above or Equal / Not Below | CF = 0 |\n| JB / JNAE | Jump if Below / Not Above or Equal | CF = 1 |\n| JBE / JNA | Jump if Below or Equal / Not Above | CF = 1 or ZF = 1 |\n| JC | Jump if Carry | CF = 1 |\n| JNC | Jump if Not Carry | CF = 0 |\n| JE / JZ | Jump if Equal / Jump if Zero | ZF = 1 |\n| JNE / JNZ | Jump if Not Equal / Jump if Not Zero | ZF = 0 |\n| JECXZ | Jump if ECX is Zero | ECX = 0 |\n\n### Signed Conditional Jumps\n\nThese treat operands as signed (two's complement) integers.\n\n| Instruction | Meaning | Condition |\n|-------------|---------|-----------|\n| JG / JNLE | Jump if Greater / Not Less or Equal | ZF = 0 and OF = SF |\n| JGE / JNL | Jump if Greater or Equal / Not Less | OF = SF |\n| JL / JNGE | Jump if Less / Not Greater or Equal | OF not equal SF |\n| JLE / JNG | Jump if Less or Equal / Not Greater | ZF = 1 or OF not equal SF |\n| JO | Jump if Overflow | OF = 1 |\n| JNO | Jump if Not Overflow | OF = 0 |\n| JS | Jump if Sign (negative) | SF = 1 |\n| JNS | Jump if Not Sign (positive) | SF = 0 |\n\n### Common Patterns\n\n#### If-Then\n```asm\n; if (AX > 5) then AX = 0\nCMP AX, 5\nJLE skip         ; if AX <= 5, skip\nMOV AX, 0        ; AX = 0\nskip:\n```\n\n#### If-Then-Else\n```asm\n; if (AL == 10) BL = 1 else BL = 0\nCMP AL, 10\nJE equal\nMOV BL, 0\nJMP done\nequal:\nMOV BL, 1\ndone:\n```\n\n#### While Loop\n```asm\n; while (CX > 0) { CX-- }\nwhile_loop:\n    CMP CX, 0\n    JLE end_while\n    DEC CX\n    JMP while_loop\nend_while:\n```\n\n#### Character Search\n```asm\n; Find first CR (carriage return, 0Dh) in string\nread_char:\n    MOV DL, 0\n    ; ... code to read character into AL ...\n    CMP AL, 0Dh        ; Compare to CR\n    JE CR_received     ; if equal, jump\n    INC CL             ; otherwise increment counter\n    JMP read_char      ; and continue reading\nCR_received:\n```\n\n### Flag States After Comparisons\n\nAfter `CMP A, B`:\n- **ZF = 1** if A == B\n- **CF = 1** if A < B (unsigned)\n- **OF = SF = 0** if A > B (signed)\n- **OF = SF = 1** if A < B (signed)\n\n> 💡 **Tip:** Unsigned comparisons use CF (carry flag). Signed comparisons use OF and SF together. Remember: **A**bove = unsigned greater, **G**reater = signed greater.",
+          "concepts": [
+            "conditional-jump",
+            "je-instruction",
+            "jne-instruction",
+            "ja-instruction",
+            "jb-instruction",
+            "jg-instruction",
+            "jl-instruction",
+            "flags",
+            "unsigned-jump",
+            "signed-jump"
+          ],
+          "instructions": [
+            "JE",
+            "JNE",
+            "JA",
+            "JB",
+            "JAE",
+            "JBE",
+            "JG",
+            "JGE",
+            "JL",
+            "JLE",
+            "JO",
+            "JNO",
+            "JS",
+            "JNS",
+            "JC",
+            "JNC",
+            "JECXZ"
+          ],
+          "examples": [
+            "conditionals.asm",
+            "branching.asm",
+            "loops.asm"
+          ],
+          "assessmentItems": [
+            "q-jump-001",
+            "q-jump-002",
+            "q-jump-003"
+          ]
+        },
+        {
+          "id": "l6-s4",
+          "lectureId": 6,
+          "title": "Loop Instructions",
+          "content": "## Loop Instructions\n\nThe 8086 provides specialized instructions for implementing loops using the CX register as a counter.\n\n### LOOP - Decrement CX and Jump if Not Zero\n\nLOOP decrements CX and jumps if CX is not zero.\n\n```asm\nLOOP target\n```\n\n**Equivalent To:**\n```asm\nDEC CX\nJNZ target\n```\n\n**Example - Simple Counter Loop:**\n```asm\nMOV CX, 10         ; Initialize counter\ncounter_loop:\n    ; ... loop body ...\n    LOOP counter_loop  ; CX--, if CX != 0, jump back\n; After loop: CX = 0\n```\n\n### LOOPE / LOOPZ - Loop if Equal/Zero\n\nLoops while equal (ZF = 1) and CX is not zero.\n\n```asm\nLOOPE target   ; Loop if Equal\nLOOPZ target  ; Loop if Zero\n```\n\n**Equivalent To:**\n```asm\nDEC CX\nJNZ target     ; continue if CX != 0 AND ZF = 1\n```\n\n### LOOPNE / LOOPNZ - Loop if Not Equal/Not Zero\n\nLoops while not equal (ZF = 0) and CX is not zero.\n\n```asm\nLOOPNE target   ; Loop if Not Equal\nLOOPNZ target  ; Loop if Not Zero\n```\n\n**Equivalent To:**\n```asm\nDEC CX\nJNZ target     ; continue if CX != 0 AND ZF = 0\n```\n\n### Using LOOP Instructions\n\n#### Counting Loop\n```asm\n; Execute loop body 5 times\nMOV CX, 5\nstart_loop:\n    ; ... loop body ...\n    LOOP start_loop\n```\n\n#### Search Loop (find first non-zero)\n```asm\n; Find first non-zero byte in array\nMOV CX, LENGTH     ; Counter = array length\nMOV SI, 0          ; Index = 0\nsearch_loop:\n    CMP BYTE PTR [SI], 0    ; Compare to zero\n    LOOPNE search_loop      ; Continue if not found (CX--, if CX!=0 and ZF=0)\n    ; Exit here with SI pointing to first non-zero or CX=0 if not found\n```\n\n#### String Search (find 'A')\n```asm\n; Find first 'A' in string\nMOV CX, STRING_LEN\nMOV DI, OFFSET string\nMOV AL, 'A'\nsearch_loop:\n    CMP [DI], AL\n    JE found\n    INC DI\n    LOOPNE search_loop\nfound:\n; DI points to 'A' or end of string if not found\n```\n\n### Important Notes\n\n1. **CX is modified by LOOP** - save it if needed\n2. **LOOP doesn't check flags** - only CX\n3. **LOOPE/LOOPNE check both CX and ZF**\n4. **All loop instructions are**:\n   - 2 bytes (short jump only)\n   - Relative to IP (-128 to +127)\n\n### Nested Loops\n\n```asm\n; Outer loop 5 times, inner loop 3 times\nMOV AX, 5\nouter_loop:\n    PUSH AX         ; Save outer counter\n    MOV CX, 3\n    inner_loop:\n        ; ... inner body ...\n        LOOP inner_loop\n    POP AX          ; Restore outer counter\n    DEC AX\n    JNZ outer_loop\n```\n\n> 💡 **Tip:** Use PUSH/POP to preserve CX when implementing nested loops, since each LOOP consumes CX. Alternatively, use DEC/JNZ manually when you need to preserve the counter.",
+          "concepts": [
+            "loop-instruction",
+            "loope-instruction",
+            "loopne-instruction",
+            "loop",
+            "iteration",
+            "counter"
+          ],
+          "instructions": [
+            "LOOP",
+            "LOOPE",
+            "LOOPZ",
+            "LOOPNE",
+            "LOOPNZ"
+          ],
+          "examples": [
+            "loop-examples.asm",
+            "search.asm",
+            "nested-loops.asm"
+          ],
+          "assessmentItems": [
+            "q-loop-001",
+            "q-loop-002",
+            "q-loop-003"
+          ]
+        }
+      ],
+      "concepts": [
+        "cmp-instruction",
+        "test-instruction",
+        "jmp-instruction",
+        "conditional-jump",
+        "loop-instruction",
+        "loope-instruction",
+        "loopne-instruction",
+        "control-flow",
+        "branching",
+        "iteration"
+      ],
+      "instructions": [
+        "CMP",
+        "TEST",
+        "JMP",
+        "JE",
+        "JNE",
+        "JA",
+        "JB",
+        "JAE",
+        "JBE",
+        "JG",
+        "JGE",
+        "JL",
+        "JLE",
+        "JO",
+        "JNO",
+        "JS",
+        "JNS",
+        "JC",
+        "JNC",
+        "LOOP",
+        "LOOPE",
+        "LOOPZ",
+        "LOOPNE",
+        "LOOPNZ"
+      ],
+      "difficulty": "intermediate",
+      "examRelevance": "high",
+      "provenance": {
+        "sourceFile": "Lecture 6.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "17-25",
         "extractedBy": "content-ingestion-v1",
         "extractionConfidence": 0.85,
         "reviewedStatus": "pending"

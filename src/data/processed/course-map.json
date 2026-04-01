@@ -59,27 +59,27 @@
     },
     {
       "id": 5,
-      "title": "Input/Output Operations",
+      "title": "Logic and Bit Manipulation",
       "topics": [
-        "DOS interrupt 21h functions",
-        "Keyboard input (AH=01h, AH=0Ah)",
-        "Screen output (AH=02h, AH=09h)",
-        "String input and output",
-        "Buffer management",
-        "Input validation concepts"
+        "AND, OR, XOR bitwise operations",
+        "NOT instruction (bitwise complement)",
+        "TEST instruction (bitwise AND without storing)",
+        "Shift operations (SHL, SHR, SAL, SAR)",
+        "Rotate operations (ROL, ROR, RCL, RCR)",
+        "Bit masking and flag manipulation"
       ],
       "examples": 0,
-      "examRelevance": "medium",
+      "examRelevance": "high",
       "difficulty": "intermediate"
     },
     {
       "id": 6,
-      "title": "Control Flow and Loops",
+      "title": "Control Flow and Branching",
       "topics": [
         "Unconditional jump (JMP)",
-        "Conditional jumps (JE, JNE, JL, JLE, JG, JGE)",
-        "CMP instruction and flag combinations",
-        "LOOP and LOOPE instructions",
+        "Conditional jumps (JE, JNE, JG, JL, JGE, JLE)",
+        "CMP instruction and flag testing",
+        "LOOP, LOOPE, LOOPNE instructions",
         "For loops, while loops, if-else structures",
         "Loop examples (forloop.asm, ifelse.asm)"
       ],
@@ -145,5 +145,5 @@
       "difficulty": "advanced"
     }
   ],
-  "lastUpdated": "2026-03-31T00:13:23.156Z"
+  "lastUpdated": "2026-03-31T00:00:00.000Z"
 }

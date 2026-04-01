@@ -1,4 +1,4 @@
-import { createRootRoute, createRoute, createRouter, Outlet, useLocation, Link, redirect } from '@tanstack/react-router'
+import { createRootRoute, createRoute, createRouter, Outlet, Link, redirect } from '@tanstack/react-router'
 import { createHashHistory } from '@tanstack/history'
 import { useState, useEffect } from 'react'
 import { BookOpen, Gamepad2, FlaskConical, Cpu, BarChart3, Sun, Moon, ArrowRight, FileText, Target, Zap, ChevronRight, Menu, X, Stethoscope } from 'lucide-react'
@@ -520,10 +520,12 @@ function FlagFrenzyPage() {
 }
 
 function SimulatorPage() {
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const encodedCode = searchParams.get('code')
-  const initialCode = encodedCode ? atob(encodedCode) : ''
+  // Parse code from hash-based URL: /#/simulator?code=XXX
+  const hash = window.location.hash
+  const hashUrl = hash.startsWith('#') ? hash.slice(1) : hash // Remove leading #
+  const fullUrl = new URL(hashUrl, 'http://localhost')
+  const encodedCode = fullUrl.searchParams.get('code')
+  const initialCode = encodedCode ? atob(decodeURIComponent(encodedCode)) : ''
 
   return (
     <div className="space-y-6">

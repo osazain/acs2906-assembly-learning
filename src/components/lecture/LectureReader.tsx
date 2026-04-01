@@ -391,6 +391,10 @@ export function LectureReader({ lecture }: LectureReaderProps) {
                         // Assembly code block
                         if (match[1] === 'asm') {
                           const codeId = `${section.id}-code-${index}`
+                          const handleTryInSimulator = () => {
+                            const encoded = btoa(code)
+                            window.location.hash = `#/simulator?code=${encodeURIComponent(encoded)}`
+                          }
                           return (
                             <div className="relative group">
                               <pre className="bg-card border rounded-lg p-4 overflow-x-auto text-sm">
@@ -416,13 +420,13 @@ export function LectureReader({ lecture }: LectureReaderProps) {
                                     <Copy className="h-4 w-4" />
                                   )}
                                 </button>
-                                <Link
-                                  to="/simulator"
+                                <button
+                                  onClick={handleTryInSimulator}
                                   className="p-1.5 rounded bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
                                   title="Try in Simulator"
                                 >
                                   <Cpu className="h-4 w-4" />
-                                </Link>
+                                </button>
                               </div>
                             </div>
                           )

@@ -61,10 +61,17 @@ agent-browser open http://localhost:4173
 
 - Preview server runs on port 4173
 - App uses hash-based routing (`/#/route`)
-- All 43 Phase 2 assertions are pending
+- Current issues: Theme toggle broken, Settings tab needs removal, lectures need full content
+
+## Mission: UI Fixes
+
+Features to implement:
+1. Fix theme toggle in header (light/dark/system, persists to localStorage)
+2. Remove Settings from navigation
+3. Merge Course Map and Lectures pages
 
 ## Resource Classification
 
-- **Time cost**: Medium (43 assertions, ~20-30 min)
+- **Time cost**: Low (~15-20 min for 3 features)
 - **Tool requirement**: agent-browser, Playwright
 - **External dependencies**: None (all local)

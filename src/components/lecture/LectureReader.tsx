@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { BookOpen, Check, Cpu, List, X, Copy, CheckCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { db, getOrCreateUserId } from '@/lib/db'
+import lecturesData from '@/data/processed/lectures.json'
 
 type CourseMapLecture = {
   id: number
@@ -12,174 +13,6 @@ type CourseMapLecture = {
   examples: number
   examRelevance: 'high' | 'medium' | 'low'
   difficulty: 'foundational' | 'intermediate' | 'advanced'
-}
-
-// Assembly code examples for different lectures
-const ASSEMBLY_EXAMPLES: Record<number, { title: string; code: string; description: string }[]> = {
-  3: [
-    {
-      title: 'Simple MOV Example',
-      code: `; Simple data transfer using MOV
-MOV AX, 1234h    ; Load immediate value into AX
-MOV BX, AX       ; Copy AX value to BX
-MOV CX, 0        ; Clear CX register`,
-      description: 'The MOV instruction transfers data between registers and memory.'
-    },
-    {
-      title: 'Memory Addressing',
-      code: `; Direct memory addressing
-DATA SEGMENT
-    myVar DB 10h
-DATA ENDS
-
-CODE SEGMENT
-    MOV AX, @DATA
-    MOV DS, AX
-    MOV AL, [myVar]    ; Load byte from memory`,
-      description: 'Memory operands use brackets to indicate indirect addressing.'
-    }
-  ],
-  4: [
-    {
-      title: 'ADD and SUB Instructions',
-      code: `; Arithmetic operations
-MOV AX, 5        ; AX = 5
-MOV BX, 3        ; BX = 3
-ADD AX, BX       ; AX = AX + BX = 8
-SUB AX, 2        ; AX = AX - 2 = 6
-NEG AX           ; AX = -AX = -6`,
-      description: 'ADD, SUB, and NEG modify the destination operand and update CPU flags.'
-    },
-    {
-      title: 'CMP Instruction',
-      code: `; Comparison using CMP
-MOV AX, 10
-MOV BX, 20
-CMP AX, BX       ; Sets flags based on AX - BX
-JE equal         ; Jump if equal (ZF = 1)
-JL smaller       ; Jump if AX < BX (SF ≠ OF)
-JG larger        ; Jump if AX > BX (ZF = 0 and SF = OF)`,
-      description: 'CMP performs subtraction but only updates flags, not the destination.'
-    },
-    {
-      title: 'Hello World',
-      code: `; Hello World Program
-.MODEL SMALL
-.STACK 100h
-.DATA
-    msg DB 'Hello, World!$'
-.CODE
-MAIN PROC
-    MOV AX, @DATA
-    MOV DS, AX
-    MOV AH, 09h
-    LEA DX, msg
-    INT 21h
-    MOV AH, 4Ch
-    INT 21h
-MAIN ENDP
-END MAIN`,
-      description: 'Classic Hello World using DOS interrupt 21h function 09h.'
-    }
-  ],
-  6: [
-    {
-      title: 'Conditional Jump',
-      code: `; If-else structure in assembly
-MOV AX, 10
-MOV BX, 20
-CMP AX, BX
-JE equal_handler
-JL less_handler
-; Greater handler (fall-through)
-MOV CX, 1
-JMP done
-equal_handler:
-    MOV CX, 0
-    JMP done
-less_handler:
-    MOV CX, -1
-done:
-    ; CX contains comparison result`,
-      description: 'Conditional jumps implement decision structures.'
-    },
-    {
-      title: 'Loop Example',
-      code: `; Countdown loop
-MOV CX, 5        ; Counter in CX
-loop_start:
-    ; Do something each iteration
-    DEC CX         ; Decrement counter
-    JNZ loop_start ; Continue if not zero`,
-      description: 'The LOOP instruction decrements CX and jumps if not zero.'
-    }
-  ],
-  7: [
-    {
-      title: 'Procedure Call',
-      code: `; Procedure definition and call
-.CODE
-MAIN PROC
-    MOV AX, 5
-    PUSH AX        ; Pass parameter
-    CALL square
-    ; Result in AX
-    POP            ; Clean stack
-    RET
-MAIN ENDP
-
-square PROC
-    PUSH BP
-    MOV BP, SP
-    MOV AX, [BP+4] ; Get parameter
-    MUL AX         ; AX = AX * AX
-    POP BP
-    RET
-square ENDP`,
-      description: 'Procedures (functions) use PUSH/POP to save/restore registers.'
-    }
-  ]
-}
-
-// Generate section content from topic
-function generateSectionContent(topic: string, lectureId: number): { content: string; hasCode: boolean } {
-  const topicLower = topic.toLowerCase()
-  
-  // Check if this topic has an associated code example
-  const examples = ASSEMBLY_EXAMPLES[lectureId] || []
-  
-  // Find relevant example based on topic
-  let relevantExample = examples.find(e => 
-    e.title.toLowerCase().includes(topicLower.split(' ')[0]) ||
-    e.description.toLowerCase().includes(topicLower.split(' ')[0])
-  )
-  
-  // If lecture has examples but none match, use the first one
-  if (!relevantExample && examples.length > 0 && lectureId === 4) {
-    relevantExample = examples[0]
-  }
-  
-  let content = `**${topic}**\n\n`
-  content += `This section covers ${topic} in the context of 8086 assembly language programming.\n\n`
-  
-  if (relevantExample) {
-    content += `### Example: ${relevantExample.title}\n\n`
-    content += `${relevantExample.description}\n\n`
-    content += '```asm\n' + relevantExample.code + '\n```\n\n'
-    content += `> 💡 **Tip:** Try modifying the values in the code above and observe how the registers change.\n\n`
-    return { content, hasCode: true }
-  }
-  
-  content += `Understanding ${topic} is essential for mastering assembly language programming. `
-  content += `In 8086 assembly, this concept forms the foundation for writing efficient programs.\n\n`
-  
-  // Add generic code example for MOV-related topics
-  if (topicLower.includes('mov') || topicLower.includes('data transfer')) {
-    content += '```asm\n; Example\nMOV AX, 1234h\nMOV BX, AX\n```\n\n'
-    return { content, hasCode: true }
-  }
-  
-  return { content, hasCode: false }
 }
 
 interface LectureReaderProps {
@@ -193,6 +26,13 @@ interface Section {
   hasCode: boolean
 }
 
+// Get full lecture content from the processed lectures data
+function getLectureContent(lectureId: number) {
+  const lecture = lecturesData.lectures.find(l => l.id === lectureId)
+  if (!lecture) return null
+  return lecture
+}
+
 export function LectureReader({ lecture }: LectureReaderProps) {
   const [activeSection, setActiveSection] = useState<string>('')
   const [completedSections, setCompletedSections] = useState<Set<string>>(new Set())
@@ -201,18 +41,31 @@ export function LectureReader({ lecture }: LectureReaderProps) {
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map())
   const userIdRef = useRef<string>('')
   
-  // Generate sections from topics using useMemo
+  // Generate sections from lecture content data
+  const fullLecture = useMemo(() => getLectureContent(lecture.id), [lecture.id])
+  
   const sections = useMemo<Section[]>(() => {
+    // If we have full lecture content, use it
+    if (fullLecture && fullLecture.sections.length > 0) {
+      return fullLecture.sections.map(section => ({
+        id: section.id,
+        title: section.title,
+        content: section.content,
+        hasCode: section.content.includes('```asm')
+      }))
+    }
+    
+    // Fallback: generate sections from topics (for lectures without full content)
     return lecture.topics.map((topic, index) => {
-      const { content, hasCode } = generateSectionContent(topic, lecture.id)
+      const content = `**${topic}**\n\nThis section covers ${topic} in the context of 8086 assembly language programming.`
       return {
         id: `section-${index + 1}`,
         title: topic,
         content,
-        hasCode
+        hasCode: false
       }
     })
-  }, [lecture])
+  }, [fullLecture, lecture.topics])
   
   // Compute effective active section (falls back to first section if not set)
   const effectiveActiveSection = activeSection || sections[0]?.id || ''
@@ -357,7 +210,7 @@ export function LectureReader({ lecture }: LectureReaderProps) {
         <div className="lg:sticky lg:top-4 space-y-4">
           {/* Back link */}
           <Link
-            to="/course-map"
+            to="/lectures"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <BookOpen className="h-4 w-4" />

@@ -1,0 +1,139 @@
+{
+  "lectures": [
+    {
+      "id": 1,
+      "title": "Introduction to Assembly Language",
+      "sourceFile": "Lecture 1.pdf",
+      "pageCount": 48,
+      "sections": [
+        {
+          "id": "l1-s1",
+          "lectureId": 1,
+          "title": "Numbering Systems",
+          "content": "## Decimal, Binary, and Hexadecimal\n\nAssembly language programmers must be fluent in three numbering systems: **decimal** (base-10), **binary** (base-2), and **hexadecimal** (base-16).\n\n### Why These Systems Matter\n\n- **Decimal**: The number system humans use naturally\n- **Binary**: How computers represent all data—zeros and ones\n- **Hexadecimal**: A human-friendly way to represent binary data\n\n### Conversions\n\n| Decimal | Binary | Hexadecimal |\n|---------|--------|-------------|\n| 0 | 0000 | 0 |\n| 1 | 0001 | 1 |\n| 9 | 1001 | 9 |\n| 10 | 1010 | A |\n| 15 | 1111 | F |\n\n### Binary to Hexadecimal\n\nGroup binary digits in sets of four, starting from the right:\n\n```\nBinary:  11010110 00111101\nGroup:  1101 0110 0011 1101\nHex:     D    6    3    D\n```\n\n### Hexadecimal to Decimal\n\nEach hex digit represents 4 binary bits. The rightmost digit is worth 16⁰, the next 16¹, and so on:\n\n```\n3D7h = (3 × 16²) + (13 × 16¹) + (7 × 16⁰)\n     = (3 × 256) + (13 × 16) + (7 × 1)\n     = 768 + 208 + 7\n     = 983\n```\n\n> 💡 **Tip:** The `h` suffix denotes hexadecimal in assembly (e.g., `FFh`).",
+          "concepts": ["number-systems", "binary", "hexadecimal", "decimal-conversion"],
+          "instructions": [],
+          "examples": ["binary-counting.asm"],
+          "assessmentItems": ["q-ns-001", "q-ns-002"]
+        },
+        {
+          "id": "l1-s2",
+          "lectureId": 1,
+          "title": "Data Representation Fundamentals",
+          "content": "## How Computers Store Data\n\n### Bits and Bytes\n\n- **Bit**: A single binary digit (0 or 1)\n- **Byte**: 8 bits. The basic unit of memory addressing.\n- **Word**: 16 bits (2 bytes)\n- **Doubleword (DWORD)**: 32 bits (4 bytes)\n- **Quadword (QWORD)**: 64 bits (8 bytes)\n\n### Signed vs Unsigned Numbers\n\n#### Unsigned Numbers\n\nUnsigned numbers can represent 0 and positive integers only.\n\n| Size | Range |\n|------|-------|\n| Byte (8-bit) | 0 to 255 |\n| Word (16-bit) | 0 to 65,535 |\n\n#### Signed Numbers (Two's Complement)\n\nSigned numbers use the most significant bit (MSB) as a sign bit.\n\n- **0 in MSB**: Positive number\n- **1 in MSB**: Negative number\n\n| Size | Range |\n|------|-------|\n| Byte (8-bit) | -128 to +127 |\n| Word (16-bit) | -32,768 to +32,767 |\n\n### Two's Complement Representation\n\nTo find the negative of a number in two's complement:\n\n1. Invert all bits\n2. Add 1\n\n```asm\n; Example: Representing -42 in 8-bit two's complement\n; 42 in binary = 00101010\n\n; Step 1: Invert all bits\n; 00101010 → 11010101\n\n; Step 2: Add 1\n;     11010101\n; +        1\n; = 11010110\n\n; So -42 = 11010110 in two's complement\n```\n\n> 💡 **Tip:** The two's complement system allows the same addition circuitry to handle both positive and negative numbers without special cases.",
+          "concepts": ["bits", "bytes", "signed-numbers", "unsigned-numbers", "two-complement"],
+          "instructions": [],
+          "examples": ["twoscomp.asm"],
+          "assessmentItems": ["q-dr-001", "q-dr-002"]
+        },
+        {
+          "id": "l1-s3",
+          "lectureId": 1,
+          "title": "8086 CPU Architecture",
+          "content": "## The 8086 Microprocessor\n\nThe Intel 8086 is a 16-bit microprocessor introduced in 1978. It was the first member of the x86 family, which still powers modern computers.\n\n### Key Characteristics\n\n- **16-bit internal registers**: Can hold 16-bit values\n- **20-bit address bus**: Can address up to 1 MB of memory (2²⁰ = 1,048,576 bytes)\n- **8-bit external data bus** (8088 variant) or 16-bit (8086)\n- **Clock speeds**: 5 MHz, 8 MHz, or 10 MHz\n\n### CPU Components\n\n```\n┌─────────────────────────────────────┐\n│           8086 CPU                  │\n│  ┌─────────────────────────────┐   │\n│  │      General Registersers    │   │\n│  │  AX  BX  CX  DX  SP  BP  SI DI │   │\n│  └─────────────────────────────┘   │\n│  ┌─────────────────────────────┐   │\n│  │      Segment Registers       │   │\n│  │    CS   DS   SS   ES         │   │\n│  └─────────────────────────────┘   │\n│  ┌───────────┐ ┌───────────────┐   │\n│  │   IP      │ │    Flags      │   │\n│  │(Instruction│ │   Register   │   │\n│  │  Pointer) │ │               │   │\n│  └───────────┘ └───────────────┘   │\n└─────────────────────────────────────┘\n```\n\n### Register Classification\n\n#### General Purpose Registers (16-bit)\n\n| Register | Name | Special Purpose |\n|----------|------|------------------|\n| AX | Accumulator | Primary for arithmetic operations |\n| BX | Base | Base pointer for memory addressing |\n| CX | Counter | Loop counts, shifts, rotations |\n| DX | Data | I/O operations, multiplication |\n| SP | Stack Pointer | Points to top of stack |\n| BP | Base Pointer | Stack frame reference |\n| SI | Source Index | String/source pointer |\n| DI | Destination Index | String/destination pointer |\n\n#### Segment Registers\n\n| Register | Purpose |\n|----------|---------|\n| CS | Code Segment - current code segment |\n| DS | Data Segment - default data segment |\n| SS | Stack Segment - stack segment |\n| ES | Extra Segment - string destination |\n\n> 💡 **Tip:** While called \"general purpose,\" each register has historical specializations that still influence optimal usage.",
+          "concepts": ["8086-architecture", "cpu-components", "registers", "memory-addressing"],
+          "instructions": [],
+          "examples": [],
+          "assessmentItems": ["q-arch-001", "q-arch-002"]
+        },
+        {
+          "id": "l1-s4",
+          "lectureId": 1,
+          "title": "Assembly Language Basics",
+          "content": "## Assembly Language Syntax\n\n### Structure of an Assembly Statement\n\nAn assembly instruction has up to four fields:\n\n```asm\n[label:]   mnemonic   [operands]   [;comment]\n```\n\n#### Examples:\n\n```asm\n; No label, single operand\nINC CX\n\n; Label with operand\nstart:  MOV AX, 0\n\n; Two operands\nADD AX, BX\n\n; Full format with label and comment\nloop_start:  DEC CX    ; Decrement counter\n```\n\n### Assembly Directives\n\nDirectives are instructions to the **assembler**, not the CPU:\n\n| Directive | Purpose |\n|-----------|---------|\n| `.MODEL` | Define memory model |\n| `.STACK` | Reserve stack space |\n| `.DATA` | Start data segment |\n| `.CODE` | Start code segment |\n| `PROC`/`ENDP` | Define procedure |\n| `SEGMENT`/`ENDS` | Define segment |\n| `EQU` | Define constant |\n| `DB`/`DW`/`DD` | Define byte/word/dword |\n\n### A Complete Program Structure\n\n```asm\n; ========================================\n; Simple Assembly Program Template\n; ========================================\n\n.MODEL SMALL        ; Small memory model (64KB code + 64KB data)\n.STACK 100h         ; 256-byte stack\n\n.DATA               ; Data segment begins\n    message DB 'Hello, World!$'\n\n.CODE               ; Code segment begins\nMAIN PROC\n    ; Initialize data segment\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display message\n    MOV AH, 09h\n    LEA DX, message\n    INT 21h\n    \n    ; Exit to DOS\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n> 💡 **Tip:** The `INT 21h` instruction invokes DOS services. Function 09h displays a string, and function 4Ch terminates the program.",
+          "concepts": ["assembly-syntax", "directives", "labels", "program-structure"],
+          "instructions": ["MOV", "INT"],
+          "examples": ["template.asm", "helloworld.asm"],
+          "assessmentItems": ["q-syntax-001", "q-syntax-002"]
+        },
+        {
+          "id": "l1-s5",
+          "lectureId": 1,
+          "title": "Memory Organization",
+          "content": "## Memory in the 8086\n\n### Physical Memory Organization\n\nThe 8086 has a 20-bit address bus, allowing it to address 1 MB of memory (addresses 00000h to FFFFFh).\n\n### Segmented Memory Model\n\nBecause 8086 registers are only 16 bits, the processor uses **segmentation** to achieve 20-bit addressing:\n\n```\nPhysical Address = (Segment × 16) + Offset\n```\n\nThis is often written as:\n\n```\nSegment:Offset → Physical Address\n```\n\n### Segment Types\n\n| Segment | Register | Purpose |\n|---------|----------|---------|\n| Code | CS | Stores executable instructions |\n| Data | DS | Stores program variables |\n| Stack | SS | Stores stack data (PUSH/POP) |\n| Extra | ES | Additional data segment |\n\n### Calculating Physical Addresses\n\n```asm\n; Example: DS = 0400h, SI = 003Ch\n\n; Physical address = (DS × 16) + SI\n;                 = (0400h × 16) + 003Ch\n;                 = 04000h + 003Ch\n;                 = 0403Ch\n\n; In assembly, memory access using [DS:SI]\nMOV AL, [SI]    ; Loads byte at physical address 0403Ch\n```\n\n### Memory Organization Diagram\n\n```\n┌──────────────────────────────────────────────────────────┐\n│                    1 MB Memory Space                      │\n├──────────────────────────────────────────────────────────┤\n│ FFFFFh ┌─────────────────────────────┐                   │\n│        │      BIOS ROM Area          │                   │\n│ F0000h └─────────────────────────────┘                   │\n│        │                               │                  │\n│        │     Free Memory Area         │                  │\n│        │     (User Programs)          │                  │\n│        │                               │                  │\n│ 04000h ┌─────────────────────────────┐                   │\n│        │    Program Data Segment      │ ← Example: DS    │\n│ 04000h └─────────────────────────────┘                   │\n│        │                               │                  │\n│        │     Interrupt Vector Table   │                  │\n│ 00000h └─────────────────────────────┘                   │\n└──────────────────────────────────────────────────────────┘\n```\n\n### Byte Ordering (Endianness)\n\nThe 8086 uses **little-endian** byte ordering:\n\n```asm\n; To store the word 1234h at address 1000h:\n\n; Address 1000h gets the LOW byte (34h)\n; Address 1001h gets the HIGH byte (12h)\n\n; Memory dump:\n; 1000h: 34 12\n```\n\n> 💡 **Tip:** The little-endian format means the least significant byte comes first in memory. This is important when debugging memory dumps or exchanging data with other systems.",
+          "concepts": ["segmented-memory", "physical-address", "segment-offset", "endianness", "memory-model"],
+          "instructions": [],
+          "examples": [],
+          "assessmentItems": ["q-mem-001", "q-mem-002"]
+        }
+      ],
+      "concepts": ["number-systems", "binary", "hexadecimal", "data-representation", "8086-architecture", "assembly-syntax", "memory-organization"],
+      "instructions": ["MOV", "INT"],
+      "difficulty": "foundational",
+      "examRelevance": "medium",
+      "provenance": {
+        "sourceFile": "Lecture 1.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "1-48",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.85,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Basic Architecture and Data Transfer",
+      "sourceFile": "Lecture 2.pdf",
+      "pageCount": 72,
+      "sections": [
+        {
+          "id": "l2-s1",
+          "lectureId": 2,
+          "title": "Register Overview",
+          "content": "## 8086 Register Set\n\nThe 8086 has a rich set of 16-bit registers, with some split into 8-bit halves for compatibility with the 8080.\n\n### General Purpose Registers\n\nThese registers can hold data and participate in arithmetic and logical operations, but each has historical specializations:\n\n#### AX (Accumulator Register) - 16-bit\n- Primary accumulator for arithmetic operations\n- Used implicitly by MUL, DIV, CBW, CWD\n- Divided into AH (bits 8-15) and AL (bits 0-7)\n\n```asm\nMOV AX, 1234h    ; AX = 1234h (AH=12h, AL=34h)\nMOV AL, 0FFh     ; AX = 12FFh (AL modified)\nMOV AH, 00h      ; AX = 0034h (AH modified)\n```\n\n#### BX (Base Register) - 16-bit\n- Base pointer for memory addressing\n- Divided into BH and BL\n- Used as a pointer register (base address)\n\n```asm\nMOV BX, 1000h    ; BX holds a base address\nMOV AX, [BX]     ; Load from address in BX\n```\n\n#### CX (Counter Register) - 16-bit\n- Loop counter (used by LOOP instruction)\n- Shift and rotate count\n- Divided into CH and CL\n\n```asm\nMOV CX, 10       ; Set up counter for 10 iterations\nloop_start:\n    ; loop body\n    LOOP loop_start   ; CX--, jump if CX != 0\n```\n\n#### DX (Data Register) - 16-bit\n- I/O port addressing\n- MUL/DIV extended results\n- Divided into DH and DL\n\n```asm\nMOV DX, 0FFh    ; DX used as I/O port address\nMOV AH, 09h\nINT 21h         ; Display using port in DX\n```\n\n### Pointer and Index Registers\n\n#### SP (Stack Pointer) - 16-bit\n- Points to the current stack top\n- Modified by PUSH, POP, CALL, RET\n- Cannot be used directly in most operations\n\n#### BP (Base Pointer) - 16-bit\n- Access stack-based parameters\n- More flexible than SP for memory access\n- Preserved across calls\n\n#### SI (Source Index) - 16-bit\n- Source pointer for string operations\n- Memory offset addressing\n- Auto-incremented by string instructions\n\n#### DI (Destination Index) - 16-bit\n- Destination pointer for string operations\n- Memory offset addressing\n- Auto-incremented by string instructions\n\n> 💡 **Tip:** SI and DI are essential for string operations like MOVSB, CMPSB, and LODSB. The 8086 has dedicated hardware to process strings efficiently using these registers.",
+          "concepts": ["register-classes", "ax-register", "bx-register", "cx-register", "dx-register", "sp-register", "bp-register", "si-register", "di-register"],
+          "instructions": [],
+          "examples": ["registers.asm"],
+          "assessmentItems": ["q-reg-001", "q-reg-002"]
+        },
+        {
+          "id": "l2-s2",
+          "lectureId": 2,
+          "title": "The MOV Instruction",
+          "content": "## MOV - Data Transfer Instruction\n\nThe MOV instruction is the most fundamental data transfer instruction. It copies data from a source to a destination.\n\n### Syntax\n\n```asm\nMOV destination, source\n```\n\n### Valid Operands\n\n| Destination | Source | Example |\n|-------------|--------|---------|\n| Register | Immediate | `MOV AX, 1234h` |\n| Register | Register | `MOV AX, BX` |\n| Register | Memory | `MOV AX, [1000h]` |\n| Memory | Register | `MOV [1000h], AX` |\n| Register | Segment reg | `MOV AX, DS` |\n| Segment reg | Register | `MOV DS, AX` |\n| Memory | Immediate | `MOV BYTE PTR [BX], 0` |\n\n### Examples\n\n```asm\n; Immediate to register\nMOV AX, 0          ; AX = 0\nMOV CX, 0FFFFh     ; CX = 65535 (max unsigned word)\n\n; Register to register\nMOV AX, BX         ; Copy BX value to AX\nMOV SI, DI         ; Copy DI value to SI\n\n; Memory operands\nMOV AX, [1000h]    ; Load AX from memory address 1000h\nMOV [2000h], DX     ; Store DX to memory address 2000h\n\n; With register indirect addressing\nMOV BX, 1000h\nMOV AX, [BX]       ; Load from address in BX\n```\n\n### Important Restrictions\n\n1. **No memory-to-memory moves**\n   ```asm\n   ; ILLEGAL!\n   MOV [1000h], [2000h]   ; Cannot!\n   \n   ; Must use register as intermediate\n   MOV AX, [2000h]        ; Load to AX\n   MOV [1000h], AX        ; Store from AX\n   ```\n\n2. **CS cannot be destination**\n   ```asm\n   ; ILLEGAL!\n   MOV CS, AX             ; Cannot modify CS directly\n   ```\n\n3. **Immediate to segment register**\n   ```asm\n   ; ILLEGAL!\n   MOV DS, 1000h          ; Cannot load segment directly\n   \n   ; Must use general register\n   MOV AX, 1000h\n   MOV DS, AX             ; Correct way\n   ```\n\n4. **Same size operands**\n   ```asm\n   ; ILLEGAL!\n   MOV AX, BL             ; 16-bit to 8-bit\n   \n   ; Correct\n   MOV AL, BL             ; 8-bit to 8-bit\n   MOV AX, BX             ; 16-bit to 16-bit\n   ```\n\n> 💡 **Tip:** MOV doesn't affect any flags. It simply copies bits from source to destination.",
+          "concepts": ["mov-instruction", "data-transfer", "register-operands", "memory-operands", "immediate-operands"],
+          "instructions": ["MOV"],
+          "examples": ["mov-examples.asm", "template.asm"],
+          "assessmentItems": ["q-mov-001", "q-mov-002"]
+        },
+        {
+          "id": "l2-s3",
+          "lectureId": 2,
+          "title": "Memory Addressing Modes",
+          "content": "## Addressing Modes in 8086\n\nThe 8086 supports multiple ways to specify the location of memory operands.\n\n### 1. Immediate Addressing\n\nData is embedded directly in the instruction:\n\n```asm\nMOV AX, 1234h      ; Data is part of instruction\nMOV CX, 100        ; Decimal value\nMOV AL, 'A'        ; ASCII code\n```\n\n### 2. Register Addressing\n\nData is in a register:\n\n```asm\nMOV AX, BX         ; Copy BX to AX\nMOV SI, DI         ; Copy DI to SI\n```\n\n### 3. Direct Memory Addressing\n\nA constant address is specified:\n\n```asm\n.DATA\n    myVar DW 0\n.CODE\n    MOV AX, [myVar]        ; Load from label address\n    MOV [1000h], AX        ; Absolute address\n```\n\n### 4. Register Indirect Addressing\n\nAddress is in a base or index register:\n\n```asm\nMOV BX, OFFSET myVar       ; BX holds address\nMOV AX, [BX]               ; Load from address in BX\n```\n\n**Valid registers for indirect:**\n- BX, BP (base registers)\n- SI, DI (index registers)\n\n### 5. Based Relative Addressing\n\nBase register + constant offset:\n\n```asm\nMOV AX, [BX+4]             ; Address = BX + 4\nMOV AX, [BP-2]             ; Address = BP - 2\nMOV AX, [BX+100h]          ; Address = BX + 256\n```\n\n### 6. Indexed Relative Addressing\n\nIndex register + constant offset:\n\n```asm\nMOV AX, [SI+10h]           ; Address = SI + 16\nMOV AX, [DI+1000h]         ; Address = DI + 4096\n```\n\n### 7. Base-Index Relative Addressing\n\nBase + Index + optional offset:\n\n```asm\nMOV AX, [BX+SI]            ; Address = BX + SI\nMOV AX, [BX+DI+4]          ; Address = BX + DI + 4\n```\n\n### Summary Table\n\n| Mode | Example | Address Calculation |\n|------|---------|-------------------|\n| Direct | `[1000h]` | Constant |\n| Register Indirect | `[BX]` | Register |\n| Based | `[BX+4]` | Register + constant |\n| Indexed | `[SI+10h]` | Index + constant |\n| Base-Index | `[BX+SI]` | Base + Index |\n| Based-Indexed | `[BX+DI+4]` | Base + Index + offset |\n\n> 💡 **Tip:** BP defaults to the Stack Segment (SS), while BX, SI, and DI default to the Data Segment (DS). This is why `[BP]` accesses stack data.",
+          "concepts": ["addressing-modes", "direct-addressing", "indirect-addressing", "based-addressing", "indexed-addressing", "base-index"],
+          "instructions": ["MOV", "LEA"],
+          "examples": ["addressing.asm"],
+          "assessmentItems": ["q-addr-001", "q-addr-002"]
+        },
+        {
+          "id": "l2-s4",
+          "lectureId": 2,
+          "title": "Data Transfer Examples",
+          "content": "## Practical Data Transfer Patterns\n\n### Setting Up Data Segment\n\nEvery program must initialize DS before accessing data:\n\n```asm\n.MODEL SMALL\n.STACK 100h\n.DATA\n    value1 DW 1234h\n    value2 DW 5678h\n    result DW ?\n.CODE\nMAIN PROC\n    ; Initialize data segment (required!)\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Now we can access our data\n    MOV AX, value1      ; MOV AX, [value1] - load from memory\n    MOV BX, value2\n    ADD AX, BX          ; AX = 1234h + 5678h = 68ACh\n    MOV result, AX      ; Store result\n    \n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN\n```\n\n### Swapping Two Values\n\n```asm\n.DATA\n    X DW 1234h\n    Y DW 5678h\n.CODE\n    ; Swap X and Y using AX as temporary\n    MOV AX, X          ; AX = 1234h\n    XCHG AX, Y          ; AX = 5678h, Y = 1234h\n    MOV X, AX           ; X = 5678h\n```\n\n### Loading an Address (LEA)\n\nLEA (Load Effective Address) puts the address, not the value, into a register:\n\n```asm\n.DATA\n    buffer DB 80 DUP(?)\n.CODE\n    LEA BX, buffer      ; BX = offset of buffer\n    \n    ; Compare to:\n    MOV BX, OFFSET buffer  ; Same result!\n    \n    ; LEA is more flexible with displacement:\n    LEA SI, buffer[DI]   ; SI = address of buffer + DI\n```\n\n### String Transfer\n\n```asm\n.DATA\n    source DB 'Hello$'\n    dest DB 80 DUP(?)\n.CODE\n    MOV SI, OFFSET source    ; Source address\n    MOV DI, OFFSET dest      ; Destination address\n    MOV CX, 5                ; Count = 5 bytes\n    \nnext_char:\n    MOV AL, [SI]             ; Load from source\n    MOV [DI], AL             ; Store to destination\n    INC SI\n    INC DI\n    LOOP next_char\n```\n\n> 💡 **Tip:** The XCHG instruction swaps two operands. It's useful for swapping values without a temporary register.",
+          "concepts": ["ds-initialization", "xchg-instruction", "lea-instruction", "swap-pattern", "address-calculation"],
+          "instructions": ["MOV", "XCHG", "LEA"],
+          "examples": ["dataswap.asm", "addressing.asm"],
+          "assessmentItems": ["q-dt-001", "q-dt-002"]
+        }
+      ],
+      "concepts": ["register-classes", "mov-instruction", "addressing-modes", "data-transfer", "xchg-instruction", "lea-instruction"],
+      "instructions": ["MOV", "XCHG", "LEA"],
+      "difficulty": "foundational",
+      "examRelevance": "high",
+      "provenance": {
+        "sourceFile": "Lecture 2.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "1-72",
+        "extractedBy": "content-ingestion-v1",
+        "extractionConfidence": 0.85,
+        "reviewedStatus": "pending"
+      }
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2026-03-31T00:00:00.000Z",
+    "generator": "content-ingestion-v1",
+    "sourceVersion": "1.0"
+  }
+}

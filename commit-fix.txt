@@ -1,1 +1,0 @@
-fix: theme toggle persistence and lectures page content

@@ -1,62 +1,45 @@
 {
   "featureId": "extract-lecture-9-10",
-  "reviewedAt": "2026-03-31T05:05:00.000Z",
+  "reviewedAt": "2026-04-01T05:30:00.000Z",
   "commitId": "734c12d",
   "transcriptSkeletonReviewed": true,
   "diffReviewed": true,
   "status": "fail",
   "codeReview": {
-    "summary": "The implementation extracted content from the wrong lecture PDFs. Feature description expected Lecture 9 to cover 'modular programming, recursion, BIOS/DOS interrupts, TSRs' and Lecture 10 to cover 'comprehensive review, real-world examples, exam preparation'. Instead, the implementation extracted Lecture 9 as 'Memory Hierarchy (cont)' and Lecture 10 as 'Exceptional Control Flow' - content that appears to be from a Computer Systems/Architecture course (CS:APP style) rather than Assembly Language Programming.",
+    "summary": "CRITICAL content mismatch: The feature was supposed to extract Assembly Language Programming content for Lecture 9 (modular programming, recursion, BIOS/DOS interrupts, TSRs) and Lecture 10 (comprehensive review, exam preparation). Instead, CS:APP (Computer Systems: A Programmer's Perspective) content was extracted covering Memory Hierarchy (caching, cache performance, memory mountain) and Exceptional Control Flow (exceptions, processes, virtual memory, TLB). The implementation is structurally correct but semantically wrong.",
     "issues": [
       {
         "file": "data/processed/lectures.json",
         "line": 1440,
         "severity": "blocking",
-        "description": "Lecture 9 content mismatch: Feature description says 'modular programming, recursion, BIOS/DOS interrupts, TSRs' but implementation extracted 'Memory Hierarchy (cont)' with topics like Locality, Caching, Direct-mapped/Set Associative/Fully Associative caches. This is Computer Systems content, not Assembly Language content."
+        "description": "Lecture 9 content is from CS:APP Chapter 6 (Memory Hierarchy) instead of Assembly Language Programming. Topics include 'Locality Principles', 'The Memory Hierarchy', 'Direct-Mapped Cache', 'Set Associative Caches', 'Cache Writes and Performance', 'The Memory Mountain'. Expected topics per feature description and AGENTS.md: 'Modular programming, Recursion, BIOS/DOS interrupts, TSRs (Terminate and Stay Resident)'."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 1709,
+        "severity": "blocking",
+        "description": "Lecture 10 content is from CS:APP Chapter 8 (Exceptional Control Flow) instead of Assembly Language Programming. Topics include 'Processes and the Operating System', 'Exceptions and Exception Handling', 'Classes of Exceptions', 'Context Switching', 'Virtual Memory', 'Page Tables and Paging', 'Address Translation and TLB', 'Memory Protection'. Expected topics per feature description and AGENTS.md: 'Comprehensive review, real-world examples, exam preparation'."
       },
       {
         "file": "data/processed/lectures.json",
         "line": 1440,
-        "severity": "blocking",
-        "description": "Lecture 10 content mismatch: Feature description says 'comprehensive review, real-world examples, exam preparation' but implementation extracted 'Exceptional Control Flow' with topics like Exceptions, Processes, Context Switching, Virtual Memory, Page Tables, TLB. This is Operating Systems/Computer Architecture content, not Assembly Language exam preparation."
-      },
-      {
-        "file": "data/processed/lectures.json",
-        "line": 1579,
-        "severity": "blocking",
-        "description": "Lecture 9 concepts array contains 'locality', 'spatial-locality', 'temporal-locality', 'memory-hierarchy', 'caching', 'cache-hit', 'cache-miss' - none of these are assembly language concepts per se. BIOS/DOS interrupts (INT instruction) are assembly-relevant but not present."
-      },
-      {
-        "file": "data/processed/lectures.json",
-        "line": 1706,
-        "severity": "blocking",
-        "description": "Lecture 10 instructions array contains only 'INT' and 'IRET' - but the lecture is about Virtual Memory, Page Tables, TLB which are architecture concepts, not assembly instructions. The INT instruction context (DOS interrupts for I/O) should be present per feature description but is missing."
-      },
-      {
-        "file": "data/processed/lectures.json",
-        "line": 1439,
         "severity": "non_blocking",
-        "description": "Lecture 9 provenance shows 'Lecture 9.pdf' with 81 pages and extractionConfidence: 0.85. If the correct PDF was used but the wrong content was extracted, the source file reference may be correct but the content extraction was wrong."
+        "description": "validation-contract.md content assertions only perform structural validation (checking that fields exist) but do not validate semantic correctness of extracted content. The content mismatch was not caught by the validation script (611 assertions passed)."
       }
     ]
   },
   "sharedStateObservations": [
     {
       "area": "conventions",
-      "observation": "AGENTS.md specifies 'Every content object must preserve provenance metadata' and 'Do not invent course facts and present them as source truth.' The extracted content violates this by presenting Computer Systems content as if it came from an Assembly Language course. The provenance metadata is preserved but the content itself may not match the actual source material.",
-      "evidence": "lectures.json:1439 - lecture 9 id=9 has title 'Memory Hierarchy (cont)' with provenance sourceFile='Lecture 9.pdf', but feature description expected modular programming/BIOS/DOS/TSRs"
+      "observation": "The validation-contract.md lacks semantic content assertions - only structural validation is performed. VAL-CONTENT-* assertions verify fields exist but not whether content matches feature description. This allowed the wrong source PDF content to pass validation.",
+      "evidence": "handoff.discoveredIssues is empty but content is critically wrong. The validation script ran 611 assertions and all passed despite CS:APP content being extracted instead of Assembly Language Programming content."
     },
     {
       "area": "conventions",
-      "observation": "The validation contract (validation-contract.md) may not have specific assertions to verify that extracted content matches the feature description expectations. Content validation ran 611 assertions but only validated format and structure, not semantic correctness relative to feature requirements.",
-      "evidence": "Handoff shows 'npm run validate:content' with exitCode 0 and '611 content assertions passed' but this doesn't catch the semantic mismatch between feature description and actual content"
-    },
-    {
-      "area": "skills",
-      "observation": "The feature's skillName is 'frontend-worker' but the work was content extraction (data processing). No skill feedback was provided in the transcript skeleton to indicate this mismatch or any awareness that the wrong content was being extracted.",
-      "evidence": "Feature skillName='frontend-worker' but work involved PDF parsing and JSON generation in scripts/build-instruction-index.ts pattern"
+      "observation": "AGENTS.md correctly documents expected lecture content (Lecture 9: modular programming, recursion, BIOS/DOS interrupts, TSRs; Lecture 10: comprehensive review, exam preparation) but this was not enforced during extraction. The worker extracted from the wrong source PDFs (CS:APP instead of ACS2906 assembly language PDFs).",
+      "evidence": "AGENTS.md Section 'Lecture 9 - Advanced Topics' and 'Lecture 10 - Final Review' describe assembly language topics. Git diff shows content about 'Direct-Mapped Cache', 'TLB', 'Virtual Memory' - CS:APP topics not present in AGENTS.md expected content."
     }
   ],
   "addressesFailureFrom": null,
-  "summary": "FAIL - The implementation extracted content from the wrong source material. Lecture 9 was expected to cover modular programming, recursion, BIOS/DOS interrupts, and TSRs (Assembly Language topics), but instead extracted Memory Hierarchy and Caching content (Computer Systems topics). Lecture 10 was expected to cover comprehensive review and exam preparation, but instead extracted Exceptional Control Flow, Virtual Memory, and Page Tables content. This suggests either: (1) wrong PDFs were processed, or (2) correct PDFs were used but the wrong lectures within those PDFs were identified. The course is ACS2906 Assembly Language Programming - the extracted content appears to be from a computer architecture/systems course (likely CS:APP based on Memory Hierarchy and Exceptional Control Flow topics). All technical aspects (JSON structure, provenance metadata, validation) are correct, but the semantic content does not match the feature description or course context."
+  "summary": "FAIL - The feature extracted CS:APP Computer Systems content (Memory Hierarchy, Exceptional Control Flow) instead of the required Assembly Language Programming content (modular programming, BIOS/DOS interrupts, TSRs, exam preparation). While the implementation is structurally correct (valid JSON, proper markdown, provenance metadata) and passed all automated validators, the content is fundamentally wrong. A fix feature (fix-lecture-9-10-content) is already pending to re-extract from the correct source PDFs."
 }

@@ -1,0 +1,31 @@
+{
+  "featureId": "extract-lecture-3-4",
+  "reviewedAt": "2026-04-01T05:30:00.000Z",
+  "commitId": "1e39dde",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Content extraction for Lectures 3 and 4 is complete and correct. All required instructions are present with proper syntax-highlighted examples, tables, and provenance metadata. Build succeeded and validate:content passed 611 assertions.",
+    "issues": []
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Worker reported frontend-worker skill didn't exist and proceeded manually, but the skill file exists at .factory/skills/frontend-worker/SKILL.md. The worker may have looked in the wrong location, or the skill was added after this worker ran. The skill content focuses on UI/component changes rather than content extraction, which may explain why it wasn't deemed appropriate for this task.",
+      "evidence": "skillFeedback.followedProcedure=false, deviations: 'frontend-worker skill didn't exist'. But .factory/skills/frontend-worker/SKILL.md exists with content about adding theme toggle, removing nav items, redirecting routes - none of which apply to content extraction."
+    },
+    {
+      "area": "conventions",
+      "observation": "Worker followed the pattern of creating duplicate files in both data/processed/ and src/data/processed/ for lectures.json, continuing a known issue first flagged in extract-lecture-1-2 review. The same duplication pattern exists for course-map.json (noted in phase2 scrutiny reviews).",
+      "evidence": "Git diff shows 4 files changed: data/processed/lectures.json, src/data/processed/lectures.json, data/processed/course-map.json, src/data/processed/course-map.json. Prior review extract-lecture-1-2.json noted: 'There are duplicate lectures.json files in data/processed/ and src/data/processed/'"
+    },
+    {
+      "area": "conventions",
+      "observation": "No schema validation added for the new lectures.json content. Prior phase2 reviews (e.g., example-explorer) noted that 'src/data/processed/*.json files lack schema validation'. This remains unaddressed.",
+      "evidence": "No new schema validation files created. AGENTS.md Engineering Rules mentions 'Add schema validation for processed content' but no JSON schema files exist in data/processed/."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Feature implementation is complete and correct. Lecture 3 covers LEA, XCHG, PUSH, POP, IN, OUT with 5 sections. Lecture 4 covers ADD, SUB, INC, DEC, NEG, CMP, MUL, DIV, CBW, CWD, and flags register with 6 sections. All content has proper provenance metadata, syntax highlighting, and follows established lecture format. Build succeeded, validation passed 611 assertions. Two non-blocking observations: (1) frontend-worker skill discrepancy - worker thought skill didn't exist but it does exist, (2) duplicate data file pattern continues from prior reviews."
+}

@@ -1,0 +1,36 @@
+{
+  "assertionId": "VAL-CROSS-003",
+  "status": "fail",
+  "tool": "agent-browser",
+  "testedUrl": "http://localhost:4173/#/lecture/4",
+  "evidence": [
+    {
+      "type": "snapshot",
+      "description": "Lecture 4 page has multiple 'Try in Simulator' buttons",
+      "elementsFound": "Multiple 'Try in Simulator' buttons with refs e18, e21, e23, e25, etc."
+    },
+    {
+      "type": "attr",
+      "selector": "@e18",
+      "attr": "href",
+      "value": "/#/simulator",
+      "note": "Link does not contain code parameter"
+    },
+    {
+      "type": "navigation",
+      "action": "Clicked 'Try in Simulator' button",
+      "result": "Navigated to /#/simulator but code textbox was empty"
+    },
+    {
+      "type": "comparison",
+      "description": "Examples page 'Run in Simulator' link has code parameter",
+      "href": "/#/simulator?code=OyBIZWxsbyBXb3JsZCBQcm9ncmFt...",
+      "codeLoaded": "Yes - 'Hello World' program loaded successfully"
+    }
+  ],
+  "summary": "The 'Try in Simulator' buttons on lecture pages link to /#/simulator WITHOUT the code parameter. The code textbox is empty after navigation. In contrast, the Examples page 'Run in Simulator' links correctly pass the code via URL parameter (base64 encoded) and the simulator loads the code properly.",
+  "rootCause": "The lecture page 'Try in Simulator' buttons are not passing the example code to the simulator via URL parameter",
+  "frictions": [],
+  "blockers": [],
+  "appliedUpdates": []
+}

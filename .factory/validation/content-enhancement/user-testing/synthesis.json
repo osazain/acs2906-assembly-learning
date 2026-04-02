@@ -1,0 +1,27 @@
+{
+  "milestone": "content-enhancement",
+  "round": 1,
+  "status": "fail",
+  "assertionsSummary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "blocked": 0
+  },
+  "passedAssertions": [],
+  "failedAssertions": [
+    {
+      "id": "VAL-CROSS-003",
+      "reason": "Try in Simulator buttons on lecture pages link to /#/simulator without code parameter. The code textbox is empty after navigation. In contrast, the Examples page Run in Simulator links correctly pass code via URL parameter (base64 encoded) and the simulator loads the code properly."
+    }
+  ],
+  "blockedAssertions": [],
+  "appliedUpdates": [
+    {
+      "target": "user-testing.md",
+      "description": "Documented that lecture page Try in Simulator buttons don't pass code, while Examples page Run in Simulator links do work correctly",
+      "source": "flow-report"
+    }
+  ],
+  "previousRound": null
+}

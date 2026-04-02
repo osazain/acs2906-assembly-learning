@@ -355,7 +355,7 @@ export function SimulatorCore({ initialCode = '', onExecutionEnd }: SimulatorCor
       )}
       
       {/* Example Preset Selector */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-visible">
         <div className="bg-muted/50 px-4 py-2 border-b flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FlaskConical className="h-4 w-4 text-primary" />

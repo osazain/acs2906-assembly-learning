@@ -1,0 +1,42 @@
+{
+  "milestone": "bugfix",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "test": {
+      "passed": true,
+      "command": "npm run test",
+      "exitCode": 0,
+      "note": "No tests configured (echo 'No tests configured')"
+    },
+    "typecheck": {
+      "passed": true,
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "lint": {
+      "passed": true,
+      "command": "npm run lint",
+      "exitCode": 0,
+      "warnings": 4
+    }
+  },
+  "reviewsSummary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Document the `window.location.hash` navigation pattern for hash-based routing. When using hash-based routing (/#/route), prefer `window.location.hash = '#/path?query'` over TanStack Router's `Link` component with `search` params, as the latter doesn't reliably work with hash routing.",
+      "evidence": "Feature fix-simulator-links changed ExampleDetail from TanStack Link with search params to window.location.hash approach. The original approach was broken with hash-based routing.",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [],
+  "previousRound": null
+}

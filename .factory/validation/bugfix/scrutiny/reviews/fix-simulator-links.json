@@ -1,0 +1,45 @@
+{
+  "featureId": "fix-simulator-links",
+  "reviewedAt": "2026-04-02T21:05:00.000Z",
+  "commitId": "098be400f98cf25c4750a2f438289977cedc46a3",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The implementation correctly fixes the 'Try in Simulator' buttons on lecture pages and example detail pages to pass code via base64-encoded hash URL parameters. Both components now use the same pattern: window.location.hash = '#/simulator?code=' + encodeURIComponent(btoa(code)).",
+    "issues": [
+      {
+        "file": "src/components/lecture/LectureReader.tsx",
+        "line": 489,
+        "severity": "suggestion",
+        "description": "extractFirstCodeBlock regex assumes exact ' ```asm' delimiter with newline. If markdown format varies (e.g., '```asm', '``` Asm', '```asm  '), the regex may fail. Consider making it more robust: /```asm\n?([\\s\\S]*?)```/i or matching just ``` followed by optional asm identifier."
+      },
+      {
+        "file": "src/components/lecture/LectureReader.tsx",
+        "line": 283,
+        "severity": "non_blocking",
+        "description": "LectureReader sidebar button's 'Try in Simulator' now navigates to '/simulator' when no code block is found, rather than doing nothing. This is a behavior change but seems reasonable - at least the user can manually enter code."
+      },
+      {
+        "file": "src/components/lecture/LectureReader.tsx",
+        "line": 489,
+        "severity": "non_blocking",
+        "description": "btoa() can throw 'InvalidCharacterError' if code contains characters outside the Latin-1 (8-bit) range. Assembly code is typically ASCII/Latin-1, so this is unlikely to be an issue, but wrapping in try-catch could be defensive."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The feature uses window.location.hash approach for hash-based routing, which is not documented in AGENTS.md or .factory/services.yaml. The validation contract mentions GitHub Pages constraints require hash-based routing, but the specific implementation pattern for programmatic navigation isn't documented.",
+      "evidence": "AGENTS.md mentions GitHub Pages deployment and hash-based routing requirement, but doesn't specify HOW components should navigate when using hash-based routing (e.g., Link vs window.location.hash)"
+    },
+    {
+      "area": "conventions",
+      "observation": "The project has a pattern where inline code block 'Try in Simulator' buttons (in lecture content) already use window.location.hash, but the sidebar button previously used TanStack Router's Link component. This inconsistency wasn't documented or explained.",
+      "evidence": "LectureReader.tsx had different navigation patterns for code-block buttons vs sidebar button before this fix"
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "PASS - The implementation correctly fixes VAL-CROSS-003 by making 'Try in Simulator' buttons on lecture pages extract the first assembly code block and pass it via base64-encoded hash URL parameter to the simulator. Both LectureReader.tsx (sidebar button) and ExampleDetail.tsx ('Run in Simulator' button) now use the same window.location.hash pattern, ensuring consistency with hash-based routing. The TypeScript compiles without errors and lint passes. Minor suggestions include making the code block regex more robust and adding error handling for btoa() failures."
+}

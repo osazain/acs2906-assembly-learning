@@ -275,13 +275,21 @@ export function LectureReader({ lecture }: LectureReaderProps) {
           </nav>
           
           {/* Simulate button */}
-          <Link
-            to="/simulator"
+          <button
+            onClick={() => {
+              const firstCode = extractFirstCodeBlock(sections)
+              if (firstCode) {
+                const encoded = btoa(firstCode)
+                window.location.hash = `#/simulator?code=${encodeURIComponent(encoded)}`
+              } else {
+                window.location.hash = '#/simulator'
+              }
+            }}
             className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors mt-4"
           >
             <Cpu className="h-4 w-4" />
             Try in Simulator
-          </Link>
+          </button>
         </div>
       </aside>
       
@@ -476,6 +484,17 @@ export function LectureReader({ lecture }: LectureReaderProps) {
       </main>
     </div>
   )
+}
+
+// Extract first code block from sections content
+function extractFirstCodeBlock(sections: Section[]): string | null {
+  for (const section of sections) {
+    const match = section.content.match(/```asm\n([\s\S]*?)```/)
+    if (match) {
+      return match[1].trim()
+    }
+  }
+  return null
 }
 
 // Simple assembly syntax highlighting

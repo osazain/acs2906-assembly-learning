@@ -1189,8 +1189,13 @@
             "MOV",
             "MUL"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "extending-8bit-16bit"
+          ],
+          "assessmentItems": [
+            "QB-065",
+            "QB-066"
+          ]
         },
         {
           "id": "l7-s9",

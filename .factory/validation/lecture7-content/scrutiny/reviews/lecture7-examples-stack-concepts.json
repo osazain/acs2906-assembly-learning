@@ -1,0 +1,57 @@
+{
+  "featureId": "lecture7-examples-stack-concepts",
+  "reviewedAt": "2026-04-13T23:20:00.000Z",
+  "commitId": "18ecc3d",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The feature added 5 examples to examples.json (flag-instructions-stack, stack-instructions-demo, parameter-passing-example, array-manipulation, number-io, extending-8bit-16bit) and 7 questions (QB-060 through QB-066). However, the extending-8bit-16bit example was NOT linked to l7-s8 in lectures.json, leaving that section with an empty examples array. This is a blocking issue that violates VAL-CONTENT-001.",
+    "issues": [
+      {
+        "file": "data/processed/lectures.json",
+        "line": 0,
+        "severity": "blocking",
+        "description": "l7-s8 (Extending 8-bit to 16-bit Programs) has empty examples array [] despite the feature claiming to add an example for this section. The extending-8bit-16bit example exists in examples.json but was never linked in lectures.json. This violates VAL-CONTENT-001 (Lecture 7 sections must have examples)."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 0,
+        "severity": "non_blocking",
+        "description": "l7-s3 (Procedures) has empty assessmentItems [] but may be covered by a separate feature (lecture7-recursion-example)."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 0,
+        "severity": "non_blocking",
+        "description": "l7-s5 (Recursion) has empty assessmentItems [] but may be covered by a separate feature (lecture7-recursion-example)."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 0,
+        "severity": "non_blocking",
+        "description": "l7-s9 (Floating Point) has empty examples and assessmentItems but may be covered by separate feature (lecture7-floating-point-example)."
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 0,
+        "severity": "non_blocking",
+        "description": "Several L7 sections (l7-s1, l7-s2, l7-s4, l7-s6, l7-s7, l7-s8) have only 1 assessment item each. VAL-CONTENT-006 requires at least 2 assessment items per section. The handoff claims 'All 9 L7 sections have assessment items' but this is misleading as they don't meet the minimum of 2 per section."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The feature handoff claims 'All 9 L7 sections have assessment items' but VAL-CONTENT-006 requires at least 2 per section, not just 1. The validation contract should be clearer about minimum counts.",
+      "evidence": "lectures.json shows l7-s1 has QB-060 and QB-066 (2 items - passes), but l7-s4 only has QB-062 (1 item - fails VAL-CONTENT-006)"
+    },
+    {
+      "area": "skills",
+      "observation": "No content-worker skill was invoked. The worker proceeded without the skill's procedure, which may have led to missing the step to update lectures.json with the new example IDs.",
+      "evidence": "skillFeedback section is absent from handoff, suggesting skill was not invoked. The examples exist in examples.json but weren't linked."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Feature implementation has a blocking issue: the extending-8bit-16bit example was added to examples.json but never linked to l7-s8 in lectures.json. This leaves l7-s8 with an empty examples array, violating VAL-CONTENT-001. The other 5 examples are properly linked. Additionally, several sections have only 1 assessment item instead of the required minimum of 2 per VAL-CONTENT-006. The code quality of the examples themselves is good with proper annotations, common mistakes, and provenance."
+}

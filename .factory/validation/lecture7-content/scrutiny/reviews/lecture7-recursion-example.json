@@ -1,0 +1,34 @@
+{
+  "featureId": "lecture7-recursion-example",
+  "reviewedAt": "2026-04-13T23:25:00.000Z",
+  "commitId": "00932ec",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Implementation successfully added comprehensive recursion factorial example with proper stack frame management. The code demonstrates recursive calls, base case handling, and stack unwinding with detailed annotations. All required fields present and validation passed.",
+    "issues": [
+      {
+        "file": "data/processed/question-bank.json",
+        "line": null,
+        "severity": "non_blocking",
+        "description": "Questions QB-061 and QB-062 have empty sourceRefs arrays [], suggesting they may not be properly linked to this specific example despite being listed in relatedQuestions. This is a minor documentation gap."
+      },
+      {
+        "file": "data/processed/lectures.json (L7-S5 section content)",
+        "line": null,
+        "severity": "non_blocking",
+        "description": "The lecture section l7-s5 content shows parameter access at [BP+6] offset, while the new example uses [BP+4] offset. This creates a documentation inconsistency. The example's offset (BP+4) is correct for its structure where parameters are pushed directly by caller, but the lecture example shows a different calling convention. Students may be confused when comparing."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "The provenance.sourceFile in the new example is set to 'Lecture 7.pdf' but the skill SKILL.md says to set it to 'generated'. The actual lecture content is from a PDF, so this may be intentional, but AGENTS.md says to label generated enrichment as 'generated'.",
+      "evidence": "examples.json entry for recursion-factorial has provenance.sourceFile: 'Lecture 7.pdf'. SKILL.md line 42 says 'Provenance.sourceFile set to generated'. AGENTS.md says 'Keep generated enrichment clearly labeled as generated'."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review passed. Implementation is solid with proper stack frame management, base case handling, and stack unwinding demonstrated. The factorial algorithm is correctly implemented with 10 annotations and 6 common mistakes documented. Validation passed with 646 assertions. Two minor issues: (1) questions QB-061/QB-062 have empty sourceRefs, (2) parameter offset inconsistency between lecture content and new example ([BP+6] vs [BP+4]). Neither is blocking. The skill procedure was followed correctly."
+}

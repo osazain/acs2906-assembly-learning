@@ -1286,7 +1286,11 @@
           "examples": [
             "string-movsb-movsw"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-067",
+            "QB-068",
+            "QB-069"
+          ]
         },
         {
           "id": "l8-s2",
@@ -1306,7 +1310,11 @@
           "examples": [
             "string-lodsb-lodsw"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-070",
+            "QB-071",
+            "QB-072"
+          ]
         },
         {
           "id": "l8-s3",
@@ -1326,7 +1334,11 @@
           "examples": [
             "string-stosb-stosw"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-073",
+            "QB-074",
+            "QB-075"
+          ]
         },
         {
           "id": "l8-s4",
@@ -1349,7 +1361,11 @@
           "examples": [
             "rep-prefixes-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-076",
+            "QB-077",
+            "QB-078"
+          ]
         },
         {
           "id": "l8-s5",
@@ -1369,7 +1385,11 @@
           "examples": [
             "cmpsb-cmpsw-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-079",
+            "QB-080",
+            "QB-081"
+          ]
         },
         {
           "id": "l8-s6",
@@ -1389,7 +1409,11 @@
           "examples": [
             "scasb-scasw-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-082",
+            "QB-083",
+            "QB-084"
+          ]
         },
         {
           "id": "l8-s7",
@@ -1409,7 +1433,10 @@
           "examples": [
             "cld-std-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-085",
+            "QB-086"
+          ]
         },
         {
           "id": "l8-s8",
@@ -1435,7 +1462,11 @@
           "examples": [
             "complete-string-processing"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-087",
+            "QB-088",
+            "QB-089"
+          ]
         }
       ],
       "concepts": [

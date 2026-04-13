@@ -2541,6 +2541,871 @@
       "misconceptionTags": [
         "misconception:puspa-availability"
       ]
+    },
+    {
+      "id": "QB-067",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "MOVSB and MOVSW",
+      "concepts": [
+        "movsb",
+        "movsw",
+        "string-instructions"
+      ],
+      "instructions": [
+        "MOVSB",
+        "MOVSW",
+        "REP"
+      ],
+      "difficulty": 1,
+      "prompt": "What does the MOVSB instruction do in 8086 assembly?",
+      "answer": "Copies one byte from [DS:SI] to [ES:DI] and updates SI and DI",
+      "options": [
+        "Copies one byte from [DS:SI] to [ES:DI] and updates SI and DI",
+        "Moves a byte from AL to memory at [ES:DI]",
+        "Compares two bytes at [DS:SI] and [ES:DI]",
+        "Scans a byte at [ES:DI] for a specific value"
+      ],
+      "hints": [
+        "MOVSB uses SI and DI registers",
+        "Both source and destination are memory locations"
+      ],
+      "explanation": "MOVSB (Move String Byte) copies a single byte from the source address [DS:SI] to the destination address [ES:DI]. After the copy, SI and DI are automatically incremented or decremented based on the Direction Flag (DF).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "MOVSB and MOVSW - Move String"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:movsb-direction"
+      ]
+    },
+    {
+      "id": "QB-068",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "MOVSB with REP",
+      "concepts": [
+        "movsb",
+        "rep-prefix",
+        "cx-register"
+      ],
+      "instructions": [
+        "MOVSB",
+        "REP"
+      ],
+      "difficulty": 2,
+      "prompt": "What will be the final values of SI, DI, and CX after executing these instructions?\n\nLEA SI, source\nLEA DI, dest\nMOV CX, 10\nREP MOVSB",
+      "answer": "SI = source + 10, DI = dest + 10, CX = 0",
+      "hints": [
+        "REP repeats MOVSB while CX != 0, decrementing CX each time",
+        "SI and DI are updated after each iteration"
+      ],
+      "explanation": "REP MOVSB executes MOVSB CX times. Each iteration copies one byte and increments SI and DI by 1. After 10 iterations: SI and DI have advanced 10 bytes from their starting positions, and CX has been decremented to 0.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "MOVSB and MOVSW - Move String"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP Prefixes"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:rep-prefix"
+      ]
+    },
+    {
+      "id": "QB-069",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "String Operations",
+      "subtopic": "MOVSW Word Size",
+      "concepts": [
+        "movsw",
+        "word-size"
+      ],
+      "instructions": [
+        "MOVSW"
+      ],
+      "difficulty": 2,
+      "prompt": "MOVSW copies a 16-bit word (2 bytes) and increments SI and DI by 2 after each copy.",
+      "answer": "True",
+      "hints": [
+        "MOVSW operates on words (16 bits)",
+        "Each word copy requires 2 byte increments"
+      ],
+      "explanation": "MOVSW (Move String Word) copies 2 bytes at a time. SI and DI are automatically incremented by 2 after each copy to advance to the next word position.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "MOVSW instruction"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-070",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "LODSB and LODSW",
+      "concepts": [
+        "lodsb",
+        "lodsw",
+        "string-instructions"
+      ],
+      "instructions": [
+        "LODSB",
+        "LODSW"
+      ],
+      "difficulty": 1,
+      "prompt": "What does the LODSB instruction do?",
+      "answer": "Loads a byte from [DS:SI] into AL and increments/decrements SI",
+      "options": [
+        "Loads a byte from [DS:SI] into AL and increments/decrements SI",
+        "Stores AL to [ES:DI] and increments/decrements DI",
+        "Compares AL with [ES:DI]",
+        "Scans [ES:DI] for the value in AL"
+      ],
+      "hints": [
+        "LODSB loads into AL (Accumulator Low)",
+        "Source is [DS:SI] - the Source Index"
+      ],
+      "explanation": "LODSB (Load String Byte) reads one byte from memory at [DS:SI] into the AL register, then updates SI based on the Direction Flag. It's used to read sequential bytes from a source string.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "LODSB and LODSW - Load String"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:lodsb-target"
+      ]
+    },
+    {
+      "id": "QB-071",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "LODSB in a Loop",
+      "concepts": [
+        "lodsb",
+        "si-register",
+        "loop-instructions"
+      ],
+      "instructions": [
+        "LODSB",
+        "LOOP"
+      ],
+      "difficulty": 2,
+      "prompt": "After executing:\n\nLEA SI, myString  ; myString = 'HELLO'\nMOV CX, 5\nL1:\n    LODSB\n    ; Process AL here\n    LOOP L1\n\nWhat is the final value of SI? (Assume DF = 0)",
+      "answer": "SI points 5 bytes past myString",
+      "hints": [
+        "LODSB loads from [DS:SI] and then increments SI",
+        "LOOP decrements CX and jumps if CX != 0"
+      ],
+      "explanation": "Each LODSB loads a byte from [DS:SI] into AL and increments SI by 1. After 5 iterations, SI has advanced 5 bytes from its original position. The final SI points to the byte immediately after 'HELLO'.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "LODSB and LODSW"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:lodsb-update"
+      ]
+    },
+    {
+      "id": "QB-072",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "LODSW Register Size",
+      "concepts": [
+        "lodsw",
+        "ax-register"
+      ],
+      "instructions": [
+        "LODSW"
+      ],
+      "difficulty": 1,
+      "prompt": "LODSW loads a word into which register?",
+      "answer": "AX",
+      "options": [
+        "AX",
+        "AL",
+        "BX",
+        "CX"
+      ],
+      "hints": [
+        "LODSW loads a 16-bit word",
+        "16-bit string operations use AX"
+      ],
+      "explanation": "LODSW (Load String Word) loads a 16-bit word from [DS:SI] into AX. The byte version LODSB loads into AL.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "LODSW instruction"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-073",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "STOSB and STOSW",
+      "concepts": [
+        "stosb",
+        "stosw",
+        "string-instructions"
+      ],
+      "instructions": [
+        "STOSB",
+        "STOSW"
+      ],
+      "difficulty": 1,
+      "prompt": "What does the STOSB instruction do?",
+      "answer": "Stores AL to [ES:DI] and increments/decrements DI",
+      "options": [
+        "Stores AL to [ES:DI] and increments/decrements DI",
+        "Loads AL from [DS:SI]",
+        "Compares AL with [ES:DI]",
+        "Scans [ES:DI] for the value in AL"
+      ],
+      "hints": [
+        "STOSB stores TO string destination",
+        "Destination is [ES:DI]"
+      ],
+      "explanation": "STOSB (Store String Byte) writes the value in AL to memory at [ES:DI], then updates DI based on the Direction Flag. The destination segment is always ES for STOS instructions.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "STOSB and STOSW - Store String"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stosb-target"
+      ]
+    },
+    {
+      "id": "QB-074",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "REP STOSB",
+      "concepts": [
+        "stosb",
+        "rep-prefix"
+      ],
+      "instructions": [
+        "STOSB",
+        "REP"
+      ],
+      "difficulty": 2,
+      "prompt": "What will this code do?\n\nLEA DI, buffer\nMOV AX, 0\nMOV CX, 100\nREP STOSB",
+      "answer": "Fill 100 bytes of buffer with zero",
+      "hints": [
+        "REP STOSB repeats STOSB CX times",
+        "AX holds the value to store"
+      ],
+      "explanation": "REP STOSB repeats the STOSB instruction CX times. With AX = 0, each STOSB writes a zero byte to [ES:DI] and increments DI. The result is 100 bytes of buffer filled with zeros.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "STOSB and STOSW"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP Prefixes"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-075",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "String Operations",
+      "subtopic": "STOSB vs STOSW Segment",
+      "concepts": [
+        "stosb",
+        "stosw",
+        "es-segment"
+      ],
+      "instructions": [
+        "STOSB",
+        "STOSW"
+      ],
+      "difficulty": 2,
+      "prompt": "STOSB and STOSW use DS as their destination segment register.",
+      "answer": "False",
+      "hints": [
+        "String store instructions use ES for destination",
+        "DS is the default for source operations"
+      ],
+      "explanation": "STOSB and STOSW store TO the destination [ES:DI]. ES (Extra Segment) is the destination segment for all string store operations. LODSB/MOVSB use DS as the source segment.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "STOSB and STOSW"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:segment-registers"
+      ]
+    },
+    {
+      "id": "QB-076",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "REP Prefixes",
+      "concepts": [
+        "rep-prefix",
+        "string-repetition"
+      ],
+      "instructions": [
+        "REP",
+        "MOVSB"
+      ],
+      "difficulty": 1,
+      "prompt": "What does the REP prefix do with MOVSB?",
+      "answer": "Repeats MOVSB CX times",
+      "options": [
+        "Repeats MOVSB CX times",
+        "Repeats MOVSB until ZF = 1",
+        "Repeats MOVSB until CX = 0 and ZF = 1",
+        "Copies all bytes until a null terminator"
+      ],
+      "hints": [
+        "REP checks CX before each iteration",
+        "CX is the counter register"
+      ],
+      "explanation": "REP (Repeat) causes MOVSB to execute CX times. Before each iteration, CX is checked - if CX = 0, the repetition ends.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP Prefixes"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-077",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "REPE vs REPNE",
+      "concepts": [
+        "repe-prefix",
+        "repne-prefix",
+        "string-comparison"
+      ],
+      "instructions": [
+        "REPE",
+        "CMPSB"
+      ],
+      "difficulty": 2,
+      "prompt": "When should REPE CMPSB be used instead of REP CMPSB?",
+      "answer": "When searching for bytes that match (equal condition)",
+      "options": [
+        "When searching for bytes that match (equal condition)",
+        "When searching for bytes that differ",
+        "When copying bytes",
+        "When storing bytes"
+      ],
+      "hints": [
+        "REPE = Repeat while Equal",
+        "ZF = 1 means [SI] == [DI]"
+      ],
+      "explanation": "REPE (Repeat while Equal) continues while CX != 0 AND ZF = 1. For CMPSB, ZF = 1 means the bytes are equal. REPE is used when you want to find matching bytes - the loop stops when a mismatch is found (ZF = 0) or CX reaches 0.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP Prefixes"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPSB and CMPSW"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:repe-vs-repne"
+      ]
+    },
+    {
+      "id": "QB-078",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "REPZ CMPSB",
+      "concepts": [
+        "repz",
+        "cmpsb"
+      ],
+      "instructions": [
+        "REPZ",
+        "CMPSB"
+      ],
+      "difficulty": 3,
+      "prompt": "After executing:\n\nMOV CX, 10\nLEA SI, str1\nLEA DI, str2\nREPZ CMPSB\n\nWhat can you conclude if ZF = 1?",
+      "answer": "All 10 bytes compared equal (strings are identical)",
+      "hints": [
+        "REPZ stops when ZF = 0 or CX = 0",
+        "ZF = 1 means last comparison was equal"
+      ],
+      "explanation": "REPZ (Repeat while Zero/Equal) continues while CX != 0 AND ZF = 1. If ZF = 1 after the loop, it means the loop ran to completion (CX = 0) with all comparisons equal. This indicates the strings are identical.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "REP Prefixes"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPSB and CMPSW"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-079",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "CMPSB Operation",
+      "concepts": [
+        "cmpsb",
+        "string-comparison"
+      ],
+      "instructions": [
+        "CMPSB"
+      ],
+      "difficulty": 1,
+      "prompt": "What does CMPSB compare?",
+      "answer": "[DS:SI] with [ES:DI]",
+      "options": [
+        "[DS:SI] with [ES:DI]",
+        "AL with [ES:DI]",
+        "[DS:SI] with AL",
+        "CX with [DS:SI]"
+      ],
+      "hints": [
+        "CMPSB compares bytes at two memory locations",
+        "SI is source, DI is destination"
+      ],
+      "explanation": "CMPSB (Compare String Bytes) compares the byte at [DS:SI] with the byte at [ES:DI] and sets flags based on the result. Unlike SUB, it doesn't modify either operand.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPSB and CMPSW"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-080",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "String Operations",
+      "subtopic": "CMPSB Modifies Operands",
+      "concepts": [
+        "cmpsb"
+      ],
+      "instructions": [
+        "CMPSB"
+      ],
+      "difficulty": 1,
+      "prompt": "After CMPSB executes, the values at [DS:SI] and [ES:DI] are modified.",
+      "answer": "False",
+      "hints": [
+        "CMPSB is a comparison, not a subtraction"
+      ],
+      "explanation": "CMPSB performs a comparison like SUB would, setting flags based on [DS:SI] - [ES:DI], but it does NOT store the result or modify either memory location.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPSB instruction"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:cmpsb-modifies"
+      ]
+    },
+    {
+      "id": "QB-081",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "CMPSB Flags",
+      "concepts": [
+        "cmpsb",
+        "zf-flag"
+      ],
+      "instructions": [
+        "CMPSB"
+      ],
+      "difficulty": 2,
+      "prompt": "After CMPSB, ZF = 1 means the bytes compared are:",
+      "answer": "Equal",
+      "options": [
+        "Equal",
+        "Not equal",
+        "Greater (unsigned)",
+        "Less (unsigned)"
+      ],
+      "hints": [
+        "ZF = 1 indicates zero result",
+        "CMPSB subtracts without storing"
+      ],
+      "explanation": "CMPSB sets ZF = 1 when the bytes at [DS:SI] and [ES:DI] are equal (the subtraction result is zero).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CMPSB flags"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-082",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "SCASB Operation",
+      "concepts": [
+        "scasb",
+        "scan-string"
+      ],
+      "instructions": [
+        "SCASB"
+      ],
+      "difficulty": 1,
+      "prompt": "What does SCASB compare?",
+      "answer": "AL with [ES:DI]",
+      "options": [
+        "AL with [ES:DI]",
+        "[DS:SI] with AL",
+        "[DS:SI] with [ES:DI]",
+        "CX with AL"
+      ],
+      "hints": [
+        "SCASB 'scans' memory for a value in AL",
+        "AL is the accumulator register"
+      ],
+      "explanation": "SCASB (Scan String Byte) compares AL with the byte at [ES:DI]. It's used to scan a string or buffer for a specific value (like finding a character in a string).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "SCASB and SCASW"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-083",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "SCASB with REPNE",
+      "concepts": [
+        "scasb",
+        "repne-prefix",
+        "string-search"
+      ],
+      "instructions": [
+        "SCASB",
+        "REPNE"
+      ],
+      "difficulty": 2,
+      "prompt": "REPNE SCASB is used to:",
+      "answer": "Find the first byte that matches AL",
+      "options": [
+        "Find the first byte that matches AL",
+        "Find the first byte that differs from AL",
+        "Count how many bytes match AL",
+        "Copy bytes from [DS:SI] to [ES:DI]"
+      ],
+      "hints": [
+        "REPNE = Repeat while Not Equal",
+        "SCASB compares AL with [ES:DI]"
+      ],
+      "explanation": "REPNE SCASB scans memory at [ES:DI] for the value in AL. The loop continues while CX != 0 AND the byte at [DI] != AL. When the loop exits, DI points to the first matching byte (or CX = 0 if not found).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "SCASB and REPNE"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-084",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "SCASB for Null Terminator",
+      "concepts": [
+        "scasb",
+        "null-terminator"
+      ],
+      "instructions": [
+        "SCASB",
+        "REPNE"
+      ],
+      "difficulty": 3,
+      "prompt": "To find the end of a null-terminated string using SCASB, what value should be in AL?",
+      "answer": "0 (the null character)",
+      "hints": [
+        "Null-terminated strings end with a null byte (0)",
+        "SCASB compares AL with each byte"
+      ],
+      "explanation": "A null-terminated string ends with a null character (0). Setting AL = 0 and using REPNE SCASB will scan until it finds the null terminator. After the loop, DI points past the null (or CX = 0 if not found).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "SCASB - Scan String"
+        },
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Complete String Processing"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-085",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "Direction Flag",
+      "concepts": [
+        "direction-flag",
+        "df-flag"
+      ],
+      "instructions": [
+        "CLD",
+        "STD"
+      ],
+      "difficulty": 1,
+      "prompt": "What does CLD do?",
+      "answer": "Clears the Direction Flag (DF = 0), making string instructions increment SI and DI",
+      "options": [
+        "Clears the Direction Flag (DF = 0), making string instructions increment SI and DI",
+        "Sets DF = 1 to decrement SI and DI",
+        "Clears the Carry Flag",
+        "Enables string instructions"
+      ],
+      "hints": [
+        "DF controls direction of string operations",
+        "CLD means 'Clear Direction'"
+      ],
+      "explanation": "CLD clears the Direction Flag (DF = 0), causing string instructions (MOVSB, LODSB, STOSB, etc.) to increment SI and DI after each operation. This is the default state for left-to-right processing.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CLD and STD - Direction Flag"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:direction-flag"
+      ]
+    },
+    {
+      "id": "QB-086",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "String Operations",
+      "subtopic": "Direction Flag Default",
+      "concepts": [
+        "direction-flag"
+      ],
+      "instructions": [
+        "CLD",
+        "STD"
+      ],
+      "difficulty": 1,
+      "prompt": "On program start, DF is guaranteed to be 0 (increment mode).",
+      "answer": "False",
+      "hints": [
+        "DF state after program start is not guaranteed",
+        "Always set DF explicitly before string operations"
+      ],
+      "explanation": "The Direction Flag state at program start is not guaranteed. DOS programs should always explicitly set DF with CLD before string operations to ensure correct behavior regardless of the initial state.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "CLD and STD"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:df-default"
+      ]
+    },
+    {
+      "id": "QB-087",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "Complete String Processing",
+      "concepts": [
+        "string-processing",
+        "lodsb",
+        "stosb"
+      ],
+      "instructions": [
+        "LODSB",
+        "STOSB",
+        "REP"
+      ],
+      "difficulty": 2,
+      "prompt": "Which pair of instructions would you use to convert each character of a source string and store it in a destination buffer?",
+      "answer": "LODSB to read and STOSB to write",
+      "options": [
+        "LODSB to read and STOSB to write",
+        "MOVSB to copy",
+        "SCASB to search",
+        "CMPSB to compare"
+      ],
+      "hints": [
+        "LODSB loads from source",
+        "STOSB stores to destination"
+      ],
+      "explanation": "LODSB reads a byte from the source string into AL, and STOSB writes AL to the destination. Together they allow reading from one location, processing, and writing to another.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Complete String Processing"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-088",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "String Operations",
+      "subtopic": "String Copy Loop",
+      "concepts": [
+        "string-processing",
+        "null-terminated"
+      ],
+      "instructions": [
+        "LODSB",
+        "STOSB",
+        "CMP",
+        "JE"
+      ],
+      "difficulty": 3,
+      "prompt": "This code copies a string:\n\ncopy_loop:\n    LODSB\n    STOSB\n    CMP AL, 0\n    JNE copy_loop\n\nWhat is special about this copy method?",
+      "answer": "It stops at the null terminator without needing a count in CX",
+      "hints": [
+        "The loop checks for null terminator",
+        "No CX counter is needed"
+      ],
+      "explanation": "This loop copies bytes until it encounters a null (0). Since LODSB loads and STOSB stores one byte at a time, and the loop terminates on null, it works for strings of any length without pre-counting.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "Complete String Processing"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-089",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "String Operations",
+      "subtopic": "String Instructions Register Usage",
+      "concepts": [
+        "si-register",
+        "di-register",
+        "cx-register"
+      ],
+      "instructions": [
+        "MOVSB",
+        "LODSB",
+        "STOSB"
+      ],
+      "difficulty": 2,
+      "prompt": "Which registers are automatically updated by string instructions (when DF = 0)?",
+      "answer": "SI (source), DI (destination), and CX (counter with REP)",
+      "options": [
+        "SI (source), DI (destination), and CX (counter with REP)",
+        "Only SI",
+        "Only DI",
+        "AX and BX"
+      ],
+      "hints": [
+        "String instructions use multiple registers",
+        "SI for source, DI for destination"
+      ],
+      "explanation": "String instructions use SI (Source Index) for source address, DI (Destination Index) for destination address, and CX as a counter with REP prefixes. All three are automatically updated after each iteration.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "8",
+          "description": "String Instructions Overview"
+        }
+      ],
+      "misconceptionTags": []
     }
   ],
   "metadata": {

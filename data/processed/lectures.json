@@ -1020,8 +1020,13 @@
             "CMC",
             "LAHF"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "flag-instructions-stack"
+          ],
+          "assessmentItems": [
+            "QB-060",
+            "QB-066"
+          ]
         },
         {
           "id": "l7-s2",
@@ -1044,8 +1049,13 @@
             "PUSHF",
             "POPF"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "stack-instructions-demo"
+          ],
+          "assessmentItems": [
+            "QB-061",
+            "QB-066"
+          ]
         },
         {
           "id": "l7-s3",
@@ -1087,8 +1097,12 @@
             "PUSH",
             "POP"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "parameter-passing-example"
+          ],
+          "assessmentItems": [
+            "QB-062"
+          ]
         },
         {
           "id": "l7-s5",
@@ -1127,9 +1141,12 @@
             "MOV"
           ],
           "examples": [
-            "array.asm"
+            "array.asm",
+            "array-manipulation"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-063"
+          ]
         },
         {
           "id": "l7-s7",
@@ -1148,8 +1165,12 @@
             "POP",
             "MOV"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "number-io"
+          ],
+          "assessmentItems": [
+            "QB-064"
+          ]
         },
         {
           "id": "l7-s8",
@@ -1193,8 +1214,12 @@
             "FST",
             "FSTP"
           ],
-          "examples": [],
-          "assessmentItems": []
+          "examples": [
+            "extending-8bit-16bit"
+          ],
+          "assessmentItems": [
+            "QB-065"
+          ]
         }
       ],
       "concepts": [

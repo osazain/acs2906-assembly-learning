@@ -472,6 +472,470 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "reviewed"
       }
+    },
+    {
+      "id": "flag-instructions-stack",
+      "filename": "FlagStack.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s1"],
+      "concepts": [
+        "flag-instructions",
+        "stack",
+        "sp-register",
+        "bp-register",
+        "push-instruction",
+        "pop-instruction"
+      ],
+      "instructions": [
+        "CLC", "STC", "CLD", "STD", "CLI", "STI", "CMC", "LAHF", "PUSH", "POP"
+      ],
+      "code": "; Flag Instructions and Stack Operations\n; Demonstrates flag manipulation and stack behavior\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    counter DW 0\n    result DB 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Flag Instructions ===\n    ; Clear carry flag for arithmetic\n    CLC                 ; CF = 0\n    \n    ; Set direction flag for string operations (forward)\n    CLD                 ; DF = 0 (SI/DI auto-increment)\n    \n    ; Example: Adding numbers without carry interference\n    MOV AL, 0FFh        ; AL = 255\n    ADC AL, 01h         ; AL = 0, CF was cleared so no add of 1\n    \n    ; Set carry flag for special conditions\n    STC                 ; CF = 1\n    \n    ; === Stack Operations ===\n    ; The stack grows toward lower addresses\n    ; SP points to the current top of stack\n    \n    ; Push registers to preserve values\n    PUSH AX             ; SP = SP - 2, [SP] = AX\n    PUSH BX             ; SP = SP - 2, [SP] = BX\n    PUSH CX             ; SP = SP - 2, [SP] = CX\n    \n    ; Use registers freely now\n    MOV AX, 1234h\n    MOV BX, 5678h\n    ADD AX, BX          ; AX = 68ACh\n    \n    ; Pop in reverse order (LIFO)\n    POP CX              ; CX = original CX, SP = SP + 2\n    POP BX              ; BX = original BX\n    POP AX              ; AX = original AX\n    \n    ; === Using BP for Stack Frame Access ===\n    PUSH BP             ; Save caller's BP\n    MOV BP, SP          ; BP points to current stack frame\n    \n    ; Access parameters at [BP+4] (return address) and [BP+6] (first param)\n    MOV AX, [BP+4]      ; Get return address\n    \n    POP BP              ; Restore caller's BP\n    \n    ; === LAHF - Load Flags into AH ===\n    ; LAHF copies SF, ZF, AF, PF, CF to AH bits 0-4\n    LAHF                ; AH = flags register lower byte\n    \n    ; Check carry flag\n    TEST AH, 01h        ; Test CF bit (AH bit 0)\n    JNZ CARRY_SET       ; Jump if carry flag was set\n    \nCARRY_SET:\n    ; Exit program\n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "CLC clears the carry flag to prepare for unsigned arithmetic",
+          "linkedConcept": "flag-instructions"
+        },
+        {
+          "line": 26,
+          "type": "instruction",
+          "text": "ADC adds with carry - since CF=0, this acts like regular ADD",
+          "linkedConcept": "adc-instruction"
+        },
+        {
+          "line": 36,
+          "type": "instruction",
+          "text": "PUSH decrements SP by 2 and copies source to [SS:SP]",
+          "linkedConcept": "push-instruction"
+        },
+        {
+          "line": 36,
+          "type": "comment",
+          "text": "Stack grows DOWN in memory - SP decreases with each push",
+          "linkedConcept": "stack"
+        },
+        {
+          "line": 54,
+          "type": "instruction",
+          "text": "POP increments SP by 2 and copies from [SS:SP] to destination",
+          "linkedConcept": "pop-instruction"
+        },
+        {
+          "line": 54,
+          "type": "comment",
+          "text": "Must pop in reverse order (LIFO) to restore correctly",
+          "linkedConcept": "stack"
+        },
+        {
+          "line": 59,
+          "type": "instruction",
+          "text": "BP register provides stable reference to access stack parameters",
+          "linkedConcept": "bp-register"
+        },
+        {
+          "line": 68,
+          "type": "instruction",
+          "text": "LAHF loads lower 8 flags into AH for testing or saving",
+          "linkedConcept": "lahf-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing SP and BP - SP tracks top of stack, BP is frame pointer",
+        "Popping in wrong order corrupts values - always use LIFO (reverse push order)",
+        "Forgetting that PUSH/POP operate on 16-bit words, not bytes",
+        "Not preserving BP before modifying it in a procedure"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-021", "QB-022"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "1-20",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "stack-instructions-demo",
+      "filename": "StackInstructions.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s2"],
+      "concepts": [
+        "push-instruction",
+        "pop-instruction",
+        "pusha-instruction",
+        "popa-instruction",
+        "pushf-instruction",
+        "popf-instruction",
+        "stack-frames"
+      ],
+      "instructions": [
+        "PUSH", "POP", "PUSHA", "POPA", "PUSHF", "POPF", "MOV", "INT"
+      ],
+      "code": "; Stack Instructions Demonstration\n; Shows PUSH, POP, PUSHA, POPA, PUSHF, POPF operations\n\n.386\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    saved_ax DW 0\n    saved_flags DW 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Basic PUSH/POP ===\n    MOV AX, 1234h\n    PUSH AX             ; Save AX\n    MOV AX, 5678h       ; Modify AX\n    POP AX              ; Restore AX (AX = 1234h again)\n    \n    ; === PUSHA/POPA - Push/Pop All General Registers ===\n    ; Order: AX, CX, DX, BX, SP, BP, SI, DI\n    MOV AX, 0AAAAh\n    MOV CX, 0CCCCh\n    MOV DX, 0DDDDh\n    MOV BX, 0BBBBh\n    MOV BP, 0EEEEh\n    MOV SI, 0FFFFh\n    MOV DI, 01234h\n    \n    PUSHA                ; Push all 8 registers (16 bytes)\n    \n    ; Modify all registers\n    MOV AX, 0000h\n    MOV CX, 0000h\n    MOV DX, 0000h\n    MOV BX, 0000h\n    \n    POPA                 ; Restore all registers\n    ; AX = AAAA, CX = CCCC, etc.\n    \n    ; === PUSHF/POPF - Save and Restore Flags ===\n    ; Set some flags via operations\n    MOV AX, 0001h\n    CMP AX, 0002h        ; ZF=0, CF=1 (AX < 2)\n    PUSHF                ; Push flags to stack\n    \n    ; Clear flags\n    CLC                 ; CF = 0\n    CLD                 ; DF = 0\n    \n    ; Modify flags\n    MOV BX, 0000h\n    SUB BX, 0001h        ; CF = 1\n    \n    POPF                 ; Restore original flags (ZF=0, CF=1)\n    \n    ; === Complete Stack Frame Example ===\n    PUSH BP              ; Save old BP\n    MOV BP, SP           ; BP = current stack frame\n    \n    ; Stack now looks like:\n    ; [BP]     = old BP\n    ; [BP+2]   = return address\n    ; [BP+4]   = first parameter (if any)\n    \n    SUB SP, 4           ; Allocate 4 bytes for local variables\n    ; Local variables at [BP-2] and [BP-4]\n    \n    MOV [BP-2], AX      ; Store local var 1\n    MOV [BP-4], BX      ; Store local var 2\n    \n    ; Restore stack frame\n    MOV SP, BP           ; Deallocate locals\n    POP BP               ; Restore old BP\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 19,
+          "type": "instruction",
+          "text": "PUSH preserves register values on stack for later restoration",
+          "linkedConcept": "push-instruction"
+        },
+        {
+          "line": 39,
+          "type": "instruction",
+          "text": "PUSHA pushes all 8 general registers in specific order",
+          "linkedConcept": "pusha-instruction"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "Order: AX, CX, DX, BX, SP, BP, SI, DI (SP value is what was before decrement)",
+          "linkedConcept": "pusha-instruction"
+        },
+        {
+          "line": 56,
+          "type": "instruction",
+          "text": "PUSHF saves current flag state to stack - useful before operations that modify flags",
+          "linkedConcept": "pushf-instruction"
+        },
+        {
+          "line": 68,
+          "type": "instruction",
+          "text": "POPF restores flags from stack - restores exact flag state",
+          "linkedConcept": "popf-instruction"
+        },
+        {
+          "line": 74,
+          "type": "instruction",
+          "text": "Establishing stack frame with BP allows access to parameters and local variables",
+          "linkedConcept": "stack-frames"
+        },
+        {
+          "line": 77,
+          "type": "comment",
+          "text": "SUB SP, N allocates N bytes of local variable space",
+          "linkedConcept": "stack-frames"
+        }
+      ],
+      "commonMistakes": [
+        "PUSHA/POPA require .386 directive - MASM won't assemble without it",
+        "Forgetting that PUSH always decrements SP by 2 (for 16-bit)",
+        "POPA restores in reverse order but skips SP (restore order is DI, SI, BP, BX, DX, CX, AX)",
+        "Not balancing stack - too many PUSHes without POPs causes stack overflow",
+        "Using POP to restore flags when PUSHF wasn't called first"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-021", "QB-022", "QB-023"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "20-40",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "parameter-passing-example",
+      "filename": "ParamPass.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s4"],
+      "concepts": [
+        "parameter-passing",
+        "stack-frames",
+        "register-preservation",
+        "callee-saved",
+        "caller-saved"
+      ],
+      "instructions": [
+        "PUSH", "POP", "CALL", "RET", "MOV", "ADD", "INT"
+      ],
+      "code": "; Parameter Passing Demonstration\n; Shows both register and stack parameter passing\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    result DW 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Method 1: Register Parameter Passing ===\n    MOV AL, 5           ; First parameter in AL\n    MOV BL, 3           ; Second parameter in BL\n    CALL MULTIPLY_REG\n    ; Result in AX = 15\n    MOV result, AX\n    \n    ; === Method 2: Stack Parameter Passing ===\n    PUSH 3              ; Push second parameter\n    PUSH 5              ; Push first parameter\n    CALL ADD_STACK\n    ADD SP, 4           ; Clean up stack (2 params × 2 bytes)\n    ; Result in AX = 8\n    MOV result, AX\n    \n    ; === Caller-Saved Register Preservation ===\n    PUSH CX             ; Save CX (caller saved)\n    PUSH DX             ; Save DX (caller saved)\n    \n    MOV AL, 10\n    CALL MULTIPLY_REG   ; CX, DX preserved across call\n    \n    POP DX              ; Restore DX\n    POP CX              ; Restore CX\n    \n    MOV AH, 4Ch\n    INT 21h\n\n; Register-based multiplication\n; AL = first param, BL = second param\n; Returns: AX = product\nMULTIPLY_REG PROC\n    MUL BL              ; AX = AL * BL\n    RET\nMULTIPLY_REG ENDP\n\n; Stack-based addition\n; Parameters at [BP+6] and [BP+4]\n; Returns: AX = sum\nADD_STACK PROC\n    PUSH BP\n    MOV BP, SP\n    \n    MOV AX, [BP+6]      ; Get first parameter (pushed second)\n    ADD AX, [BP+4]      ; Add second parameter (pushed first)\n    \n    POP BP\n    RET                 ; Return address popped automatically\nADD_STACK ENDP\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 24,
+          "type": "instruction",
+          "text": "Register parameter passing is fast but limited - only available registers",
+          "linkedConcept": "parameter-passing"
+        },
+        {
+          "line": 28,
+          "type": "instruction",
+          "text": "Stack parameters pushed in REVERSE order so first param is at higher address",
+          "linkedConcept": "parameter-passing"
+        },
+        {
+          "line": 29,
+          "type": "instruction",
+          "text": "CALL pushes return address before jumping to procedure",
+          "linkedConcept": "call-instruction"
+        },
+        {
+          "line": 30,
+          "type": "instruction",
+          "text": "ADD SP, 4 cleans up stack (removes the 2 pushed parameters)",
+          "linkedConcept": "parameter-passing"
+        },
+        {
+          "line": 36,
+          "type": "instruction",
+          "text": "Caller-saved: calling code preserves registers it needs across calls",
+          "linkedConcept": "caller-saved"
+        },
+        {
+          "line": 53,
+          "type": "instruction",
+          "text": "Stack frame: BP+6 is first param, BP+4 is second (due to reverse push order)",
+          "linkedConcept": "stack-frames"
+        },
+        {
+          "line": 58,
+          "type": "instruction",
+          "text": "RET pops return address from stack and jumps back to caller",
+          "linkedConcept": "ret-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to clean up stack parameters after stack-based call (ADD SP, N)",
+        "Incorrect parameter offset calculation - [BP+4] for first, [BP+6] for second",
+        "Confusing caller-saved vs callee-saved register conventions",
+        "Not preserving registers when required by calling convention",
+        "Parameters pushed in wrong order causing offset confusion"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-021", "QB-022", "QB-025"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "30-50",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "array-manipulation",
+      "filename": "Array.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s6"],
+      "concepts": [
+        "array",
+        "indexing",
+        "memory-addressing",
+        "lea-instruction",
+        "byte-vs-word"
+      ],
+      "instructions": [
+        "MOV", "LEA", "ADD", "CMP", "JE", "JNE", "LOOP", "INT"
+      ],
+      "code": "; Array Manipulation Examples\n; Shows how to define, address, and traverse arrays\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Byte array (8 elements)\n    byteArray DB 10, 20, 30, 40, 50, 60, 70, 80\n    \n    ; Word array (4 elements)\n    wordArray DW 1000h, 2000h, 3000h, 4000h\n    \n    ; Uninitialized byte array\n    buffer DB 16 DUP(?)\n    \n    sum DW 0\n    foundIndex DW 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Accessing Array Elements ===\n    ; Direct indexing with constant offset\n    MOV AL, byteArray[0]    ; AL = 10 (first element)\n    MOV AL, byteArray[3]    ; AL = 40 (fourth element, offset = 3)\n    \n    ; Using register as index (SI, DI, BX)\n    MOV SI, 2\n    MOV AL, byteArray[SI]   ; AL = 30 (third element)\n    \n    ; === Word Array Indexing ===\n    ; IMPORTANT: Offset is always in bytes, even for word arrays!\n    MOV SI, 0\n    MOV AX, wordArray[SI]       ; AX = 1000h (first word)\n    \n    MOV SI, 2                    ; SI = 2 (NOT 1 for second element!)\n    MOV AX, wordArray[SI]        ; AX = 2000h (second word)\n    \n    MOV SI, 4\n    MOV AX, wordArray[SI]        ; AX = 3000h (third word)\n    \n    ; === Searching an Array ===\n    MOV CX, 8               ; Array length\n    MOV SI, 0               ; Index\n    MOV AL, 50              ; Value to find\n    \nsearch_loop:\n    CMP AL, byteArray[SI]\n    JE found\n    INC SI\n    LOOP search_loop\n    \n    ; Not found - SI = 8\n    JMP done\n    \nfound:\n    MOV foundIndex, SI\n    \ndone:\n    ; === Summing an Array ===\n    MOV CX, 8               ; Counter\n    MOV SI, 0               ; Index\n    XOR AX, AX              ; AX = 0 (accumulator)\n    \nsum_loop:\n    ADD AL, byteArray[SI]\n    INC SI\n    LOOP sum_loop\n    \n    MOV sum, AX\n    \n    ; === Finding Max Value ===\n    MOV CX, 8\n    MOV SI, 0\n    MOV AL, 0               ; Max = 0\n    \nmax_loop:\n    CMP byteArray[SI], AL\n    JNA not_max\n    MOV AL, byteArray[SI]\nnot_max:\n    INC SI\n    LOOP max_loop\n    ; AL now contains maximum value (80)\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 34,
+          "type": "comment",
+          "text": "byteArray[SI] uses SI as offset from array start - each element is 1 byte",
+          "linkedConcept": "indexing"
+        },
+        {
+          "line": 40,
+          "type": "comment",
+          "text": "Word array requires doubling index: element N at offset N*2",
+          "linkedConcept": "byte-vs-word"
+        },
+        {
+          "line": 40,
+          "type": "comment",
+          "text": "wordArray[2] accesses second element (2000h), not first (would be wordArray[0])",
+          "linkedConcept": "array"
+        },
+        {
+          "line": 74,
+          "type": "instruction",
+          "text": "Loop compares each element to target value, exits when found or end reached",
+          "linkedConcept": "array"
+        },
+        {
+          "line": 89,
+          "type": "instruction",
+          "text": "AL accumulator sums all bytes - note potential overflow for large arrays",
+          "linkedConcept": "arithmetic-overflow"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting that word array indices must be doubled (element 3 at offset 6, not 3)",
+        "Using byte array index for word array causing misalignment",
+        "Assuming byteArray[SI] modifies SI - it does NOT, just adds SI to base address",
+        "Memory-to-memory moves not allowed: MOV array[2], array[5] is ILLEGAL",
+        "Not using XOR AX, AX to clear accumulator - must initialize before ADD"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-037", "QB-038", "QB-040", "QB-041"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "35-55",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "number-io",
+      "filename": "NumberIO.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s7"],
+      "concepts": [
+        "number-output",
+        "ascii-conversion",
+        "division",
+        "stack-usage",
+        "buffered-input"
+      ],
+      "instructions": [
+        "DIV", "PUSH", "POP", "MOV", "CMP", "JE", "JNE", "LOOP", "INT", "LEA"
+      ],
+      "code": "; Number Input and Output\n; Reads and prints multi-digit integers\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    prompt DB 'Enter a number (max 5 digits): $'\n    buffer DB 7, ?, 7 DUP(?)\n    number DW 0\n    outputMsg DB 'You entered: $'\n    newline DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Display prompt\n    LEA DX, prompt\n    MOV AH, 09h\n    INT 21h\n    \n    ; Read string of digits\n    LEA DX, buffer\n    MOV AH, 0Ah\n    INT 21h\n    \n    ; Convert ASCII string to number\n    CALL ASCII_TO_NUM\n    MOV number, AX\n    \n    ; Print result\n    LEA DX, newline\n    MOV AH, 09h\n    INT 21h\n    \n    LEA DX, outputMsg\n    MOV AH, 09h\n    INT 21h\n    \n    ; Print the number\n    MOV AX, number\n    CALL PRINT_NUM\n    \n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\n\n; ========================================\n; Convert ASCII string in buffer to number\n; Input: buffer contains digits ending with CR\n; Output: AX = number\n; ========================================\nASCII_TO_NUM PROC\n    PUSH CX\n    PUSH DX\n    PUSH SI\n    PUSH BP\n    \n    MOV SI, OFFSET buffer + 2  ; Point to first digit\n    MOV CL, buffer[1]           ; Length in CL\n    XOR CH, CH                 ; CX = length\n    XOR AX, AX                 ; Result = 0\n    MOV BP, 10                 ; Multiplier\n    \nconvert_loop:\n    CMP CX, 0\n    JE convert_done\n    \n    MOV DL, [SI]              ; Get digit\n    SUB DL, '0'               ; Convert ASCII to value\n    \n    ; AX = AX * 10 + digit\n    MUL BP                    ; AX = AX * 10\n    ADD AL, DL                ; Add digit\n    \n    INC SI\n    LOOP convert_loop\n    \nconvert_done:\n    POP BP\n    POP SI\n    POP DX\n    POP CX\n    RET\nASCII_TO_NUM ENDP\n\n; ========================================\n; Print number in AX\n; Algorithm: Divide by 10, push remainders, pop and print\n; ========================================\nPRINT_NUM PROC\n    PUSH CX\n    PUSH DX\n    \n    CMP AX, 0                 ; Handle zero specially\n    JNE print_nonzero\n    MOV DL, '0'\n    MOV AH, 02h\n    INT 21h\n    JMP print_done\n    \nprint_nonzero:\n    XOR CX, CX                ; Digit counter\n    \nnext_digit:\n    CMP AX, 0\n    JE print_digits\n    \n    MOV DX, 0\n    MOV BX, 10\n    DIV BX                    ; AX = quotient, DX = remainder\n    \n    ADD DL, '0'              ; Convert to ASCII\n    PUSH DX                   ; Save digit\n    INC CX\n    JMP next_digit\n    \nprint_digits:\n    CMP CX, 0\n    JE print_done\n    \n    POP DX                    ; Get digit\n    MOV AH, 02h\n    INT 21h                   ; Print character\n    LOOP print_digits\n    \nprint_done:\n    POP DX\n    POP CX\n    RET\nPRINT_NUM ENDP\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 55,
+          "type": "instruction",
+          "text": "buffer[1] contains the actual length of input (after function 0Ah reads)",
+          "linkedConcept": "buffered-input"
+        },
+        {
+          "line": 68,
+          "type": "instruction",
+          "text": "MUL BP with BP=10 multiplies AX by 10 without destroying other registers",
+          "linkedConcept": "mul-instruction"
+        },
+        {
+          "line": 81,
+          "type": "comment",
+          "text": "Special case: number is 0, just print '0'",
+          "linkedConcept": "number-output"
+        },
+        {
+          "line": 88,
+          "type": "instruction",
+          "text": "DIV BX divides DX:AX by BX - quotient in AX, remainder in DX",
+          "linkedConcept": "div-instruction"
+        },
+        {
+          "line": 93,
+          "type": "instruction",
+          "text": "Digits pushed to stack in reverse order, then popped to print in correct order",
+          "linkedConcept": "stack-usage"
+        },
+        {
+          "line": 93,
+          "type": "comment",
+          "text": "This is classic use of stack for reversal: LIFO gives reversed order",
+          "linkedConcept": "ascii-conversion"
+        }
+      ],
+      "commonMistakes": [
+        "Not converting ASCII '0'-'9' to values by subtracting '0' before arithmetic",
+        "Forgetting that DIV uses DX:AX - must clear DX before dividing AX by byte",
+        "Not handling the special case of number = 0 (would print nothing)",
+        "Buffer overflow: not reserving enough space in input buffer for digits",
+        "Confusing buffer format: buffer[0]=max, buffer[1]=actual, buffer[2]=first char"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-026", "QB-027", "QB-028"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "10-30",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "extending-8bit-16bit",
+      "filename": "Extend16.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s8"],
+      "concepts": [
+        "register-preservation",
+        "stack-usage",
+        "16-bit-arithmetic",
+        "mul-instruction",
+        "div-instruction"
+      ],
+      "instructions": [
+        "PUSH", "POP", "MOV", "MUL", "DIV", "ADD", "SUB", "INT"
+      ],
+      "code": "; Extending 8-bit Programs to 16-bit\n; Shows how to preserve values and work with larger numbers\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    temp1 DW 0\n    temp2 DW 0\n    result DW 0\n    value8 DB 200          ; 8-bit value\n    value16 DW 60000       ; 16-bit value\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Problem: MUL overwrites AX and DX ===\n    MOV AL, 100            ; 8-bit multiplicand\n    MOV BL, 50             ; 8-bit multiplier\n    \n    PUSH AX               ; Save AX (contains AL)\n    PUSH DX               ; Save DX (might be used elsewhere)\n    \n    MUL BL                ; AX = AL * BL = 5000 (1388h)\n    ; AX = 1388h, DX = 0 (no high part overflow)\n    \n    POP DX                ; Restore DX\n    POP AX                ; Restore AX\n    \n    ; === 16-bit Multiplication ===\n    MOV AX, 1234h          ; Multiplicand\n    MOV BX, 5678h          ; Multiplier\n    \n    PUSH AX               ; Save AX before MUL (MUL overwrites it)\n    PUSH DX               ; Save DX (high part of result)\n    \n    MUL BX                ; DX:AX = AX * BX\n    ; DX:AX now holds 32-bit result\n    ; Result = 0x0BDC0F80 (approx 3.16 billion)\n    \n    POP DX                ; Restore DX\n    POP AX                ; Restore AX\n    \n    ; === Division preserving registers ===\n    MOV AX, 1234h         ; Dividend\n    MOV CX, 100h          ; Divisor\n    \n    PUSH AX               ; Save dividend\n    PUSH DX               ; Save any high part\n    \n    XOR DX, DX            ; Clear DX for 16-bit division\n    DIV CX                ; AX = quotient, DX = remainder\n    ; AX = 0x12 (18), DX = 0x34 (52)\n    \n    POP DX                ; Restore DX\n    POP AX                ; Restore AX\n    \n    ; === Using Data Segment for preservation ===\n    MOV AX, 0ABCDh        ; Important value\n    MOV temp1, AX         ; Store in data segment\n    \n    ; Do something that modifies AX\n    MOV BX, 1234h\n    MUL BX                ; AX overwritten\n    \n    ; Restore original value\n    MOV AX, temp1          ; AX = ABCDh again\n    \n    ; === 8-bit to 16-bit extension ===\n    MOV AL, value8         ; AL = 200\n    CBW                   ; Sign-extend AL to AX (AX = 0200h or FFE0h if negative)\n    ; CBW: if AL < 128, AH = 00; if AL >= 128, AH = FF\n    \n    ; Now we can safely do 16-bit operations\n    MOV BX, 1000h\n    ADD AX, BX            ; AX = 0200h + 1000h = 1200h\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "PUSH before MUL preserves values that MUL would overwrite",
+          "linkedConcept": "register-preservation"
+        },
+        {
+          "line": 24,
+          "type": "instruction",
+          "text": "MUL BL multiplies AL by BL, result in AX",
+          "linkedConcept": "mul-instruction"
+        },
+        {
+          "line": 40,
+          "type": "instruction",
+          "text": "16-bit MUL: DX:AX = AX * BX (32-bit result)",
+          "linkedConcept": "16-bit-arithmetic"
+        },
+        {
+          "line": 40,
+          "type": "comment",
+          "text": "MUL always uses AX and another register - result splits across AX and DX",
+          "linkedConcept": "mul-instruction"
+        },
+        {
+          "line": 59,
+          "type": "instruction",
+          "text": "DIV overwrites AX and DX - must preserve if needed",
+          "linkedConcept": "div-instruction"
+        },
+        {
+          "line": 62,
+          "type": "instruction",
+          "text": "XOR DX, DX clears DX before DIV to ensure high word of dividend is 0",
+          "linkedConcept": "div-instruction"
+        },
+        {
+          "line": 78,
+          "type": "instruction",
+          "text": "Data segment storage preserves values across operations that modify registers",
+          "linkedConcept": "stack-usage"
+        },
+        {
+          "line": 90,
+          "type": "instruction",
+          "text": "CBW sign-extends AL to AX - essential before 16-bit operations on 8-bit values",
+          "linkedConcept": "cbw-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting that MUL overwrites AX (and DX for 16-bit) - must preserve first",
+        "Not clearing DX before 16-bit DIV - DX:AX must be full dividend",
+        "Confusing CBW (sign-extend) with just moving AL to AH (which zeros AH)",
+        "Using stack for long-term storage - stack is for temporary preservation",
+        "Forgetting that PUSH/POP are 16-bit operations - cannot push 8-bit registers directly"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-021", "QB-027", "QB-028"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "40-51",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {

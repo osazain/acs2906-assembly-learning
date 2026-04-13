@@ -2294,6 +2294,253 @@
         }
       ],
       "misconceptionTags": []
+    },
+    {
+      "id": "QB-060",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures and Stack",
+      "subtopic": "Flag Instructions",
+      "concepts": [
+        "flag-instructions",
+        "carry-flag",
+        "direction-flag"
+      ],
+      "instructions": [
+        "CLC", "STC", "CLD", "STD"
+      ],
+      "difficulty": 1,
+      "prompt": "What does the CLC instruction do in 8086 assembly?",
+      "answer": "Clears (resets to 0) the Carry Flag",
+      "options": [
+        "Clears (resets to 0) the Carry Flag",
+        "Sets the Carry Flag to 1",
+        "Complements (toggles) the Carry Flag",
+        "Clears the Direction Flag"
+      ],
+      "hints": [
+        "CLC stands for Clear Carry",
+        "Flags can be set, cleared, or complemented"
+      ],
+      "explanation": "CLC clears the Carry Flag (CF = 0). This is often done before arithmetic operations that generate a carry, or before using ADC (Add with Carry).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Flag Instructions and The Stack"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:flag-instructions"
+      ]
+    },
+    {
+      "id": "QB-061",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures and Stack",
+      "subtopic": "Stack Operations",
+      "concepts": [
+        "push-instruction",
+        "pop-instruction",
+        "sp-register"
+      ],
+      "instructions": [
+        "PUSH", "POP", "MOV"
+      ],
+      "difficulty": 2,
+      "prompt": "After executing PUSH AX followed by PUSH BX, if SP = 1000h initially, what is the new SP value?",
+      "answer": "FFFAh",
+      "hints": [
+        "PUSH decrements SP by 2 before storing",
+        "Two PUSHes mean SP decreased by 4 total"
+      ],
+      "explanation": "PUSH AX: SP = SP - 2 = FFFEh. PUSH BX: SP = SP - 2 = FFFAh. Each PUSH decrements SP by 2 (for 16-bit operands).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack Instructions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-pointer"
+      ]
+    },
+    {
+      "id": "QB-062",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Procedures and Stack",
+      "subtopic": "Parameter Passing",
+      "concepts": [
+        "parameter-passing",
+        "stack-frames"
+      ],
+      "instructions": [
+        "PUSH", "POP", "CALL", "RET"
+      ],
+      "difficulty": 2,
+      "prompt": "When passing parameters on the stack, the first parameter is accessed at [BP+4] and the second at [BP+6].",
+      "answer": "True",
+      "hints": [
+        "Return address is at [BP+2], old BP at [BP]",
+        "Parameters are at higher offsets"
+      ],
+      "explanation": "When using BP as a frame pointer, [BP+4] points to the first parameter and [BP+6] to the second. This is because the return address (2 bytes) is at [BP+2] and the old BP (2 bytes) is at [BP].",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Parameter Passing"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:parameter-offset"
+      ]
+    },
+    {
+      "id": "QB-063",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures and Stack",
+      "subtopic": "Arrays",
+      "concepts": [
+        "array",
+        "indexing",
+        "word-size"
+      ],
+      "instructions": [
+        "MOV", "LEA"
+      ],
+      "difficulty": 2,
+      "prompt": "Given a word array 'words DW 1000h, 2000h, 3000h', what address offset is needed to access the third element (3000h)?",
+      "answer": "4",
+      "hints": [
+        "Word elements are 2 bytes each",
+        "Third element is index 2, so offset = 2 * 2"
+      ],
+      "explanation": "Word arrays store 16-bit values, each occupying 2 bytes. The third element (index 2) starts at offset 2 × 2 = 4 bytes from the array's start. So words[4] accesses the value 3000h.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Arrays in Assembly"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:array-indexing"
+      ]
+    },
+    {
+      "id": "QB-064",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures and Stack",
+      "subtopic": "Number I/O",
+      "concepts": [
+        "number-output",
+        "ascii-conversion",
+        "stack-usage"
+      ],
+      "instructions": [
+        "DIV", "PUSH", "POP"
+      ],
+      "difficulty": 3,
+      "prompt": "In a print routine that divides by 10 and pushes remainders to the stack, what does the stack provide?",
+      "answer": "Reversal of digit order - ones digit pushed first, popped last to print first",
+      "hints": [
+        "Division yields digits from right to left (ones, tens, hundreds)",
+        "Stack is LIFO - last pushed is first popped"
+      ],
+      "explanation": "When converting a number like 123: divide by 10 gives remainder 3 (ones), then 2 (tens), then 1 (hundreds). Pushing to stack stores 3, 2, 1. Popping gives 1, 2, 3 - the correct print order.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Reading and Printing Numbers"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:stack-reversal"
+      ]
+    },
+    {
+      "id": "QB-065",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Procedures and Stack",
+      "subtopic": "Register Preservation",
+      "concepts": [
+        "register-preservation",
+        "mul-instruction"
+      ],
+      "instructions": [
+        "PUSH", "POP", "MUL"
+      ],
+      "difficulty": 3,
+      "prompt": "Why must AX and DX be saved before executing MUL BL?",
+      "answer": "MUL overwrites AX with the low part of the result and DX with the high part",
+      "hints": [
+        "MUL has implicit operands",
+        "8-bit MUL uses AL and the operand"
+      ],
+      "explanation": "MUL BL computes AL × BL and stores the 16-bit result in AX. Unlike regular instructions, MUL doesn't have separate destination and source - it always uses AX (and DX for 16-bit) as implicit destinations, overwriting any previous values.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Extending 8-bit to 16-bit Programs"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:mul-overwrites"
+      ]
+    },
+    {
+      "id": "QB-066",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Procedures and Stack",
+      "subtopic": "Stack Instructions",
+      "concepts": [
+        "pusha-instruction",
+        "popa-instruction"
+      ],
+      "instructions": [
+        "PUSHA", "POPA"
+      ],
+      "difficulty": 2,
+      "prompt": "What directive is required to use PUSHA and POPA in MASM?",
+      "answer": ".386",
+      "options": [
+        ".386",
+        ".486",
+        ".MODEL",
+        ".8086"
+      ],
+      "hints": [
+        "PUSHA/POPA are not available on 8086/8088",
+        "They were introduced with the 80186 processor"
+      ],
+      "explanation": "PUSHA (Push All) and POPA (Pop All) instructions were introduced in the 80186 processor. To use them in MASM, you must declare .386 or higher to enable these instructions.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "7",
+          "description": "Stack Instructions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:puspa-availability"
+      ]
     }
   ],
   "metadata": {

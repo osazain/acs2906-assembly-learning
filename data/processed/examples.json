@@ -1017,6 +1017,103 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "recursion-factorial",
+      "filename": "RecursionFactorial.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s5"],
+      "concepts": [
+        "recursion",
+        "stack-frame",
+        "base-case",
+        "recursive-procedure",
+        "stack-unwinding"
+      ],
+      "instructions": [
+        "CALL", "RET", "PUSH", "POP", "CMP", "JE", "JNE", "MOV", "MUL", "DEC", "INT"
+      ],
+      "code": "; Recursive Factorial with Stack Frame Management\n; Demonstrates recursive call stack and stack unwinding\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    result DW ?\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Calculate 5! = 120\n    MOV AX, 5\n    PUSH AX              ; Push parameter (n) onto stack\n    CALL FACTORIAL\n    ADD SP, 2            ; Clean up stack (remove parameter)\n    MOV result, DX\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\n\n; FACTORIAL Procedure\n; Calculates n! recursively using the stack to preserve\n; the current value of n for each recursive level\n;\n; Stack Frame Layout:\n;   [BP+4] = parameter n (pushed by caller or recursive call)\n;   [BP+2] = return address (pushed by CALL)\n;   [BP]   = saved BP (pushed by this procedure)\n;\; Recursive Call Flow for factorial(5):\n;   Call factorial(5) -> pushes return addr, n=5\n;     Call factorial(4) -> pushes return addr, n=4\n;       Call factorial(3) -> pushes return addr, n=3\n;         Call factorial(2) -> pushes return addr, n=2\n;           Call factorial(1) -> pushes return addr, n=1\n;             Base case: return 1\n;           Multiply: 1 * 2 = 2, return 2\n;         Multiply: 2 * 3 = 6, return 6\n;       Multiply: 6 * 4 = 24, return 24\n;     Multiply: 24 * 5 = 120, return 120\n;\nFACTORIAL PROC\n    PUSH BP               ; Save caller's BP\n    MOV BP, SP            ; Set up new stack frame\n    \n    ; Get parameter n from stack at [BP+4]\n    MOV CX, [BP+4]\n    \n    ; ===== BASE CASE =====\n    ; If n <= 1, we're done - return 1\n    CMP CX, 1\n    JLE BASE_CASE\n    \n    ; ===== RECURSIVE CASE =====\n    ; Stack grows as we recurse deeper:\n    ;   Each call pushes: BP, return address, parameter n\n    ;   Stack grows TOWARD LOWER addresses (SP decreases)\n    \n    ; Save current n for later multiplication\n    PUSH CX               ; Save current n\n    \n    ; Decrement n and push for recursive call\n    DEC CX                ; n = n - 1\n    PUSH CX               ; Push new parameter\n    CALL FACTORIAL        ; Recursive call - factorial(n-1)\n    \n    ; ===== STACK UNWINDING =====\n    ; After returning from factorial(n-1):\n    ;   - DX contains factorial(n-1) result\n    ;   - Return address has been popped\n    ;   - Our stack frame is restored\n    ;   - CX still has original n (we pushed it)\n    \n    ; Clean up the parameter we pushed\n    ADD SP, 2\n    \n    ; Restore original n\n    POP CX                ; CX = original n\n    \n    ; Multiply: result = n * factorial(n-1)\n    ; DX currently has factorial(n-1)\n    MOV AX, DX            ; AX = factorial(n-1)\n    MOV DX, CX            ; DX = n\n    MUL DX                ; AX * DX -> DX:AX = n * factorial(n-1)\n    \n    ; DX now contains the final result\n    ; (AX holds low word, DX holds high word for larger numbers)\n    \n    POP BP                ; Restore caller's BP\n    RET                   ; Return to caller\n    \nBASE_CASE:\n    ; Return 1 (0! = 1 and 1! = 1)\n    MOV DX, 1\n    POP BP                ; Restore BP\n    RET                   ; Return to caller\nFACTORIAL ENDP\n\nEND MAIN",
+      "annotations": [
+        {
+          "line": 28,
+          "type": "instruction",
+          "text": "PUSH saves BP so we can restore caller's frame after procedure completes",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 29,
+          "type": "instruction",
+          "text": "MOV BP, SP establishes new stack frame - BP now references this call's frame",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 34,
+          "type": "instruction",
+          "text": "[BP+4] accesses the parameter n passed on the stack",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 40,
+          "type": "instruction",
+          "text": "Base case: n <= 1 means we stop recursing and return 1",
+          "linkedConcept": "base-case"
+        },
+        {
+          "line": 49,
+          "type": "instruction",
+          "text": "PUSH CX saves current n before recursive call - essential for later multiplication",
+          "linkedConcept": "stack-frame"
+        },
+        {
+          "line": 53,
+          "type": "instruction",
+          "text": "CALL pushes return address and jumps to FACTORIAL - stack depth increases",
+          "linkedConcept": "recursive-procedure"
+        },
+        {
+          "line": 58,
+          "type": "comment",
+          "text": "STACK UNWINDING: After recursive call returns, stack pops unwinds back to this frame",
+          "linkedConcept": "stack-unwinding"
+        },
+        {
+          "line": 66,
+          "type": "instruction",
+          "text": "DEC CX reduces n for the recursive call, pushing n-1 onto stack",
+          "linkedConcept": "recursive-procedure"
+        },
+        {
+          "line": 79,
+          "type": "instruction",
+          "text": "MUL computes n * factorial(n-1) - result in DX:AX, we use DX for final result",
+          "linkedConcept": "recursion"
+        },
+        {
+          "line": 85,
+          "type": "instruction",
+          "text": "POP BP and RET restore caller's frame and return address - stack unwinds fully",
+          "linkedConcept": "stack-unwinding"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting the base case - causes infinite recursion and stack overflow",
+        "Not preserving the current n value before recursive call - loses n during unwinding",
+        "Forgetting to clean up stack parameters (ADD SP, 2) before returning",
+        "Using DX after MUL without checking if result exceeds 16 bits",
+        "Not establishing proper stack frame with PUSH BP / MOV BP, SP",
+        "Accessing parameters at wrong offset ([BP+6] instead of [BP+4])"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-061", "QB-062"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "15-35",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {

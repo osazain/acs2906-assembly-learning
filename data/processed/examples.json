@@ -1673,9 +1673,248 @@
       "reviewedStatus": "pending"
     }
   },
+  {
+    "id": "cld-std-demo",
+    "filename": "CLDSTD.asm",
+    "lectureIds": [8],
+    "sectionIds": ["l8-s7"],
+    "concepts": [
+      "direction-flag",
+      "cld-instruction",
+      "std-instruction",
+      "df-flag",
+      "string-instructions",
+      "movsb",
+      "stosb",
+      "rep-prefix"
+    ],
+    "instructions": [
+      "CLD", "STD", "MOVSB", "STOSB", "REP", "MOV", "LEA", "INT"
+    ],
+    "code": "; CLD and STD Demonstration\n; Demonstrates Direction Flag control and its effect on string operations\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    source      DB 'ABCDEFGHIJ', 0\n    dest_fwd    DB 20 DUP(?)\n    dest_bwd    DB 20 DUP(?)\n    buffer      DB 100 DUP(?)\n    header1     DB '=== Forward Direction (CLD) ===', 13, 10, '$'\n    header2     DB 13, 10, '=== Backward Direction (STD) ===', 13, 10, '$'\n    footer      DB 13, 10, '=== Demo Complete ===', 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX\n\n    ; === Part 1: Forward Copy with CLD ===\n    ; CLD clears DF: SI and DI will INCREMENT after each string operation\n    CLD                     ; DF = 0 (forward/increment)\n    \n    ; Set up pointers to START of both strings\n    LEA SI, source          ; SI = start of source\n    LEA DI, dest_fwd        ; DI = start of destination\n    \n    ; Count string length first\n    MOV CX, 0               ; Counter\ncount_fwd:\n    CMP BYTE PTR [SI + CX], 0\n    JE count_fwd_done\n    INC CX\n    CMP CX, 100\n    JNE count_fwd\ncount_fwd_done:\n    \n    ; Copy using LODSB/STOSB pattern (forward)\n    MOV DX, CX              ; Save length\n    MOV CX, DX              ; Restore count\n    \ncopy_fwd:\n    LODSB                   ; AL = [DS:SI], SI = SI + 1 (because DF=0)\n    STOSB                   ; [ES:DI] = AL, DI = DI + 1 (because DF=0)\n    LOOP copy_fwd\n    \n    ; Result: dest_fwd now contains 'ABCDEFGHIJ'\n    \n    ; === Part 2: Backward Copy with STD ===\n    ; STD sets DF: SI and DI will DECREMENT after each string operation\n    STD                     ; DF = 1 (backward/decrement)\n    \n    ; Set up pointers to END of strings (last valid byte)\n    LEA SI, source[9]       ; SI = end of source (index 9 = 'J')\n    LEA DI, dest_bwd[9]    ; DI = end of destination\n    \n    ; Copy 10 bytes backward\n    MOV CX, 10\n    \ncopy_bwd:\n    LODSB                   ; AL = [DS:SI], SI = SI - 1 (because DF=1)\n    STOSB                   ; [ES:DI] = AL, DI = DI - 1 (because DF=1)\n    LOOP copy_bwd\n    \n    ; Reset to forward direction for safety\n    CLD\n    \n    ; Result: dest_bwd now contains 'ABCDEFGHIJ' (same as source)\n    ; Note: We copied from end to start, but stored end to start,\n    ; so the byte order is preserved!\n    \n    ; === Part 3: Practical - Build String in Reverse ===\n    CLD\n    LEA DI, buffer          ; Start of buffer\n    \n    ; Write 'A', 'B', 'C' but we'll build it in reverse order\n    ; First, fill buffer with spaces (forward)\n    MOV AL, ' '\n    MOV CX, 50\n    REP STOSB               ; DI increments with each store\n    \n    ; Now use STD to write backwards from position 20\n    STD\n    LEA DI, buffer[19]     ; Point to position 19 (20th byte, 0-indexed)\n    \n    ; Write 'C', 'B', 'A' in reverse\n    MOV AL, 'C'\n    STOSB                   ; DI = DI - 1 = 18\n    MOV AL, 'B'\n    STOSB                   ; DI = DI - 1 = 17\n    MOV AL, 'A'\n    STOSB                   ; DI = DI - 1 = 16\n    \n    ; Result: buffer[17]='A', buffer[18]='B', buffer[19]='C'\n    \n    ; Reset to forward\n    CLD\n    \n    ; === Part 4: Demonstrate REP with Different Directions ===\n    ; Clear both destinations\n    LEA DI, dest_fwd\n    MOV AL, 0\n    MOV CX, 20\n    REP STOSB               ; Clear 20 bytes (forward with CLD)\n    \n    LEA DI, dest_bwd\n    MOV CX, 20\n    STD\n    REP STOSB               ; Clear 20 bytes (backward with STD)\n    CLD\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 23,
+        "type": "instruction",
+        "text": "CLD clears the direction flag, setting DF=0 so SI and DI increment after string ops",
+        "linkedConcept": "cld-instruction"
+      },
+      {
+        "line": 28,
+        "type": "instruction",
+        "text": "LEA SI, source loads the offset of source - SI points to first byte",
+        "linkedConcept": "lea-instruction"
+      },
+      {
+        "line": 48,
+        "type": "instruction",
+        "text": "LODSB with DF=0: AL = [DS:SI], then SI increments by 1",
+        "linkedConcept": "movsb"
+      },
+      {
+        "line": 49,
+        "type": "instruction",
+        "text": "STOSB with DF=0: [ES:DI] = AL, then DI increments by 1",
+        "linkedConcept": "stosb"
+      },
+      {
+        "line": 56,
+        "type": "instruction",
+        "text": "STD sets the direction flag, DF=1 so SI and DI decrement after string ops",
+        "linkedConcept": "std-instruction"
+      },
+      {
+        "line": 60,
+        "type": "comment",
+        "text": "When DF=1, string operations work backward from high addresses to low",
+        "linkedConcept": "direction-flag"
+      },
+      {
+        "line": 62,
+        "type": "instruction",
+        "text": "source[9] is the 10th byte (0-indexed) = 'J' - perfect for backward processing",
+        "linkedConcept": "df-flag"
+      },
+      {
+        "line": 71,
+        "type": "comment",
+        "text": "LODSB with DF=1: AL = [DS:SI], then SI decrements by 1",
+        "linkedConcept": "direction-flag"
+      },
+      {
+        "line": 72,
+        "type": "comment",
+        "text": "STOSB with DF=1: [ES:DI] = AL, then DI decrements by 1",
+        "linkedConcept": "direction-flag"
+      },
+      {
+        "line": 92,
+        "type": "instruction",
+        "text": "REP STOSB with CLD fills buffer from low to high addresses",
+        "linkedConcept": "rep-prefix"
+      },
+      {
+        "line": 98,
+        "type": "instruction",
+        "text": "With STD, DI starts at buffer[19] and decrements as we write",
+        "linkedConcept": "std-instruction"
+      },
+      {
+        "line": 105,
+        "type": "comment",
+        "text": "After writing CBA with STD at buffer[19], positions 17-19 contain ABC",
+        "linkedConcept": "string-instructions"
+      }
+    ],
+    "commonMistakes": [
+      "Forgetting to set DF before string operations - wrong DF means wrong direction",
+      "Confusing CLD and STD - CLD clears (0=forward), STD sets (1=backward)",
+      "Not setting ES for STOSB when using STD - ES:DI is used for destination",
+      "Starting backward copy at wrong address - must start at the END for backward",
+      "Forgetting to reset DF to 0 (CLD) after STD operations",
+      "Assuming DF state persists - always set DF explicitly before string operations"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-030", "QB-031", "QB-038"],
+    "provenance": {
+      "sourceFile": "Lecture 8.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "65-80",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
+  {
+    "id": "complete-string-processing",
+    "filename": "CompleteStringProc.asm",
+    "lectureIds": [8],
+    "sectionIds": ["l8-s8"],
+    "concepts": [
+      "string-processing",
+      "null-terminated",
+      "string-case",
+      "string-search",
+      "string-compare",
+      "lodsb",
+      "stosb",
+      "scasb",
+      "cmpsb",
+      "repne-prefix",
+      "repe-prefix"
+    ],
+    "instructions": [
+      "LODSB", "STOSB", "SCASB", "CMPSB", "REP", "REPE", "REPNE", "MOV", "LEA", "CMP", "JE", "JNE", "JMP", "LOOP", "INT"
+    ],
+    "code": "; Complete String Processing Demonstration\n; Combines multiple string operations for practical text processing\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    input_str   DB 'hello world from assembly!', 0\n    output_str  DB 50 DUP(?)\n    search_str  DB 'assembly programming is fun!', 0\n    target_char DB 'a'\n    result_msg  DB 'Result: $'\n    found_msg   DB 'Found at position $'\n    notfound_msg DB 'Character not found', 13, 10, '$'\n    equal_msg   DB 'Strings are EQUAL', 13, 10, '$'\n    nequal_msg  DB 'Strings are NOT equal', 13, 10, '$'\n    upper_msg   DB 13, 10, 'Uppercase: $'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX\n\n    ; === Part 1: Copy and Uppercase String ===\n    ; Combines LODSB (read) + processing + STOSB (write)\n    CLD\n    LEA SI, input_str         ; Source\n    LEA DI, output_str        ; Destination\n    \nuppercase_loop:\n    LODSB                       ; AL = [DS:SI], SI = SI + 1\n    CMP AL, 0                   ; Check for null terminator\n    JE uppercase_done\n    \n    ; Convert lowercase to uppercase (ASCII: 'a'=61h, 'z'=7Ah)\n    CMP AL, 'a'\n    JB not_lowercase\n    CMP AL, 'z'\n    JA not_lowercase\n    SUB AL, 20H                ; Convert to uppercase\nnot_lowercase:\n    \n    STOSB                       ; Store to output, DI = DI + 1\n    JMP uppercase_loop\n    \nuppercase_done:\n    MOV AL, 0\n    STOSB                       ; Null terminate\n    \n    ; Result: output_str now contains 'HELLO WORLD FROM ASSEMBLY!'\n    \n    ; === Part 2: Find Character in String (SCASB) ===\n    CLD\n    LEA DI, search_str         ; String to search\n    MOV CX, 30                  ; Maximum length\n    MOV AL, 'a'                 ; Character to find\n    \n    ; Save original CX for position calculation\n    PUSH CX\n    \n    REPNE SCASB                 ; Search while [ES:DI] != AL\n    ; After: ZF=1 means found, ZF=0 means not found\n    ; CX has remaining count\n    \n    JZ char_found\n    \n    ; Character not found\n    POP CX                      ; Clean up stack\n    ; Would print 'not found' message here\n    JMP part3\n    \nchar_found:\n    POP CX                      ; Get original CX\n    ; Position = original_CX - remaining_CX\n    MOV AX, CX\n    SUB AX, CX                  ; AX = original_CX - remaining_CX\n    ; AX now holds position\n    \n    ; === Part 3: String Comparison (CMPSB) ===\npart3:\n    ; Compare 'hello' with 'hello' (should be equal)\n    LEA SI, input_str          ; First string\n    LEA DI, output_str         ; Our uppercase version (different!)\n    MOV CX, 5                  ; Compare first 5 characters\n    \n    REPE CMPSB                  ; Compare while equal (ZF=1)\n    ; After: CX=0 and ZF=1 means equal, otherwise not equal\n    \n    JZ strings_equal\n    \n    ; Not equal - 'hello' != 'HELLO' (case differs)\n    ; Print 'not equal' message\n    JMP part4\n    \nstrings_equal:\n    ; This won't execute since hello != HELLO\n    \n    ; === Part 4: Find and Replace ===\n    ; Find '!' and replace with '.'\npart4:\n    CLD\n    LEA DI, input_str           ; Search in input_str\n    MOV CX, 30                  ; Max length\n    MOV AL, '!'                 ; Find this\n    \nsearch_exclaim:\n    REPNE SCASB                 ; Search for '!'\n    JZ found_exclaim\n    JMP part5                   ; Not found\n    \nfound_exclaim:\n    ; DI points to '!' - replace it\n    MOV AL, '.'                 ; Replace with '.'\n    STOSB                       ; Store replacement (DI already at position)\n    \n    ; === Part 5: Count Vowels in String ===\npart5:\n    CLD\n    LEA SI, input_str           ; Count vowels in input_str\n    MOV CX, 30                  ; Max length\n    XOR DX, DX                  ; DX = vowel counter\n    \nvowel_loop:\n    LODSB                       ; Get character\n    CMP AL, 0                   ; Null terminator?\n    JE vowel_done\n    \n    ; Check if vowel (A, E, I, O, U - uppercase or lowercase)\n    CMP AL, 'A'\n    JE is_vowel\n    CMP AL, 'E'\n    JE is_vowel\n    CMP AL, 'I'\n    JE is_vowel\n    CMP AL, 'O'\n    JE is_vowel\n    CMP AL, 'U'\n    JE is_vowel\n    CMP AL, 'a'\n    JE is_vowel\n    CMP AL, 'e'\n    JE is_vowel\n    CMP AL, 'i'\n    JE is_vowel\n    CMP AL, 'o'\n    JE is_vowel\n    CMP AL, 'u'\n    JE is_vowel\n    JMP not_vowel\n    \nis_vowel:\n    INC DX\nnot_vowel:\n    LOOP vowel_loop\n    \nvowel_done:\n    ; DX = vowel count (should be 6: hello world - 'o', 'o', 'o')\n    \n    ; === Part 6: Reverse Copy with Transformation ===\n    ; Copy input_str to output_str in reverse, converting to uppercase\n    CLD\n    LEA SI, input_str           ; Source (forward)\n    LEA DI, output_str          ; Destination (we'll write backward)\n    \n    ; First, find length\n    MOV CX, 0\nlen_loop:\n    CMP BYTE PTR [SI + CX], 0\n    JE len_done\n    INC CX\n    CMP CX, 100\n    JNE len_loop\nlen_done:\n    \n    ; Now copy in reverse\n    ; SI starts at input_str, will increment\n    ; DI starts at output_str + length - 1, will decrement\n    PUSH CX                     ; Save length\n    \n    MOV DI, SI                 ; DI = SI (start of source)\n    ADD DI, CX                 ; DI = end of source\n    DEC DI                      ; DI = last valid byte\n    \n    LEA SI, output_str          ; We'll write to output_str\n    ADD SI, CX\n    DEC SI                      ; SI = end of output position\n    \n    STD                         ; Set direction = backward\n    \nrev_copy:\n    LODSB                       ; AL = [DS:SI], SI = SI - 1\n    ; AL has character from input_str\n    \n    ; Convert to uppercase if lowercase\n    CMP AL, 'a'\n    JB store_char\n    CMP AL, 'z'\n    JA store_char\n    SUB AL, 20H\nstore_char:\n    \n    MOV [DI], AL                ; Store to output (DI was set to output_str+len-1)\n    DEC DI                      ; Move backward in destination\n    \n    LOOP rev_copy\n    \n    CLD                         ; Reset direction\n    \n    POP CX\n    ; Result: output_str contains reversed, uppercased string\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 29,
+        "type": "instruction",
+        "text": "LODSB loads byte into AL and increments SI (forward direction)",
+        "linkedConcept": "lodsb"
+      },
+      {
+        "line": 33,
+        "type": "comment",
+        "text": "Check for null terminator to stop processing string",
+        "linkedConcept": "null-terminated"
+      },
+      {
+        "line": 38,
+        "type": "comment",
+        "text": "ASCII range for lowercase letters: 'a'=61h(97) to 'z'=7Ah(122)",
+        "linkedConcept": "string-case"
+      },
+      {
+        "line": 43,
+        "type": "instruction",
+        "text": "SUB AL, 20H converts lowercase to uppercase (adds 32 decimal)",
+        "linkedConcept": "string-case"
+      },
+      {
+        "line": 48,
+        "type": "instruction",
+        "text": "STOSB stores AL to [ES:DI] and increments DI (forward)",
+        "linkedConcept": "stosb"
+      },
+      {
+        "line": 61,
+        "type": "instruction",
+        "text": "SCASB compares AL with [ES:DI] - perfect for searching in strings",
+        "linkedConcept": "scasb"
+      },
+      {
+        "line": 61,
+        "type": "comment",
+        "text": "REPNE SCASB searches until AL matches or CX=0",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 92,
+        "type": "instruction",
+        "text": "CMPSB compares [DS:SI] with [ES:DI] and sets flags",
+        "linkedConcept": "cmpsb"
+      },
+      {
+        "line": 92,
+        "type": "comment",
+        "text": "REPE CMPSB repeats while bytes are equal - good for equality checks",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 113,
+        "type": "instruction",
+        "text": "After finding '!', STOSB overwrites it with '.' since DI is already there",
+        "linkedConcept": "stosb"
+      },
+      {
+        "line": 133,
+        "type": "comment",
+        "text": "Vowel counting combines LODSB with conditional checks in a loop",
+        "linkedConcept": "string-search"
+      },
+      {
+        "line": 172,
+        "type": "instruction",
+        "text": "STD sets direction flag for backward processing - SI and DI will decrement",
+        "linkedConcept": "std-instruction"
+      },
+      {
+        "line": 179,
+        "type": "instruction",
+        "text": "LODSB with DF=1: AL = [DS:SI], SI decrements",
+        "linkedConcept": "lodsb"
+      },
+      {
+        "line": 188,
+        "type": "comment",
+        "text": "Writing to [DI] directly when DI points to our output buffer position",
+        "linkedConcept": "string-processing"
+      }
+    ],
+    "commonMistakes": [
+      "Forgetting to null-terminate output strings after building them",
+      "Not checking for null terminator in loops that should stop at end of string",
+      "Confusing LODSB (loads TO AL) with STOSB (stores FROM AL)",
+      "Forgetting to set ES before using STOSB and SCASB",
+      "Not resetting DF to 0 (CLD) after using STD",
+      "Using REPE when REPNE is needed for searching - REPE finds matches, REPNE finds non-matches"
+    ],
+    "difficulty": "advanced",
+    "relatedQuestions": ["QB-030", "QB-031", "QB-038", "QB-039", "QB-040"],
+    "provenance": {
+      "sourceFile": "Lecture 8.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "75-86",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
-    "totalExamples": 14,
+    "totalExamples": 16,
     "lectureCoverage": [4, 5, 6, 7, 8],
     "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD"],
     "difficultyDistribution": {

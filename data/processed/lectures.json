@@ -1406,7 +1406,9 @@
             "CLD",
             "STD"
           ],
-          "examples": [],
+          "examples": [
+            "cld-std-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1430,7 +1432,9 @@
             "REPNE",
             "REPE"
           ],
-          "examples": [],
+          "examples": [
+            "complete-string-processing"
+          ],
           "assessmentItems": []
         }
       ],

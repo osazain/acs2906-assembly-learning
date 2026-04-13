@@ -1215,7 +1215,7 @@
             "FSTP"
           ],
           "examples": [
-            "extending-8bit-16bit"
+            "floating-point-example"
           ],
           "assessmentItems": [
             "QB-065"

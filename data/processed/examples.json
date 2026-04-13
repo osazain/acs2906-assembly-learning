@@ -936,6 +936,87 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "floating-point-example",
+      "filename": "FloatPoint.asm",
+      "lectureIds": [7],
+      "sectionIds": ["l7-s9"],
+      "concepts": [
+        "floating-point",
+        "x87-fpu",
+        "fadd-instruction",
+        "fsub-instruction",
+        "fld-instruction",
+        "fst-instruction",
+        "fp-registers",
+        "stack-based-architecture"
+      ],
+      "instructions": [
+        "FLD", "FST", "FSTP", "FADD", "FADDP", "FSUB", "FSUBP", "MOV", "INT"
+      ],
+      "code": "; Floating Point Example\n; Demonstrates x87 FPU instructions: FLD, FST, FADD, FSUB\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    val1 REAL4 3.14       ; 32-bit float\n    val2 REAL4 2.71       ; 32-bit float\n    result REAL4 ?        ; Store result here\n    temp REAL8 ?          ; 80-bit intermediate (ST register)\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Basic FP Register Loading ===\n    ; FLD pushes a value onto the FP stack (ST0)\n    FLD val1              ; ST0 = 3.14, ST1-ST7 = empty\n    \n    ; === Floating Point Addition ===\n    ; FADD: ST0 = ST0 + source\n    FLD val2              ; ST0 = 2.71, ST1 = 3.14\n    FADD val1             ; ST0 = 2.71 + 3.14 = 5.85, ST1 = 3.14\n    ; Note: FADD with memory adds to ST0\n    \n    ; === Store Result ===\n    FSTP result           ; Store ST0 to result, pop stack\n    ; ST0 now = 3.14 (was ST1)\n    \n    ; === Subtraction ===\n    ; FSUB: ST0 = ST0 - source\n    FLD val1              ; ST0 = 3.14\n    FSUB val2             ; ST0 = 3.14 - 2.71 = 0.43\n    FSTP result           ; Store and pop\n    \n    ; === Stack Operations ===\n    ; ST(0) is top, ST(1)-ST(7) form the stack below\n    FLD val1              ; ST0 = 3.14\n    FLD val2              ; ST0 = 2.71, ST1 = 3.14 (pushed)\n    FADD                 ; Without operand: ST0 = ST0 + ST1, pop\n    ; Now ST0 = 5.85, ST1 = empty (was popped)\n    FSTP result           ; Store and pop\n    \n    ; === FST without pop ===\n    FLD val1              ; ST0 = 3.14\n    FST temp              ; Copy ST0 to temp (no pop)\n    ; ST0 still = 3.14\n    FSTP result           ; Now pop\n    \n    ; === FADDP/FSUBP (add/subtract with pop) ===\n    FLD val1              ; ST0 = 3.14, ST1 = empty\n    FLD val2              ; ST0 = 2.71, ST1 = 3.14\n    FADDP                ; ST0 = 2.71 + 3.14 = 5.85, ST1 popped\n    FSTP result           ; Store result\n    \n    ; === Clean up FP register stack ===\n    ; FLDCW, FINIT, etc. for proper initialization\n    \n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 18,
+          "type": "instruction",
+          "text": "FLD loads a value onto the FP stack, pushing ST0 down",
+          "linkedConcept": "fld-instruction"
+        },
+        {
+          "line": 20,
+          "type": "instruction",
+          "text": "FADD ST0 = ST0 + source (source can be memory or another stack register)",
+          "linkedConcept": "fadd-instruction"
+        },
+        {
+          "line": 24,
+          "type": "instruction",
+          "text": "FSTP stores and pops - ST0 goes to result, ST1 becomes new ST0",
+          "linkedConcept": "fst-instruction"
+        },
+        {
+          "line": 30,
+          "type": "instruction",
+          "text": "FSUB performs ST0 = ST0 - source",
+          "linkedConcept": "fsub-instruction"
+        },
+        {
+          "line": 36,
+          "type": "comment",
+          "text": "FADD without operands uses ST0 and ST1 - convenient for stack operations",
+          "linkedConcept": "fadd-instruction"
+        },
+        {
+          "line": 42,
+          "type": "instruction",
+          "text": "FST copies without popping - useful for preserving values",
+          "linkedConcept": "fst-instruction"
+        },
+        {
+          "line": 48,
+          "type": "instruction",
+          "text": "FADDP adds and then pops the stack - reduces stack depth by 1",
+          "linkedConcept": "fadd-instruction"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing FST (store without pop) with FSTP (store and pop) - can cause stack overflow",
+        "Assuming FP registers behave like integer registers - they are stack-based",
+        "Forgetting that FADD without operands uses ST0 and ST1, not memory",
+        "Not checking for NaN or infinity conditions in floating point results",
+        "Using 80-bit long double precision but only reserving 64-bit storage"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-065", "QB-066", "QB-067"],
+      "provenance": {
+        "sourceFile": "Lecture 7.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "40-51",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {

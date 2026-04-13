@@ -1114,16 +1114,280 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "string-movsb-movsw",
+      "filename": "StringMOV.asm",
+      "lectureIds": [8],
+      "sectionIds": ["l8-s1"],
+      "concepts": [
+        "movsb",
+        "movsw",
+        "string-instructions",
+        "rep-prefix",
+        "direction-flag",
+        "cld-instruction",
+        "std-instruction",
+        "si-register",
+        "di-register"
+      ],
+      "instructions": [
+        "MOVSB", "MOVSW", "REP", "CLD", "STD", "MOV", "LEA", "INT"
+      ],
+      "code": "; String Move Instructions: MOVSB and MOVSW\n; Demonstrates copying data between memory locations using string instructions\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    source      DB 'Hello, World! This is a test string.', 0\n    dest        DB 80 DUP(?)\n    word_src    DW 1000h, 2000h, 3000h, 4000h, 5000h\n    word_dst    DW 5 DUP(?)\n    msg_src     DB 'Source string: $'\n    msg_dst     DB 13, 10, 'Destination string: $'\n    newline     DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX            ; ES must be set for string ops\n\n    ; === Part 1: Copy String Using REP MOVSB ===\n    ; Ensure direction is forward (DF = 0)\n    CLD                     ; Clear direction flag - SI and DI increment\n\n    ; Set up source and destination pointers\n    LEA SI, source          ; SI = offset of source\n    LEA DI, dest            ; DI = offset of destination\n\n    ; Calculate length (find terminating 0)\n    MOV CX, 0               ; Counter for length\n    MOV AL, 0               ; Search for null terminator\ncount_loop:\n    CMP [SI + CX], AL\n    JE found_null\n    INC CX\n    CMP CX, 80\n    JNE count_loop\nfound_null:\n\n    ; Copy the string using REP MOVSB\n    ; REP repeats CX times: MOVSB copies [DS:SI] to [ES:DI], increments both\n    REP MOVSB               ; Copy CX bytes\n\n    ; === Part 2: Copy Word Array Using REP MOVSW ===\n    LEA SI, word_src        ; SI = source word array\n    LEA DI, word_dst        ; DI = destination word array\n    MOV CX, 5               ; Copy 5 words\n    REP MOVSW               ; Each MOVSW copies 2 bytes, increments SI and DI by 2\n\n    ; === Demonstrate Direction Flag Effect ===\n    ; Forward direction (CLD): DF=0, SI/DI increment\n    CLD\n    LEA SI, source\n    LEA DI, dest\n    MOV CX, 5\n    REP MOVSB               ; SI and DI both increase\n\n    ; Backward direction (STD): DF=1, SI/DI decrement\n    STD\n    LEA SI, source[40]      ; Point to end of source (last valid position)\n    LEA DI, dest[35]       ; Point to end of destination\n    MOV CX, 5\n    ; Note: When using STD, must start from END and copy backwards\n    ; This is less common but useful for backward string operations\n    REP MOVSB               ; SI and DI both decrease\n\n    ; Reset to forward direction\n    CLD\n\n    ; === Practical Example: Copy Buffer ===\n    MOV AL, '*'             ; Fill character\n    LEA DI, dest            ; Destination\n    MOV CX, 40              ; Fill 40 bytes\n    REP STOSB               ; Fill with '*' (will cover original copy)\n\n    ; Exit program\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "CLD clears direction flag so SI and DI increment after each string operation",
+          "linkedConcept": "cld-instruction"
+        },
+        {
+          "line": 28,
+          "type": "instruction",
+          "text": "LEA loads effective address without reading memory - SI gets offset of source",
+          "linkedConcept": "lea-instruction"
+        },
+        {
+          "line": 39,
+          "type": "instruction",
+          "text": "REP prefixes repeat the string instruction CX times, automating the copy loop",
+          "linkedConcept": "rep-prefix"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "MOVSB: [ES:DI] = [DS:SI], then SI=SI+1 and DI=DI+1 (or -1 if DF=1)",
+          "linkedConcept": "movsb"
+        },
+        {
+          "line": 48,
+          "type": "instruction",
+          "text": "MOVSW copies a word (2 bytes) instead of a byte - SI and DI increment by 2",
+          "linkedConcept": "movsw"
+        },
+        {
+          "line": 56,
+          "type": "instruction",
+          "text": "STD sets direction flag so SI and DI decrement after each string operation",
+          "linkedConcept": "std-instruction"
+        },
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "When DF=1, string instructions auto-decrement SI and DI instead of incrementing",
+          "linkedConcept": "direction-flag"
+        },
+        {
+          "line": 68,
+          "type": "instruction",
+          "text": "REP MOVSB repeats the byte copy - one instruction replaces an entire loop",
+          "linkedConcept": "movsb"
+        },
+        {
+          "line": 75,
+          "type": "instruction",
+          "text": "REP STOSB fills memory with value in AL - demonstrates store string instruction",
+          "linkedConcept": "rep-prefix"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to set ES before string operations - MOVSB/MOVSW use ES:DI, not DS:DI",
+        "Not setting direction flag correctly - CLD for forward, STD for backward processing",
+        "Confusing MOVSB with MOVSW - MOVSB copies bytes, MOVSW copies words (2 bytes)",
+        "Starting backward copy at wrong address - STD copies from high to low addresses",
+        "Assuming REP clears CX - CX must be set before REP prefix",
+        "Forgetting that string instructions auto-modify SI and DI - don't increment them manually"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-030", "QB-031", "QB-032"],
+      "provenance": {
+        "sourceFile": "Lecture 8.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "1-25",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "string-lodsb-lodsw",
+      "filename": "StringLODS.asm",
+      "lectureIds": [8],
+      "sectionIds": ["l8-s2"],
+      "concepts": [
+        "lodsb",
+        "lodsw",
+        "string-instructions",
+        "load-string",
+        "si-register",
+        "accumulator",
+        "character-processing"
+      ],
+      "instructions": [
+        "LODSB", "LODSW", "MOV", "LEA", "CMP", "JE", "JNE", "LOOP", "INT"
+      ],
+      "code": "; String Load Instructions: LODSB and LODSW\n; Demonstrates loading string data into AL/AX using LODSB/LODSW\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    message     DB 'ASSEMBLY LANGUAGE PROGRAMMING'\n    buffer      DB 26 DUP(?)\n    upper_count DW 0\n    vowel_count DW 0\n    vowels      DB 'AEIOU'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; === Part 1: Count Uppercase Letters ===\n    CLD                     ; Ensure forward direction\n    LEA SI, message         ; SI points to string\n    MOV CX, 26              ; Length of string\n    XOR BX, BX              ; BX = uppercase counter\n\ncount_upper:\n    LODSB                   ; AL = [DS:SI], SI = SI + 1\n    CMP AL, 'A'\n    JL not_upper\n    CMP AL, 'Z'\n    JG not_upper\n    INC BX                  ; It's uppercase\nnot_upper:\n    LOOP count_upper\n\n    MOV upper_count, BX     ; Store result (should be 26)\n\n    ; === Part 2: Count Vowels in String ===\n    CLD\n    LEA SI, message         ; Reset SI\n    MOV CX, 26              ; Reset counter\n    XOR DX, DX              ; DX = vowel counter\n\ncount_vowels:\n    LODSB                   ; Load next character\n    MOV BH, AL              ; Save character in BH\n\n    ; Check if it's a vowel (A, E, I, O, U)\n    LEA DI, vowels          ; DI points to vowel string\n    MOV CX, 5               ; 5 vowels to check\n    MOV AH, 0               ; Clear AH\n\ncheck_vowel:\n    CMP AL, [DI]           ; Compare with vowel\n    JE found_vowel          ; If match, it's a vowel\n    INC DI                  ; Next vowel\n    LOOP check_vowel\n\n    JMP next_char           ; Not a vowel\n\nfound_vowel:\n    INC DX                  ; Increment vowel count\n\nnext_char:\n    CMP CX, 0               ; Check if we checked all vowels\n    LOOP count_vowels\n\n    MOV vowel_count, DX\n\n    ; === Part 3: Copy String Using LODSB ===\n    LEA SI, message         ; Source pointer\n    LEA DI, buffer          ; Destination pointer\n    MOV CX, 26              ; Length\n\ncopy_loop:\n    LODSB                   ; Load from source into AL\n    MOV [DI], AL            ; Store to destination\n    INC DI                  ; Must manually increment DI\n    LOOP copy_loop          ; LODSB doesn't modify DI\n\n    ; === Part 4: Load Words (16-bit values) ===\n    LEA SI, buffer          ; SI points to our copied buffer\n    MOV CX, 13              ; 26 bytes = 13 words\n\nload_words:\n    LODSW                   ; AX = [DS:SI], SI = SI + 2\n    ; Process word in AX here\n    ; For now just loop\n    LOOP load_words\n\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 22,
+          "type": "instruction",
+          "text": "LODSB loads byte from [DS:SI] into AL, then increments SI by 1",
+          "linkedConcept": "lodsb"
+        },
+        {
+          "line": 24,
+          "type": "comment",
+          "text": "Compare to check if character is between 'A' and 'Z' (uppercase ASCII range)",
+          "linkedConcept": "character-processing"
+        },
+        {
+          "line": 38,
+          "type": "instruction",
+          "text": "LODSB loads one character at a time for processing - common pattern",
+          "linkedConcept": "load-string"
+        },
+        {
+          "line": 48,
+          "type": "comment",
+          "text": "AH is cleared so AL contains just the character for comparison",
+          "linkedConcept": "accumulator"
+        },
+        {
+          "line": 66,
+          "type": "comment",
+          "text": "LODSB only modifies SI, NOT DI - must manually increment DI yourself",
+          "linkedConcept": "lodsb"
+        },
+        {
+          "line": 73,
+          "type": "instruction",
+          "text": "LODSW loads word from [DS:SI] into AX, increments SI by 2",
+          "linkedConcept": "lodsw"
+        },
+        {
+          "line": 73,
+          "type": "comment",
+          "text": "Important: LODSW increments by 2 for word alignment",
+          "linkedConcept": "lodsw"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking LODSB modifies DI - it only modifies SI",
+        "Forgetting to increment DI when copying: LODSB loads to AL, then you must store it",
+        "Confusing LODSB with MOVSB - LODSB reads into AL, MOVSB copies between memory",
+        "Using LODSB in a REP prefix - LODSB is not typically used with REP (why would you load CX times?)",
+        "Not resetting SI when reusing the same source string",
+        "Forgetting CLD before string operations if previous code might have set STD"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-033", "QB-034", "QB-035"],
+      "provenance": {
+        "sourceFile": "Lecture 8.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "25-45",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "string-stosb-stosw",
+      "filename": "StringSTOS.asm",
+      "lectureIds": [8],
+      "sectionIds": ["l8-s3"],
+      "concepts": [
+        "stosb",
+        "stosw",
+        "string-instructions",
+        "store-string",
+        "rep-prefix",
+        "di-register",
+        "memory-fill",
+        "buffer-initialization"
+      ],
+      "instructions": [
+        "STOSB", "STOSW", "REP", "MOV", "LEA", "CLD", "INT"
+      ],
+      "code": "; String Store Instructions: STOSB and STOSW\n; Demonstrates storing AL/AX values to memory using STOSB/STOSW\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    buffer      DB 100 DUP(?)\n    word_buffer DW 50 DUP(?)\n    fill_char   DB '*'\n    header      DB '=== String Store Demo ===', 13, 10, '$'\n    footer      DB 13, 10, '=== Demo Complete ===', 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX              ; ES needed for STOS operations\n\n    ; === Part 1: Fill Buffer with Character Using REP STOSB ===\n    CLD                     ; Clear direction flag\n    LEA DI, buffer          ; DI = destination buffer\n    MOV AL, '*'             ; Character to store\n    MOV CX, 50              ; Store 50 times\n    REP STOSB               ; Fill [ES:DI] with AL, DI increments\n\n    ; === Part 2: Initialize Word Buffer with Value ===\n    CLD\n    LEA DI, word_buffer     ; DI = word buffer\n    MOV AX, 0FFFFh          ; Value to store in each word\n    MOV CX, 25              ; Store 25 words\n    REP STOSW               ; Store AX to [ES:DI] 25 times, DI increments by 2\n\n    ; === Part 3: Build String Character by Character ===\n    CLD\n    LEA DI, buffer          ; Output buffer\n\n    ; Add 'H'\n    MOV AL, 'H'\n    STOSB                   ; [ES:DI] = AL, DI = DI + 1\n\n    ; Add 'e'\n    MOV AL, 'e'\n    STOSB\n\n    ; Add 'l'\n    MOV AL, 'l'\n    STOSB\n\n    ; Add 'l'\n    MOV AL, 'l'\n    STOSB\n\n    ; Add 'o'\n    MOV AL, 'o'\n    STOSB\n\n    ; Null terminate\n    MOV AL, 0\n    STOSB\n\n    ; === Part 4: Copy-and-Fill Pattern ===\n    ; Common pattern: initialize destination then fill with data\n    CLD\n    LEA DI, buffer          ; Target\n    MOV AL, ' '             ; Fill with spaces\n    MOV CX, 80              ; 80 characters\n    REP STOSB               ; Clear buffer to spaces\n\n    ; Now write specific data into initialized buffer\n    LEA DI, buffer\n    MOV AL, 'A'\n    STOSB                   ; buffer[0] = 'A'\n    MOV AL, 'B'\n    STOSB                   ; buffer[1] = 'B'\n    MOV AL, 'C'\n    STOSB                   ; buffer[2] = 'C'\n\n    ; === Part 5: Reverse Copy Using STOSB ===\n    ; Copy string but store in reverse order\n    LEA SI, buffer          ; Source (where we just wrote ABC)\n    MOV CX, 3               ; 3 characters to copy\n    LEA DI, buffer[50]      ; Destination (different location)\n\nreverse_copy:\n    MOV AL, [SI]            ; Load from source\n    STOSB                   ; Store to destination\n    INC SI                  ; Move forward in source\n    LOOP reverse_copy       ; LODSB not used - manual SI handling needed\n\n    ; === Part 6: Practical - Clear Screen Buffer ===\n    ; Simulate clearing a 80x25 text screen (2000 characters)\n    CLD\n    LEA DI, buffer          ; Screen buffer\n    MOV AL, ' '             ; Space character (clear)\n    MOV CX, 2000            ; Full screen\n    REP STOSB               ; Clear 2000 characters\n\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 20,
+          "type": "instruction",
+          "text": "REP STOSB repeats: AL stored to [ES:DI], DI incremented, CX decremented, until CX=0",
+          "linkedConcept": "rep-prefix"
+        },
+        {
+          "line": 20,
+          "type": "comment",
+          "text": "STOSB: [ES:DI] = AL, then DI = DI + 1 (or -1 if DF=1)",
+          "linkedConcept": "stosb"
+        },
+        {
+          "line": 28,
+          "type": "instruction",
+          "text": "STOSW stores AX (16 bits) to [ES:DI], increments DI by 2",
+          "linkedConcept": "stosw"
+        },
+        {
+          "line": 28,
+          "type": "comment",
+          "text": "REP STOSW useful for clearing/initalizing word arrays quickly",
+          "linkedConcept": "stosw"
+        },
+        {
+          "line": 38,
+          "type": "instruction",
+          "text": "Building string one character at a time - STOSB updates DI automatically",
+          "linkedConcept": "store-string"
+        },
+        {
+          "line": 54,
+          "type": "instruction",
+          "text": "Common pattern: first fill buffer with spaces, then write specific data",
+          "linkedConcept": "buffer-initialization"
+        },
+        {
+          "line": 70,
+          "type": "comment",
+          "text": "STOSB only modifies DI, not SI - must manage SI manually for source",
+          "linkedConcept": "stosb"
+        },
+        {
+          "line": 80,
+          "type": "comment",
+          "text": "Practical use: clearing screen buffer to spaces before writing new content",
+          "linkedConcept": "memory-fill"
+        }
+      ],
+      "commonMistakes": [
+        "Forgetting to set ES register - STOS uses ES, not DS",
+        "Confusing STOSB with LODSB - STOS stores FROM AL to memory, LODSB loads TO AL",
+        "Not setting direction flag - DF=0 for forward, DF=1 for backward storage",
+        "Forgetting that STOSB/STOSW only modify DI, not SI",
+        "Using wrong value in AL/AX before STOS - must load value before storing",
+        "Assuming REP STOS clears CX automatically - CX must be set before REP"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["QB-036", "QB-037", "QB-038"],
+      "provenance": {
+        "sourceFile": "Lecture 8.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "45-65",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {
-    "lastUpdated": "2026-03-30T00:00:00.000Z",
-    "totalExamples": 11,
-    "lectureCoverage": [4, 5, 6, 7],
-    "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT"],
+    "lastUpdated": "2026-04-13T00:00:00.000Z",
+    "totalExamples": 14,
+    "lectureCoverage": [4, 5, 6, 7, 8],
+    "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD"],
     "difficultyDistribution": {
       "beginner": 4,
-      "intermediate": 4,
+      "intermediate": 7,
       "advanced": 3
     }
   }

@@ -1283,7 +1283,9 @@
             "MOVSB",
             "MOVSW"
           ],
-          "examples": [],
+          "examples": [
+            "string-movsb-movsw"
+          ],
           "assessmentItems": []
         },
         {
@@ -1301,7 +1303,9 @@
             "LODSB",
             "LODSW"
           ],
-          "examples": [],
+          "examples": [
+            "string-lodsb-lodsw"
+          ],
           "assessmentItems": []
         },
         {
@@ -1319,7 +1323,9 @@
             "STOSB",
             "STOSW"
           ],
-          "examples": [],
+          "examples": [
+            "string-stosb-stosw"
+          ],
           "assessmentItems": []
         },
         {

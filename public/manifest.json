@@ -2,14 +2,14 @@
   "name": "ACS2906 Assembly Language Learning Platform",
   "short_name": "ACS2906",
   "description": "A source-grounded, mastery-based learning platform for Assembly Language Programming",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#863bff",
   "orientation": "any",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "./favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

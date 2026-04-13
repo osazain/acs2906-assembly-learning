@@ -1346,7 +1346,9 @@
             "REPNE",
             "REPNZ"
           ],
-          "examples": [],
+          "examples": [
+            "rep-prefixes-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1364,7 +1366,9 @@
             "CMPSB",
             "CMPSW"
           ],
-          "examples": [],
+          "examples": [
+            "cmpsb-cmpsw-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1382,7 +1386,9 @@
             "SCASB",
             "SCASW"
           ],
-          "examples": [],
+          "examples": [
+            "scasb-scasw-demo"
+          ],
           "assessmentItems": []
         },
         {

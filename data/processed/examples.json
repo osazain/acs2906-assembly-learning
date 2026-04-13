@@ -1380,6 +1380,299 @@
       }
     }
   ],
+  {
+    "id": "rep-prefixes-demo",
+    "filename": "RepPrefix.asm",
+    "lectureIds": [8],
+    "sectionIds": ["l8-s4"],
+    "concepts": [
+      "rep-prefix",
+      "repe-prefix",
+      "repne-prefix",
+      "string-instructions",
+      "cx-register",
+      "direction-flag",
+      "zf-flag"
+    ],
+    "instructions": [
+      "REP", "REPE", "REPNE", "MOVSB", "MOVSW", "CMPSB", "SCASB", "CLD", "MOV", "LEA", "INT"
+    ],
+    "code": "; REP Prefixes Demonstration\n; Shows REP, REPE, and REPNE prefix usage with string instructions\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    source      DB 'ABCDEFGHIJ', 0\n    dest        DB 20 DUP(?)\n    word_src    DW 100h, 200h, 300h, 400h, 500h\n    word_dst    DW 5 DUP(?)\n    str1        DB 'HELLO'\n    str2        DB 'HELLO'\n    str3        DB 'WORLD'\n    buffer      DB 'TEST STRING FOR SEARCHING', 0\n    result_msg  DB 'Result: $'\n    match_msg   DB 'MATCH!', 13, 10, '$'\n    nomatch_msg DB 'NO MATCH', 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX\n\n    ; === Part 1: REP MOVSB - Block Copy ===\n    CLD\n    LEA SI, source\n    LEA DI, dest\n    MOV CX, 10              ; Copy 10 bytes\n    REP MOVSB               ; Repeat MOVSB CX times\n\n    ; === Part 2: REP MOVSW - Word Block Copy ===\n    LEA SI, word_src\n    LEA DI, word_dst\n    MOV CX, 5               ; Copy 5 words\n    REP MOVSW               ; Each MOVSW copies 2 bytes\n\n    ; === Part 3: REPE CMPSB - Compare While Equal ===\n    ; Compare str1 and str2 (should be equal)\n    LEA SI, str1\n    LEA DI, str2\n    MOV CX, 5               ; Compare 5 bytes\n    REPE CMPSB              ; Compare while equal (ZF=1)\n    ; After REPE CMPSB:\n    ;   If CX=0 and ZF=1: All bytes matched\n    ;   If CX>0 and ZF=0: Mismatch found at position (original_CX - CX)\n    JZ strings_equal\n    ; Not equal - CX shows position of mismatch\n    JMP compare_done\n\nstrings_equal:\n    ; CX=0 means all 5 bytes matched\n    ; This path would execute for HELLO == HELLO\n\ncompare_done:\n\n    ; === Part 4: REPE CMPSB - Find Difference ===\n    ; Compare str1 and str3 (should not be equal)\n    LEA SI, str1\n    LEA DI, str3\n    MOV CX, 5\n    REPE CMPSB\n    ; After REPE CMPSB:\n    ;   CX=0 and ZF=1: Strings are equal\n    ;   CX>0 and ZF=0: First mismatch found\n    JNZ strings_differ\n    ; Strings are equal (HELLO == WORLD? No, so this won't happen)\n    JMP done_comparing\n\nstrings_differ:\n    ; CX now holds position of first mismatch\n    ; str1[0]='H', str3[0]='W' - they differ!\n\ndone_comparing:\n\n    ; === Part 5: REPNE SCASB - Search for Value ===\n    ; Find first 'S' in buffer\n    LEA DI, buffer\n    MOV CX, 25              ; Search up to 25 bytes\n    MOV AL, 'S'             ; Character to find\n    REPNE SCASB             ; Scan while [DI] != AL\n    ; After REPNE SCASB:\n    ;   If CX=0: Reached max length without finding\n    ;   If CX>0: DI points to first 'S' (or past it)\n    JZ found_S\n    ; Not found in 25 bytes\n    JMP search_done\n\nfound_S:\n    ; Found 'S' at position (25 - CX)\n    ; DI now points to 'S' in buffer\n\nsearch_done:\n\n    ; === Part 6: REPNE SCASB - Find Null Terminator ===\n    LEA DI, buffer\n    MOV CX, 0FFFFh          ; Max search length\n    XOR AL, AL              ; AL = 0 (null character)\n    REPNE SCASB             ; Search for null\n    ; After: DI points past the null (or CX=0 if no null found)\n\n    ; === Part 7: REP STOSB - Fill Memory ===\n    LEA DI, dest\n    MOV AL, 'X'             ; Fill character\n    MOV CX, 20              ; Fill 20 bytes\n    REP STOSB               ; Fill with 'X'\n\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 28,
+        "type": "instruction",
+        "text": "REP repeats the string instruction CX times: decrements CX, executes instruction, repeats until CX=0",
+        "linkedConcept": "rep-prefix"
+      },
+      {
+        "line": 28,
+        "type": "comment",
+        "text": "REP prefix works with MOVS and STOS - repeats the operation CX times",
+        "linkedConcept": "rep-prefix"
+      },
+      {
+        "line": 37,
+        "type": "instruction",
+        "text": "REPE repeats CMPSB while ZF=1 (equal) and CX>0 - exits when mismatch or CX=0",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 37,
+        "type": "comment",
+        "text": "REPE (Repeat While Equal) = REPZ - same prefix, different mnemonic",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 40,
+        "type": "comment",
+        "text": "After REPE: CX=0 means all matched; CX>0 means mismatch at position (original_CX - CX)",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 62,
+        "type": "instruction",
+        "text": "REPNE repeats SCASB while ZF=0 (not equal) and CX>0 - used for searching",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 62,
+        "type": "comment",
+        "text": "REPNE (Repeat While Not Equal) = REPNZ - same prefix, different mnemonic",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 65,
+        "type": "comment",
+        "text": "After REPNE SCASB: ZF=1 means found (AL matched byte at DI); ZF=0 means not found (CX=0)",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 78,
+        "type": "instruction",
+        "text": "Common use: find null terminator by searching for 0 in buffer",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 85,
+        "type": "instruction",
+        "text": "REP STOSB fills memory with a value - one instruction replaces a fill loop",
+        "linkedConcept": "rep-prefix"
+      }
+    ],
+    "commonMistakes": [
+      "Forgetting to set CX before REP prefix - CX controls repetition count",
+      "Confusing REPE with REPNE - REPE exits on mismatch (ZF=0), REPNE exits on match (ZF=1)",
+      "Not checking ZF after REPE/REPNE - the result is in the flags, not in a register",
+      "Forgetting that REPE/REPNE exit when either CX=0 OR condition changes",
+      "Using REP with LODSB - this would load the same byte CX times into AL (usually not useful)",
+      "Not setting direction flag (DF) before string operations - DF controls increment/decrement"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-030", "QB-031", "QB-038"],
+    "provenance": {
+      "sourceFile": "Lecture 8.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "1-30",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
+  {
+    "id": "cmpsb-cmpsw-demo",
+    "filename": "StringCMP.asm",
+    "lectureIds": [8],
+    "sectionIds": ["l8-s5"],
+    "concepts": [
+      "cmpsb",
+      "cmpsw",
+      "string-instructions",
+      "compare-string",
+      "repe-prefix",
+      "zf-flag",
+      "si-register",
+      "di-register"
+    ],
+    "instructions": [
+      "CMPSB", "CMPSW", "REPE", "REPZ", "CLD", "MOV", "LEA", "CMP", "JE", "JNE", "INT"
+    ],
+    "code": "; CMPSB and CMPSW Demonstration\n; Shows string comparison using CMPSB and CMPSW\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    str_a       DB 'APPLE'\n    str_b       DB 'APPLE'\n    str_c       DB 'APPLF'\n    str_d       DB 'BANANA'\n    word_a      DW 1234h, 5678h, 9ABCh\n    word_b      DW 1234h, 5678h, 9ABCh\n    word_c      DW 1234h, 5678h, 9DEFh\n    result      DB 'Comparison result: $'\n    equal_msg   DB 'EQUAL', 13, 10, '$'\n    nequal_msg  DB 'NOT EQUAL', 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX\n\n    ; === Part 1: CMPSB - Compare Byte Strings ===\n    CLD\n    LEA SI, str_a\n    LEA DI, str_b\n    MOV CX, 5               ; Compare 5 bytes\n\ncompare_loop:\n    CMPSB                     ; Compare [DS:SI] with [ES:DI], set flags\n    ; After CMPSB: SI=SI+1, DI=DI+1\n    JNE not_equal            ; If ZF=0, mismatch found\n    LOOP compare_loop\n    ; If we reach here, CX=0 and all bytes matched\n    JMP strings_equal\n\nnot_equal:\n    ; Mismatch found at position (5 - CX - 1) = position of difference\n    ; CX is remaining count, str_a[5-CX-1] differs from str_b[5-CX-1]\n    JMP done_comparing\n\nstrings_equal:\n    ; All 5 bytes of str_a and str_b are equal\n\ndone_comparing:\n\n    ; === Part 2: REPE CMPSB - Compare While Equal ===\n    LEA SI, str_a\n    LEA DI, str_c            ; str_c differs at last byte\n    MOV CX, 5\n    REPE CMPSB               ; Compare while equal\n    ; After REPE CMPSB:\n    ;   CX=0 and ZF=1: All equal\n    ;   CX>0 and ZF=0: Found difference at position (5 - CX)\n    JZ all_equal_c\n    ; str_a and str_c differ\n    JMP part3\n\nall_equal_c:\n    ; This won't execute because str_c differs\n\npart3:\n    ; === Part 3: CMPSW - Compare Word Strings ===\n    CLD\n    LEA SI, word_a\n    LEA DI, word_b\n    MOV CX, 3               ; Compare 3 words\n\nword_compare_loop:\n    CMPSW                     ; Compare word at [DS:SI] with [ES:DI], set flags\n    ; After CMPSW: SI=SI+2, DI=DI+2\n    JNE words_not_equal\n    LOOP word_compare_loop\n    ; All 3 words are equal\n    JMP words_equal\n\nwords_not_equal:\n    ; Found word difference - SI and DI already advanced\n    JMP part4\n\nwords_equal:\n    ; word_a and word_b are identical\n\npart4:\n    ; === Part 4: Find Mismatch Position ===\n    LEA SI, str_d            ; BANANA\n    LEA DI, str_a            ; APPLE\n    MOV CX, 5\n    XOR BX, BX              ; Position counter\n\nfind_diff_loop:\n    CMPSB\n    JNE diff_found\n    INC BX                  ; Next position\n    LOOP find_diff_loop\n    JMP done_finding\n\ndiff_found:\n    ; BX now holds position of first mismatch\n    ; str_d[BX] != str_a[BX]\n    ; B=66h vs A=41h at position 0\n\ndone_finding:\n\n    ; === Part 5: Case-Insensitive String Compare ===\n    ; Compare 'hello' with 'HELLO' (convert to uppercase first)\n    LEA SI, str_a            ; APPLE\n    LEA DI, str_a            ; Same string - just demo annotations\n    MOV CX, 5\n    ; In real scenario, you'd convert both to same case first\n    REPE CMPSB              ; Check if exactly equal\n\n    ; === Part 6: Using Flags After CMPSB ===\n    LEA SI, str_a\n    LEA DI, str_d\n    CMPSB                     ; Compare first byte\n    ; ZF=0 because 'A'(41h) != 'B'(42h)\n    ; CF=0 because 41h < 42h (unsigned)\n\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 25,
+        "type": "instruction",
+        "text": "CMPSB compares byte at [DS:SI] with byte at [ES:DI] and sets flags like SUB",
+        "linkedConcept": "cmpsb"
+      },
+      {
+        "line": 25,
+        "type": "comment",
+        "text": "CMPSB doesn't store result - only updates flags (like CMP but reads from memory)",
+        "linkedConcept": "cmpsb"
+      },
+      {
+        "line": 27,
+        "type": "instruction",
+        "text": "After CMPSB, SI and DI are automatically incremented by 1",
+        "linkedConcept": "cmpsb"
+      },
+      {
+        "line": 30,
+        "type": "comment",
+        "text": "CMPSB sets ZF=1 if bytes are equal, ZF=0 if different",
+        "linkedConcept": "cmpsb"
+      },
+      {
+        "line": 44,
+        "type": "instruction",
+        "text": "REPE CMPSB repeats comparison while bytes are equal (ZF=1) and CX>0",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 44,
+        "type": "comment",
+        "text": "REPE exits when bytes differ (ZF=0) or CX reaches 0",
+        "linkedConcept": "repe-prefix"
+      },
+      {
+        "line": 60,
+        "type": "instruction",
+        "text": "CMPSW compares word at [DS:SI] with word at [ES:DI], increments SI/DI by 2",
+        "linkedConcept": "cmpsw"
+      },
+      {
+        "line": 60,
+        "type": "comment",
+        "text": "CMPSW is useful for comparing arrays of 16-bit values efficiently",
+        "linkedConcept": "cmpsw"
+      },
+      {
+        "line": 87,
+        "type": "comment",
+        "text": "After CMPSB: ZF=1 means equal, ZF=0 means different; CF indicates unsigned relation",
+        "linkedConcept": "compare-string"
+      }
+    ],
+    "commonMistakes": [
+      "Confusing CMPSB with CMP - CMP compares register with memory, CMPSB compares two memory locations",
+      "Forgetting that CMPSB modifies SI and DI - they point past the compared bytes after execution",
+      "Not setting ES properly - CMPSB uses ES:DI for destination, not DS:DI",
+      "Using CMPSB with wrong size operands - comparing bytes vs words requires matching instruction",
+      "Assuming CX is preserved after REPE CMPSB - CX is decremented each iteration",
+      "Forgetting CLD before string comparisons - DF must be 0 for forward comparison"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-037", "QB-038"],
+    "provenance": {
+      "sourceFile": "Lecture 8.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "30-55",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
+  {
+    "id": "scasb-scasw-demo",
+    "filename": "StringSCAS.asm",
+    "lectureIds": [8],
+    "sectionIds": ["l8-s6"],
+    "concepts": [
+      "scasb",
+      "scasw",
+      "string-instructions",
+      "scan-string",
+      "repne-prefix",
+      "zf-flag",
+      "di-register",
+      "search-pattern"
+    ],
+    "instructions": [
+      "SCASB", "SCASW", "REPNE", "CLD", "MOV", "LEA", "CMP", "JE", "JNE", "LOOP", "INT"
+    ],
+    "code": "; SCASB and SCASW Demonstration\n; Shows string scanning using SCASB and SCASW\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    buffer      DB 'FIND THE CHARACTER IN THIS STRING', 0\n    names       DB 'ALICEBOBCHARLIEDAVE', 0\n    numbers     DW 1111h, 2222h, 3333h, 4444h, 5555h\n    search_char DB 'X'\n    found_msg   DB 'Found!$'\n    notfound_msg DB 'Not found$'\n    at_msg      DB ' at position $'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    MOV ES, AX\n\n    ; === Part 1: Find Character with REPNE SCASB ===\n    CLD\n    LEA DI, buffer\n    MOV CX, 30              ; Search up to 30 bytes\n    MOV AL, 'C'             ; Character to find\n    REPNE SCASB             ; Scan while [ES:DI] != AL\n    ; After REPNE SCASB:\n    ;   If ZF=1: Found! DI points to 'C'\n    ;   If ZF=0 and CX=0: Not found in 30 bytes\n    JZ char_found\n    ; Not found\n    JMP part2\n\nchar_found:\n    ; Found 'C' at position (30 - CX)\n    ; DI now points to the found 'C'\n\npart2:\n    ; === Part 2: Find First Non-Space Character ===\n    LEA DI, buffer\n    MOV CX, 30\n    MOV AL, ' '              ; Space character\n    REPNE SCASB             ; Skip spaces\n    ; After: DI points to first non-space or end\n    JZ space_skipped\n\nspace_skipped:\n    ; CX bytes were spaces, first non-space is at DI\n\n    ; === Part 3: Find Null Terminator ===\n    LEA DI, buffer\n    MOV CX, 0FFFFh          ; Max search (65535 bytes)\n    XOR AL, AL              ; AL = 0 (null)\n    REPNE SCASB             ; Search for null\n    ; After: DI points past null, CX = 0\n    ; String length = 30 (original CX - CX)\n\n    ; === Part 4: Count Occurrences of Character ===\n    LEA DI, names\n    MOV CX, 20              ; Length of names string\n    MOV AL, 'A'             ; Count 'A's\n    XOR BX, BX              ; BX = counter\n\ncount_loop:\n    SCASB                     ; Compare AL with [ES:DI], update DI\n    JNE not_an_a\n    INC BX                  ; Found an 'A'\nnot_an_a:\n    LOOP count_loop\n    ; BX = number of 'A' characters found\n\n    ; === Part 5: Find Word in Word Array using SCASW ===\n    CLD\n    LEA DI, numbers\n    MOV CX, 5               ; Search 5 words\n    MOV AX, 3333h            ; Word to find\n    REPNE SCASW             ; Scan while [ES:DI] != AX\n    ; After REPNE SCASW:\n    ;   If ZF=1: Found! DI points to 3333h\n    ;   If ZF=0: Not found\n    JZ word_found\n\nword_found:\n    ; Found 3333h at position (5 - CX) = 2\n\n    ; === Part 6: Search with Early Termination ===\n    ; Find 'Z' in buffer (should not be found)\n    LEA DI, buffer\n    MOV CX, 30\n    MOV AL, 'Z'\n    REPNE SCASB\n    ; CX will be 0 if we searched entire buffer\n    ; ZF will be 0 because 'Z' is not in buffer\n    JNZ not_in_buffer\n\nnot_in_buffer:\n    ; 'Z' not found - CX = 0, ZF = 0\n\n    ; === Part 7: Find Vowel in String ===\n    LEA DI, names\n    MOV CX, 20\n    MOV AL, 'E'             ; Looking for 'E'\n    REPNE SCASB\n    ; When found: position = 20 - CX\n    ; 'E' appears in ALICE and CHARLIE\n\n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 26,
+        "type": "instruction",
+        "text": "SCASB compares AL with byte at [ES:DI] and sets flags, then DI is updated",
+        "linkedConcept": "scasb"
+      },
+      {
+        "line": 26,
+        "type": "comment",
+        "text": "SCASB is like CMP AL, [ES:DI] but doesn't modify memory, only sets flags",
+        "linkedConcept": "scasb"
+      },
+      {
+        "line": 30,
+        "type": "instruction",
+        "text": "REPNE SCASB repeats scanning while bytes don't match and CX>0",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 30,
+        "type": "comment",
+        "text": "REPNE SCASB: exits when found (ZF=1) or CX=0 (searched all)",
+        "linkedConcept": "repne-prefix"
+      },
+      {
+        "line": 35,
+        "type": "comment",
+        "text": "Position of found character = original_CX - remaining_CX",
+        "linkedConcept": "search-pattern"
+      },
+      {
+        "line": 55,
+        "type": "instruction",
+        "text": "Finding null terminator: scan for AL=0, DI will be past null when found",
+        "linkedConcept": "scasb"
+      },
+      {
+        "line": 62,
+        "type": "instruction",
+        "text": "SCASB only updates DI, not SI - useful for searching in destination buffer",
+        "linkedConcept": "scasb"
+      },
+      {
+        "line": 74,
+        "type": "instruction",
+        "text": "SCASW compares AX with word at [ES:DI], updates DI by 2",
+        "linkedConcept": "scasw"
+      },
+      {
+        "line": 74,
+        "type": "comment",
+        "text": "SCASW is efficient for searching arrays of 16-bit values",
+        "linkedConcept": "scasw"
+      },
+      {
+        "line": 83,
+        "type": "comment",
+        "text": "After REPNE SCASW: ZF=1 means word found, ZF=0 means not found (CX=0)",
+        "linkedConcept": "scasw"
+      }
+    ],
+    "commonMistakes": [
+      "Confusing SCASB with CMPSB - SCASB compares AL with memory, CMPSB compares two memory locations",
+      "Forgetting that SCASB uses ES:DI, not DS:SI - must set ES properly",
+      "Not initializing AL before SCASB - AL must contain the value you're searching for",
+      "Confusing REPE with REPNE for searching - REPNE finds matching value, REPE finds non-matching",
+      "Not setting DF correctly - DF=0 (CLD) for forward scanning",
+      "Forgetting that SCASB updates DI automatically - don't increment DI in the loop"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-039", "QB-040"],
+    "provenance": {
+      "sourceFile": "Lecture 8.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "55-75",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
     "totalExamples": 14,

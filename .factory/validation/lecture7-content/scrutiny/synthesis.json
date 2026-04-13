@@ -1,7 +1,7 @@
 {
   "milestone": "lecture7-content",
-  "round": 1,
-  "status": "fail",
+  "round": 2,
+  "status": "pass",
   "validatorsRun": {
     "validate:content": {
       "passed": true,
@@ -19,49 +19,28 @@
       "passed": true,
       "command": "npm run build",
       "exitCode": 0,
-      "details": "Built in 365ms"
+      "details": "Built in 362ms"
     }
   },
   "reviewsSummary": {
-    "total": 3,
-    "passed": 2,
-    "failed": 1,
-    "failedFeatures": ["lecture7-examples-stack-concepts"]
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": []
   },
-  "blockingIssues": [
-    {
-      "featureId": "lecture7-examples-stack-concepts",
-      "severity": "blocking",
-      "description": "l7-s8 (Extending 8-bit to 16-bit Programs) has empty examples array [] despite the extending-8bit-16bit example existing in examples.json. The example was never linked to l7-s8 in lectures.json, violating VAL-CONTENT-001.",
-      "file": "data/processed/lectures.json",
-      "fix": "Add 'extending-8bit-16bit' to the examples array for l7-s8 in lectures.json"
-    }
-  ],
+  "blockingIssues": [],
   "appliedUpdates": [],
   "suggestedGuidanceUpdates": [
     {
       "target": "AGENTS.md",
-      "suggestion": "Clarify that examples must be linked in lectures.json, not just added to examples.json. Workers may add examples to examples.json but forget to update the section's examples array in lectures.json.",
-      "evidence": "lecture7-examples-stack-concepts added extending-8bit-16bit to examples.json but didn't link it in lectures.json l7-s8 section",
-      "isSystemic": true
-    },
-    {
-      "target": "AGENTS.md",
-      "suggestion": "Clarify VAL-CONTENT-006 requires minimum 2 assessment items per section. The current phrasing 'has assessment items' is ambiguous - workers interpreted it as 'has at least 1' when the contract requires 2.",
-      "evidence": "lecture7-examples-stack-concepts handoff claimed 'All 9 L7 sections have assessment items' but several have only 1 item, not 2 as required",
+      "suggestion": "Clarify that VAL-CONTENT-006 requires minimum 2 assessment items per section. Workers interpreted 'has assessment items' as 'at least 1' when the contract requires 2. Pre-existing issue: l7-s3, l7-s5 have 0 items; l7-s4, l7-s6, l7-s7 have only 1 item each.",
+      "evidence": "lecture7-examples-stack-concepts review flagged this as non-blocking but it's a contract violation. Sections l7-s3 and l7-s5 have empty assessmentItems arrays; l7-s4, l7-s6, l7-s7 have only 1 item each.",
       "isSystemic": true
     }
   ],
-  "rejectedObservations": [
-    {
-      "observation": "content-worker skill doesn't exist",
-      "reason": "Skill availability is an infrastructure issue for the orchestrator to address, not a code review finding"
-    }
-  ],
-  "previousRound": null,
+  "rejectedObservations": [],
+  "previousRound": ".factory/validation/lecture7-content/scrutiny/synthesis.json",
   "reviewFiles": [
-    ".factory/validation/lecture7-content/scrutiny/reviews/lecture7-examples-stack-concepts.json",
-    ".factory/validation/lecture7-content/scrutiny/reviews/lecture7-floating-point-example.json",
-    ".factory/validation/lecture7-content/scrutiny/reviews/lecture7-recursion-example.json"
+    ".factory/validation/lecture7-content/scrutiny/reviews/lecture7-examples-stack-concepts-fix.json"
   ]
 }

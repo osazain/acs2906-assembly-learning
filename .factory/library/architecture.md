@@ -1,79 +1,44 @@
 # Architecture
 
-## System Overview
+## Content Processing System
 
-ACS2906 Assembly Language Learning Platform is a static web application that transforms course materials into an interactive mastery-based learning system.
-
-## High-Level Architecture
-
+### Data Flow
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    React SPA (Static)                       │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │
-│  │Lectures │ │Examples  │ │Simulator│ │ Drills  │           │
-│  │ Reader  │ │Explorer │ │         │ │  Mode   │           │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘           │
-│                        │                                    │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              Dexie (IndexedDB)                       │   │
-│  │   Mastery Records │ Sessions │ User Preferences      │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-           │                                    │
-           ▼                                    ▼
-┌──────────────────────┐           ┌──────────────────────┐
-│  Processed JSON Data │           │   GitHub Pages       │
-│  - lectures.json     │           │   (Static Hosting)   │
-│  - examples.json     │           └──────────────────────┘
-│  - instruction-index │
-│  - question-bank     │
-│  - concept-taxonomy  │
-└──────────────────────┘
+raw/ → processing script → processed/JSON files
+                              ↓
+                         React app
 ```
 
-## Data Flow
+### Processed Content Files
 
-1. **Content Ingestion (Phase 1)**: Raw course materials → Processed JSON
-2. **UI Rendering (Phase 2+)**: JSON → React components → User interface
-3. **Progress Tracking**: User actions → Dexie → Mastery records
+#### lectures.json
+Complete lecture content with:
+- 10 lectures covering 8086 assembly
+- 60 total sections
+- Section content in markdown format
+- Linked concepts, instructions, examples, assessments
 
-## Key Components
+#### examples.json
+Code examples with:
+- Assembly code (MASM/TASM syntax)
+- Line-by-line annotations
+- Common mistakes documentation
+- Concept and instruction mapping
 
-### Content Pipeline
-- Scripts parse and normalize course materials
-- Output to `data/processed/` as JSON
-- Each entity has provenance metadata
+#### question-bank.json
+Assessment items with:
+- Multiple choice questions
+- Conceptual and coding questions
+- Difficulty levels
+- Concept/section linkage
 
-### State Management
-- React Context for global state (theme, user)
-- Dexie for persistent data (mastery, sessions)
-- URL state via TanStack Router
+### Content Schema
 
-### Routing
-- Hash-based routing for GitHub Pages compatibility
-- Routes: `/`, `/course-map`, `/lectures`, `/examples`, `/drills`, `/games`, `/simulator`, `/progress`, `/settings`
+Each lecture section maintains:
+- Provenance metadata (source file, extraction method)
+- Concept taxonomy references
+- Instruction references
+- Example links
+- Assessment item links
 
-## Tech Stack
-
-- **Framework**: React 19 + TypeScript + Vite
-- **Routing**: TanStack Router v1
-- **Styling**: Tailwind CSS v4
-- **Persistence**: Dexie (IndexedDB)
-- **Animation**: Framer Motion
-- **Deployment**: GitHub Actions → GitHub Pages
-
-## Directory Structure
-
-```
-├── data/
-│   ├── processed/       # Generated JSON files
-│   └── raw/             # Source materials (PDFs, etc.)
-├── scripts/             # Content processing scripts
-├── src/
-│   ├── components/      # React components
-│   ├── lib/             # Utilities, DB, types
-│   ├── routes/          # Page components
-│   └── styles/          # Global CSS
-├── public/              # Static assets
-└── docs/                # Project documentation
-```
+This creates a traceable path from any learning item back to source material.

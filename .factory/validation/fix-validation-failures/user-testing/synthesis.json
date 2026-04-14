@@ -1,0 +1,41 @@
+{
+  "milestone": "fix-validation-failures",
+  "round": 1,
+  "status": "success",
+  "assertionsSummary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-SECTION-001",
+    "VAL-COVERAGE-001",
+    "VAL-COVERAGE-003"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "previousRound": null,
+  "notes": {
+    "scope": "Only tested assertions fulfilled by fix-validation-failures features (enhance-l5-full, fix-l9-s7-content). Other failed assertions (VAL-CONTENT-001, VAL-CONTENT-002) are from pdf-extraction milestone and not addressed by this milestone.",
+    "validationMethod": "Direct JSON data validation against data/processed/lectures.json",
+    "testResults": {
+      "VAL-SECTION-001": {
+        "assertion": "l9-s7 content >= 2000 chars for detailed topics",
+        "actual": "5975 chars",
+        "status": "pass"
+      },
+      "VAL-COVERAGE-001": {
+        "assertion": "L5 has >= 4 sections",
+        "actual": "4 sections",
+        "status": "pass"
+      },
+      "VAL-COVERAGE-003": {
+        "assertion": "L5 has >= 12000 chars for at-risk lecture",
+        "actual": "39401 chars",
+        "status": "pass"
+      }
+    }
+  }
+}

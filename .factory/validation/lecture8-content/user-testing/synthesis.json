@@ -1,0 +1,61 @@
+{
+  "milestone": "lecture8-content",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-CONTENT-002",
+    "VAL-CODE-001",
+    "VAL-CODE-002",
+    "VAL-CONTENT-007",
+    "VAL-QUEST-001"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "previousRound": null,
+  "validationDetails": {
+    "VAL-CONTENT-002": {
+      "description": "Lecture 8 sections have examples",
+      "evidence": "All 8 sections (L8-S1 through L8-S8) have non-empty examples arrays",
+      "examplesFound": [
+        "string-movsb-movsw (L8-S1)",
+        "string-lodsb-lodsw (L8-S2)",
+        "string-stosb-stosw (L8-S3)",
+        "rep-prefixes-demo (L8-S4)",
+        "cmpsb-cmpsw-demo (L8-S5)",
+        "scasb-scasw-demo (L8-S6)",
+        "cld-std-demo (L8-S7)",
+        "complete-string-processing (L8-S8)"
+      ]
+    },
+    "VAL-CONTENT-007": {
+      "description": "Lecture 8 sections have assessments",
+      "evidence": "All 8 sections have 2+ assessment items each",
+      "questionsFound": "23 questions (QB-067 through QB-089)"
+    },
+    "VAL-CODE-001": {
+      "description": "Examples have valid structure",
+      "evidence": "All string operation examples have code, annotations, commonMistakes, provenance, difficulty"
+    },
+    "VAL-CODE-002": {
+      "description": "Examples have linked concepts",
+      "evidence": "All examples have 2+ concepts in concepts array"
+    },
+    "VAL-QUEST-001": {
+      "description": "Assessment items have required fields",
+      "evidence": "All QB-067 to QB-089 have id, question, type, difficulty, concepts, provenance"
+    }
+  },
+  "validationCommand": {
+    "command": "npm run validate:content",
+    "exitCode": 0,
+    "assertionsPassed": 761,
+    "assertionsFailed": 0
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "featureId": "lecture9-associative-examples",
+  "reviewedAt": "2026-04-14T00:30:00.000Z",
+  "commitId": "42e0855",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "All 4 examples (direct-mapped-cache-demo, set-associative-cache-demo, cache-writes-demo, memory-mountain-demo) meet structural requirements: non-empty MASM code, 4-5 annotations each, 5 common mistakes each, proper provenance, advanced difficulty, linked to correct lecture/section IDs, and 8086/DOS compatible.",
+    "issues": []
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Worker reported 'content-worker' skill did not exist, but it does exist at .factory/skills/content-worker/SKILL.md. Worker completed work by following existing patterns instead. The skill procedure was not followed.",
+      "evidence": "Handoff skillFeedback.deviations states: 'The content-worker skill did not exist in the system.' However, .factory/skills/content-worker/SKILL.md exists with documented procedures for content generation."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review passes. All 4 cache examples for L9-S4 through L9-S7 are structurally sound with proper annotations, common mistakes, provenance, and 8086/DOS compatible assembly code. Section IDs verified to exist in lectures.json. relatedQuestions (QB-096 through QB-103) verified to exist in question-bank.json. One skill discovery issue noted: worker claimed content-worker skill didn't exist when it does."
+}

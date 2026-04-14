@@ -1,0 +1,1401 @@
+Computer Architecture and
+System Software
+Lecture 08: Memory Hierarchy
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+Important Dates:
+[x]
+Last day to voluntary withdrawal is this Friday,
+[x]
+March 13th (This Friday)
+Assignment 3 Due March 13th
+[x]
+Supplementary Materials Uploaded to Nexus
+[x]
+Not mandatory to utilize by any means
+[x]
+Textbook Video Lectures YouTube Playlist
+[x]
+Game Programming Patterns: Data Locality
+[x]
+
+Chapter 6
+3
+The Memory Hierarchy
+6.1 - 6.3
+
+The Memory Hierarchy
+4
+To this point:
+[x]
+Simple model of a computer system
+[x]
+CPU that executes instructions
+[x]
+Memory system that holds instructions and data for CPU
+[x]
+Linear array of bytes
+[x]
+CPU can access each memory location in a constant amount of
+[x]
+time
+Effective model, but does not reflect reality
+[x]
+
+The Memory Hierarchy
+5
+In practice, a memory system is a hierarchy of
+[x]
+storage devices
+Different capacities, costs, and access times
+[x]
+For example:
+[x]
+CPU registers: hold the most frequently used data
+[x]
+Cache memories: act as a staging area for a subset of
+[x]
+data & instructions in (relatively) slow main memory
+Main memory: act as staging area for data stored on
+[x]
+large, slow disks
+HD: May act as a staging area for data stored on
+[x]
+tapes or other machines connected by networks
+
+The Memory Hierarchy
+6
+Why does this work?
+[x]
+Well-written programs tend to access the storage at
+[x]
+any particular level more frequently than the next
+lower level
+Thus: storage at next level can be slower
+[x]
+Means it can be larger and cheaper per bit
+[x]
+Overall effect:
+[x]
+A large pool of memory that is as cheap as memory at
+[x]
+the bottom of hierarchy
+Serves data to programs at the rate of the fast storage
+[x]
+near the top
+
+The Memory Hierarchy
+7
+Why do you need to know about the hierarchy?
+[x]
+It has a big impact on the performance of your
+[x]
+applications
+e.g.
+[x]
+Data in a CPU register can be accessed in 0 cycles
+[x]
+Cache: 1 - 10 cycles
+[x]
+Main memory: 50 to 100 cycles
+[x]
+Disk: 20, 000, 000 cycles
+[x]
+
+Recall: Clock Cycle
+8
+The frequency at which a computer can execute
+[ ]
+instructions
+Controlled by a crystal that vibrates when electric
+[ ]
+current is applied
+Important for ordered timing of instructions
+[ ]
+Modern processors are on the order of GHz (billions
+[ ]
+of instructions per second)
+
+The Memory Hierarchy
+9
+If you understand this hierarchy:
+[x]
+You can write application programs so that their data is
+[x]
+stored higher in the hierarchy when the CPU needs them
+How?
+[x]
+Locality: programs with good locality tend to access the
+[x]
+same set of data items over and over again
+Or they tend to access sets of nearby data items
+[x]
+Tend to access more data items from the upper levels of the
+[x]
+hierarchy than programs with poor locality
+
+The Memory Hierarchy
+10
+6.1 Storage Technologies
+
+Storage Technologies
+11
+Success of computer technology stems from progress
+[x]
+in storage technology
+Early computers had a few kilobytes of
+[x]
+random-access memory
+Earliest IBM PCs did not have a hard disk
+[x]
+Changed with IBM PC-XT (1982) which had 10 MB disk
+[x]
+By 2000 typical machines had 1024 times as much disk
+[x]
+storage
+Ratio was increasing by a factor of 10 every two or three
+[x]
+years
+
+RAM and ROM
+12
+Two types of storage: Random Access Memory
+[x]
+(RAM) and Read Only Memory (ROM)
+Names are historical and do not reflect true behaviour
+[x]
+of the memory anymore
+Read only
+[x]
+Originally used mainly for firmware, CDs, hard-wired
+[x]
+circuits etc.
+Random Access
+[x]
+Called 'random' to differentiate from magnetic tapes
+[x]
+that had to be accessed sequentially
+Should really be called 'non-sequential'
+[x]
+
+Random Access Memory (RAM)
+13
+Stores data in the computer while it is on
+[x]
+Implements a simple interface
+[x]
+Looks like a sequence of cells, each storing a fixed number of
+[x]
+bits
+Controlled by three sets of lines (wires)
+[x]
+Address lines: specifies the address in which to read/write
+[x]
+Data lines: used to transmit data to/from memory cells
+[x]
+Control line: Indicates if operation is read or write
+[x]
+
+Static RAM (SRAM)
+14
+Static RAM stores each bit in bistable memory
+[x]
+Implemented with a six-transistor circuit
+[x]
+Can stay indefinitely in either of two voltage
+[x]
+configurations (states)
+Any other state is unstable
+[x]
+Circuit will quickly move toward one of the stable states
+[x]
+Unstable
+Stable Stable
+left . . right
+.
+
+Static RAM
+15
+Due to its bistable nature, an SRAM memory cell will
+[x]
+retain its value indefinitely
+As long as it is kept powered
+[x]
+Even with a disturbance, the circuit will return to the
+[x]
+stable value
+i.e. once the noise is removed
+[x]
+
+Dynamic RAM
+16
+Stores each bit as a charge on a capacitor
+[x]
+DRAM storage can be made very dense
+[x]
+Each cell consists of a capacitor and a single access
+[x]
+transistor
+DRAM is very sensitive to disturbance
+[x]
+Capacitor voltage will never recover from a
+[x]
+disturbance
+Also, capacitor will lose it charge around 10 to 100
+[x]
+milliseconds
+Due to various sources of leakage
+[x]
+
+Dynamic RAM
+17
+Fortunately: CPU cycles are typically measured in
+[x]
+nanoseconds
+CPU point of view: Retention time is quite long
+[x]
+Due to leakage, the memory must be periodically
+[x]
+refreshed
+Entails reading every bit & then rewriting it
+[x]
+Error correcting codes are also used to correct bits that
+[x]
+have been misread/corrupted
+
+SRAM vs DRAM
+18
+Static RAM (SRAM)
+[x]
+Each bit is stored in bistable memory
+[x]
+Memory will store values unless disturbed
+[x]
+1 bit = 6 transistors
+[x]
+Fast and expensive
+[x]
+Dynamic RAM (DRAM)
+[x]
+Stores each bit as a charge on a capacitor
+[x]
+Has to be refreshed on regular basis
+[x]
+Uses 1 transistor per bit
+[x]
+Can be made very dense (lots of bits per inch)
+[x]
+100X cheaper
+[x]
+10X slower
+[x]
+
+Conventional DRAMs
+19
+High level view of a 128-bit (16 B) 16x8 DRAM chip
+
+Conventional DRAMs
+20
+Cells (bits) in a DRAM chip are partitioned into
+d
+[x]
+supercells
+Each consists of w DRAM cells (bits)
+[x]
+A d x w DRAM stores a total of dw bits of information
+[x]
+Supercells are organized as a rectangular array
+[x]
+r rows & c columns
+[x]
+rc = d
+[x]
+Each supercell has an address of the form (i,j)
+[x]
+i denotes the row
+[x]
+j denotes the column
+[x]
+
+Conventional DRAMs
+21
+Example
+128-bit (16B) 16 x 8 DRAM chip
+[x]
+d supercells of w bits each
+[x]
+16 supercells of 8 bits each
+[x]
+In this case, supercell configuration is 4 x 4
+[x]
+
+Conventional DRAM
+22
+Information flows in and out of the chip via external
+[ ]
+connectors called pins
+Each pin carries a 1-bit signal
+[ ]
+Example shows 8 data pins that can transfer 1 byte
+[ ]
+in/out of the chip
+Also shows 2 address pins that identify row/column
+[ ]
+of supercell
+Other control pins are not shown
+[ ]
+
+Conventional DRAMs
+23
+
+SDRAM Module
+24
+
+Conventional DRAMs
+25
+Each DRAM chip is connected to a memory controller
+[x]
+Control can transfer bits at a time to/from chip
+w
+[x]
+Data is read by sending row address first
+[x]
+The whole row is copied to internal row buffer
+[x]
+Then, column address is sent and bits are
+w
+[x]
+retrieved
+Chips are designed this way to reduce the number
+[x]
+of address pins on the chip
+
+Memory Module
+26
+DRAM chips are packaged in memory modules that
+[x]
+plug into expansion slots on the motherboard
+Common packages include:
+[x]
+168-pin Dual Inline Memory Module (DIMM)
+[x]
+Transfers data to and from memory controller in 64-bit
+[x]
+chunks
+72-pin Single Inline Memory Modules (SIMM)
+[x]
+Transfer data in 32-bit chunks
+[x]
+
+SDRAM Module
+27
+
+Memory Module
+28
+
+Memory Module
+29
+Example
+Module stores a total of 64 MB
+[x]
+Uses eight 64-Mbit 8M x 8 DRAM chips
+[x]
+Numbered 0-7
+[x]
+Each supercell consists of one byte of main memory
+[x]
+Each 64-bit quadword at address A in main
+[x]
+memory is represented by 8 supercells
+i.e. the supercells whose corresponding address is (i,j)
+[x]
+
+Memory Module
+30
+To retrieve a 64-bit quadword at address A
+[x]
+Memory controller converts A to a supercell address (i,j)
+[x]
+Sends address to memory module
+[x]
+Memory module broadcasts i and j to each DRAM
+[x]
+DRAM outputs 8-bit contents of its (i,j) supercell
+[x]
+Module collects these outputs and forms them into a 64-bit
+[x]
+quadword
+Quadword returned to memory controller
+[x]
+
+Memory Module
+31
+Main memory is an aggregate of multiple memory modules
+[x]
+Each memory module stores part of the address space
+[x]
+A module consists of DRAM chips
+[x]
+DRAM chips consist of supercells containing a number of bits
+[x]
+4 GB of memory example:
+[x]
+1024 Mb (128 MB) DRAM chip
+[x]
+8 chips on a module (128MB x 8 chips = 1024 MB = 1GB)
+[x]
+1GB Requires 30 address lines
+[x]
+Only ¼ of address spaces
+[x]
+Need 4 banks of modules (32 DRAM chips) to get 4GB
+[x]
+Memory controller determines which module to use based on last 2 lines
+[x]
+
+Enhanced DRAMs
+32
+There are many kinds of DRAM memories
+[x]
+New kinds appear regularly
+[x]
+To keep up with processor speeds
+[x]
+Each is based on the conventional DRAM cell
+[x]
+With optimizations that improve the speed with which the
+[x]
+basic DRAM cells can be accessed
+
+Enhanced DRAMs
+33
+Fast Page Mode DRAM (FPM DRAM)
+[x]
+Extended data out DRAM (EDO DRAM)
+[x]
+Synchronous DRAM (SDRAM)
+[x]
+Double Data-Rate Synchronous DRAM (DDR SDRAM)
+[x]
+DDR2
+[x]
+DDR3
+[x]
+Rambus DRAM (RDRAM)
+[x]
+Video RAM (VRAM)
+[x]
+
+Enhanced DRAMs
+34
+Fast Page Mode DRAM (FPM DRAM)
+[x]
+Keeps a row in the internal buffer
+[x]
+Executes successive read/writes on the row
+[x]
+Advantage: Save time spent on transmitting the same row
+[x]
+address on successive read/writes
+
+Enhanced DRAMs
+35
+Extended data out DRAM (EDO DRAM)
+[x]
+Similar to FPM RAM, but with slightly different signal
+[x]
+timings
+Results in small efficiency boost
+[x]
+
+Enhanced DRAMs
+36
+Synchronous DRAM (SDRAM)
+[x]
+Synchronous refers to the timing of signals with the
+[x]
+computer clock cycle
+Most significant change is introduction of internal 'address
+[x]
+banks'
+This allows a second memory read to begin while the first
+[x]
+memory read is in progress
+Keeps data bus continuously busy (more efficient)
+[x]
+
+Enhanced DRAMs
+37
+Double Data-Rate Synchronous DRAM (DDR SDRAM)
+[x]
+Access time is the same as SDRAM
+[x]
+Transfer of data is doubled for DDR SDRAM
+[x]
+DDR2, DDR3 have same average transfer rate, but they
+[x]
+transfer more data at one time
+This results in less memory reads on average
+[x]
+Processor doesn't have to wait on memory as much since it
+[x]
+can work on bigger chunks of information at one time
+
+Enhanced DRAMs
+38
+Both RDRAM and VRAM are obsolete
+[x]
+Rambus DRAM (RDRAM)
+[x]
+Similar to SDRAM
+[x]
+Performed marginally better but had significantly higher
+[x]
+heat output and cost
+Video RAM (VRAM)
+[x]
+Has extra set of data output pins that are read-only
+[x]
+These are optimized for high throughput to a graphics
+[x]
+card
+
+Aside: Graphics Processing
+39
+Optimizations that began with VRAM and continued
+[x]
+with more modern graphics card memory are seeing
+increasing use in scientific computing
+Idea:
+[x]
+Graphic Processing Units (GPUs) started by optimizing
+[x]
+calculations in parallel for display on monitor
+Scientific community began utilizing this strategy for
+[x]
+time consuming mathematical problems
+
+Nonvolatile Memory
+40
+DRAM and SRAM are volatile since they lose their
+[ ]
+information if the power supply is turned off
+Nonvolatile memory stores data even when
+[ ]
+powered off
+Called Read Only Memory (even though some can
+[ ]
+be written to as well)
+ROMs are distinguished by the number of times they
+[ ]
+can be reprogrammed (written to)
+
+Nonvolatile Memory
+41
+Programmable ROM (PROM): can be programmed once
+[x]
+By blowing a fuse
+[x]
+Erasable Programmable PROM (EPROM):
+[x]
+Has a transparent quartz window
+[x]
+Cells are cleared to zeros by shinning ultraviolet light
+[x]
+Programmed with special device
+[x]
+Can be programmed ~1000 times
+[x]
+Electrically Erasable PROM (EEPROM):
+[x]
+Can be reprogrammed in place
+[x]
+Doesn't need special device to program like EPROM
+[x]
+Example: flash memory
+[x]
+Can be reprogrammed ~10^5 times
+[x]
+
+Nonvolatile Memory
+42
+PROM applications:
+[x]
+Programs that run on PROM are called firmware
+[x]
+First thing to run when power is turned on
+[x]
+Remote controls, video game consoles, appliances, etc
+[x]
+EPROM applications:
+[x]
+Basic input output system (BIOS) (also considered
+[x]
+firmware)
+Bootstrap OS
+[x]
+EEPROM applications:
+[x]
+USB, RAM, solid state drives, etc.
+[x]
+
+EPROM
+43
+
+Accessing Main Memory
+44
+Data flows between the processor and the DRAM
+[x]
+main memory over shared electrical conduits
+Called buses
+[x]
+Each transfer is accomplished with a series of steps
+[x]
+Called a bus transaction
+[x]
+Read transaction: data from main memory
+[x]
+Write transaction: data to main memory
+[x]
+
+Accessing Main Memory
+45
+Bus is a collection of parallel wires that carry
+[x]
+address, data, and control signals
+Data and address signals can share the same set of
+[x]
+wires or use different sets
+Also, more than two devices can share the same bus
+[x]
+Control wires carry signals that:
+[x]
+Synchronize transaction
+[x]
+Identify the type of transaction
+[x]
+Destination of transaction
+[x]
+Read or write
+[x]
+Information on bus address or data
+[x]
+
+Accessing Main Memory
+46
+Configuration of typical desktop system
+[ ]
+CPU chip
+Register file
+A
+L
+U
+System bus Memory bus
+I/O Main
+Bus interface
+bridge memory
+
+Components of a Memory System
+47
+Bus Interface: Controls the system bus
+[x]
+System Bus:
+[x]
+Main connection between CPU and computer
+[x]
+32 or 64 data lines (wires)
+[x]
+Small number of control lines
+[x]
+I/O Bridge:
+[x]
+Bridge to memory bus and I/O bus
+[x]
+Directs CPU requests for memory or I/O
+[x]
+Also connects to I/O bus what is shared by I/O devices
+[x]
+Memory Bus: main connection between I/O bridge and
+[x]
+memory controller
+
+Components of a Memory System
+48
+Memory Controller
+[x]
+Manages memory chips
+[x]
+Executes store/load requests
+[x]
+Memory Chips: store actual data
+[x]
+Two types of operations:
+[x]
+Read transaction
+[x]
+Write transaction
+[x]
+
+Read Transaction: mov ax, A
+49
+Bus interface initiates a read transaction on the bus
+[ ]
+CPU places address A on the system bus via bus interface
+[ ]
+I/O bridge interprets request as memory read
+[ ]
+Forwards it on to memory bus
+[ ]
+Register file
+A
+L
+ax
+U
+Main memory
+I/O bridge
+0
+A
+Bus interface
+x A
+
+Read Transaction: mov ax, A
+50
+Main memory controller
+[x]
+Senses the address signal on memory bus and reads it
+[x]
+Fetches the data word from DRAM and writes it to memory bus
+[x]
+I/O bridge translates the memory bus signal into a system bus
+[x]
+signal and passes it along to the system bus
+Register file
+A
+L
+ax
+U
+I/O
+Main memory
+bridge
+x 0
+Bus interface
+x A
+
+Read Transaction: mov ax, A
+51
+CPU:
+[x]
+Senses data on system bus
+[x]
+Reads it from the bus
+[x]
+Copies it to register ax
+[x]
+Register file
+A
+L
+ax
+x
+U
+Main memory
+I/O bridge 0
+Bus interface
+x A
+
+Write Transaction: mov A, ax
+52
+CPU places the address on the system bus
+[ ]
+I/O bridge interprets requests as memory write
+[ ]
+Forwards it on memory bus
+[ ]
+Memory reads address from memory bus and waits for data
+[ ]
+Register file
+A
+L
+ax
+y
+U Main
+I/O
+memory
+bridge
+0
+A
+Bus interface
+A
+
+Write Transaction: mov A, ax
+53
+CPU copies the data word in ax to system bus
+[ ]
+I/O bridge copies data to memory bus
+[ ]
+Register file
+A
+L
+ax y
+U Main
+I/O
+memory
+bridge
+0
+y
+Bus interface
+A
+
+Write Transaction: mov A, ax
+54
+Main memory reads the data word from the memory bus
+[ ]
+and stores bits in memory
+Register file
+A
+L
+ax y
+U
+Main
+I/O
+memory
+bridge
+0
+Bus interface
+y A
+
+Limitations of Main Memory
+55
+Size: Main memory is too small to hold all our data
+[x]
+Volatility: Main memory does not store data when
+[x]
+computer is off
+Solution:
+[x]
+Disk storage is
+[x]
+Large
+[x]
+Cheap
+[x]
+Non-volatile
+[x]
+
+Hard Disks
+56
+
+Disk Geometry
+57
+Disks are constructed from platters
+[x]
+Each platter consists of two sides or surfaces
+[x]
+Each side coated with a magnetic recording material
+[x]
+A rotating spindle in the center spins the platter at a
+[x]
+fixed rotation rate
+Typically between 5400 and 15000 revolutions per
+[x]
+minute (RPM)
+A disk typically contains one or more platters
+[x]
+Encased in a sealed container
+[x]
+Why?
+[x]
+
+Disk Geometry
+58
+Platter
+[x]
+Thin disks coated with magnetic recording material
+[x]
+Placed on a rotating spindle in the center of the platter
+[x]
+Spin at 5400 to 15000 RPM
+[x]
+Has two surfaces (i.e. both sides store data)
+[x]
+Surface comprises a collection of concentric rings called
+[x]
+tracks
+
+Disk Geometry
+59
+Track:
+[x]
+Partitioned into a collection of sectors
+[x]
+Sector
+[x]
+Contains an equal number of bits (typically 512 bytes)
+[x]
+Separated by gaps where no data is recorded
+[x]
+Gaps store formatting bits that identify sectors
+[x]
+Cylinder
+[x]
+A collection of tracks
+[x]
+Located in the same location on each surface
+[x]
+# of tracks per cylinder = # of surfaces
+[x]
+Numbering
+[x]
+Surfaces, tracks (cylinders), and sectors are numbered
+[x]
+Location is defined as (surface, cylinder, sector)
+[x]
+
+Disk Capacity
+60
+Maximum # of bits that can be recorded on the HD depends
+[x]
+on
+Recording density (bits/in): # of bits in 1-inch of surface segment
+[x]
+of a track
+Track density (tracks/in) : # of tracks in a 1-inch segment of the
+[x]
+radius extending from the center of the patter
+Areal density (bits/in2): The product of the recording density and
+[x]
+the track density
+
+Disk Capacity
+61
+Example
+5 platters
+[ ]
+512 bytes per sector
+[ ]
+20,000 tracks per surface
+[ ]
+Average of 300 sectors per track
+[ ]
+
+Disk Capacity
+62
+Long ago all tracks had same # of sectors
+[x]
+Easy to implement
+[x]
+Efficient for low density recording
+[x]
+Problem: Inefficient for high density recording (too many wasted
+[x]
+bits)
+Solution:
+[x]
+Set of tracks is partitioned into zones
+[x]
+Each zone has a fixed # of sectors per track
+[x]
+Disk controller keeps tracks of zones
+[x]
+
+Disk Operations
+63
+Magnetic material on surface stores bits
+[ ]
+Written and read by passing over area of bit with a r/w
+[ ]
+head
+r/w head attached to actuator arm
+[ ]
+Actuator arm can position head any where on radial axis of
+[ ]
+disk
+
+Disk Operations
+64
+Once head is positioned, rotation of disk will bring desired
+[ ]
+sector under head
+Disk spins so fast, head flies 0.1 micron above surface at 80
+[ ]
+km/hr
+Disk read and write data in sector-sized blocks
+[ ]
+
+Disk Operations
+65
+To perform r/w operation:
+[x]
+Seek: move head to correct cylinder
+[x]
+Wait for sector: rotation of disk will bring sector under
+[x]
+the head
+R/W sector:
+[x]
+Read: send bits from head to controller as sector passes
+[x]
+head
+Write: send bits from controller to head as sector passes
+[x]
+head
+
+Access Time
+66
+How long to read or write a sector?
+[x]
+Seek time: time to move head to correct cylinder
+[x]
+Depends on previous position of head
+[x]
+Speed of actuator arm
+[x]
+Average seek time: measured by averaging time of several thousand
+[x]
+seeks
+Max seek time can be as high as 20ms
+[x]
+Rotational latency: time to wait before sector passes head
+[x]
+Depends on rotation speed of disk
+[x]
+Location of sector at time of operation
+[x]
+Worst case: head just missed sector and must wait for complete rotation
+[x]
+Average case: worst case divided by 2
+[x]
+Max. rotational latency in seconds (1/RPM) x 60 seconds
+[x]
+
+Access Time
+67
+Transfer time (throughput): amount of time to r/w a sector
+[x]
+Depends on rotation speed of disk & # of sectors per track
+[x]
+Approx = (1/RPM) x (1/avg. # sectors per track) x 60 seconds
+[x]
+Estimate the avg. time to access the contents of a disk sector
+[x]
+as the sum of the avg. seek time, avg. rotational latency, and
+avg. transfer time
+Example:
+[x]
+Disk 7200 RPM, 9ms seek, 400 sectors/track
+[x]
+Access time = 13.19 ms
+[x]
+
+Access Time Observations
+68
+Seek time and rot. lat. dominate access time
+[x]
+2x seek time is good estimate of access time
+[x]
+Access time to read 512-byte sized block:
+[x]
+SRAM = 256 ns
+[x]
+DRAM = 4000 ns
+[x]
+Disk = 10 ms
+[x]
+Disk access time is roughly 40000X greater than
+[x]
+SRAM, and 2500X greater than DRAM
+
+Logical Disk Blocks
+69
+Problem: Disks have varied and complex geometries
+[x]
+Sectors/tracks may fail, today's drives automatically remap
+[x]
+bad sectors
+Too complicated for OS to keep track
+[x]
+Solution:
+[x]
+HD controller provides a logical block interface
+[x]
+Sectors are assigned logical #s 0 ... b-1
+[x]
+HD controller (on disk) keeps track of mapping to (surface, track,
+[x]
+sector)
+To perform r/w:
+[x]
+OS specifies block # instead of (surface, track, sector)
+[x]
+HD controller maps that to (surface, track, sector)
+[x]
+r/w data from/to that sector
+[x]
+
+Solid State Disks
+70
+A solid state disk is a storage technology based on
+[x]
+flash memory
+Flash memory is a type of nonvolatile memory
+[x]
+based on EEPROMs
+Provides fast and durable storage for many devices
+[x]
+Digital cameras, cell phones, music players, PDAs,
+[x]
+laptop, desktop, and server computer systems
+
+Solid State Disks
+71
+Can provide an alternative to rotation disk
+[ ]
+
+Solid State Disks
+72
+A SSD package plugs into a standard disk slot in
+[x]
+the I/O bus
+Usually USB or SATA
+[x]
+Behaves like any other disk
+[x]
+Physically, disk consists of one or more flash memory
+[x]
+chips
+Replaces the mechanical drive in conventional disks
+[x]
+Also, contains hardware/firmware device
+[x]
+Same role as disk controller in conventional HDs
+[x]
+Translates requests for logical blocks into accesses for the
+[x]
+underlying physical device
+
+SSD vs. Disk
+73
+Sequential reads/writes are faster on the SSD
+[x]
+~66% improvement in access times
+[x]
+Logical blocks written in random order is much
+[x]
+slower for SSD
+Order of magnitude slower
+[x]
+Logical blocks read in random order is much
+[x]
+faster for SSD
+
+SSD vs. Disk
+74
+Random performance due to physical characteristics of
+[x]
+flash memory
+A flash memory consists of B blocks
+[x]
+Each block consists of P pages
+[x]
+Typically pages are 512 B - 4 KB
+[x]
+Typical block consists of 32 - 128 pages
+[x]
+Thus, total block size range from 16KB - 512 KB
+[x]
+A page can be written to only after entire block is erased
+[x]
+Once block has been erased, each page can be written once
+[x]
+with no further erasing
+A block wears out after ~100,000 writes
+[x]
+Can no longer be used
+[x]
+
+SSD vs. Disk
+75
+Random writes are slow for two reasons
+[x]
+Erasing a block takes a relatively long time
+[x]
+~ 1ms
+[x]
+Any pages containing existing data in block being written to
+[x]
+must be copied to a new block before writing
+Manufactures try to solve this problem by using
+[x]
+sophisticated logic in the flash translation layer
+
+Block erasing
+76
+Why can we only erase a block at a time?
+[x]
+Technically possible to erase page-by-page
+[x]
+Requires high voltage and risk of damaging nearby
+[x]
+memory cells
+Therefore, block erasure constriction is purely an
+[x]
+engineering concern
+
+Garbage Collection
+77
+
+SSD Advantages
+78
+They are built of semiconductor memory
+[x]
+No moving parts = faster random access times
+[x]
+Use less power
+[x]
+More rugged
+[x]
+
+SSD Disadvantages
+79
+SSDs have potential of wearing out
+[x]
+Since flash blocks wear out
+[x]
+Mitigated by logic in flash translation layer
+[x]
+Attempts to spread erasures evenly across all blocks
+[x]
+More expensive
+[x]
+
+Accessing Disks
+80
+Hardware interconnect
+[ ]
+I/O Bridge: seen before
+[ ]
+I/O Bus: links all I/O
+[ ]
+devices to CPU
+I/O Controllers: translate
+[ ]
+bus signals to device
+signals
+
+Accessing Disks
+81
+To send/receive a word to a
+[x]
+device, CPU writes/reads word
+to/from special location in
+memory
+Block of addresses reserved for
+[x]
+Communicating with I/O devices
+Each address is called a port
+[x]
+Corresponds to a particular I/O
+[x]
+device
+r/w request is sent via system
+[x]
+bus
+
+Accessing Disks
+82
+I/O controller intercepts
+[ ]
+request
+Forwards it to corresponding
+[ ]
+device via I/O bus
+Good method for exchanging
+[ ]
+small amounts of data with
+device
+For large amounts of data
+[ ]
+computers use DMA
+
+Accessing Disks
+83
+Direct Memory Access
+[x]
+CPU sends r/w request to HD
+[x]
+Includes memory address of
+[x]
+where to write/read the data
+Includes size of data
+[x]
+HD controller and IO controller
+[x]
+collaborate
+Data is sent directly to/from
+[x]
+memory from/to HD
+Bypassing the CPU
+[x]
+Much more efficient!
+[x]
+
+Direct Memory Access
+84
+Example: A HD read
+[x]
+CPU uses memory mapped IO to send the following to HD controller
+[x]
+# of logical block to read
+[x]
+Memory address where to store the block
+[x]
+CPU proceeds to do something else
+[x]
+Meanwhile: HD controller converts # to (sector, cylinder, surface)
+[x]
+Reads sector from disk
+[x]
+Sends address to IO controller with instruction to DMA
+[x]
+Sends the sector over the IO and memory busses to the memory
+[x]
+Notifies CPU when the transfer is done
+[x]
+During this time CPU does other work
+[x]
+Takes 16ms to read a sector
+[x]
+A 1GHz CPU could execute 16 million instructions in this time
+[x]
+Waiting for data would be extremely wasteful
+[x]
+
+Storage Technology Trends
+85
+
+Storage Technology Trends
+86
+Observations
+[x]
+CPU speed is out-pacing all storage
+[x]
+SRAM is keeping up, but
+[x]
+DRAM and Disk are sorely lacking
+[x]
+SRAM is too expensive to use for main memory
+[x]
+DRAM and disk are main storage devices
+[x]
+Creates the CPU-memory gap, CPU is limited by speed of
+[x]
+memory and disk
+To bridge gap: modern systems use SRAM based caches
+[x]
+This approach works because most programs exhibit good
+[x]
+locality

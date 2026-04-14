@@ -1,0 +1,433 @@
+1
+Computer Architecture and
+System Software
+Lecture 06: Midterm Results, Assembly
+Language
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+Hand back midterms after break, go over solutions
+-
+after lecture content
+If you did not attend lecture, please see Connie
+-
+Arnhold in 3D13 to pick it up
+Assignment 3 will be available this Friday
+-
+Due Friday, May 13th
+-
+All Assembly coding
+-
+
+Debugging
+
+Using the debugger
+4
+It is possible examine the contents of memory and
+[ ]
+the CPU registers after the execution of each
+instruction
+In DOSBOX, type
+[ ]
+debug <filename>.exe
+Type ? to see available commands
+[ ]
+
+Debugging
+5
+Useful commands for us:
+[x]
+T (trace [num]) - execute num instructions and view
+[x]
+CPU registers and flags before the instruction starts
+P (proceed [num]) - same as trace but skips through
+[x]
+loops and interrupt calls
+D (dump [num]) - view contents of data segment from
+[x]
+address DS:num
+Can also specify other segments (SS, CS, ES)
+[x]
+U (unassemble [num]) - View the assembly code
+[x]
+instructions in the code segment with offset address
+num
+A (assemble [num]) - You will be prompted for an
+[x]
+instruction to be executed at address num
+
+Tracing
+6
+First few instructions are setting up your data and
+[x]
+code segments
+Contents of registers are shown before instruction
+[x]
+executes
+You still have input/output functionality in trace
+[x]
+mode
+Also visible:
+[x]
+Address of current instruction, address of code segment,
+[x]
+machine code equivalent instruction (hex form), flags
+Variable name will not be displayed - only their
+[x]
+memory addresses
+
+Tracing
+7
+
+Flags register
+8
+8 status flags displayed in debugger
+[x]
+Overflow, Direction, Interrupt, Sign, Zero, Auxillary,
+[x]
+Parity, and Carry
+1's and 0's are displayed as 2 character abbeviations
+[x]
+OV (OVerflow) NV [No oVerflow]
+[x]
+DN (decrement) UP (increment)
+EI (enabled) DI (disabled)
+NG (negative) PL (positive)
+ZR [zero] NZ [ Not zero]
+AC [Auxiliary Carry] NA [ No AC ]
+PE (even) PO (odd)
+CY [Carry] NC [ No Carry]
+
+Memory dump
+9
+View contents of data segment, or specific range of
+[x]
+memory addresses
+Important to trace through first few instructions of
+[x]
+program first to initialize your data segment first
+In the next image we'll see:
+[x]
+Left: Memory addresses
+[x]
+Middle: Contents (hex)
+[x]
+Right: Contents decoded using ASCII
+[x]
+
+Memory dump
+10
+
+Unassemble
+11
+View instructions in the code segment starting at
+[x]
+specified offset address for any IA32 .exe file
+In the next image we'll see:
+[x]
+Left: Address of instruction + machine code
+[x]
+Ex: 0777:0000 B86A07
+[x]
+Right: Assembly code instruction equivalent
+[x]
+Ex: MOV AX, 076A
+[x]
+
+Unassemble
+12
+
+Assemble
+13
+Execute an instruction at address specified by user
+[ ]
+In the image, we unassembled the code segment
+[ ]
+from address 0 to view the addresses of each
+instruction currently in the code segment
+Next, we assembled a new instruction at address E
+[ ]
+(or 000E) by typing 'a E'
+The old instruction at 0777:000E was
+[ ]
+MOV AH, 0A. We replaced it with MOV AH, 09.
+Tracing through the program normally would now
+[ ]
+run our new instruction instead.
+
+Assemble
+14
+
+Assemble
+15
+Notice that the size of instructions varies.
+[ ]
+LEA DX, [0000] is a 4-byte large instruction. The
+[ ]
+machine code equivalent is 0x8D160000.
+MOV AH, 0A is a 2-byte instruction. The machine
+[ ]
+code equivalent is 0xB40A.
+Assembling using the debugger must be done with
+[ ]
+caution to conserve instruction size.
+
+Debugging
+16
+To stop assembling, simply press enter
+[ ]
+To quit the debugger, type q
+[ ]
+
+Branching and Loops
+
+Branching and Loops
+18
+Normally, CPU executes instructions one after
+[x]
+another, in order they are written
+Branching and loops require different behaviour
+[x]
+Need to be able to ask questions about our code
+[x]
+Is my result bigger than...
+[x]
+Is my result positive or negative?
+[x]
+Etc.
+[x]
+After any mathematical operation, the flags
+[x]
+register tracks various properties of the result
+
+Recall: Flag Register
+19
+Overflow flag: Set if a signed overflow occurs
+[ ]
+Direction flag: Used to indicate direction of processing for
+[ ]
+string manipulations (0 = forward, 1 = backward)
+Interrupt enable flag: Setting this enables interrupts
+[ ]
+Trace (trap) flag: Used for debugging. When set processor
+[ ]
+executes only 1 instruction, then interrupts to call debugger
+Sign flag: Set to the MSB of the result of an operation
+[ ]
+Zero flag: Set if the result is zero
+[ ]
+Auxiliary carry flag: Set if there was a carry from or borrow
+[ ]
+to bits 0-3 in the AL register
+Parity flag: Set if the number of1's in result is even
+[ ]
+Carry flag: Set if there was a carry from or borrow to the
+[ ]
+MSB during last calculation
+Image source: http://www.electronics.dit.ie/staff/tscarff/8086_registers/8086_registers.html
+
+CMP
+20
+CMP used to compare two 8, 16, or 32-bit numbers
+[ ]
+cmp operand1, operand2 => operand1-operand2
+[ ]
+The cmp instruction performs the same operation as
+[ ]
+the sub instruction except that the result of
+subtraction is not saved
+Thus, cmp does not disturb the source and
+[ ]
+destination operands
+After the subtraction operation, flags are set
+[ ]
+accordingly
+Flags register critical in branching
+[ ]
+
+Branching and Loop Instructions
+21
+JMP used to make the program execution jump to a
+[x]
+specific label or address
+Called an unconditional jump since jump always occurs
+[x]
+jmp label
+[x]
+Label identifies the next instruction to be executed
+[x]
+Example: Infinite loop
+[x]
+mov ax, 1
+inc_again:
+inc ax
+jmp inc_again
+mov bx, ax
+
+Branching and Loop Instructions
+22
+J<cond> used to make the program execution jump to a specific
+[ ]
+label or address if the condition is true
+j<cond> label
+[ ]
+Example
+[ ]
+read_char:
+mov dl, 0
+... ;Code for reading a character into al
+cmp al, 0Dh ;Compare the character to CR
+je CR_received ;if equal, jump to CR_received
+inc cl ;otherwise, increment cl and
+jmp read_char ;go back to read another
+CR_received: ;character from keyboard
+...
+
+Branching and Loop Instructions
+23
+Note, while the result is not saved anywhere, the operation sets the
+[ ]
+zero flag (ZF = 1) if the two operands are the same
+je jump if equal
+[ ]
+jg jump if greater
+[ ]
+jl jump if less
+[ ]
+jge jump if greater than or equal
+[ ]
+jle jump if less than or equal
+[ ]
+jne jump if not equal
+[ ]
+jz jump if zero
+[ ]
+jnz jump if not zero
+[ ]
+jc jump if carry
+[ ]
+jnc jump if not carry
+[ ]
+
+Branching and Loop Instructions
+24
+How is iteration performed?
+[ ]
+mov cl, 50 ;initialize loop counter
+repeat1:
+<loop body>
+dec cl ;update counter
+jnz repeat1 ;jumps back to
+;repeat1 if cl is not 0
+
+Branching and Loop Instructions
+25
+
+Logical Instructions
+26
+AND, OR, XOR, NOT
+[x]
+and destination, source
+[x]
+or destination, source
+[x]
+xor destination, source
+[x]
+not destination
+[x]
+The first three are binary operators and perform bitwise
+[x]
+and, or, and xor logical operations respectively.
+The not is a unary operator that performs bitwise
+[x]
+complement operation
+Example:
+[x]
+and al, 01h
+[x]
+Note: logical operations set the zero flag if the result is 0
+[x]
+
+Logical Instructions
+27
+TEST performs logical bitwise and operation like the
+[x]
+and instruction except that the source and
+destination are not modified
+However, test sets the flags just like the and
+[x]
+instruction
+Example
+[x]
+test al, 01h
+[x]
+
+Shift Instructions
+28
+SHL, SHR Shift logical left and shift logical right
+[ ]
+shl dest, count shr dest, count
+[ ]
+shl dest, cl shr dest, cl
+[ ]
+The destination can be an 8, 16, or 32-bit operand stored either in
+[ ]
+a register or in memory
+The second operand specifies the number of bit positions to be
+[ ]
+shifted
+The first format specifies the shift count directly. The shift count can
+[ ]
+range from 0 to 31
+The second format can be used to indirectly specify the shift count,
+[ ]
+which is assumed to be in the cl register. The cl register contents are
+not changed by either the shl or shr instructions
+
+Shift Instructions
+29
+Examples
+[ ]
+
+Shift Instructions
+30
+SAL, SAR Shift arithmetic left and shift arithmetic right
+[ ]
+sal dest, count sar dest, count
+[ ]
+sal dest, cl sar dest, cl
+[ ]
+Examples
+[ ]
+
+Rotate Instructions
+31
+ROL, ROR Rotate left and right without carry
+[ ]
+rol dest, count ror dest, count
+[ ]
+rol dest, cl ror dest, cl
+[ ]
+
+Rotate Instructions
+32
+Examples
+[ ]
+
+Rotate Instructions
+33
+RCL, RCR Rotate left and right through carry
+[ ]
+rcl dest, count rcr dest, count
+[ ]
+rcl dest, cl rcr dest, cl
+[ ]
+
+Rotate Instructions
+34
+Examples
+[ ]

@@ -1,0 +1,689 @@
+1
+Computer Architecture and
+System Software
+Lecture 03: Integer Arithmetic and
+Floating Points
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+Assignment 1 will be due next week
+[x]
+Due Jan 30th at 11:59pm
+[x]
+After today's lecture, should be able to complete all
+[x]
+questions
+
+So far
+3
+So far, using unsigned/signed ints, we have:
+[x]
+Added
+[x]
+Subtracted
+[x]
+Multiplied
+[x]
+Simple divisions via shift
+[x]
+Now we must consider dividing - but this opens up
+[x]
+the possibility of fractional results
+Must understand how fractions work in binary
+[x]
+
+Integer Binary Division without Fractions
+4
+20 / 4 = 5
+[ ]
+Try it in binary
+[ ]
+
+Integer Binary Division with Fractions
+5
+Unsigned integers
+Perform long division in binary, then discard fraction
+[x]
+(round to zero)
+33/8 = 4.125 🡪 4
+[x]
+42/3 = 14
+[x]
+55/4 = 13.75 🡪 13
+[x]
+Signed
+Treat as unsigned
+[x]
+Convert to signed when finished
+[x]
+
+Fractional Decimal Numbers
+6
+
+Fractional Binary Numbers
+7
+
+Observations
+8
+In decimal the period is called a decimal point
+[ ]
+In binary the period is now a "binary point"
+[ ]
+Digits left of the point are weighted by positive
+[ ]
+powers, and digits right of the point are weighted
+by negative powers
+Shifting point right multiplies by base
+[ ]
+Shifting point left divides by base
+[ ]
+Examples:
+[ ]
+
+Another Observation
+9
+Numbers of the form 0.11 ... 1 represent values just
+[ ]
+less than one.
+e.g. 0.11111 = 1/2 + 1/4 + 1/8 + 1/16 + 1/32
+[ ]
+2
+= 16/32 + 8/32 + 4/32 + 2/32 + 1/32
+= 31/32
+
+Recall
+10
+Dec to Hex Conversion
+[x]
+Keep dividing by 16, the remainders become the hex
+[x]
+digits
+Dec to Binary Conversion follows same process
+[x]
+Just replace 16 with 2
+[x]
+
+Conversion of binary fractions
+11
+Process left and right separately
+[ ]
+Process might not terminate (look for repeating
+[ ]
+pattern)
+For right of point, we will use the inverse of the
+[ ]
+previous process
+
+Conversion
+12
+Keep multiplying fraction by 2, 'storing' ones
+[x]
+whenever the result >= 1. Store zero otherwise.
+Keep working on fractional parts until you are
+done.
+Examples
+[x]
+0.375:
+0.375 * 2 = 0.75 (0)
+0.75 * 2 = 1.5 (1)
+0.5 * 2 = 1 (1)
+Read results from top to bottom this time! (Inverse process)
+Try 10.3125, and 0.3.
+[x]
+
+Representable Numbers
+13
+Each base has numbers that are not representable with finite
+[x]
+number of digits
+Decimal
+[x]
+Finite: 1/10 = 0.1
+[x]
+Infinite: 1/3 = 0.33 [3] ...
+[x]
+Base 3
+[x]
+Finite: 1/3 = 0.1
+[x]
+Infinite: 1/10 = 0.00220022 [0022] ...
+[x]
+Binary
+[x]
+Finite: 1/2 = 0.1
+[x]
+Infinite: 1/3 = 0.0101 [01] ...
+[x]
+Limitation is acceptable (usually, an approximation is
+[x]
+sufficient)
+
+Multiplying fractions
+14
+Base 10:
+[x]
+Count total # of digits to right of decimal point in
+[x]
+multiplicands
+Total # of digits to right of decimal point is conserved
+[x]
+in the result
+3.3 x 0.05 = 0.165
+OR
+33 x 5 = 165 🡪 shift 3 decimal places 🡪 0.165
+Base 2: Same procedure
+[x]
+
+Dividing fractions
+15
+Base 10:
+[x]
+Multiply dividend AND divisor by power of 10 until
+[x]
+there is no decimal
+1.004 / 0.02 = 1004 / 20
+Now use long division as normal
+[x]
+Base 2:
+[x]
+Same procedure (except we multiply by power of 2)
+[x]
+Equivalent is shifting left
+[x]
+0.01 / 0.001 = (0.01 << 3)/(0.001 << 3) = 10/1
+[x]
+
+Chapter 2
+16
+Section 2.4 Floating Point
+
+Floating Point
+17
+Finite-length encodings cannot represent numbers such as
+[x]
+1/3 and 5/7
+Fractional binary notation can only represent numbers in the
+[x]
+form V = M × 2y
+Examples:
+[x]
+5 × 2-3 = 5/8 = 0.101
+[x]
+5 × 2-4 = 5/16 = 0.0101
+[x]
+5 × 2-8 = 5/256 = 0.00000101
+[x]
+Notice: y determines location of point
+[x]
+Only need to store M and y
+[x]
+Hence: floating point notation
+[x]
+
+Floating Point Representation
+18
+s E
+Encode values as (-1) × M × 2
+[ ]
+Sign bit s determines whether number is negative or
+[ ]
+positive
+Significand M fractional binary number ranging
+[ ]
+from [1 2), or from [0 and 1)
+Exponent E weights value by +ve or -ve power of 2
+[ ]
+
+Floating Point Encoding
+19
+Bit representation
+[x]
+Single bit encodes sign
+[x]
+exp contains k bits encoding E
+[x]
+frac contains n bits encoding M
+[x]
+Total number of bits = 1+k+n
+[x]
+Standards
+[x]
+Single precision: 8 exp bits, 23 frac bits
+[x]
+32 bits total
+[x]
+Double precision: 11 exp bits, 52 frac bits
+[x]
+64 bits total
+[x]
+s exp frac
+
+Floating Point Encodings
+20
+Floating point standard specifies three different
+[x]
+categories for a value encoded by a given bit
+representation
+Normalized: majority of all values
+[x]
+Denormalized: values near and including 0
+[x]
+Special: +∞ , −∞, NaN
+[x]
+
+Normalized Values
+21
+Most common case
+[x]
+Occurs when exp is neither all 0s or all 1s
+[x]
+i.e. 0 < exp < 2k - 1
+[x]
+E is interpreted as representing a signed integer in
+[x]
+biased form
+E = exp - bias
+[x]
+exp is an unsigned number
+[x]
+k-1
+Bias = 2 - 1 (127 or 1023 for single and double)
+[x]
+
+Normalized Values Continued
+22
+Bits in frac are interpreted as 0.f ... f f
+[x]
+n-1 1 0
+And M is interpreted as 1 + frac
+[x]
+This is called an implied leading 1 because M can be
+[x]
+viewed as 1.f ... f f
+n-1 1 0
+Trick for getting an extra bit of precision for free
+[x]
+
+Denormalized Values
+23
+Occurs when exp is all 0s
+[x]
+i.e. exp = 00 ... 0
+[x]
+E is interpreted as E = 1 - bias
+[x]
+M is interpreted as frac without implied leading 1
+[x]
+i.e. M = 0.f ... f f
+[x]
+n-1 1 0
+
+Denormalized Values Continued
+24
+Why use denormalized values ?
+Represent 0 (not possible with normalized values)
+[x]
+M >= 1 and (-1)s × M × 2E
+[x]
+Represent numbers very close to 0
+[x]
+Provides a property called gradual underflow in which
+[x]
+possible numeric values are spaced evenly near 0
+
+Special Values
+25
+Occurs when exp is all 1s
+[x]
+i.e. exp = 11 ... 1
+[x]
+When frac is all 0s
+[x]
++∞ when s = 0
+[x]
+-∞ when s = 1
+[x]
+Infinity can represent overflow
+[x]
+Multiply two very large numbers
+[x]
+Divide by 0
+[x]
+When frac is non-zero we get NaN
+[x]
+When sqrt(-1) or ∞ - ∞
+[x]
+
+First Example
+26
+k = 3 and n = 2 (bias is 3)
+[ ]
+Top shows representable values (max is +- 14)
+[ ]
+Denormalized values clustered around 0
+[ ]
+Representable numbers are not uniformly distributed
+[ ]
+
+Second Example
+27
+Let's consider a small floating point type where k =
+[ ]
+4 and n = 3
+7 6 3 2 0
+s exp frac
+
+Second Example Continued
+28
+
+Comments on Previous Example
+29
+Denormalized numbers are closest to 0
+[x]
+Positive numbers in the interval [0, 7/512]
+[x]
+Observe smooth transition
+[x]
+Due to choice of E = 1- bias for denormalized values
+[x]
+Positive normalized numbers
+[x]
+Below one in the interval [8/512, 480/512]
+[x]
+Interesting property is that bit patterns of previous
+[x]
+slide occur in ascending order
+Intentional: Designed so that FP could be sorted using
+[x]
+integer-sorting routines
+
+Observations
+30
+Maximum FP value (6 exp bits)
+[x]
+0 11110 111111...
+[x]
+Minimum FP value (6 exp bits)
+[x]
+1 11110 111111...
+[x]
+Two representations for zero
+[x]
+0 000000 000000...
+[x]
+1 000000 000000...
+[x]
+
+Range of FPs
+31
+
+Converting to FP Notation
+32
+Example: 101.125 with k=8, n=9
+[ ]
+What happens if n=11? n=7? How much precision
+[ ]
+do we lose in this case?
+
+Decimal Addition
+33
+Review decimal addition in scientific notation:
+[x]
+Step 1: Match exponents by shifting decimal point
+[x]
+Step 2: Add
+[x]
+Step 3: Normalize result (if needed)
+[x]
+Examples:
+[x]
+Without normalization: (3.25 × 10^3)+(2.63 × 10^-1)
+[x]
+With normalization: (9.25 × 10^3)+(8.41 × 10^2)
+[x]
+
+Floating Point Addition
+34
+Before proceeding note:
+[x]
+Shifting frac left by 1 bit decreases E/exp by 1
+[x]
+Shifting frac right by 1 bit increases E/exp by 1
+[x]
+The idea behind adding FP numbers is to make exp
+[x]
+of the smaller number equal to exp of the larger
+Then, the steps in binary are the same as decimal:
+[x]
+Convert numbers to binary FP (if necessary)
+[x]
+Align "binary points" by matching exp of both numbers
+[x]
+Add
+[x]
+Normalize result
+[x]
+
+Example: FP Addition
+35
+100 + 0.3125
+[ ]
+100 + 80
+[ ]
+
+Floating Point Subtraction
+36
+Like addition in terms of aligning radix points
+[ ]
+But, requires a few more rules:
+[ ]
+Pay attention to the signs and magnitudes of
+[ ]
+operands. We always want the value of M to be a
+positive number after subtraction since it is an
+unsigned binary fraction.
+Sign of the result after subtraction is encoded by
+[ ]
+sign bit only. You shouldn't have negative integers
+anywhere.
+Don't forget to normalize!
+[ ]
+
+Examples: FP Subtraction
+37
+100 - 80
+[x]
+Result is positive, so perform subtraction as normal
+[x]
+100 - (-80)
+[x]
+Simplifies to 100 + 80. Do addition instead.
+[x]
+80 - 100
+[x]
+Result is negative! But 80 -100 = -(-80+100).
+[x]
+Therefore, do the addition and change the sign bit to 1.
+[x]
+-100 - (-80)
+[x]
+Simplifies to -(100-80). Do the subtraction and change the sign bit
+[x]
+to 1.
+-80 - 100
+[x]
+.
+Simplifies to - (80 + 100) Do the addition and change the sign
+[x]
+bit to 1.
+
+Example (on board)
+38
+Consider the following 16-bit FP numbers (1 sign bit,
+[ ]
+6 exp bits (k=6), 9 frac bits (n=9), bias = 31.
+R1 = 1100 0110 1000 0110
+[ ]
+R2 = 0100 0100 1110 0000
+[ ]
+Perform R1+R2 and R1-R2 in FP representation.
+[ ]
+
+Floating Point Multiplication
+39
+
+Floating Point Division
+40
+Perform unsigned division on significands
+[x]
+Subtract exponent
+[x]
+(subtract E not exp)
+[x]
+Decimal
+[x]
+(5 10^2) / (2 10^1) = (2.5 10^1)
+[x] × × ×
+Binary
+[x]
+Same procedure.
+[x]
+Convert to binary FP representation when finished.
+[x]
+
+Denormalized Floating points
+41
+Recall with normalized floating points,
+[x]
+M = 1+frac
+[x]
+E = exp-bias
+[x]
+Bias = 2k-1 -1
+[x]
+Denormalized floating points:
+[x]
+M = frac
+[x]
+E = 1-bias
+[x]
+Bias = 2k-1 -1
+[x]
+exp = 0
+[x]
+
+Denormalized Floating points
+42
+Arithmetic with denormalized floating points follows
+[x]
+the same rules as normalized floating points except
+E cannot go lower than E = 1-bias
+[x]
+M < 1 (hence denormalized)
+[x]
+If after arithmetic, M >=1, reinterpret result as a
+[x]
+normalized floating point
+If performing arithmetic in FP representation and
+[x]
+your result has E <= 1-bias
+Set E = 1 - bias (add to E)
+[x]
+Shift M appropriately
+[x]
+
+In-class Examples
+43
+Using floating points with k = 3 exp bits and n = 4
+[ ]
+frac bits, (bias = 3), calculate the following:
+A) Adding two denormalized numbers and getting
+[ ]
+a denormalized result
+0.078125 + 0.046875
+■
+B) Adding two denormalized numbers and getting
+[ ]
+a normalized result
+0.234375 + 0.234375
+■
+C) Subtracting two normalized numbers and
+[ ]
+getting a denormalized result
+0.5625 - 0.375
+■
+
+Examples
+44
+A) R +R
+[x]
+1 2
+-4
+R = (0.078125) = (1.01 x 2 )
+[x]
+1 10 2
+-5
+R = (0.046875) = (1.1 x 2 )
+2 10 2
+(confirm for yourself as an exercise)
+If we try to interpret as a normalized FP
+[x]
+exp = E + bias = -4 + (2k-1-1) = -1
+[x]
+1 1
+But exp must be an unsigned int! So we must interpret
+[x]
+as denormalized instead
+E = 1-bias = -2, M = 0.0101
+[x]
+1
+Similarly, R = 0.0011 x 2-2.
+[x]
+2
+
+Examples
+45
+-2
+R = 0.0101 x2
+[x]
+1
+Then M = 0.0101 = frac , exp = 0
+[x]
+1 1
+Similarly, M =0.0011 = frac , exp = 0
+[x]
+2 2
+Add M values since exponents match
+[x]
+M + M = 0.1000
+[x]
+1 2
+Do not normalize
+[x]
+Result: 0 000 1000
+s exp frac
+Questions B) ,C) on board
+[x]
+
+Floating point summary
+46
+
+For Next Lecture
+47
+Introduction to Assembly Language
+[x]
+Working with Intel 32-bit architecture
+[x]
+For work at home you will need DOSBOX
+[x]
+http://www.dosbox.com/
+[x]
+Other software packages available to
+[x]
+simulate 32-bit architecture, but solutions
+given in class will only be guaranteed to
+compile in DOSBOX environment

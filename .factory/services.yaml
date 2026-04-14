@@ -3,5 +3,12 @@ commands:
   validate: npm run validate:content
   lint: npm run lint
   build: npm run build
+  test: npm run test
+  extract-pdfs: python extract-pdfs.py
 
 services: {}
+
+notes:
+  python: "Python 3.14 with pdfplumber installed (pip install pdfplumber)"
+  raw-text-dir: "data/raw/lecture*_full.txt — extracted from PDFs using extract-pdfs.py"
+  lectures-json: "data/processed/lectures.json — target for content extraction"

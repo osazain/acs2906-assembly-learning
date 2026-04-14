@@ -1,0 +1,1244 @@
+1
+Computer Architecture and
+System Software
+Lecture 02: Overview of Computer Systems
+& Start of Chapter 2
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+Reminder: No LLM/AI usage for any deliverables in
+[x]
+this course (lab, assignment, etc.)
+Assignment 1 will be posted this week
+[x]
+Will be due Jan 30th (~2 weeks from now)
+[x]
+Some programming, mostly theory and math
+[x]
+
+Chapter 2
+3
+Representing and Manipulating Information
+
+Information is bits + context
+4
+Recall: all information in a system is represented as
+[ ]
+a bunch of bits.
+What does this mean ?
+[ ]
+All information has to be encoded by numbers
+1.
+All numbers have to be stored in binary
+2.
+
+Decimal Number System
+5
+We operate in a decimal system world
+[x]
+For example a number 7392 represents
+[x]
+[x]
+Each coefficient is one of the ten symbols
+[x]
+Called digits
+[x]
+This system is said to be of base (or radix) 10
+[x]
+because it uses 10 digits
+
+Why don't Computers use Base 10?
+6
+Base 10 Number Representation
+Each coefficient is one of the ten digits {0, ..., 9}
+[x]
+That is why fingers are also called digits
+[x]
+In use for thousands of years
+[x]
+Implementation
+[x]
+Digits are hard to store
+[x]
+ENIAC (first electronic computer) used 10 vacuum tubes/digit
+[x]
+Digits are hard to transmit
+[x]
+High precision required to encode 10 signal levels on 1 wire
+[x]
+Messy to implement digital logic functions
+[x]
+Addition, multiplication, etc.
+[x]
+
+Binary Representations
+7
+Base 2 Number Representation
+Computers store and process information as bits
+[x]
+Coefficients can take on only two values: 0 or 1
+[x]
+Can represent more complex values if:
+[x]
+Grouped together (not useful in isolation)
+[x]
+Assigned context (interpretation)
+[x]
+Represented, stored, and transmitted as:
+[x]
+Presence or absence of a hole in punch card
+[x]
+High or low voltage on a wire
+[x]
+A magnetic domain oriented clockwise or
+[x]
+counter-clockwise
+
+Electronic Representation
+8
+Easy to store with bistable elements
+[ ]
+Reliably transmitted on noisy wires
+[ ]
+Straightforward implementation of arithmetic
+[ ]
+functions
+0 1 0
+3.3V
+2.8V
+0.5V
+0.0V
+
+Binary Number System
+9
+
+Hexadecimal Notation
+10
+Problem: Both notations are inconvenient
+[x]
+Binary is too verbose
+[x]
+Decimal: difficult to determine binary equivalent from just
+[x]
+looking
+Solution: Hexadecimal (base 16)
+[x]
+10 decimal digits + 6 more
+[x]
+
+Hexadecimal Notation
+11
+Coefficients can take on 16 different values
+[x]
+{0, ..., 9, A, ..., F}
+[x]
+A corresponds to 10, B to 11, etc.
+[x]
+Each coefficient can be represented by 4 bits
+[x]
+Now a Byte can be represented as:
+[x]
+00 ... FF
+[x]
+16 16
+0 ... 255
+[x]
+10 10
+0000 0000 ... 1111 1111
+[x]
+2 2
+Example:
+[x]
+0110 1001 = 69
+[x]
+2 16
+
+Hexadecimal Notation
+12
+Most computers use blocks of eight bits as the smallest
+[x]
+addressable unit of memory
+Called a byte
+[x]
+Range:
+[x]
+0 ... 255
+[x]
+10 10
+0000 0000 ... 1111 1111
+[x]
+2 2
+Hex Range:
+[x]
+00 ...09 , 0A , 0B ... FF
+[x]
+16 16 16 16 16
+
+Hexadecimal Notation
+13
+By convention, prefix a hex number with 0x or 0X
+[x]
+A nibble is 4 bits of a byte
+[x]
+Byte is represented by two hexadecimal digits
+[x]
+Each represented by a nibble
+[x]
+Example:
+[x]
+0000 0000
+[x]
+0101 1001
+[x]
+1101 1011
+[x]
+1010 1000 1111
+[x]
+
+Conversion
+14
+Binary to Hex
+[x]
+Separate number into nibbles
+[x]
+Zero pad left side of string
+[x]
+101011 should be written as 0010 1011
+[x]
+Use memory or table to convert
+[x]
+Hex to Binary
+[x]
+Each digit is four bits
+[x]
+Convert each nibble independently and then put it all
+[x]
+together
+
+Conversion
+15
+Hex to Dec
+[x]
+Multiply coefficients by powers of 16
+[x]
+
+Conversion
+16
+Dec to Hex
+[x]
+Keep dividing by 16, the remainders become the hex
+[x]
+digits
+Result 0x4CB2C
+[x]
+Note: Result is read from bottom to top
+[x]
+Unsure, check result
+[x]
+
+Conversion
+17
+
+WorkSheet 1
+18
+Covers material up to here
+[ ]
+
+Miscellaneous
+19
+Sections 2.1.2 - 2.1.5
+
+From Number Systems to Addresses
+20
+Recall:
+[ ]
+
+Back to Buses
+21
+Buses are collections of wires to shuttle data
+[x]
+between components
+Transfer fixed chunks of data
+[x]
+Word size specifies the size of "chunk" transferred
+[x]
+Memory is organized as a linear array of bytes
+[x]
+i.e. each byte has a unique address
+[x]
+Thus: the size of the address bus determines the
+[x]
+amount of physical memory that can be addressed
+
+Example
+22
+32-bit machine refers to the size of the address bus
+[ ]
+By definition, the memory is limited to
+[ ]
+19
+64 bit machines can address 1.8 x 10 bytes
+[ ]
+
+Units of memory
+23
+Bit
+[ ]
+Nibble (4 bits)
+[ ]
+Byte (8 bits or 2 nibbles)
+[ ]
+Kilobyte (1024 bytes)
+[ ]
+Megabyte (1024 kilobytes)
+[ ]
+Gigabyte (1024 megabytes)
+[ ]
+Terabyte (1024 gigabytes)
+[ ]
+Pedabyte =1024x1024x1024x1024x1024x8 bits
+[ ]
+
+Units of memory
+24
+Note that in the International System of Units (SI),
+[ ]
+the prefix kilo means 1000.
+Sometimes you will come across texts/articles that
+[ ]
+adopt this notation, and use 1 kB to mean 1000
+bytes.
+In this course, we will stick with the binary metric
+[ ]
+(1 KB = 1024 bytes, or 1 KiB)
+
+Memory Organization
+25
+Addresses specify byte
+[x]
+locations
+Address of first byte in word
+[x]
+Address of successive words
+[x]
+differ by 4 (32-bit) or 8
+(64-bit)
+
+Aside: Data Sizes
+26
+Programming languages and processors support
+[x]
+multiple data formats
+Integers: char, short, int, long
+[x]
+Pointers or references
+[x]
+Floating point (real numbers): float, double
+[x]
+These data formats are different sizes
+[x]
+char = 1 byte, short = 2 bytes, int = 4 bytes (word
+[x]
+size), float = 4 bytes, double = 8 bytes
+Have different internal representations
+[x]
+Int and float: same bit pattern represents 2 different
+[x]
+values
+
+Recall
+27
+1 byte = 8 bits
+[x]
+28 different combinations possible
+[x]
+28 = 256, so we can represent numbers 0-255
+[x]
+In other words, our range is [0,28-1]
+[x]
+What is our range for 2 bytes?
+[x]
+
+Recall
+28
+1 byte = 8 bits
+[x]
+28 different combinations possible
+[x]
+28 = 256, so we can represent numbers 0-255
+[x]
+In other words, our range is 28-1
+[x]
+Question: What is our range for 2 bytes?
+[x]
+
+Back to Memory: Addressing
+29
+To use multi-byte objects we need two conventions
+[x]
+Object addresses
+[x]
+Byte order
+[x]
+On most machines:
+[x]
+Objects are stored contiguously
+[x]
+Object's address is first byte of the object
+[x]
+
+Byte Ordering Example
+30
+Big Endian
+Least significant byte has highest address
+[x]
+Little Endian
+Least significant byte has lowest address
+[x]
+Example
+Int x has 4-byte representation 0x01234567
+[x]
+Address given by &x is 0x100
+[x]
+
+String Representation
+31
+A sequence of characters terminated by a 0
+[x]
+character
+Each character is represented by a standard
+[x]
+encoding
+Most systems use ASCII (American Standard Code
+[x]
+for Information Interchange)
+Wait! What?
+[x]
+Most systems *used* to use ASCII
+[x]
+Now, UTF-8 is the most common
+[x]
+We will use ASCII for this course
+[x]
+The first 128 characters of ASCII are the same as UTF-8
+[x]
+
+String Representation
+32
+A sequence of characters terminated by a 0
+[ ]
+character
+Each character is represented by a standard
+[ ]
+encoding
+Most systems use ASCII (American Standard Code
+[ ]
+for Information Interchange)
+Example string "Hello" has the encoding
+[ ]
+0x48 0x65 0x6C 0x6C 0x6F 0x00
+Looks the same on any system using ASCII
+[ ]
+
+Bit-Level Operations
+33
+Section 2.1.7
+
+Boolean Logic
+34
+To manipulate data, computers change the value of
+[x]
+bits based on other bits
+A bit naturally encodes the logic values:
+[x]
+True (1)
+[x]
+False (0)
+[x]
+Bit manipulation is based on logic
+[x]
+
+Boolean Logic
+35
+Developed by George Boole in 19th Century
+[ ]
+Given Boolean variables p & q
+[ ]
+NOT ~p: yields true if p is false
+[ ]
+AND p & q: yields true if both p and q are true
+[ ]
+OR: p | q: yields true if either p or q are true
+[ ]
+XOR p ^ q: yields true if only one of p or q is true
+[ ]
+
+Bit-Level Operators
+36
+Boolean logic can be applied to the integral data
+[x]
+types:
+long, int, short, char
+[x]
+View arguments as bit vectors
+[x]
+Arguments applied bit-wise
+[x]
+Examples (Char data type)
+[x]
+~0x41 🡪 0xBE
+[x]
+~0x00 🡪 0xFF
+[x]
+0x69 & 0x55 🡪 0x41
+[x]
+0x69 | 0x55 🡪 0x7D
+[x]
+These operators perform the same in C, C++, Java
+[x]
+
+Bit-Level Operators
+37
+Boolean logic can be applied to the integral data
+[x]
+types:
+long, int, short, char
+[x]
+View arguments as bit vectors
+[x]
+Arguments applied bit-wise
+[x]
+Examples (Char data type)
+[x]
+~0x41 🡪 0xBE 🡪 Using ASCII, this statement
+[x]
+~0x00 🡪 0xFF is equivalent to (~A = ╛)
+[x]
+0x69 & 0x55 🡪 0x41
+[x]
+0x69 | 0x55 🡪 0x7D
+[x]
+These operators perform the same in C, C++, Java
+[x]
+
+Bit-Level Operators
+38
+Although the smallest addressable unit of memory is
+[ ]
+a byte, we can probe specific bits using bit-level
+operators.
+Example:
+[ ]
+1010 0100
+& 0000 0001 = 0
+1010 0101
+& 0000 0001 = 1
+In general, (X&1) returns the lowest order bit of X.
+
+Bit-Level Operators
+39
+The last trick is a fast way of determining whether a
+[ ]
+binary number is even or odd. (Can you see why?)
+Bit-level operations are simple operations that take
+[ ]
+few cycles on a CPU
+You should substitute more complicated math
+[ ]
+operators (i.e. dividing) with bit level operators
+wherever possible
+
+Example
+40
+
+Logical Operators
+41
+Section 2.1.8
+
+Logical Operators
+42
+C, C++, and Java also have logical operators
+[x]
+Not: !
+[x]
+And: &&
+[x]
+Or: ||
+[x]
+What's the difference ?
+[x]
+Used when evaluating expressions to obtain a single
+[x]
+relational result
+Input/Output always interpreted as 1 or 0
+[x]
+
+Examples
+43
+int a = 5, b =10, c = 15;
+[ ]
+(a<b) && (a<c) = 1
+[ ]
+(a<b) && (c<a) = 0
+[ ]
+More in text on pg. 54 (56 in 2nd ed)
+[ ]
+
+Shift Operators
+44
+Section 2.1.9
+
+Shift Operations
+45
+C, C++, and Java also provide shift operations
+[ ]
+Shift the bit vector a specified number of bits left or
+[ ]
+right
+These operations are left shift, right logical shift,
+[ ]
+and right arithmetic shift
+
+Shift Operations
+46
+Left shift
+[x]
+Denoted x << i
+[x]
+Right logical shift
+[x]
+Fills the left end with zeros
+[x]
+Denoted x >> i in C, C++
+[x]
+Unsigned data must use logical shift
+[x]
+Denoted x >>> i in Java
+[x]
+Right arithmetic shift
+[x]
+Fills the left with repetitions of the sign bit (left-most bit)
+[x]
+Denoted x >> I
+[x]
+C,C++ arithmetic shift is used on signed data
+[x]
+
+Examples
+47
+Argument x 01100010
+<< 3 000000000111000000000000
+Log. >> 2 000000000111111000000000
+Arith. >> 2 000000000111111000000000
+Argument x 10100010
+<< 3 000000000111000000000000
+Log. >> 2 000000111000111000000000
+Arith. >> 2 111111111000111000000000
+
+Examples
+48
+Argument x 01100010
+<< 3 000000000111000000000000
+Log. >> 2 000000000111111000000000
+Arith. >> 2 000000000111111000000000
+Argument x 10100010
+<< 3 000000000111000000000000
+Log. >> 2 000000111000111000000000
+Arith. >> 2 111111111000111000000000
+
+Worksheet 2
+49
+Covers everything up until here
+[ ]
+
+Chapter 2
+50
+Section 2.2 Integer Representations
+
+Integer Data Types
+51
+Motivation:
+Important to understand the representation of the
+[x]
+data types you are working with.
+Integral types represent a finite range of integers
+[x]
+Sizes:
+[x]
+1, 2, 4, or 8* bytes
+[x]
+Unsigned: Only non-negative integers
+[x]
+(the representation we've been using so far)
+Signed: Positive and negative integers
+[x]
+Java only supports signed numbers
+[x]
+http://en.wikipedia.org/wiki/Comparison_of_basic_instructions_of_programming_languages#Integers
+[x]
+
+Integer Data Types
+52
+Size determines range of integers a variable can
+[x]
+represent
+Each pattern represents a single integer
+[x]
+How many different bit patterns can a w-length bit
+[x]
+vector have ?
+1 bit = 2 patterns (0 or 1)
+[x]
+4 bits = 24 = 16 patterns
+[x]
+8 bits = 28 = 256 patterns
+[x]
+16 bits = 216 = 65536 patterns
+[x]
+
+Integer Data Types
+53
+Hence, # of patterns equal # of integers
+[ ]
+Question: How are these integers represented ?
+[ ]
+
+Unsigned Integers
+54
+
+Observations
+55
+
+Signed Integers
+56
+
+Example
+57
+X B2U B2T
+4 4
+Hex Binary
+A 1010
+0 0000
+3 0011
+B 1011
+C 1100
+F 1111
+
+Example
+58
+X B2U B2T
+4 4
+Hex Binary
+A 1010 10
+0 0000 0
+3 0011 3
+B 1011 11
+C 1100 12
+F 1111 15
+
+Example
+59
+X B2U B2T
+4 4
+Hex Binary
+A 1010 10 -6
+0 0000 0 0
+3 0011 3 3
+B 1011 11 -5
+C 1100 12 -4
+F 1111 15 -1
+
+Observations
+60
+
+Other Representations
+61
+
+Unsigned & Signed Numeric Values
+62
+X B2U(X) B2T(X)
+Equivalence
+0000 0 0 [ ]
+0001 1 1
+Same encodings for nonnegative
+(cid:0)
+0010 2 2
+values
+0011 3 3
+0100 4 4
+Uniqueness
+[ ]
+0101 5 5
+Every bit pattern represents
+0110 6 6
+(cid:0)
+0111 7 7 unique integer value
+1000 8 -8
+Each representable integer has
+1001 9 -7 (cid:0)
+1010 10 -6 unique bit encoding
+1011 11 -5
+Can Invert Mappings
+1100 12 -4 [ ]
+1101 13 -3
+1110 14 -2
+1111 15 -1
+
+Conversion
+63
+What happens if you interpret a signed integer as
+[ ]
+an unsigned one, or vice versa ?
+Bit pattern is the the same, but the bits may be
+[ ]
+interpreted differently
+
+Two's Compliment 2 Unsigned
+64
+Use the fact that they have identical bit
+[ ]
+representations to derive a numerical relationship
+2w
+-1
++2w-1 -1 2w-1 -1 Unsigned
+Two's
+0 0
+complement
+-2w-1
+
+Unsigned 2 Two's Complement
+65
+Same process as previous slide
+[ ]
+2w
+2w-1 +2w-1
+Unsigned
+Two's
+0 0 complement
+-2w-1
+
+Shortcut conversion
+66
+To quickly read a negative signed number:
+[x]
+If the binary number starts with 1, we know it's a
+[x]
+negative number
+Flip all bits and add 1 to the result
+[x]
+Read as (-) [unsigned number]
+[x]
+4-bit example:
+[x]
+Signed 1111
+Flip all and add 1🡪 0000 + 1 = 0001 = 1
+Therefore, 1111 = - (1)
+
+Another example
+67
+Signed 1100
+[x]
+Flip all bits🡪 0011 = 3
+[x]
+Add 1 🡪 = 4
+[x]
+Therefore, 1100 = -4
+[x]
+
+Worksheet 3
+68
+Questions 1-3 cover up to here
+[ ]
+
+Expanding Bit Representation
+69
+Common operation: convert from smaller to larger
+[x]
+data type
+e.g. converting an short to an int, or an int to a long
+[x]
+Should always be possible
+[x]
+Unsigned: add leading zeros (i.e. zero extension)
+[x]
+Signed: repeat sign bit (i.e. sign extension)
+[x]
+Example:
+[x]
+Unsigned 4 bit 🡪 8 bit: 1001 🡪 0000 1001
+[x]
+Signed 4 bit 🡪 8 bit: 1001 🡪 1111 1001
+[x]
+
+Truncating Bit Representation
+70
+What happens when you want to reduce the number
+[x]
+of bits representing a number
+When truncating a w-bit number to a k-bit number,
+[x]
+we drop the high-order w-k bits
+Truncating a number can alter its value
+[x]
+A form of overflow
+[x]
+e.g. 0x00FF 🡪 0xFF changes from positive to negative
+[x]
+with the two's complement representation
+Question: What is the value of the integer after
+[x]
+truncation ?
+
+Aside: Modulus After Division
+71
+Mod(x,y) or x % y: The amount by which x exceeds
+[x]
+the largest integer multiple of y that is not greater
+than x, i.e. x - ny, where n = floor(x/y)
+20 % 3 = 2
+[x]
+(20 = 3*6 + 2) 🡪 Mod gives us the remainder
+[x]
+45 % 7 = 3
+[x]
+(45 = 7*6 + 3) 🡪 Mod gives us the remainder
+[x]
+-45 % 7 = 4
+[x]
+(-45 = -7*7 + 4)
+[x]
+NOTE: Remainder is always positive!
+[x]
+
+Truncating Continued
+72
+
+Chapter 2
+73
+2.3 Integer Arithmetic
+
+Unsigned Addition
+74
+
+Unsigned Addition
+75
+Another Example:
+[ ]
+Note: We started with 5 bits and ended with 6
+[ ]
+
+Unsigned Subtraction
+76
+
+Overflow
+77
+
+Example
+78
+Arguments: 0 - 15
+[ ]
+Sum: 0 - 30
+[ ]
+
+Overflow Continued
+79
+Result of adding two w-bit integers could require
+[ ]
+w+1 bits
+Solution: Fixed precision arithmetic
+[ ]
+Unsigned arithmetic can be viewed as a form of
+[ ]
+modular arithmetic
+w
+Equivalent to computing sum modulo 2
+[ ]
+w
+Sum modulo 2 can be obtained by discarding the
+[ ]
+high order bit in w + 1 result
+Examples:
+[ ]
+
+Overflow Continued
+80
+x + y
+2w+1
+Overflow
+x +u y
+2w
+0
+
+Example
+81
+
+Two's Complement Addition
+82
+In binary, add bit patterns as if they were unsigned
+[x]
+Again, discard high order w+1 bit
+[x]
+Interpret result as signed (remember bits + context)
+[x]
+Most computers use the same machine instruction to
+[x]
+perform either unsigned or signed addition
+In decimal, perform the following addition
+[x]
+x + y = U2T [(x+y) mod 2w]
+[x]
+w
+
+Examples
+83
+4-bit examples:
+[x]
+-8 + (-5)
+[x]
+-8 + 5
+[x]
+2 + 5
+[x]
+5 + 5
+[x]
+
+Overflow
+84
+Note: In two's-compliment there are two
+types of overflow, positive and negative
+x y Case
+x + y
++2
+Positive -8 -5 1
+w
+Case 4 overflow
+x +t y
++2w -1 +2w -1
+-8 -8 1
+Case 3
+0 0
+-8 5 2
+Case 2
+-2w -1 -2w -1
+2 5 3
+Case 1
+Negative
+-2w
+overflow 5 5 4
+4-bit addition
+
+Example
+85
+
+Integer Subtraction
+86
+Subtraction is performed using addition of signed
+[x]
+numbers
+a - b = a + (-b)
+[x]
+Example (6 bit length)
+[x]
+25 - 5 = 25 + (-5) = 20
+[x]
+01 1001 (25)
++ 11 1011 (-5)
+----------------
+101 0100 🡪 Truncation 🡪 01 0100 = 20
+
+Unsigned Multiplication
+87
+Just like multiplication in base 10
+[x]
+What is the range of the product of x and y ?
+[x]
+w
+To deal with overflow we perform (x * y) mod 2
+[x]
+Example
+[x]
+Base 2: 0110 * 1011 = 0010
+[x]
+Base 10: (6 * 11) mod 24 = 2
+[x]
+
+Signed Multiplication
+88
+Due to overflow results will also be truncated
+[x]
+As a result, unsigned multiplication is the same as
+[x]
+signed multiplication
+i.e. U2T ((x * y) mod 2w )
+[x]
+w
+Mode x y x * y Truncated
+Unsigned 5 3 15 7
+Signed -3 3 -9 -1
+Unsigned 4 7 28 4 (3-bit
+multiplication)
+Signed -4 -1 4 -4
+Unsigned 3 3 9 1
+Signed 3 3 9 1
+
+Mult. and Div. by Shifting
+89
+The cost of multiplication and division
+[x]
+Multiplication and division are expensive operations
+[x]
+Addition takes 1 to 2 cycles
+[x]
+Multiplication can take 5 to 10 cycles
+[x]
+Division 20 to 39 cycles
+[x]
+Does it always have to be expensive?
+[x]
+
+Multiplying by Powers of Two
+90
+Multiplication by 2 is the same as left shift
+[x]
+k
+Multiplication by 2 is the same as left shift of k bits
+[x]
+Examples:
+[x]
+7 * 2
+[x]
+Before: 0000 0111
+[x]
+After: 0000 1110
+[x]
+7 * 8
+[x]
+Before: 0000 0111
+[x]
+After: 0011 1000
+[x]
+
+Dividing by powers of 2
+91
+Unsigned numbers
+[x]
+Same as a logical shift right
+[x]
+Ex: 42/2 = 21
+[x]
+Before: 0010 1010
+[x]
+After: 0001 0101
+[x]
+Why does it work ?
+[x]
+Integer division rounds toward 0
+[x]
+k
+Divide by 2 is a right shift of k bits
+[x]
+42 / 8 = 5
+[x]
+Before: 0010 1010
+[x]
+After: 0000 0101
+[x]
+
+Dividing by Powers of 2
+92
+Signed numbers
+[x]
+Use arithmetic right shift to protect the sign bit
+[x]
+Problem: integer division should round upwards for
+[x]
+negative numbers
+e.g. -5/2 = -2 not -3
+[x]
+Need to bias value before shifting
+[x]
+k
+If x < 0, add 2 - 1 to x before right shifting where
+[x]
+k equals the number of bits shifted
+Example:
+[x]
+-5 >>1 = (1011 + 21 - 1) >> 1 = (1100 >> 1) = -2
+-5 >>2 = (1011 + 22 - 1) >> 2 = (1110 >> 2) = -1
+
+Divide by Powers of 2
+93
+Another example (5-bit)
+[x]
+We want -11/2 = -5 (remember we round towards 0)
+[x]
+-11 = 1 0101
+[x]
+Bias is 21-1 since we only want to divide by 2
+[x]
+Perform shift: (1 0101 + 21 - 1) >> 1
+[x]
+=(1 0110) >> 1
+=(1 1011) = -5
+
+Recall from last class
+94
+An int is not an integer
+[x]
+Example 1) Is x2 >= 0 ?
+[x]
+float: yes
+[x]
+int: no
+[x]
+40000 * 40000 = 1600000000
+[x]
+50000 * 50000 = ?
+[x]
+Now we can predict value above. Let's try.
+[x]
+
+Recall from last class
+95
+What is the range of our integer?
+[ ]
+(Hint: We're using Java.)
+
+Recall from last class
+96
+
+Recall from last class
+97
+We want to multiply 50,000 x 50,000 = 2.5 x 109
+[x]
+[1001 0101 0000 0010 1111 1001 0000 0000]
+But our max range = 2.147 x 109
+[x]
+[0111 1111 1111 1111 1111 1111 1111 1111]
+What is the predicted result after overflow?
+[x]
+How do we figure out what the result will be (a priori)?
+[x]
+
+Recall from last class
+98
+
+Recall from last class
+99
+
+Recall from last class
+100
+Result falls outside of two's complement number line.
+[ ]
+It is assigned a negative value instead.
+4.294b
+50,000 x 50,000
+Unsigned +2.147b +2.147b
+Two's
+0 0
+complement
+-2.147b

@@ -1,0 +1,954 @@
+1
+Computer Architecture and
+System Software
+Lecture 04: Intro to Assembly Language
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+Assignment 1 due this Friday, Jan 30th
+[x]
+Going forward, please submit calculation work
+[x]
+exclusively as .PDF.
+Lab 4 will be floating point calculations, you need to
+[x]
+put this in a word processor and export as PDF
+(pictures of work by hand ok, but needs to be
+attached in a PDF in the proper order)
+
+Assembly Language Background
+3
+
+Assembly Language Programming
+4
+We will be working with the Intel 32-bit architecture
+[x]
+For work at home you will need an emulator,
+[x]
+DOSBOX
+http://www.dosbox.com/
+[x]
+Other software packages available, but solutions
+[x]
+given in class will only be guaranteed to compile
+using DOSBOX
+
+High-Level Language
+5
+High-level language (HLL) shield us from
+[x]
+machine-level complexity
+HLL programs are
+[x]
+Easier to write
+[x]
+Less error prone
+[x]
+Readable
+[x]
+Portable
+[x]
+Efficient
+[x]
+
+High-Level Languages
+6
+HLL relieves programmer from
+[x]
+Writing in machine-level instructions
+[x]
+Managing memory
+[x]
+Rewriting programs to run on different machines
+[x]
+
+Compiler
+7
+Main work is done by compiler
+[x]
+Translate HLL program to assembly code (hardest part)
+[x]
+Assemble assembly code to machine code (object code)
+[x]
+Link object code with runtime library
+[x]
+Yields an executable
+[x]
+Assembly code:
+[x]
+VERY close to machine code
+[x]
+Human readable encoding of machine code
+[x]
+Each instruction corresponds to a machine instruction
+[x]
+Not readable by machine (needs to be assembled)
+[x]
+
+Machine-Level (ML) Code
+8
+Both assembly and machine code are ML code
+[x]
+How does ML differ from High Level (HL) ?
+[x]
+HL view:
+[x]
+Objects of different types are declared and allocated memory
+[x]
+Memory is accessed by accessing the objects
+[x]
+Local variables used to store temporary values
+[x]
+CPU state is hidden from programmer
+[x]
+Object type defines what operations can be performed
+[x]
+Single statement can perform a complex task
+[x]
+e.g. if (a+b < c) someFunc(d);
+[x]
+
+Machine-Level (ML) Code
+9
+ML view:
+[x]
+CPU state is visible and accessible to the program
+[x]
+All CPU state is stored in its register file, i.e. the memory
+[x]
+on the CPU
+CPU has:
+[x]
+Registers
+[x]
+ALU
+[x]
+Control Unit
+[x]
+Execution Unit
+[x]
+etc
+[x]
+
+Motivation for Assembly Code
+10
+Important:
+[x]
+Understand how computers execute code
+[x]
+Understand what optimizations the compiler performs
+[x]
+Reverse engineer a piece of software
+[x]
+Improve efficiency of a program
+[x]
+Write programs that have direct control over system
+[x]
+hardware
+Example: writing a device driver to a new scanner
+[x]
+If you are developing system software, you will need to
+[x]
+know assembly language
+
+Instruction Set
+11
+The set of instructions (and their encodings) that a
+[x]
+processor can execute
+We will use the IA32 (aka i386/i486/Pentium)
+[x]
+instruction set
+Used by majority of computers
+[x]
+Instruction set for Intel's most commercially successful
+[x]
+microprocessors
+Easily accessible
+[x]
+Large # of instructions and modes
+[x]
+Gives a good view of how computers work
+[x]
+
+Program Encoding
+12
+Recall the compilation process
+[ ]
+hello.cpp hello.asm Assembl hello.obj Hello.exe
+Editor Linker
+Compiler er
+Assembly Relocatable
+Source Executable
+program object
+program program
+(text) programs
+(text) (binary)
+(binary)
+hello.asm: assembly (human readable, not executable)
+[ ]
+hello.obj: machine code (binary, executable)
+[ ]
+Assembly and machine code are different encodings of the
+[ ]
+same instructions
+
+x86 and IA-32 Instruction Set Architectures
+13
+
+History
+14
+Intel first introduced microprocessors in 1969
+[x]
+Work on early processors led to the development of the
+[x]
+Intel Architecture (IA)
+First processor in the IA family was the 8086 (1979)
+[x]
+20-bit address bus and 16-bit data bus
+[x]
+First 32-bit IA processor was the 80386 (1985)
+[x]
+32-bit address bus and 32-bit data bus
+[x]
+Pentium introduced in 1993
+[x]
+Not named 80586 because numbers can't be trademarked
+[x]
+32-bit address bus and 64-bit data bus
+[x]
+Source (UofW electronic resource): Chapter 3 in S. Dandamudi, Introduction to Assembly Language Programming
+for Pentium and RISC Processors, Springer, 2005.
+
+History
+15
+Source (UofW electronic resource): Chapter 3 in S. Dandamudi, Introduction to Assembly Language Programming
+for Pentium and RISC Processors, Springer, 2005.
+
+History
+16
+https://www.youtube.com/watch?v=7uvUiq_jTLM
+[ ]
+
+Moore's Law
+17
+https://en.wikipedia.org/wiki/Moore%27s_law
+
+8086 / 8088 Architecture
+18
+8086/8088 is the first CPU in the X86-series
+[x]
+(1979)
+8088 is identical to 8086 except it has a 8-bit data
+[x]
+bus instead of a 16-bit data bus (more economical)
+Later processors in this series have similar but
+[x]
+extended architectures
+Need to start at the beginning to understand a
+[x]
+processor like Pentium-IV
+Or newer ones like today's I5, I7 or I9
+[x]
+
+8086 / 8088 Architecture
+19
+Two main units
+[x]
+Bus interface unit (BIU)
+[x]
+Execution unit (EU)
+[x]
+8086
+[x]
+Data bus size: 16 bit
+[x]
+Instruction queue: 6 bytes
+[x]
+20 bit address bus
+[x]
+
+General Purpose Registers
+20
+Used for arithmetic, logical,
+[x]
+and other operations
+Can be configured as:
+[x]
+Four 16-bit registers
+[x]
+Eight 8-bit registers
+[x]
+
+Index and Pointer Registers
+21
+Base Pointer, Stack Pointer,
+[ ]
+Destination Index, Source
+Index
+Can only be used as
+[ ]
+16 bit registers
+SI, DI used for
+[ ]
+addressing, and string op.
+BP, SP are used for
+[ ]
+maintaining the stack
+
+Segment Registers
+22
+16 bit registers labelled
+[ ]
+DS, CS, SS, ES
+Used to indicate the start
+[ ]
+of different segments in
+memory
+D - Data
+[ ]
+C - Code
+[ ]
+S - Stack
+[ ]
+E - Extra
+[ ]
+IP - Instruction Pointer
+[ ]
+
+Flag Register
+23
+16-bit register containing 9
+[ ]
+1-bit flags
+Gives status of the last
+[ ]
+instruction and the
+processor
+
+Flag Register
+24
+Overflow flag: Set if a signed overflow occurs
+[ ]
+Direction flag: Used to indicate direction of processing for
+[ ]
+string manipulations (0 = forward, 1 = backward)
+Interrupt enable flag: Setting this enables interrupts
+[ ]
+Trace (trap) flag: Used for debugging. When set processor
+[ ]
+executes only 1 instruction, then interrupts to call debugger
+Sign flag: Set to the MSB of the result of an operation
+[ ]
+Zero flag: Set if the result is zero
+[ ]
+Auxiliary carry flag: Set if there was a carry from or borrow
+[ ]
+to bits 0-3 in the AL register
+Parity flag: Set if the number of1's in result is even
+[ ]
+Carry flag: Set if there was a carry from or borrow to the
+[ ]
+MSB during last calculation
+Image source: http://www.electronics.dit.ie/staff/tscarff/8086_registers/8086_registers.html
+
+Programming Tools
+25
+
+DOSBox
+26
+Required for those of you that have 64-bit machines
+[ ]
+and want to work on assignments at home
+Available at: http://www.dosbox.com/
+[ ]
+
+Using DOSBOX
+27
+Run DOSBOX
+[x]
+Choose your working folder by 'mounting' your
+[x]
+virtual C:\
+Example: mount c "C:\Assembly"
+[x]
+Directory in quotations is where you will be storing your
+[x]
+source code, masm.exe, link.exe, debug.exe
+Once the C:\ is mounted, type C: to switch to your
+[x]
+directory in DOSBOX
+
+DOS commands
+28
+You will need to know simple DOS commands to
+[ ]
+navigate your folders in the command line
+dir /p - display contents of current directory
+[ ]
+(folders and files), one page at a time
+cd FolderName - change directory to the folder
+[ ]
+called 'FolderName' in your current directory
+Alternatively you can type full directory path
+?
+(C:\Windows\etc...)
+
+DOS commands
+29
+cd .. - Go up a level in the folder hierarchy
+[ ]
+Prog.exe - run program Prog.exe (must be in your
+[ ]
+current directory)
+help - displays a list of usable commands
+[ ]
+
+Shortcuts
+30
+Up arrow - previous command
+[x]
+Tab - Scrolls through available files/directories that
+[x]
+begin with whatever you have started typing
+Use to avoid wasting time typing long directory
+[x]
+pathways
+
+Creating an Assembly file
+31
+Use template.asm and save changes under different
+[x]
+file name
+OR
+Create a .txt file
+[x]
+Change file name extension to .asm
+[x]
+You may have to turn on the option to show file
+[x]
+extensions on your computer
+Method varies with OS - google if you can't find it
+[x]
+
+Programming Tools
+32
+Course website has link to websites and tools you
+[ ]
+will need (these will also be included in As2
+handout)
+After you have created an .asm file, you'll need to
+[ ]
+compile and link your program before you can run it
+This is done within DOSBOX from your mounted C:\
+[ ]
+
+Programming Tools
+33
+Compile, link, and run program
+[x]
+masm programName.asm
+[x]
+Include the file extension above
+[x]
+Hit enter 4 times
+[x]
+link programName
+[x]
+DO NOT include the file extension above
+[x]
+Hit enter 4 times
+[x]
+An exe file should have been generated in your directory
+[x]
+programName.exe
+[x]
+Runs the program
+[x]
+To be demonstrated in class
+[x]
+
+Debugging
+34
+Debug programName.exe
+[x]
+Type ? for command listing
+[x]
+Commander that may be useful
+[x]
+Dump
+[x]
+Dumps a section of memory
+[x]
+go
+[x]
+Jumps to a line of code in the program
+[x]
+Is like running until a break point in a program
+[x]
+Can be used to skip over interrupt routines
+[x]
+
+Debugging
+35
+trace
+[x]
+Allows you to step through the code one line at a time,
+[x]
+allowing you to see the CPU state at any point
+unassemble
+[x]
+Displays the disassembly starting from the net instruction to
+[x]
+be executed
+There will be a section that goes more into depth on
+debugging later, just for now know
+
+Notepad++
+36
+Recommend notepad++ as assembly editor for this
+[x]
+course
+Highlights keywords
+[x]
+Good organization/formatting
+[x]
+Does not require an installer
+[x]
+Available at: http://notepad-plus-plus.org/
+[x]
+
+Instruction Set
+37
+
+Assembly Language Statements
+38
+Three types of statements
+[x]
+Directives or Pseudo-ops
+[x]
+Instructions
+[x]
+Macros
+[x]
+
+Assembly Language Statements
+39
+Three types of statements
+[x]
+Directives or Pseudo-ops
+[x]
+Direct the assembler during the assembly process
+[x]
+Used for variable declaration and storage allocation
+[x]
+Non-executable and do not generate any machine language
+[x]
+e.g. segment, db, dw
+[x]
+Instructions
+[x]
+Macros
+[x]
+
+Assembly Language Statements
+40
+Three types of statements
+[x]
+Directives or Pseudo-ops
+[x]
+Instructions
+[x]
+Instruct the processor to perform a task
+[x]
+Contains operation code (opcode)
+[x]
+Cause the assembler to generate machine language
+[x]
+e.g. mov, add
+[x]
+Macros
+[x]
+
+Assembly Language Statements
+41
+Three types of statements
+[x]
+Directives or Pseudo-ops
+[x]
+Instructions
+[x]
+Macros
+[x]
+Permit the assembly language programmer to name a group
+[x]
+of statements and refer to the group by the macro name
+During the assembly process, each macro is replaced by the
+[x]
+group of statements that it represents and assembled in
+place
+
+Assembly Language Statements
+42
+Take a look at template.asm (on the website for
+[x]
+download)
+There are three memory segments visible here. In
+[x]
+order of appearance:
+Data - Directives and macros go here
+[x]
+Stack - More storage space (details on this later)
+[x]
+Code - Instructions go here
+[x]
+
+Directives: Data Allocation
+43
+[var-name] define-directive initial-value,[initial-value] ...
+The define directive takes one of the five basic forms:
+[x]
+DB Define Byte ;allocates 1 byte
+[x]
+DW Define Word ;allocates 2 bytes
+[x]
+DD Define Doubleword ;allocates 4 bytes
+[x]
+DQ Define Quadword ;allocates 8 bytes
+[x]
+DT Define Ten Bytes ;allocates 10 bytes
+[x]
+Examples:
+[x]
+var1 DB 'y' ;Use ASCII for number equivalent
+[x]
+var2 DB 79h ;(base 16)
+[x]
+var3 DB 11110010B ;(base 2)
+[x]
+var4 DB 62 ;(base 10)
+[x]
+
+Directives: Data Allocation
+44
+Another example:
+[x]
+total DD 542803535
+[x]
+This would allocated four contiguous bytes of memory
+[x]
+and initialize it to 542803535 (205A864Fh):
+Address: x x+1 x+2 x+3
+Contents: 4F 86 5A 20
+
+Directives: Data Allocation
+45
+Or:
+[x]
+total DB 20h,5Ah,86h,4Fh
+[x]
+This would allocated four contiguous bytes of memory
+[x]
+and initialize it to 205A864Fh:
+Address: x x+1 x+2 x+3
+Contents: 20 5A 86 4F
+
+Directives: Data Allocation
+46
+Range of numeric operands
+[x]
+DB: -27 to 28 - 1
+[x]
+DW: -215 to 216 - 1
+[x]
+DD: -231 to 232 - 1 or a short floating-point number
+[x]
+(32 bits)
+DQ: -263 to 264 - 1or a long floating-point number
+[x]
+Ranges depend on context (signed or unsigned)
+[x]
+
+Directives: Data Allocation
+47
+Uninitialized Data and multiple initializations
+[x]
+Use DUP command
+[x]
+Number after DB indicates the number of bytes, and
+[x]
+DUP(X) will fill the number of bytes with X
+Examples:
+[x]
+test DB 10 DUP ('W') ;initializes 10 bytes to W
+[x]
+test DB 1 DUP(?) ;Reserve 1 uninitialized byte
+[x]
+test DB DUP(?) is invalid - you must specify a number
+[x]
+test DB 20 DUP(?) ;Reserve 20 uninitialized bytes
+[x]
+
+Directives: Data Allocation
+48
+Multiple definitions:
+[ ]
+sort DB 'y' ; ASCII of y = 79h
+value DW25159 ; 25159 = 6247h
+total DD 542803535 ; 542803535 = 205A864Fh
+Memory allocation
+[ ]
+Address: x x+1 x+2 x+3 x+4 x+5 x+6
+Contents: 79 47 62 4F 86 5A 20
+More examples:
+[ ]
+message DB 'BYE',0Dh,0Ah OR message DB 'B'
+DB 'Y'
+DB 'E'
+DB 0Dh
+DB 0Ah
+
+Directives: Defining Constants
+49
+name EQU expression
+[x]
+Assigns the result of the expression to name.
+[x]
+Example:
+[x]
+NUM_OF_STUDENTS EQU 90
+...
+MOV AX, NUM_OF_STUDENTS
+
+Directives
+50
+When allocating data with directives, space is
+[ ]
+always reserved in the data segment
+
+8086 Instructions
+51
+Instructions can be of various types
+[x]
+Data moving instructions
+[x]
+Arithmetic - add, subtract, increment, decrement, etc.
+[x]
+Control transfer - conditional, unconditional, call
+[x]
+subroutine
+Logic - AND, OR, XOR, shift/rotate and test
+[x]
+String manipulation - load, store, move, compare
+[x]
+Input/Output instructions
+[x]
+Other - setting/clearing flag bits, stack operations, etc.
+[x]
+
+MOV
+52
+mov destination, source
+mov register, register
+mov register, immediate
+mov memory, immediate
+mov register, memory
+mov memory, register
+Memory to memory forbidden.
+Examples
+[ ]
+mov [response], bh
+mov dx, [table1]
+mov [name1+4], 'k'
+
+Data Transfer Instructions
+lea register, memory_address
+Loads effective address of variable
+[x]
+Effective address - byte with lowest address of
+[x]
+multi-byte object
+(First char of a string)
+[x]
+Examples
+[x]
+lea dx, mystring
+
+Data Transfer Instructions
+54
+XCHG exchanges 8, or 16-bit source and destination operands
+[x]
+Examples
+[x]
+xchg ax, dx
+[x]
+xchg [response], cl
+[x]
+xchg [total], dx
+[x]
+As in the mov instruction, both operands cannot be located in
+[x]
+memory. Note that this restriction is applicable to most instructions
+
+Arithmetic Instructions
+55
+INC and DEC used to either increment or decrement
+[x]
+the operands by one
+inc destination
+[x]
+dec destination
+[x]
+Examples
+[x]
+inc bx ; increment bx register by one
+[x]
+dec dl ; decrement 8-bit register
+[x]
+
+Arithmetic Instructions
+56
+ADD used to add two 8 or 16-bit operands
+[ ]
+As with the mov instruction, add can also take the five basic forms
+[ ]
+depending on how the two operands are specified. The semantics of
+the add instruction are
+add destination, source => destination = destination + source
+[ ]
+
+Arithmetic Instructions
+57
+Examples:
+[ ]
+
+Arithmetic Instructions
+58
+SUB used to subtract two 8, 16-bit operands
+[ ]
+sub destination, source => destination = destination - source
+[ ]
+Examples:
+[ ]
+
+Arithmetic Instructions
+59
+MUL used to perform unsigned multiplication of a number with AL
+[ ]
+register
+mul source
+[ ]
+The source operand can be in a general-purpose register or in
+[ ]
+memory. Immediate operand specification is not allowed
+Example:
+[ ]
+mov al, 10
+?
+mov dl, 25
+?
+mul dl
+?
+
+Arithmetic Instructions
+60
+MUL is used to perform unsigned multiplication of a
+[ ]
+number with AL register
+Example:
+[ ]
+mov al, 2
+mov bl, 80h ; 128
+mul bl ; Ax = 0100h (256)
+
+Arithmetic Instructions
+61
+IMUL used to perform signed multiplication of a number with AL
+[ ]
+register
+imul source
+[ ]
+The behaviour of the imul instruction is similar to that of mul
+[ ]
+The only difference to note is that the carry and overflow flags are
+[ ]
+set if the upper half of the result is not the sign extension of the
+lower half
+mov al, 2
+mov bl, f6h ; -10
+imul bl ; ax = FFECh (-20)
+Note, here the carry and overflow flags are cleared, because AH
+[ ]
+contains the sign extension of the AL value
+
+Arithmetic Instructions
+62
+DIV, IDIV used to perform division of AX register
+[ ]
+div source (unsigned)
+[ ]
+idiv source (signed)
+[ ]
+Division generates two result components: a quotient and a
+[ ]
+remainder
+In multiplication, by using double-length registers, overflow never
+[ ]
+occurs. In division, divide overflow is a real possibility.
+The processor generates a special software interrupt when a divide
+[ ]
+overflow occurs
+
+Arithmetic Instructions
+63
+Example
+[x]
+mov ax, 251
+[x]
+mov cl, 12
+[x]
+div cl
+[x]
+Leaves 20 (14h) in the al register and 11 (0bh) in
+[x]
+the ah register
+Therefore, ax contains 0b14h after division
+[x]
+
+Arithmetic Instructions
+64
+Extension to larger operands:
+Both the multiplication and division instructions can
+[x]
+be performed using 32-bit and 16-bit operands
+Or, 64-bit and 32-bit operands on 32-bit system
+[x]
+Example:
+[x]
+
+Arithmetic Instructions
+65
+Need for sign extension
+[x]
+Example: Perform signed division 8000h/400h
+[x]
+Here the divisor is larger than a byte, so dividend must be stored in DX AX
+[x]
+However, 8000h fits entirely within AX
+[x]
+So, AX needs to be sign extended to DX in order to maintain sign for
+[x]
+division
+To aid sign extension instructions such as idiv, several instructions are
+[x]
+provided:
+cbw ; Convert byte to word
+[x]
+cwd ; Convert word to doubleword
+[x]
+cdq ; Convert doubleword to quadword
+[x]

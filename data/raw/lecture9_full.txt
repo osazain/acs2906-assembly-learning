@@ -1,0 +1,1251 @@
+Computer Architecture and
+System Software
+Lecture 09: Memory Hierarchy (cont)
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+- Important Dates:
+Final Exam dates announced (Wednesday, April
+-
+15th, 6pm-9pm @ 1D62 (Duckworth Gym),
+details of content to come)
+- As4 will be released on March, 18th
+- Due Wednesday, April 1st at midnight
+- 1 question, 20 points
+
+Recall: Storage Technology Trends
+3
+Observations
+[x]
+CPU speed is out-pacing all storage
+[x]
+SRAM is keeping up, but
+[x]
+DRAM and Disk are sorely lacking
+[x]
+SRAM is too expensive to use for main memory
+[x]
+DRAM and disk are main storage devices
+[x]
+Creates the CPU-memory gap, CPU is limited by speed of
+[x]
+memory and disk
+To bridge gap: modern systems use SRAM based caches
+[x]
+This approach works because most programs exhibit good
+[x]
+locality
+
+The Memory Hierarchy
+4
+6.2 Locality
+
+Locality
+5
+Well written programs tend to reference data items that
+[x]
+Are near to other recently referenced items
+[x]
+Were recently referenced themselves
+[x]
+Two forms of locality:
+[x]
+Spatial locality: if a memory location was referenced, memory
+[x]
+locations nearby will likely be or have been referenced
+Temporal locality: if a memory location was referenced, the
+[x]
+memory location is likely to be referenced again in the near
+future
+
+Principle of Locality
+6
+Why consider locality?
+Programs with good locality will run faster than programs
+[x]
+with poor locality
+All levels of a computer system exploit locality:
+[x]
+Hardware: uses caches to speed up memory accesses
+[x]
+Operating Systems:
+[x]
+Main memory is used as a cache for the most recently used chunks of the
+[x]
+virtual address space
+Use main memory as cache for disk data
+[x]
+Applications: Web browser cache recently viewed pages on disk
+[x]
+
+Principle of Locality
+7
+Two different things are fetched from memory during
+[x]
+execution
+Program data: fetched at request of program
+[x]
+Program instructions: fetched at request of CPU
+[x]
+Locality principles apply to both
+[x]
+
+Locality of Ref. to Program Data
+8
+Consider the following function:
+[ ]
+Question: Does this function have good locality?
+[ ]
+
+Locality of Ref. to Program Data
+9
+Answer: Look at reference pattern for each variable
+[x]
+Max:
+[x]
+Scalar: no spatial locality
+[x]
+Accessed at least once in each loop iteration: good temporal
+[x]
+locality
+i:
+[x]
+Scalar: no spatial locality
+[x]
+Accessed at least once in each loop iteration: good temporal
+[x]
+locality
+v:
+[x]
+Array elements are accessed sequentially: good spatial locality
+[x]
+Each element is accessed once: bad temporal locality
+[x]
+
+Locality of Ref. to Program Data
+10
+Since all variables have either good temporal or
+[x]
+spatial locality
+maxvec has good locality
+[x]
+maxvec accesses elements sequentially: said to have
+[x]
+a stride of 1
+Definition: stride-k means function visits every kth
+[x]
+item
+Stride-1 is most common and has good spatial
+[x]
+locality
+Idea: greater the stride, the worse the locality
+[x]
+
+Locality of Ref. to Program Data
+11
+Multidimensional arrays example (p. 587-588)
+[ ]
+Important: Convention is to store elements of array
+[ ]
+in row-major order
+
+Locality of Instruction Fetches
+12
+CPU fetches instructions from memory in sequential order
+[ ]
+Unless: a branch occurs
+[ ]
+These are also memory accesses
+[ ]
+Small tight loops enjoy both good spatial and temporal
+[ ]
+locality
+Large functions enjoy good spatial locality, bad temporal
+[ ]
+Small functions that are not called from loops enjoy neither
+[ ]
+
+Summary of Locality
+13
+Programs that repeatedly reference the same
+[x]
+variables enjoy good temporal locality
+For program with k-stride patterns, the smaller the
+[x]
+stride the better the spatial locality
+Loops have good temporal and spatial locality
+[x]
+Smaller loops have better spatial locality
+[x]
+More loop iterations have better temporal locality
+[x]
+
+The Memory Hierarchy
+14
+6.3 The Memory Hierarchy
+
+The Memory Hierarchy
+15
+We began with two fundamental properties
+[x]
+Different storage technologies have widely ranging
+[x]
+access times
+Faster technologies are more expensive and have less
+[x]
+capacity
+Well written programs tend to have good locality
+[x]
+These principles complement each other
+[x]
+Suggests organization of computer memory into a
+[x]
+hierarchy
+
+The Memory Hierarchy
+16
+In general:
+[x]
+Storage devices get slower, cheaper, and larger as we move
+[x]
+from higher to lower levels
+At the highest level (L0) are a small number of fast CPU
+[x]
+registers
+Accessed in a single clock cycle
+[x]
+Next are one or more small SRAM-based cache memories
+[x]
+Accessed in a few clock cycles
+[x]
+Followed by DRAM-based memory
+[x]
+Accessed in 10s to 100s clock cycles
+[x]
+Next come slow enormous disks
+[x]
+
+The Memory Hierarchy
+17
+L0 Registers: Holds words retrieved from L1 cache
+[ ]
+L1 On chip cache: Holds cache lines retrieved from
+[ ]
+L2 cache
+L2 Off-chip cache: Holds lines retrieved from main
+[ ]
+memory
+L3 Main Memory: Holds disk blocks retrieved from
+[ ]
+local disk
+L4 Local Disks: Holds files retrieved from remote
+[ ]
+sources
+L5: Remote secondary storage: End of hierarchy
+[ ]
+
+Storage Hierarchy
+18
+L0 CPU registers hold words retrieved from
+cache memory.
+Smaller, : Registers
+faster,
+and
+On-chip L1
+L1 L1 cache holds cache lines retrieved
+costlier
+cache (SRAM) from the L2 cache.
+(per byte) :
+storage
+devices Off-chip L2 L2 cache holds cache lines retrieved
+L2
+cache (SRAM) from memory.
+:
+Main Main memory holds disk
+blocks retrieved from local
+L3 memory
+disks.
+: (DRAM)
+Larger,
+slower,
+Local secondary
+Local disks hold files
+and
+retrieved from disks on
+cheaper L4 storage
+remote network servers.
+(per byte)
+: (local disks)
+storage
+devices
+Remote secondary storage
+L5 (distributed file systems, Web
+: servers)
+
+Caching in the Memory Hierarchy
+19
+A cache is a
+[x]
+Small fast storage device
+[x]
+Acts as a staging area for data objects in slower
+[x]
+devices
+Caching: Process of using a cache
+[x]
+Main idea:
+[x]
+Faster & smaller memory at level k acts as a cache for
+[x]
+larger & slower memory at level k+1
+Each level "caches" data objects from the next lower level
+[x]
+
+Caching in the Memory Hierarchy
+20
+General concept:
+[x]
+Storage at level k+1 is partitioned into blocks
+[x]
+Each block has a unique address
+[x]
+Blocks can be either fixed (in most cases) or variable size
+[x]
+
+Caching in the Memory Hierarchy
+21
+General concept continued
+[x]
+Storage at level k is partitioned into smaller set of same-sized
+[x]
+blocks
+Data is copied between levels k and k+1 in units corresponding to
+[x]
+the size of the block
+Note: different block sizes between different levels
+[x]
+General principle: lower in hierarchy = longer access and larger
+[x]
+blocks
+
+Cache Hits and Misses
+22
+When a program looks for data object d at level
+[x]
+k+1
+It first looks for d at level k
+[x]
+If d is cached at level k, then this is called a cache hit
+[x]
+Program reads d from level k, which is faster than level
+[x]
+k+1
+
+Cache Hits and Misses
+23
+If d is not found, this is called a cache miss.
+[x]
+Cache at level k fetches block d from level k+1
+[x]
+If level k cache is full, fetched block overwrites another block in
+[x]
+cache
+The overwritten block is called the victim block
+[x]
+The victim block is said to be evicted from the cache
+[x]
+Method used to perform eviction is called the replacement policy
+[x]
+Random
+[x]
+Least Recently Used (LRU)
+[x]
+Once d is read into level k, it can be used by the program
+[x]
+
+Cache Hits and Misses
+24
+Three types of cache misses:
+[x]
+Compulsory misses: are those misses caused by an empty
+[x]
+cache
+Empty cache is called a cold cache
+[x]
+Conflict misses: Are those misses that could have been
+[x]
+avoided, had the cache not evicted an entry earlier
+Capacity misses: Misses that occur solely due to finite size of
+[x]
+the caches
+When a block is loaded into cache, it must have a place
+[x]
+Ideal: a flexible policy to place block anywhere in cache
+[x]
+
+Cache Hits and Misses
+25
+Problem: caches at top of hierarchy must be fast, such a
+[x]
+policy would be too expensive to implement in hardware
+Solution:
+[x]
+Hardware caches restrict where blocks can be placed
+[x]
+To a subset or even singleton of blocks at level k
+[x]
+Example: block i can be placed only in location i mod 4
+[x]
+
+Cache Hits and Misses
+26
+However:
+[x]
+Even if cache is not full, another block may have to be evicted
+[x]
+Lastly:
+[x]
+Programs generally work in phases (or stages)
+[x]
+In each stage, program access a limited # of blocks
+[x]
+This set of blocks is called the working set
+[x]
+If working sets fits in cache, great! Program runs quickly
+[x]
+If working set does not fit, program wastes time evicting and
+[x]
+replacing blocks in cache
+
+Cache Management
+27
+At each level of memory something must manage the cache
+[x]
+i.e. evict and load blocks, and decide which blocks to
+[x]
+replace
+This logic can be hardware, software, or both
+[x]
+Compiler manages L0
+[x]
+Hardware manages L1/L2
+[x]
+Hardware/OS manages L3
+[x]
+OS manages L4 (many disks also have a hardware cache)
+[x]
+
+Summary of Memory Concepts
+28
+Exploiting Temporal Locality:
+[x]
+Objects will be accessed many times
+[x]
+First time object is loaded into cache
+[x]
+In the future object is accessed from the cache faster
+[x]
+Exploiting Spatial Locality:
+[x]
+Blocks contain multiple data objects
+[x]
+First object causes block to be loaded into cache
+[x]
+Next object accessed after first object will already be
+[x]
+in the cache
+
+The Memory Hierarchy
+29
+6.4 Cache Memories
+
+General Operation
+30
+Assume the following memory hierarchy
+[x]
+Registers
+[x]
+L1 cache
+[x]
+Memory
+[x]
+
+Generic Cache Structure
+31
+
+Summary Of Cache Parameters
+32
+
+General Operation
+33
+CPU requests word at address A (i.e. data is not in the reg.)
+[x]
+Request is sent to cache
+[x]
+A is divided into three parts
+[x]
+Set: used to determine which set the block may be cached in
+[x]
+Tag: used to determine which line, if any, the block is in
+[x]
+Offset: offset of word in block
+[x]
+
+General Operation
+34
+Cache uses s bits of A to identify the set that may
+[ ]
+contain the block
+Cache uses tag and valid bit to determine if a line
+[ ]
+in set contains the block
+Offset bits are used to load word if found
+[ ]
+Otherwise cache loads block from memory
+[ ]
+
+General Operation
+35
+The cache must
+[x]
+determine whether a request is a hit or a miss, and
+[x]
+extract the requested word.
+[x]
+This process consists of three steps:
+[x]
+Set selection
+1.
+Line matching
+2.
+Word extraction
+3.
+
+Types of Cache
+36
+Caches are grouped into different classes based on
+[x]
+E (# of cache lines per set)
+Direct-mapped caches: easiest to understand and
+[x]
+implement
+Set associative caches: hard to implement
+[x]
+Fully associative caches: hard to implement
+[x]
+
+Direct-Mapped Cache
+37
+Key characteristic: each set has 1 line (i.e. E = 1)
+[ ]
+Therefore # of sets = # of lines
+[ ]
+
+DM: Set Selection
+38
+To determine if cache contains word at address A
+Find set: use s bits of A to index into array of sets
+[ ]
+
+DM: Line Matching
+39
+Check if valid bit is set
+[x]
+Check if tag bits of A match tag of line
+[x]
+If the above conditions are true, then we have a cache hit
+[x]
+Otherwise, we have a miss.
+[x]
+Load block from memory (assuming only one cache)
+[x]
+Replace line with block
+[x]
+Set bit to valid
+[x]
+Extract word in block
+[x]
+
+DM: Word Selection
+40
+When a hit occurs (or block was loaded from memory) we
+[x]
+know that word is somewhere in the block
+The block offset provides us with the offset of the first byte
+[x]
+in the desired word
+Think of block as an array of bytes, and the byte offset as an
+[x]
+index into that array
+
+Example (pg. 619-621)
+41
+The mechanisms that a cache uses to select sets and
+[x]
+identify lines are extremely simple
+Have to be, because hardware must perform them in a
+[x]
+few nanoseconds
+However, manipulating these bits can be confusing
+[x]
+to us
+
+Example (pg. 619-621)
+42
+Let (S,E,B,m) = (4, 1, 2, 4)
+[ ]
+
+Example (pg. 619-621)
+43
+Using the table, if I try to access address 8,
+[x]
+tag = 1, set = 0, block offset = 0
+[x]
+A read at address 8 therefore checks the cache at
+[x]
+set 0 for a tag of 1. If found, the byte at offset 0 is
+read (Cache Hit)
+Otherwise, update the cache:
+[x]
+1 1 M[8] M[9]
+(M[8], M[9] are the bytes of data located at addresses 8, 9)
+[x]
+
+Example (pg. 619-621)
+44
+1 1 M[8] M[9]
+Now try to access address 0. Using the table,
+[x]
+tag = 0, set = 0, block offset = 0
+[x]
+Currently, the cache at set 0 shows tag of 1. We
+[x]
+wanted a tag of 0, so this is a cache miss.
+Evict the line and update the cache:
+[x]
+1 0 M[0] M[1]
+(M[0], M[1] are the bytes of data located at addresses 0, 1)
+[x]
+
+Direct Mapped Cache
+45
+Advantage: very fast
+[x]
+Code to determine if set contains block is very simple
+[x]
+Disadvantage: each set can only hold one line
+[x]
+Results in thrashing
+[x]
+Example of thrashing (occurred in last example)
+[x]
+Two blocks map to the same set
+[x]
+Program accesses each block in alternating order
+[x]
+Each time block is accessed, other block is evicted from cache
+[x]
+Cache is forced to reload block on each access
+[x]
+Slows down program execution significantly (as much as 2x or 3x)
+[x]
+Also, conflict misses stem from the constraint that each set has
+[x]
+exactly one line
+
+Set Associative Caches
+46
+Key characteristic: 1 < E < C/B
+[ ]
+Called E-way set associative caches
+[ ]
+Each set contains multiple lines
+[ ]
+
+SA: Set Selection
+47
+Identical to direct-mapped caches
+[x]
+s bits identify the set
+[x]
+
+SA: Line Matching and Word Sel.
+48
+Check ALL lines in set (in parallel)
+[ ]
+
+Set Associative Caches
+49
+Retrieve word if line is valid and if line contains
+[x]
+matching tag
+Otherwise, load block from memory (assuming only
+[x]
+1 cache)
+If no empty lines are available (all lines are valid), then
+[x]
+evict a line from the set
+Use offset to get word in cached block
+[x]
+
+Line Replacement
+50
+Which line to evict?
+[x]
+Replacement policy: Method to select block for
+[x]
+eviction
+Options:
+[x]
+Random: choose a line at random from the set
+[x]
+LFU: Least frequently used
+[x]
+LRU: Least recently used
+[x]
+First policy is cheap, but results in more conflict
+[x]
+misses
+Latter policies are more expensive, but result in less
+[x]
+conflict misses
+
+Caching Example
+51
+General:
+[x]
+Same procedure as previous example but now we have
+[x]
+2 lines of space for each cache set
+If both lines are full, choose which line to evict based on
+[x]
+a replacement policy
+Replacement policy will vary depending on the storage
+[x]
+medium
+More on replacement policies later
+[x]
+
+Fully Associative Caches
+Key Characteristic: E = C/B (S = 1)
+[x]
+Cache is a single set with C / B lines
+[x]
+Address is divided into tag and offset
+[x]
+No s bits.
+[x]
+Analogous to a huge hash table
+[x]
+Valid Tag
+E = C/B lines in
+Set Valid Tag
+the one and only
+0:
+set
+Valid Tag
+* *
+*
+52
+Cache block
+Cache block
+Cache block
+
+Fully Associative Caches
+53
+Works similar to set associative caches
+[x]
+There is only one set
+[x]
+Check all lines in set (in parallel)
+[x]
+Retrieve word if line is valid and line contains matching tag
+[x]
+Otherwise:
+[x]
+Choose empty line to place block
+[x]
+Or, evict a block if there are no empty lines
+[x]
+Load block from memory (assuming only 1 cache)
+[x]
+Use offset to get word in cached block
+[x]
+
+FA: Line Matching and Word Sel.
+54
+=1 ? (1) The valid bit must be set
+0 1 2 3 4 5 6 7
+1 1001
+0 0110
+Entire
+cache 1 0110 w w w w
+0 1 2 3
+0 1110
+(2) The tag bits in one of the (3) If (1) and (2), then
+= ?
+cache lines must match the cache hit, and block
+tag bits in the address offset selects
+starting byte
+t bits b bits
+0110 100
+m-1 0
+Tag Block
+offset
+
+Fully Associative Caches
+55
+Logic for searching for tags is slow and expensive
+[x]
+Only an option in caches at lower end of hierarchy
+[x]
+Too slow for L1 and L2 cache
+[x]
+L1 and L2 caches use either
+[x]
+Direct mapped caches
+[x]
+2-way caches
+[x]
+3-way caches
+[x]
+4-way caches
+[x]
+
+Caches and Memory Writes
+56
+What about writing to memory?
+[x]
+Recall read procedure:
+[x]
+CPU requests word from cache
+[x]
+If block with word is cached, it's a hit
+[x]
+Else it's a miss, and cache fetches block from next level
+[x]
+Word from block is returned once block is cached
+[x]
+
+Caches and Memory Writes
+57
+Writes are more complicated
+[x]
+Scenario: CPU writes a word to memory
+[x]
+Either block with word is in cache, or not
+[x]
+If block is in cache (cache hit):
+[x]
+Block in cache is updated with word
+[x]
+Eventually memory has to be updated with word
+[x]
+What does cache do about updating the copy of w in the
+[x]
+next lower level in the hierarchy?
+
+Caches and Memory Writes
+58
+Two options:
+Write-through: Immediately write block to memory
+[x]
+Simplest to implement
+[x]
+Increases number of bus transactions
+[x]
+Write-back: Defer block write until block is evicted
+[x]
+Advantage: significantly reduces number of bus transactions
+[x]
+Disadvantage: additional complexity
+[x]
+Cache must maintain a 'dirty bit' to keep track of which blocks must be
+[x]
+written back when evicted
+Loading cache may take longer because eviction is more complex
+[x]
+
+Caches and Memory Writes
+59
+Scenario: CPU writes a word to memory
+[x]
+Either block with word is in cache, or not
+[x]
+If block is not in cache (cache miss)
+[x]
+Should the block be loaded?
+[x]
+
+Caches and Memory Writes
+60
+Two options
+Write-allocate: Update cache only
+[x]
+Exploits spatial locality of writes
+[x]
+Reduces # of bus transactions
+[x]
+Generally done by write-back caches
+[x]
+Requires more cache hardware
+[x]
+No-write allocate: Send update only to lower level
+[x]
+More bus transactions will occur
+[x]
+Cache updated only on hits
+[x]
+Generally done by write-through caches
+[x]
+Takes less hardware
+[x]
+
+Types of Caches
+61
+In many cases CPU'S use two caches:
+[x]
+d-cache: for program data
+[x]
+Should handle a wide variety of access patterns
+[x]
+Handles reads/writes
+[x]
+i-cache: for program instructions
+[x]
+Mainly needs to handle simple sequential access
+[x]
+Does not need to handle writes
+[x]
+Can be made simpler and faster than a d-cache
+[x]
+Unified cache: a single cache is used for both instructions
+[x]
+and data
+
+Types of Caches
+62
+Modern processors include separate i-caches and
+[x]
+d-caches
+Processor can read an instruction word and a data word at the
+[x]
+same time
+I-caches are typically read-only (simpler)
+[x]
+Each cache is often optimized to different access patterns
+[x]
+Different block sizes, associativities, and capacities
+[x]
+
+Types of Caches
+63
+Cache hierarchy for the Intel Core i7 processor
+[ ]
+Each CPU has four cores
+[ ]
+Each core has its own private L1 i-cache and L1 d-cache
+[ ]
+Each core also has its own L2
+[ ]
+unified cache
+All of the cores share an on-chip
+[ ]
+L3 unified cached
+Note: all SRAM cache memories are
+[ ]
+contained on the chip
+
+Performance Impact
+64
+Cache performance is evaluated using several metrics
+[x]
+Miss rate: fraction of memory references that are cache misses
+[x]
+# misses / # references
+[x]
+Hit rate: fraction of memory references that are cache hits
+[x]
+1 - miss rate
+[x]
+Hit time: Time to deliver a cached word to the CPU
+[x]
+Including time for set selection, line identification, and word selection
+[x]
+several cycles for L1
+[x]
+Miss penalty: Additional time required due to a miss
+[x]
+10 cycles to load from L2
+[x]
+40 cycles to load from L3
+[x]
+100 cycles to load from memory
+[x]
+
+Parameters and Performance
+65
+Recall, cache parameters are
+[x]
+Cache size: # of bytes cache can store
+[x]
+Block size: # of bytes stored in a line
+[x]
+Associatively: # of lines per set
+[x]
+Impact of cache size
+[x]
+Adv.: Large caches tend to increase hit rate
+[x]
+Disadv.: Large caches tend to increase hit time
+[x]
+Especially important for L1 caches that must have short hit time
+[x]
+
+Parameters and Performance
+66
+Impact of block size
+[x]
+Large blocks can increase hit rate if spatial locality is
+[x]
+good
+Large blocks imply smaller number of cache lines (C =
+[x]
+SxExB
+)
+Reduction in hit rate in programs with good temporal locality
+[x]
+Large blocks increase miss penalty (time to load blocks)
+[x]
+Since larger blocks cause larger transfer times
+[x]
+Modern systems usually compromise
+[x]
+Blocks that contain 32 to 64 bytes
+[x]
+
+Parameters and Performance
+67
+Impact of associatively (the number of lines E per set)
+[x]
+Advantage of higher associatively
+[x]
+Reduces thrashing due to conflict misses
+[x]
+Disadvantages:
+[x]
+Slower and more expensive to implement
+[x]
+Hard to make fast
+[x]
+Requires more tag bits
+[x]
+More bits to keep track of which block to evict next
+[x]
+Can increase hit time because of increased complexity
+[x]
+Can increase miss penalty because of increased complexity of choosing
+[x]
+a victim
+Essentially a trade-off between cost, hit-rate, and miss penalty
+[x]
+
+Parameters and Performance
+68
+Write-through caches are simpler to implement
+[x]
+Can use a write buffer that works independently of cache to
+[x]
+update memory
+Read misses are less expensive
+[x]
+Do not trigger a memory write
+[x]
+Write-back caches result in fewer transfers
+[x]
+Allows more bandwidth to memory for I/O devices
+[x]
+Reducing the # of transfers becomes important as we move
+[x]
+down the hierarchy
+In general, caches further down the hierarchy are more
+[x]
+likely to use write-back caches
+
+Memory Mountain
+69
+
+The Memory Mountain
+70
+Every computer has a unique memory mountain
+[x]
+Characterizes the capabilities of the memory system
+[x]
+Next slide shows the memory mountain for an Intel Core i7
+[x]
+system
+L1 cache: 32KB
+[x]
+L2 cache: 256KB
+[x]
+L3 cache: 8MB
+[x]
+Working set:
+[x]
+size varies from 2 KB - 64 MB
+[x]
+stride varies from 1 to 64 elements
+[x]
+
+71
+
+The Memory Mountain
+72
+Geography reveals a rich structure
+[x]
+Perp. to the size axis are four ridges
+[x]
+Correspond to regions of temporal locality
+[x]
+i.e. working set fits entirely
+[x]
+Note: order of magnitude difference between top of L1 ridge
+[x]
+and bottom of memory ridge
+Reads at 6 GB/s vs 600 MB/s
+[x]
+
+The Memory Mountain
+73
+For L2, L3, and main memory ridges there is a slope of spatial locality that
+[x]
+falls downhill as stride increases
+Increase in stride = decrease in locality
+[x]
+Notice even when the working set is too large to fit in any of the caches, the
+[x]
+highest point on the main memory ridge is a factor of 7 higher than its
+lowest point
+Even with poor temporal locality, spatial
+[x]
+Locality can still come to the rescue
+
+The Memory Mountain
+74
+Notice flat ridge for stride 1
+[x]
+Read throughput is relatively constant at 4.5 GB/s
+[x]
+Due to prefetching mechanism in the Core i7 memory system
+[x]
+Automatically identifies memory referencing patterns and attempts to fetch those
+[x]
+blocks into cache before they are accessed
+Yet another reason to favor sequential access in your code
+[x]
+
+The Memory Mountain
+75
+Let's take a slice of mountain holding stride constant
+[x]
+To see impact of cache size and temporal locality on performance
+[x]
+Up to 32 KB, working set fits entirely in L1 d-cache
+[x]
+Thus, reads are served at the peak throughput (6 GB/s)
+[x]
+
+The Memory Mountain
+76
+Up to 256 KB, working set fits entirely in L2 cache
+[ ]
+Up to 8M, working sets fits entirely in L3 cache
+[ ]
+Larger working sets are served from memory
+[ ]
+
+The Memory Mountain
+77
+Notice that read throughputs drop when the working sets are equal to their
+[x]
+respective cache sizes
+Likely drops are caused by other data and code blocks that make it impossible to fit
+[x]
+the entire array in the cache
+
+The Memory Mountain
+78
+Let's take a slice of the mountain holding working set size constant
+[x]
+To see impact of spatial locality on read throughput
+[x]
+Let's use a fixed size of 4 MB
+[x]
+Cut along L3 ridge
+[x]
+Working set fits entirely in L3 cache (too large for L2 cache)
+[x]
+
+The Memory Mountain
+79
+Notice read throughput decreases steadily as the stride increases from 1 to
+[x]
+8
+In this region a read miss in L2 causes a block to be transferred from L3 to L2
+[x]
+Followed by some number of hits on the block loaded into L2
+[x]
+Depends on the stride
+[x]
+As the stride increases, the
+[x]
+ratio of L2 hits to L2 misses
+Increases
+Since misses are slower than
+[x]
+hits, the read throughput
+Decreases
+Once stride reaches 8,
+[x]
+Every read request misses in L2
+
+The Memory Mountain
+80
+To summarize:
+[x]
+Performance of the memory system is not characterized by a
+[x]
+single number
+Instead, it is a mountain of temporal and spatial locality
+[x]
+Elevations can vary by over an order of magnitude
+[x]
+Wise programmers try to structure their programs so that they
+[x]
+run in the peaks instead of the valleys
+Goal:
+[x]
+Exploit temporal locality so that heavily used words are
+[x]
+fetched from L1 cache
+Exploit spatial locality so that as many words as possible are
+[x]
+accessed from a single L1 cache
+
+The Memory Mountain
+81
+Broken record:
+[x]
+Focus your attention on inner loops
+[x]
+Bulk of computations and memory accesses
+[x]
+Try to maximize spatial locality by reading objects with stride 1
+[x]
+Try to maximize temporal locality by using a data object as often
+[x]
+as possible once it has been read from memory

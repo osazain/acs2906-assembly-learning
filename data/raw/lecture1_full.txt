@@ -1,0 +1,644 @@
+1
+Computer Architecture and
+System Software
+Chapter 01: Course Introduction and
+Overview of Computer Systems
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Preliminaries
+2
+
+Instructor
+3
+David Bosc
+[x]
+E-mail: da.bosc@uwinnipeg.ca
+[x]
+Background:
+[x]
+Video Games Industry (Tools, Gameplay, UI and Online
+[x]
+programming)
+
+Website
+4
+Check the Nexus page regularly
+[x]
+Updates will be posted weekly
+[x]
+Course announcements
+[x]
+Syllabus available for download
+[x]
+
+Syllabus
+The course syllabus can be downloaded from the
+[ ]
+course website
+
+LLM Prompt Examples
+6
+Use them to write a study guide, practice tests
+-
+- Writing one yourself first, then compare LLM's guide.
+- Fill in extra info is a great way to understand the
+theory.
+- Don't understand one of the points on your study
+guide? Ask for a detailed explanation!
+
+LLM Prompt Examples (cont)
+7
+
+LLM Prompt Examples (cont)
+8
+
+LLM Prompt Examples (cont)
+9
+Completed the worksheets? Use them to make more
+-
+practice problems, or variants of the labs!
+
+Classroom Procedure
+10
+Be on time, and stay until the end
+[ ]
+Ask questions anytime
+[ ]
+Typically, we will take a break at 7:15 and restart
+[ ]
+at 7:30
+
+Lecture Format
+11
+Lectures will consist of
+[x]
+Announcements
+[x]
+Slides (available from the course website)
+[x]
+Problems and examples solved in class on the board
+[x]
+Attendance for solutions is mandatory!
+[x]
+In-class demos for assembly programming
+[x]
+
+Lab Format
+12
+Will be led by a demonstrator
+[ ]
+You will be provided the lab material Friday
+[ ]
+morning on Nexus under Assignments. You will
+have until 11:59pm of Friday to submit it.
+Important: It is very important to attend labs to get
+[ ]
+practice with assembly programming. You will not
+be successful unless you put the time in.
+Questions will only be addressed in lab, by the lab
+[ ]
+demonstrator of your enrolled section.
+
+Outline
+13
+Course theme
+[x]
+Preliminaries
+[x]
+A Tour of Computing Systems
+[x]
+Information is Bits + Context
+[x]
+Compilation System
+[x]
+Hardware Organization
+[x]
+The Operation System
+[x]
+
+Course Theme
+14
+
+Course Textbook
+15
+R. E. Bryant and D. R. O'Hallaron, Computer Systems: A Programmer's
+[ ]
+Perspective, 3rd Edition, Upper Saddle River, NJ, USA: Pearson/Prentice
+Hall, 2011.
+Textbook website: http://csapp.cs.cmu.edu/
+[ ]
+
+Course Theme
+16
+Most Systems Courses are Builder-Centric
+[x]
+This course is programmer-centric
+[x]
+Purpose to show how by knowing more about the underlying
+[x]
+system, one can be more effective as a programmer
+The goal of this course is to give you a
+[x]
+programmer-centric view of the "what is going on under
+the hood of a computer system"
+Need to understand details of underlying implementations
+[x]
+
+Course Theme
+17
+[x] Enable you to:
+[x] Write programs that are more reliable and efficient
+[x] Avoid strange numerical errors caused by representation of
+numbers
+[x] Optimize code by using clever tricks that exploit designs of
+modern systems
+[x] Example: Buffer overflows are sometimes exploited to
+bypass network security
+
+Class Discussion
+18
+What is the difference between int and float data
+[ ]
+types?
+
+Course Theme
+19
+
+Class discussion
+20
+What does a compiler do?
+[ ]
+
+Course Theme
+21
+You've got to know assembly language
+[x]
+Compilers are much better & more patient than you are
+[x]
+But: Understanding assembly is key to machine-level
+[x]
+execution model
+Behaviour of programs in presence of bugs
+[x]
+High-level language model breaks down
+[x]
+Tuning program performance
+[x]
+Understand optimizations done/not done by the compiler
+[x]
+Understanding sources of program inefficiency
+[x]
+Implementing system software
+[x]
+Compiler has machine code as target
+[x]
+Operating systems must manage process state
+[x]
+
+Course Theme
+22
+Memory Matters
+Memory is not unbounded
+[x]
+It must be allocated and managed
+[x]
+Many applications are memory dominated
+[x]
+Memory referencing bugs are often the most difficult to find
+[x]
+Effects are distant in both time and space
+[x]
+Memory performance is not uniform
+[x]
+Cache and virtual memory effects can greatly affect program
+[x]
+performance
+Adapting program to characteristics of memory system can lead
+[x]
+to major speed improvements
+
+Course Theme
+23
+Memory performance example
+[ ]
+
+Course Theme
+24
+Computers do more than execute programs
+They need to get data in and out
+[x]
+I/O system critical to program reliability and performance
+[x]
+They communicate with each other over networks
+[x]
+Many system-level issues arise in presence of network
+[x]
+Concurrent operations by autonomous processes
+[x]
+Coping with unreliable media
+[x]
+Cross platform compatibility
+[x]
+Complex performance issues
+[x]
+
+Chapter 1
+25
+A Tour of Computer Systems
+
+Information is bits + context
+26
+Example:
+[x]
+What do the numbers below represent ?
+[x]
+
+Information is bits + context
+27
+Answer: Depends on the context.
+[x]
+In this case they could represent text
+[x]
+ASCII: American Standard Code for Information Interchange
+[x]
+
+Information is bits + context
+28
+All information in a system is represented as a
+[x]
+bunch of bits!
+Problem: What do they represent?
+[x]
+For example: 0100 1011
+[x]
+Integer 75
+[x]
+ASCII character K
+[x]
+
+Information is bits + context
+29
+Context is determined by:
+[x]
+Computer architecture
+[x]
+Big endian and little endian byte ordering
+[x]
+Operating system
+[x]
+Different OS use different markers to indicate the end of a
+[x]
+line in a text file (CR and LF)
+\r\n DOS\Windows
+[x]
+\n for Unix and Unix-like world
+[x]
+Application software
+[x]
+MS Word doc files
+[x]
+
+C/C++ Program Compilation
+30
+printf.o
+Pre-
+Assembl
+hello.c processo hello.i hello.s hello.o Linker hello
+Compiler er
+r (ld)
+(cc1) (as)
+Source (cpp) Modified Assembly Relocatable Executable
+program source program object object
+(text) program (text) programs program
+(text) (binary) (binary)
+
+Java Compilation Process
+31
+See http://en.wikipedia.org/wiki/Java_Virtual_Machine
+[ ]
+
+Program Compilation
+32
+Important reasons to understand compilation
+[x]
+process:
+Optimizing system performance
+[x]
+Why does a loop run faster if we sum into a local variable
+[x]
+instead of an argument that is passed by reference?
+Understanding link-time errors
+[x]
+Avoiding security holes
+[x]
+What are buffer overflow bugs?
+[x]
+
+Program Execution
+33
+How is an executable file executed ?
+[x]
+To answer this question we need to understand the
+[x]
+hardware organization of a typical system
+Also need to know the role of the operating system
+[x]
+
+Layout of a Real System
+34
+
+Layout of a Real System
+35
+https://download.msi.com/archive/mnu_exe/mb/E7B86v1.2-GSE-LITE.pdf
+
+Hardware Organization
+36
+
+Running the hello program
+37
+Referring to example on p. 10 of the text
+[x]
+Simple "Hello World" program
+[x]
+To run program (majority of details omitted)
+[x]
+Load program into memory
+[x]
+Point PC to main routine of program
+[x]
+CPU executes instructions
+[x]
+
+"hello"
+38
+
+39
+
+40
+
+Overhead
+41
+Problem: A computer spends a lot of time copying
+[x]
+data
+Hello program
+[x]
+Copied from disk to main memory to processor
+[x]
+String "hello, world\n"
+[x]
+Copied from disk to main memory to display device
+[x]
+Overhead slows down real work of processor
+[x]
+Goal: make these copy instructions as fast as possible
+[x]
+
+Class Discussion
+42
+How is information represented/managed at the
+[x]
+hardware level?
+What is a bit physically?
+[x]
+Do we know how long it takes to read a byte?
+[x]
+
+Storage Devices
+43
+Physical laws dictate storage device operation
+[x]
+Larger capacity storage devices are slower
+[x]
+Faster devices are more expensive
+[x]
+Examples:
+[x]
+A disk drive (HD) might be 100 x larger than main memory
+[x]
+But, it might take CPU 10,000,000 x longer to read a word from disk than from memory
+[x]
+A register file stores only a few hundred bytes (compared to
+[x]
+millions of bytes in memory)
+However, CPU can read data from registers
+[x]
+[x] 100 x faster than memory
+http://www.mackintoshconsultants.co.uk/images/storage-devices.gif
+http://upload.wikimedia.org/wikipedia/commons/8/87/PersonalStorageDevices.agr.jpg
+http://upload.wikimedia.org/wikipedia/commons/c/ca/Memory_module_DDRAM_20-03-2006.jpg
+
+Storage Hierarchy
+44
+L0
+Smaller, :
+Registers
+CPU registers hold words retrieved from
+faster,
+cache memory.
+and
+L1
+costlier On-chip L1
+:
+(per byte) cache (SRAM)
+L1 cache holds cache lines retrieved
+storage
+from the L2 cache.
+devices L2
+Off-chip L2
+: cache (SRAM)
+L2 cache holds cache lines
+retrieved from memory.
+Main
+L3
+memory
+:
+(DRAM)
+Main memory holds disk
+Larger,
+blocks retrieved from local
+slower,
+disks.
+and
+Local secondary
+L4
+cheaper
+storage
+(per byte)
+:
+storage (local disks) Local disks hold files retrieved
+devices from disks on remote network
+servers.
+Remote secondary storage
+L5
+(distributed file systems, Web
+:
+servers)
+
+Storage Hierarchy
+45
+Main Idea:
+[x]
+Storage at one level serves as a cache for storage at
+[x]
+the next lower level
+Programs can run much faster if the programmer
+[x]
+exploits caches effectively
+Problem: How to manage all the different memory
+[x]
+and devices?
+
+Class Discussion
+46
+What does an operating system do? What are its
+[ ]
+main functions?
+
+Operating System
+47
+Hello and shell programs did not access the keyboard,
+[ ]
+display, disk, or main memory directly
+Instead, they relied on services provided by the
+[ ]
+Operating System (OS)
+OS is a layer of software between application programs
+[ ]
+and hardware
+All attempts to access the hardware must go through OS
+[ ]
+first
+Application programs
+Software
+Operating system
+Processor Main memory I/O devices Hardware
+
+Operating System
+48
+OS has 2 purposes:
+[x]
+Protect the hardware from misuse by applications
+[x]
+Provide applications with simple and uniform mechanisms for
+[x]
+manipulating various complicated low-level hardware
+OS achieves both goals via the fundamental abstractions:
+[x]
+Processes
+[x]
+Virtual memory
+[x]
+Processes
+Files
+[x]
+Virtual
+memory
+Files
+Processor Main memory I/O devices
+
+Processes
+49
+Operating system provides illusion that program is the
+[x]
+only one running
+Appears to:
+[x]
+Have exclusive use of processor, main memory, and I/O
+[x]
+Execute instructions one after the other without interruption
+[x]
+Only program's code and data reside in memory
+[x]
+Illusions provided by processes
+[x]
+A process is the OS
+[x]
+abstraction for a running
+program
+
+Context Switching
+50
+Processes share the processor and system resources
+[x]
+OS allocates time
+[x]
+Switches context by
+[x]
+Saving context of current process (PC, register,
+[x]
+memory)
+Restoring context of previous process (PC, register,
+[x]
+memory)
+Passing control to new process
+[x]
+
+Threads
+51
+Processes with multiple executions
+[x]
+A process can have more than one execution
+[x]
+Each execution is called a thread
+[x]
+Threads execute concurrently as well
+[x]
+Differences:
+[x]
+Process do not share memory
+[x]
+Threads view: it does not have the whole machine to
+[x]
+itself
+
+Virtual Memory (VM)
+52
+VM: interaction of hw exceptions, hw address translation,
+[ ]
+main memory, disk files, and kernel software
+Goal: Provide each process with a large, uniform, and
+[ ]
+private memory address space
+Virtual
+memory
+Main memory I/O devices
+
+Files
+53
+A file is a sequence of bits.
+[x]
+Every I/O device is modeled as a file
+[x]
+Read/write: disks, networks
+[x]
+Read-only: keyboard, mouse, web-cam
+[x]
+Write-only: video, printer
+[x]
+Advantages:
+[x]
+Uniform interface for varied I/O devices
+[x]
+Abstracts away all the underlying details on how data
+[x]
+read/written
+Programs written on one system can be easily ported to
+[x]
+another
+
+Networks
+54
+Systems are often linked to other systems by
+[ ]
+networks
+Viewed as another I/O device
+[ ]
+Akin to reading/writing to a file
+[ ]
+
+Remote Execution
+55

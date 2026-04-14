@@ -1,0 +1,1652 @@
+Computer Architecture and
+System Software
+Lecture 10: Exceptional Control Flow
+Instructor:
+David Bosc
+Applied Computer Science
+University of Winnipeg
+
+Announcements
+2
+- Important Dates:
+Final Exam dates announced (Wednesday, April
+-
+15th, 6pm-9pm @ 1D62 (Duckworth Gym),
+details of content to come)
+- Assignment 4 Released
+- Due April 1st at midnight
+- 1 question, 20 points
+- Final Lab due this week
+- SET Evaluations
+- Final exam review will be part of next lecture
+
+3
+
+Processes and the OS
+4
+Background to Sect. 8.1
+
+Processes and the OS
+5
+What is an O/S?
+[x]
+Is a program (or programs)
+[x]
+Runs on the same CPU
+[x]
+Uses the same memory
+[x]
+Accesses the IO devices
+[x]
+Is the guardian of the computer
+[x]
+
+The Role of an Operating System
+6
+What are its roles?
+[x]
+Manage and run all our programs
+[x]
+Allow programs to share the CPU
+[x]
+Manage computer resources
+[x]
+Processor, memory, hard disk, network connection, and I/O devices
+[x]
+Protect processes from each other
+[x]
+Present a standard abstraction to programs and users
+[x]
+Act as an intermediary between the programs, user, and
+[x]
+computer
+
+The Role of an Operating System
+7
+The O/S:
+Is the first program loaded by the computer
+[x]
+Resides in memory all the time
+[x]
+Runs when
+[x]
+A program needs a service such as:
+[x]
+performing I/O, run a program, stop running, and allocation of more
+[x]
+resources
+An external event occurs
+[x]
+A program error occurs
+[x]
+A computer error occurs
+[x]
+
+Exceptions
+8
+Section 8.1
+
+Exceptions
+9
+Recall what the processor does:
+[x]
+The processor executes one instruction after another
+[x]
+The PC points to the next instruction to execute
+[x]
+PC takes on a sequence of values a , a , a , ...
+[x]
+0 1 2
+Where each a is the address of a corresponding
+[x]
+k
+instruction I
+k
+Each transition from a to a is called a control
+[x]
+k k+1
+transfer
+CPU control is transferred from instruction at a to one at
+[x]
+k
+a
+k+1
+A sequence of control transfers is called the flow of
+[x]
+control
+
+Control Flow and Exceptional Control Flow
+10
+Program control flow
+[x]
+Transfers are either smooth or abrupt
+[x]
+Smooth: Instruction I is adjacent to instruction I in memory
+[x]
+k+1 k
+Abrupt: I is not adjacent to instruction I in memory
+[x]
+k+1 k
+Occurs during:
+[x]
+Jump or branch
+[x]
+Procedure call
+[x]
+Procedure return
+[x]
+
+Control Flow and Exceptional Control Flow
+11
+Abrupt control flow transfer are necessary to:
+[x]
+Allow a program to respond to changes of internal states
+[x]
+Execute conditional code (if statements)
+[x]
+Execute repetitive code (loops)
+[x]
+Use methods and procedures
+[x]
+This is what we mean when we talk of program control flow
+[x]
+
+Observations
+12
+Program has illusion that it is the only thing running on the
+[x]
+computer
+However, system must react to events outside of the program
+[x]
+Keystrokes
+[x]
+Internet packets
+[x]
+Mouse movement
+[x]
+Inter-program signals
+[x]
+How is this done?
+[x]
+
+Exceptional Control Flow (ECF)
+13
+System reacts to these events by special abrupt changes in
+[x]
+control flow called exceptional control flow (ECF)
+These occur at all levels of a system
+[x]
+Hardware: devices can interrupt current CPU execution via
+[x]
+exception handlers
+Operating system: can transfer control between programs via
+[x]
+context switches
+Programs can abruptly change flow of other programs via signals
+[x]
+and software exceptions
+
+Exceptional Control Flow (ECF)
+14
+We want to study ECF in order to understand how
+[x]
+An OS works (basic mechanism)
+[x]
+Programs (applications) interact with the OS
+[x]
+To write more interesting applications
+[x]
+Software exceptions work
+[x]
+
+Exceptions
+15
+Exception is an abrupt change of flow control
+[ ]
+implemented jointly by hardware and OS
+When an exception occurs
+[ ]
+Application Exception
+program handler
+Event
+Exception
+I
+occurs
+curr
+I Exception
+here next
+processing
+Exception
+return
+(optional)
+
+Exceptions
+16
+CPU is executing instruction I
+[x]
+curr
+A significant change in the processor's state occurs
+[x]
+(called an event)
+Examples:
+[x]
+Divide by 0
+[x]
+Virtual memory page fault
+[x]
+Arithmetic overflow
+[x]
+I/O request completes
+[x]
+Hardware timer
+[x]
+
+Exceptions
+17
+Processor detects change
+[x]
+Processor responds by making an indirect procedure call
+[x]
+This is why it is called an exception
+[x]
+Procedure call is made through a lookup table called an
+[x]
+exception table
+The procedure is an operating system subroutine called the
+[x]
+exception handler
+After handler terminates, one of three things happen:
+[x]
+Handler returns control to instruction I
+[x]
+curr
+Handler returns control to instruction I
+[x]
+next
+Handler aborts program
+[x]
+
+Exception Handling
+18
+Requires close cooperation between OS and CPU
+[x]
+Each type of possible exception is assigned a
+[x]
+unique nonnegative integer
+Some values are determined by CPU designers
+[x]
+Others by kernel designers
+[x]
+There are a fixed number of possible exceptions
+[x]
+Pentium has 256
+[x]
+See, e.g., http://stanislavs.org/helppc/int_table.html
+[x]
+
+Exception Table
+19
+Located in memory
+[ ]
+Created and initialized when OS
+[ ]
+boots
+Entry k contains the address of
+[ ]
+the handler for exception k
+Address of table is stored in CPU
+[ ]
+register called Exception Table
+Base Register
+CPU uses table to locate
+[ ]
+exception handler
+
+Exception Table
+When exception occurs (CPU detects an event)
+[x]
+CPU determines ID of exception
+[x]
+Uses ID to index into exception table
+[x]
+Locates reference to corresponding handler
+[x]
+Uses reference to make a procedure call to handler
+[x]
+Exception
+number Exception table
+(x 4)
+0
+1
+Address of entry
+2
+for exception # k
+Exception table
++
+base register
+n-1
+. ..
+20
+
+Observations
+21
+This call differs from regular procedure call in several ways
+[x]
+Return address pushed on stack may be either current or next
+[x]
+instruction, depending on type of exception
+Processor also pushes additional information on stack
+[x]
+e.g. the flags register
+[x]
+Exception handler has complete control over the system
+[x]
+The handler then handles the event
+[x]
+What does the handler do ?
+[x]
+Depends on the type of exception
+[x]
+
+Class of Exceptions
+22
+There are four classes of exceptions:
+[x]
+Interrupts: caused by normal hardware events
+[x]
+Traps: caused by program service requests
+[x]
+Faults: caused by repairable program "errors"
+[x]
+Aborts: caused by irreparable program errors and HW
+[x]
+errors
+Let's look at this table:
+[x]
+http://stanislavs.org/helppc/int_table.html
+[x]
+
+Interrupts
+23
+Occur asynchronously, as a result of a hardware
+[x]
+event
+Mouse movements, keystrokes, I/O completions
+[x]
+Not caused by the execution of a instruction
+[x]
+Handlers for interrupts are called interrupt handlers
+[x]
+
+Interrupt Handling
+24
+A hardware devices signals a pin on the CPU
+[ ]
+At the same time, places exception ID on the system bus
+[ ]
+CPU finishes current instruction
+[ ]
+CPU reads ID from system bus
+[ ]
+Invokes handler to handle the device
+[ ]
+Handler completes
+[ ]
+Returns to the next instruction of program
+[ ]
+Program continues to execute as if interrupt did not occur
+[ ]
+(1) Interrupt pin
+(2) Control passes to handler
+goes high
+after current instruction finishes
+I
+during
+curr
+I (3) Interrupt
+execution of nex
+handler runs
+current t (4) Handler returns to
+instruction next instruction
+
+Class of Exceptions
+25
+The remaining exceptions are all synchronous
+[x]
+Traps: caused by program service requests
+[x]
+Faults: caused by repairable program "errors"
+[x]
+Aborts: caused by unrepairable program errors and
+[x]
+HW errors
+Caused by the current instruction
+[x]
+This instruction is called the faulting instruction
+[x]
+
+Traps
+26
+Intentional exceptions (called a "system call")
+[x]
+Occur as a result of executing a special "trap" instruction
+[x]
+Used by programs to request services from OS
+[x]
+Read/write data from/to a file
+[x]
+Create a new process (run program)
+[x]
+Terminate program
+[x]
+Provides a procedure-like interface between OS and
+[x]
+application
+From a programmer's perspective call looks just like a
+[x]
+function call, except
+Regular functions run in "user" mode
+[x]
+System calls run in "kernel" mode
+[x]
+
+Trap Handling
+27
+Program invokes "trap" instruction with ID as operand
+[ ]
+CPU uses ID to index into exception table, locate handler
+[ ]
+Handler is invoked to handle system call
+[ ]
+Handler completes
+[ ]
+Returns to next instruction of program (similar to interrupt)
+[ ]
+(2) Control passes
+(1) Application to handler
+syscall
+makes a
+I (3) Trap
+nex
+system call
+handler runs
+t
+(4) Handler returns
+to instruction
+following the syscall
+
+Faults
+28
+Result in (possibly) correctable error conditions
+[x]
+If handler can correct condition, current instruction is
+[x]
+retried
+Otherwise program is aborted
+[x]
+Examples:
+[x]
+Page fault: when memory needed by program has
+[x]
+been swapped to disk
+Protection fault: when program references unowned
+[x]
+memory
+
+Fault Handling
+29
+Current instruction generates a fault
+[ ]
+CPU identifies fault, assigns ID
+[ ]
+Uses ID to find handler in the exception table
+[ ]
+Invokes handler
+[ ]
+If handler corrects fault, handler returns to instruction that
+[ ]
+caused it
+Else handler invokes abort routine
+[ ]
+(2) Control passes
+(1) Current
+to handler
+I
+instruction curr
+(3) Fault
+causes a
+handler runs
+abort
+fault
+(4) Handler either re executes
+current instruction or aborts.
+
+Aborts
+30
+Result from unrecoverable errors
+[x]
+Bad memory
+[x]
+CPU errors
+[x]
+Same as a fault, but never returns, just aborts the process
+[x]
+(2) Control passes
+(1) Fatal
+to handler
+I
+hardware
+curr
+(3) Abort
+error occurs
+handler runs
+abort
+(4) Handler
+returns to abort
+routine
+
+Exceptions on Intel Processors
+31
+Exception table has 256 entries
+[ ]
+Exceptions 0...31 are hardware defined (interrupts and
+[ ]
+faults)
+A trap is performed by the instruction int
+[ ]
+Form: int n where n is a constant between 0 and 255
+[ ]
+To return from an exception handler, use the special iret
+[ ]
+(instead of ret)
+The iret pops the FLAGS register before returning with the
+[ ]
+return address
+
+Processes (Section 8.2)
+32
+Are an abstraction for a running program
+[x]
+Idea: Abstraction presents two illusions to a program
+[x]
+Exclusive use of the CPU: program instructions are executed
+[x]
+without interruption
+Exclusive use of the memory: program code and data are only
+[x]
+objects in memory
+Definition: A processes is an instance of a program in
+[x]
+execution
+
+Processes
+33
+A process defines the context in which the program
+[x]
+runs:
+Program code and data
+[x]
+Logical control flow of the program
+[x]
+Private address space
+[x]
+Contents of general purpose registers
+[x]
+Program counter
+[x]
+
+Processes
+34
+Each time a program is run, the OS
+[x]
+Creates a new context
+[x]
+Loads the program code and initial data into context
+[x]
+Initializes context to begin execution of program
+[x]
+Information about a process is stored in a Process
+[x]
+Control Block (PCB)
+Allocated by the OS when a process is created
+[x]
+Is only accessible to the OS
+[x]
+Used to store parts of the process context
+[x]
+
+Logical Control Flow
+35
+
+Logical Control Flow
+36
+If we used a debugger to step through our
+[x]
+program, we could trace the contents of our IP
+register (program counter or PC)
+Corresponds to addresses of instructions contained
+[x]
+in our .exe file
+Also any other objects linked to program
+[x]
+This sequence is the logical control flow
+[x]
+
+Logical Control Flow
+37
+This sequence of PC values is known as the logical control
+[x]
+flow
+We can divide a physical control flow into logical control
+[x]
+flows
+Each logical flow is independent of any other flow
+[x]
+Different processes do not affect the states of any other processes
+[x]
+
+Logical Control Flow
+38
+Concurrent process: any process whose logical flow
+[ ]
+overlaps with another flow
+The notion of processes taking turns is called
+[ ]
+multitasking
+Each time period that a process executes is called a
+[ ]
+time slice
+
+Logical Control Flow
+39
+Each process executes a portion of its flow and then is
+[ ]
+pre-empted
+A & B and A & C run concurrently, but B and C do not
+[ ]
+Process A Process B Process C
+Time
+
+Logical Control Flow
+40
+Each process executes a portion of its flow and then is
+[ ]
+pre-empted
+A & B and A & C run concurrently, but B and C do not
+[ ]
+Process A Process B Process C
+Pre-empt
+Time
+
+Logical Control Flow
+41
+Notice that the idea of concurrency is independent of the
+[x]
+number of cores
+If two flows overlap, they are concurrent
+[x]
+Even if they are running on the same processor
+[x]
+Sometimes we will find it useful to identify truly
+[x]
+"concurrent" flows
+Called parallel flows
+[x]
+Two flows running concurrently on different processor cores or
+[x]
+processors
+These flows are said to be running in parallel (have parallel
+[x]
+execution)
+
+Private Address Space
+42
+Each process has illusion of exclusive use of system's address
+[x]
+space
+In actuality, a process provides each program with its own
+[x]
+private address space
+Private address spaces have similar
+[x]
+layouts:
+Code, data, heap, stack, kernel space
+[x]
+Why do we need this abstraction?
+[x]
+To multitask
+[x]
+
+User and Kernel Mode
+43
+Private address spaces must remain private!
+[ ]
+Need to restrict user capabilities
+[ ]
+Extra mode bit in a control register usually
+[ ]
+characterizes privileges of processor
+The mode bit sets the process in user or kernel
+[ ]
+mode
+
+User and Kernel Mode
+44
+Cannot do the following in user mode:
+[x]
+Halt processor
+[x]
+Change mode bit
+[x]
+Initiate I/O operation
+[x]
+Directly reference code in kernel area of address
+[x]
+space
+All programs initially begin in user mode and use
+[x]
+exceptions to pass into kernel mode
+
+Multitasking
+45
+In the past
+[x]
+Computer ran a program, waited until program completed, then
+[x]
+ran the next one
+Today
+[x]
+We want many programs to run at once
+[x]
+No program should interfere with another
+[x]
+Programmers should not have to worry what other programs are
+[x]
+doing
+
+Multitasking
+46
+Each program has its own logical flow, runs as if it is
+[ ]
+the only program on the computer
+Physically, many programs take turns running on the
+[ ]
+CPU
+The OS switches between the logical flows
+[ ]
+Creates the illusion that all programs are running at
+[ ]
+once
+In reality, the processes run concurrently
+[ ]
+
+Multitasking
+47
+Key Ideas:
+To switch processes we simply switch contexts
+[x]
+Recall, context consists of address space, registers, flags, PC
+[x]
+Processes are protected from each other because
+[x]
+Processes can only manipulate data inside their context
+[x]
+Processes may not manipulate data of another process (context)
+[x]
+Processes may not manipulate data of the OS
+[x]
+OS also runs in its own context
+[x]
+A process need not worry about other processes because it
+[x]
+is "alone"
+Question: when are processes switched in/out ?
+[x]
+
+Context Switching
+48
+Recall: in normal control flow the program executes
+[x]
+one instructions after the other
+Stopping a control flow is exceptional
+[x]
+Thus, context switches occur only if an exception
+[x]
+occurs
+Trap
+[x]
+Interrupt
+[x]
+Fault
+[x]
+
+Context Switching
+49
+What if no exceptions occur?
+[x]
+Computer has a timer chip
+[x]
+Generates a "timer" exception on fixed intervals
+[x]
+Between 10 to100ms
+[x]
+Exceptions are guaranteed to occur at regular intervals
+[x]
+
+Context Switching
+50
+Recall: During an exception
+[x]
+Operating system takes control
+[x]
+Services the exception
+[x]
+Selects a process (could be the current one)
+[x]
+Returns flow control to that process
+[x]
+The exception handler
+[x]
+Switches out current process context
+[x]
+Switches in OS context
+[x]
+Handles exception (OS code)
+[x]
+Selects a process to run (could be the same one)
+[x]
+Switches out OS context
+[x]
+Switches in the process's context
+[x]
+Switch out/in is called a context switch
+[x]
+
+Context Switch
+51
+Involves 2 contexts: the out-going and the in-coming
+[x]
+Does the following:
+[x]
+Save CPU context (state) of current process
+[x]
+Stores all registers (FLAGS and PC included) into PCB
+[x]
+Essentially a sequence of mov instructions
+[x]
+Determine PCB of process/OS to be switched in
+[x]
+Switch memory address spaces (from the PCB)
+[x]
+Load CPU context (state) from current PCB
+[x]
+Load all registers FLAGS and PC from PCB
+[x]
+Run the switched process
+[x]
+These steps are performed twice for a single exception
+[x]
+
+Context Switching
+52
+Decision of kernel to pre-empt a process is called
+[ ]
+scheduling
+Handled by part of the kernel called the scheduler
+[ ]
+Question: Why would a kernel pre-empt a process
+[ ]
+in the first place?
+
+Context Switching
+53
+Example:
+[x]
+Read call in process A requires disk access
+[x]
+Next instruction must be stalled until information is
+[x]
+retrieved
+Kernel decides to switch context for efficiency
+[x]
+Programs can opt to sleep (request for context to be
+[x]
+switched)
+Gets around any scheduling errors
+[x]
+
+User and Kernel Modes Revisited
+54
+When an exception occurs
+[x]
+Control is passed to handler
+[x]
+CPU is placed in kernel mode
+[x]
+The handler now has access to OS memory, including PCBS
+[x]
+Can manipulate OS memory, perform context switch
+[x]
+When handler returns to process, CPU is placed back in user mode
+[x]
+
+Physical and Virtual Addressing
+55
+Section 9.1-9.6 (except 9.4)
+
+Memory Sharing
+56
+Process in a system share CPU and memory
+[x]
+Poses some challenges:
+[x]
+Threshold in # of process, above which some may not be able to
+[x]
+run
+Memory is vulnerable to corruption
+[x]
+Process could write to another process's memory
+[x]
+Cause the process to fail in some odd fashion unrelated to the program
+[x]
+logic
+Solution: Modern systems provide an abstraction of main
+[x]
+memory known as virtual memory
+
+Virtual Memory
+57
+Interaction of hardware exceptions, hardware
+[x]
+address translation, main memory, disk files, and
+kernel software
+Virtual memory provides three important
+[x]
+capabilities:
+Treats memory as a cache for an address space store
+[x]
+on disk
+Simplifies memory management by providing each
+[x]
+process with a uniform address space
+Protects address space of each process from corruption
+[x]
+by other processes
+
+Virtual Memory
+58
+Reasons to study virtual memory
+Virtual memory is central:
+[x]
+Encompasses all levels of computer system
+[x]
+Help you better understand system in general
+[x]
+Virtual memory is powerful
+[x]
+Gives applications capabilities to create and destroy chunks of
+[x]
+memory, map chunks of memory to portions of disk files, and
+share memory with other processes
+Reading/writing virtual memory can modify contents of disk
+[x]
+Can load contents into memory without any explicit copying
+[x]
+
+Virtual memory
+59
+Virtual memory is dangerous
+[x]
+If used improperly, applications can suffer from perplexing and
+[x]
+insidious memory related bugs
+Crash minutes or hours after problem occurred in the code
+[x]
+Run to completion with incorrect results
+[x]
+
+Physical Addressing (Sect. 9.1)
+60
+Recall: computer main memory is an array of
+[x]
+byte-sized cells (CPU point of view)
+Each byte has a unique physical address (PA)
+[x]
+Most natural way for CPU to access memory is to use
+[x]
+physical addresses
+Called physical addressing
+[x]
+Address corresponds to same physical location in
+[x]
+memory
+The address is from the physical address space
+[x]
+This is the easiest and most natural approach
+[x]
+
+Physical Addressing
+61
+Example: a load instruction that
+[ ]
+reads the word at address 4
+CPU generates physical address
+[ ]
+Sends it over the bus
+[ ]
+Memory fetches four-byte word
+[ ]
+starting at address 4
+
+Virtual Addressing
+62
+Modern computers have CPU access main memory by
+[ ]
+generating a virtual address (VA)
+VA is then converted to PA before being sent to memory
+[ ]
+The task of converting a VA to a PA is called address
+[ ]
+translation
+
+Virtual Addressing
+63
+Requires close cooperation between CPU hardware and the
+[x]
+OS
+Translation performed by hardware on CPU called the
+[x]
+memory management unit (MMU)
+Addresses are translated on the fly using a look-up table
+[x]
+stored in main memory
+Contents managed by the OS
+[x]
+
+VA Example
+64
+
+Virtual Addressing
+65
+Called virtual addressing
+[x]
+Each address is virtual from a virtual address space
+[x]
+Translated by MMU
+[x]
+Process thinks it is reading/writing at the specific
+[x]
+address
+In reality, the read/write occurs at MMU translated
+[x]
+address
+Allows system to control where the processes
+[x]
+read/write memory without process involvement
+
+Address Spaces (Sect. 9.2)
+66
+An address space is an ordered set of nonnegative
+[x]
+integer addresses {0, 1, 2, ...}
+Linear address space: If the integers are consecutive
+[x]
+e.g. physical main memory addresses form a linear
+[x]
+address space
+We will always assume linear address spaces
+[x]
+
+Address Spaces
+67
+CPU generates virtual address space of N = 2n address
+[x]
+{0, 1, 2, ..., N - 1}
+[x]
+Address space size is characterized by the number of bits
+[x]
+needed to represent largest address
+e.g. virtual address space with N = 2n addresses is called a n-bit
+[x]
+address space
+Modern systems use either 32 or 64-bit virtual address spaces
+[x]
+A system also has a physical address space that corresponds
+[x]
+to M bytes of physical memory
+{0, 1, 2, ..., M - 1}
+[x]
+
+Address Spaces
+68
+Address space concept is important because it makes a
+[x]
+clean distinction between data objects (bytes) and their
+attributes (addresses)
+This allows each byte to have
+[x]
+Virtual address from the virtual address space
+[x]
+Physical address from the physical address space
+[x]
+
+VM and Caching (Sect. 9.3)
+69
+VM is organized as an array of N contiguous byte-sized cells
+[x]
+stored on disk (hard drive)
+Each byte has a unique address (index into array)
+[x]
+The contents of the array on disk are cached in main memory
+[x]
+The data on disk is partitioned into blocks that serve as the
+[x]
+transfer units between the disk and the main memory
+VM is partitioned into fixed-sized blocks called virtual pages (VP)
+[x]
+Each virtual page is P = 2p bytes in size
+[x]
+Physical memory is partitioned into physical pages (PP)
+[x]
+Physical pages are also P bytes in size
+[x]
+
+VM and Caching
+70
+At any point in time, the set of VP is partitioned into three
+[x]
+disjoint subsets
+Unallocated: Pages that have not yet been allocated (or created)
+[x]
+by the VM system
+Contains no data and do not occupy any disk space
+[x]
+Cached: Allocated pages that are currently cached in physical
+[x]
+memory
+Page contain data
+[x]
+Page is assigned to a frame (physical page)
+[x]
+Uncached: Allocated pages that are not cached in physical
+[x]
+memory
+Page contains data
+[x]
+Page is not assigned to a frame (physical page)
+[x]
+Page is stored on disk
+[x]
+
+Example
+71
+8 virtual pages
+[ ]
+0 and 3 have not been
+[ ]
+allocated yet
+1, 4, 6 are cached in
+[ ]
+physical memory
+2, 5, 7 are allocated but
+[ ]
+are not currently cached
+
+Key Ideas
+72
+Physical frames (pages) hold virtual pages
+[x]
+A virtual page can be placed in any frame
+[x]
+Not all pages or frames are used
+[x]
+A process must allocate a page before using it
+[x]
+Requests a page of memory from the OS
+[x]
+OS creates a new virtual page
+[x]
+Finds a free frame (physical page)
+[x]
+Assigns page to the frame
+[x]
+Returns confirmation to process
+[x]
+
+VM and Caching
+73
+When a process performs a read/write
+[x]
+CPU sends virtual address to MMU
+[x]
+MMU determines page that contains the address
+[x]
+MMU checks if page is unallocated, cached, or uncached
+[x]
+Unallocated causes an exception, program is terminated
+[x]
+Uncached causes an exception, invokes the VM:
+[x]
+Locates a free frame (physical page)
+[x]
+Loads page from HD into frame
+[x]
+Adds mapping updates to MMU
+[x]
+Returns to process, attempts memory access again
+[x]
+
+Paging Tables
+74
+Task: The MMU has to translate addresses for each
+[x]
+running process
+Basic approach: for each virtual address determine
+[x]
+Which virtual page corresponds to the address
+[x]
+Whether virtual page is allocated and cached
+[x]
+Determine location of frame containing the page
+[x]
+
+Paging Tables
+75
+To perform the translation the MMU uses page
+[x]
+tables
+Each process has an associated table
+[x]
+The tables are stored in physical memory
+[x]
+Contain page table entries (PTE)
+[x]
+
+Example
+76
+Page table for 8 VP
+[ ]
+1, 2, 4, and 7 are cached
+[ ]
+0 and 5 not allocated
+[ ]
+3 and 6 are not cached
+[ ]
+Note: any physical page
+[ ]
+can contain any virtual
+page
+
+Paging Tables
+77
+One PTE per page in the virtual address
+[x]
+Size of table is size of virtual address space / size
+[x]
+of page
+Example:
+[x]
+Suppose N = 65536 = 216
+[x]
+Each page is of size P = 4096 = 212
+[x]
+# entries = N/P = 24 = 16
+[x]
+Each PTE contains:
+[x]
+Valid bit
+[x]
+Address entry
+[x]
+Valid bit: denotes if the entry is cached or not
+[x]
+
+Paging Tables
+78
+Address denotes one of three things
+[x]
+1: address contains location of frame (physical page)
+[x]
+0:
+[x]
+Address contains location of page on disk
+[x]
+Or null address means the page is unallocated
+[x]
+Hence: a page is
+[x]
+Unallocated if valid = 0, and address = 0
+[x]
+Not cached if valid = 0, and address != 0
+[x]
+Cached if valid = 1
+[x]
+
+Processes and Memory Access
+79
+CPU sends address to MMU
+[x]
+MMU checks if page is in memory
+[x]
+If page is cached
+[x]
+Called a page hit
+[x]
+MMU translates virtual address into physical address
+[x]
+Sends it to the memory system to read/write data
+[x]
+If not
+[x]
+Called a page miss
+[x]
+Similar to cache hit/miss
+[x]
+Page is loaded
+[x]
+Current instruction retried
+[x]
+
+VM Page Fault (Before)
+80
+CPU references VP 3
+[ ]
+Hardware reads PTE 3
+[ ]
+Infers from valid bit that VP 3 is not
+[ ]
+cached
+Page fault exception
+[ ]
+occurs
+
+VM Page Fault (After)
+81
+Exception handler selects a victim page
+[ ]
+In this case VP 4 stored in PP 3
+[ ]
+If VP 4 has been modified kernel copies it back
+[ ]
+to disk
+Kernel modifies PTE to
+[ ]
+reflect VP 4 is no longer in memory
+Kernel copies VP 3 from disk to
+[ ]
+PP 3 in memory
+PTE 3 is updated
+[ ]
+Faulting instruction restarted
+[ ]
+
+Page Fault Summary
+82
+MMU issues an exception ■ Handler returns to faulting process
+[x]
+Restarts same instruction that created fault
+Invokes page fault handler ■
+[x]
+Process proceeds as if nothing has
+■
+The handler
+[x]
+happened
+Checks to if the page is allocated
+[x]
+If the page is not allocated, process is aborted
+[x]
+Otherwise check for a free frame
+[x]
+If a free frame is available, use it
+[x]
+If not
+[x]
+Selects a victim page to be evicted
+[x]
+If the page has been modified, write it to HD
+[x]
+Update page table entry
+[x]
+Use resulting free frame
+[x]
+Load required page from HD into free frame
+[x]
+Update process' page table
+[x]
+
+Page Allocation
+83
+Pages are allocated under three conditions
+[x]
+When a process is created
+[x]
+Enough pages are allocated to hold code, data, stack, and small heap
+[x]
+When a process needs more heap memory
+[x]
+Process uses system call to request pages from OS
+[x]
+OS responds by
+[x]
+Allocating pages for the heap
+[x]
+Returns to the process # of pages that were added
+[x]
+When process needs more stack
+[x]
+OS automatically detects when a process needs more stack
+[x]
+Allocates more pages to the stack
+[x]
+
+Page Allocation
+84
+When pages are allocated:
+[x]
+OS modifies corresponding page table entries
+[x]
+Page is created on disk
+[x]
+OS may or may not allocate
+[x]
+[x] VP to PP
+
+Memory Protection (Section 9.5)
+85
+A useful feature of VM is memory protection
+[x]
+Basic idea:
+[x]
+Process only sees its own memory
+[x]
+Hence it can only modify its own memory
+[x]
+Problem: process also "sees" kernel memory in private
+[x]
+address space
+Solution: Each PTE contains additional permission bits
+[x]
+Read bit, write bit, execute bit, supervisor bit
+[x]
+
+Memory Protection
+86
+
+Memory Protection
+87
+Suppose the MMU not only checks if the page is resident but
+[x]
+also
+If read operation, whether read bit is set
+[x]
+If write operation, whether write bit is set
+[x]
+If CPU is in user mode, whether supervisor bit is not set
+[x]
+If any of these test fail, MMU generates a general
+[x]
+protection fault
+
+Memory Protection
+88
+Important because
+[x]
+Kernel sets permissions on memory accessible by the
+[x]
+process
+This prevents process from reading, writing or executing
+[x]
+any memory that is dangerous
+Thus, VM serves as a natural protection system
+[x]
+
+Aside: VM and Caching
+89
+Note that valid bit in PTE denotes whether
+[ ]
+information is cached or not
+Page hits and page misses analogous to cache hits
+[ ]
+and cache misses from Chapter 6
+Waiting until the last minute to swap a page from
+[ ]
+DRAM to disk is analogous to write-back caches
+
+VM and Locality
+90
+In the previous examples, we saw how VM consisted
+[ ]
+of pages from both DRAM and disk
+Given disk access times, why isn't VM terribly
+[ ]
+inefficient?
+Answer: Locality to the rescue!
+[ ]
+
+VM and Locality
+91
+Total # of pages probably exceeds total size of
+[ ]
+physical memory
+BUT: Locality promises at any point in time they will
+[ ]
+tend to work on smaller set of active pages
+(working set)
+See memory mountain
+[ ]
+
+Address Translation (Sect. 9.6)
+92
+Basic translation: virtual to physical
+[x]
+For a given address the MMU must
+[x]
+Locate corresponding PTE
+[x]
+Determine location of frame that contains the page
+[x]
+Compute offset into frame
+[x]
+This is the resulting address
+[x]
+Process is similar to cache
+[x]
+Virtual address is divided into two parts
+[x]
+Virtual page number: VPN
+[x]
+Virtual page offset: VPO
+[x]
+MMU uses the VPN to locate PTE
+[x]
+Entry in PTE is: physical frame (or page) number
+[x]
+MMU composes PPN and VPO to get physical address
+[x]
+
+Address Translation
+93
+
+Address Translation
+94
+Page Hit
+Page Miss
+
+Address Translation
+95
+
+Address Translation
+96
+PTEs are kept separate for processes, even if they
+[ ]
+share the same physical memory
+PTE's may also be multi level (PTE pointing to a PT)
+[ ]
+
+TLB
+97
+Problem: this process requires accessing more memory (to
+[ ]
+read PTE)
+Solution: use a special cache called Translation Lookaside
+[ ]
+Buffer
+Most programs have good locality
+[ ]
+i.e. accesses are spatially and temporally localized
+[ ]
+Many accesses will occur within the same set of virtual pages
+[ ]
+and hence within the same set of physical frames
+
+TLB
+98
+Idea:
+Cache PTEs of recently accessed virtual pages in a cache
+[x]
+Located in the MMU
+[x]
+Called TLB
+[x]
+Instead of looking up PTE in page table first check TLB
+[x]
+If PTE is in TLB, use it
+[x]
+Else look in page table
+[x]
+Load TLB with new PTE (may need to evict another one)
+[x]
+TLBs are efficient (95% hit rates)
+[x]
+
+TLBs
+99
+Translation Lookaside Buffer is used as a cache for
+[ ]
+page table entries
+Indexing into a TLB is done through tag and index
+[ ]
+bits
+Very similar to caching in chapter 6
+[ ]
+
+Putting it all together
+100
+You should now be able to explain the steps
+[ ]
+involved in a memory read beginning with an
+arbitrary virtual address A, ending with an
+arbitrary DRAM supercell address (i,j)
+You should be able to describe the functions of:
+[ ]
+MMU
+■
+Buses
+■
+I/O controller
+■
+Mem/Disk Controllers
+■
+Caches (On-chip and off), (Write-through/write-back)
+■

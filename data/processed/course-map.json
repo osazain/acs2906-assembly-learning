@@ -10,7 +10,7 @@
         "Assembly language basics and syntax",
         "Registers and memory concepts"
       ],
-      "examples": 0,
+      "examples": 6,
       "examRelevance": "medium",
       "difficulty": "foundational"
     },
@@ -24,7 +24,7 @@
         "Carry and overflow flags",
         "ASCII representation"
       ],
-      "examples": 0,
+      "examples": 5,
       "examRelevance": "medium",
       "difficulty": "foundational"
     },
@@ -38,7 +38,7 @@
         "Basic I/O operations",
         "DOS interrupts (INT 21h)"
       ],
-      "examples": 0,
+      "examples": 9,
       "examRelevance": "high",
       "difficulty": "intermediate"
     },
@@ -53,7 +53,7 @@
         "Arithmetic operations and overflow",
         "Hello World and template programs"
       ],
-      "examples": 6,
+      "examples": 11,
       "examRelevance": "high",
       "difficulty": "intermediate"
     },
@@ -68,7 +68,7 @@
         "Rotate operations (ROL, ROR, RCL, RCR)",
         "Bit masking and flag manipulation"
       ],
-      "examples": 0,
+      "examples": 6,
       "examRelevance": "high",
       "difficulty": "intermediate"
     },
@@ -83,7 +83,7 @@
         "For loops, while loops, if-else structures",
         "Loop examples (forloop.asm, ifelse.asm)"
       ],
-      "examples": 6,
+      "examples": 9,
       "examRelevance": "high",
       "difficulty": "intermediate"
     },
@@ -98,7 +98,7 @@
         "Recursive procedures",
         "proc.asm example"
       ],
-      "examples": 2,
+      "examples": 11,
       "examRelevance": "high",
       "difficulty": "advanced"
     },
@@ -112,7 +112,7 @@
         "String processing loops",
         "CLD and STD direction flag"
       ],
-      "examples": 0,
+      "examples": 8,
       "examRelevance": "medium",
       "difficulty": "advanced"
     },
@@ -126,7 +126,7 @@
         "Searching algorithms (linear, binary)",
         "Multi-dimensional arrays"
       ],
-      "examples": 0,
+      "examples": 7,
       "examRelevance": "medium",
       "difficulty": "advanced"
     },
@@ -140,7 +140,7 @@
         "Shift and rotate operations",
         "Course review and exam preparation"
       ],
-      "examples": 0,
+      "examples": 9,
       "examRelevance": "low",
       "difficulty": "advanced"
     }

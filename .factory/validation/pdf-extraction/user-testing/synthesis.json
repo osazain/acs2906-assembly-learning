@@ -1,0 +1,53 @@
+{
+  "milestone": "pdf-extraction",
+  "round": 1,
+  "status": "fail",
+  "assertionsSummary": {
+    "total": 23,
+    "passed": 18,
+    "failed": 5,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-LECTURE-001",
+    "VAL-LECTURE-002",
+    "VAL-LECTURE-003",
+    "VAL-SOURCE-001",
+    "VAL-SOURCE-002",
+    "VAL-SOURCE-003",
+    "VAL-SECTION-002",
+    "VAL-SECTION-003",
+    "VAL-SECTION-004",
+    "VAL-SECTION-005",
+    "VAL-DUPLICATE-001",
+    "VAL-DUPLICATE-002",
+    "VAL-SCHEMA-001",
+    "VAL-SCHEMA-002",
+    "VAL-SCHEMA-003",
+    "VAL-SCHEMA-004",
+    "VAL-COVERAGE-002",
+    "VAL-CONTENT-003"
+  ],
+  "failedAssertions": [
+    { "id": "VAL-SECTION-001", "reason": "l9-s7 has 1855 chars (below 2000 minimum for detailed topics)" },
+    { "id": "VAL-CONTENT-001", "reason": "Multiple sections missing code blocks (l1-s1, l1-s3, l8-s1, l8-s2, l8-s3, etc.)" },
+    { "id": "VAL-CONTENT-002", "reason": "L8 (Memory Hierarchy) content is about memory hierarchy theory, not assembly instructions - this is actually correct behavior since L8 content was replaced with Memory Hierarchy material" },
+    { "id": "VAL-COVERAGE-001", "reason": "L5 has only 3 sections (minimum 4 required)" },
+    { "id": "VAL-COVERAGE-003", "reason": "L5 has 8650 chars (target 12000 for at-risk lecture)" }
+  ],
+  "blockedAssertions": [],
+  "appliedUpdates": [
+    { "target": "validation-state.json", "description": "Updated validation state with pdf-extraction milestone results", "source": "setup" }
+  ],
+  "notes": [
+    "VAL-CONTENT-002 failure for L8 is actually correct - Memory Hierarchy content is theoretical (storage tech, cache, locality) rather than assembly instruction syntax. The assertion may need refinement to handle theoretical vs instruction-focused lectures.",
+    "L5 content appears to be legitimately only 3 sections (Logic and Bit Manipulation with 3 substantial sections totaling 8647 chars).",
+    "L9-s7 at 1855 chars is close to the 2000 minimum - could be enhanced in a future iteration."
+  ],
+  "previousRound": null,
+  "environmentVerification": {
+    "dataFilesPresent": true,
+    "lecturesJsonValid": true,
+    "npmValidatePassed": true
+  }
+}

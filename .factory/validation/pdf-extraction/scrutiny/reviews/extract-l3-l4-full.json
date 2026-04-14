@@ -1,0 +1,72 @@
+{
+  "featureId": "extract-l3-l4-full",
+  "reviewedAt": "2026-04-14T00:00:00Z",
+  "commitId": "4639e41",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Feature extract-l3-l4-full successfully extracted full content for lectures 3 and 4. L3 sections meet 1500 char minimum, L4 sections meet 2000 char minimum. All validation assertions pass. Content includes proper markdown formatting (headers, code blocks) and assembly syntax (MOV, ADD, SUB, PUSH, POP, CBW, CWD, CDQ, INC, DEC, NEG, CMP, JMP, CALL, RET). The only change in commit 4639e41 was updating l4-s5 content to include CDQ instruction and minor formatting fixes.",
+    "issues": []
+  },
+  "sharedStateObservations": [],
+  "addressesFailureFrom": null,
+  "validationChecks": {
+    "VAL-LECTURE-003": {
+      "description": "Sequential lecture IDs 1-10",
+      "result": "pass",
+      "evidence": "lecture IDs are [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+    },
+    "VAL-SECTION-003": {
+      "description": "Required section fields present",
+      "result": "pass",
+      "evidence": "All sections have id, lectureId, title, content fields"
+    },
+    "VAL-SECTION-004": {
+      "description": "Unique section IDs per lecture",
+      "result": "pass",
+      "evidence": "No duplicate section IDs found per lecture"
+    },
+    "VAL-SECTION-005": {
+      "description": "lectureId matches parent",
+      "result": "pass",
+      "evidence": "All section.lectureId matches parent lecture.id"
+    },
+    "VAL-SCHEMA-002": {
+      "description": "lectures array valid",
+      "result": "pass",
+      "evidence": "lectures is array with 10 elements"
+    },
+    "VAL-DUPLICATE-001": {
+      "description": "Globally unique section IDs",
+      "result": "pass",
+      "evidence": "All section IDs are globally unique"
+    },
+    "VAL-DUPLICATE-002": {
+      "description": "No orphaned sections",
+      "result": "pass",
+      "evidence": "All sections reference valid lectureIds"
+    },
+    "L3_CHAR_COUNT": {
+      "description": "L3 sections min 1500 chars",
+      "result": "pass",
+      "evidence": "l3-s1: 1777, l3-s2: 1724, l3-s3: 2988, l3-s4: 2906, l3-s5: 2394"
+    },
+    "L4_CHAR_COUNT": {
+      "description": "L4 sections min 2000 chars",
+      "result": "pass",
+      "evidence": "l4-s1: 2493, l4-s2: 2274, l4-s3: 2207, l4-s4: 2972, l4-s5: 2249, l4-s6: 3426"
+    },
+    "MARKDOWN_FORMATTING": {
+      "description": "Content has markdown formatting",
+      "result": "pass",
+      "evidence": "All L3 and L4 sections have headers (##) and code blocks (```asm)"
+    },
+    "ASSEMBLY_SYNTAX": {
+      "description": "Content includes assembly instructions",
+      "result": "pass",
+      "evidence": "L3 has MOV/ADD/PUSH/POP/INC/RET; L4 has MOV/ADD/SUB/PUSH/POP/CBW/CWD/CDQ/INC/DEC/NEG/CMP/JMP/CALL"
+    }
+  },
+  "summary": "Review passed. All L3 sections meet 1500 char minimum, all L4 sections meet 2000 char minimum. All validation assertions pass. Content has proper markdown formatting with headers and code blocks. Assembly syntax is present throughout (MOV, ADD, SUB, PUSH, POP, CBW, CWD, CDQ, etc.). The commit only changed lectures.json, updating l4-s5 content to include CDQ instruction and applying minor formatting fixes."
+}

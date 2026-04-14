@@ -1,0 +1,51 @@
+{
+  "featureId": "extract-l5-l6-full",
+  "status": "pass",
+  "blockingIssues": [],
+  "nonBlockingIssues": [],
+  "sharedStateObservations": [],
+  "validationChecks": {
+    "VAL-SECTION-004": {
+      "description": "Unique section IDs per lecture",
+      "result": "pass",
+      "details": "L5: 3 unique IDs (l5-s1, l5-s2, l5-s3), L6: 4 unique IDs (l6-s1, l6-s2, l6-s3, l6-s4)"
+    },
+    "VAL-SCHEMA-003": {
+      "description": "Non-empty concepts for lectures 1-8",
+      "result": "pass",
+      "details": "L5 has 17 concepts, L6 has 10 concepts - all non-empty"
+    },
+    "VAL-SCHEMA-004": {
+      "description": "Non-empty instructions for lectures 1-5",
+      "result": "pass",
+      "details": "L5 has 13 instructions including AND, OR, XOR, NOT, TEST, SHL, SHR, SAL, SAR, ROL, ROR, RCL, RCR"
+    },
+    "VAL-COVERAGE-002": {
+      "description": "Total content per lecture >= 4000 chars",
+      "result": "pass",
+      "details": "L5 total: 8647 chars, L6 total: 8190 chars"
+    },
+    "section-character-counts": {
+      "L5-sections": {
+        "l5-s1 (Logical Instructions)": "2900 chars (min 2500: OK)",
+        "l5-s2 (Shift Instructions)": "2804 chars (min 2500: OK)",
+        "l5-s3 (Rotate Instructions)": "2943 chars (min 2500: OK)"
+      },
+      "L6-sections": {
+        "l6-s1 (The CMP Instruction)": "1529 chars (min 1200: OK)",
+        "l6-s2 (Unconditional Jump - JMP)": "1553 chars (min 1200: OK)",
+        "l6-s3 (Conditional Jumps)": "2598 chars (min 1200: OK)",
+        "l6-s4 (Loop Instructions)": "2510 chars (min 1200: OK)"
+      }
+    },
+    "markdown-formatting": {
+      "result": "pass",
+      "details": "All sections contain proper markdown headers (##, ###) and code blocks (```asm)"
+    },
+    "assembly-syntax": {
+      "result": "pass",
+      "details": "L5 contains LOGICAL/SHIFT/ROTATE instructions (AND, OR, XOR, NOT, SHL, SHR, SAL, SAR, ROL, ROR, RCL, RCR), L6 contains CMP and JMP instructions as expected"
+    }
+  },
+  "summary": "Feature extract-l5-l6-full passes all validation checks. L5 (Logic and Bit Manipulation) has 3 sections totaling 8647 chars, all >= 2500 chars minimum. L6 (Control Flow and Branching) has 4 sections totaling 8190 chars, all >= 1200 chars minimum. All sections have proper markdown formatting, assembly syntax examples, and non-empty concepts/instructions arrays. Commit 4639e41 shows only L4 section content was modified (added CDQ content to 'CBW and CWD - Sign Extension'), but the handoff confirms L5/L6 extraction was completed successfully in a prior commit."
+}

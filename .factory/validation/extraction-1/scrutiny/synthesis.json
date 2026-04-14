@@ -1,0 +1,50 @@
+{
+  "milestone": "extraction-1",
+  "round": 1,
+  "status": "fail",
+  "validatorsRun": {
+    "lint": { "passed": true, "command": "npm run lint", "exitCode": 0 },
+    "validate:content": { "passed": true, "command": "npm run validate:content", "exitCode": 0 },
+    "build": { "passed": true, "command": "npm run build", "exitCode": 0 }
+  },
+  "reviewsSummary": {
+    "total": 2,
+    "passed": 0,
+    "failed": 2,
+    "failedFeatures": ["extract-lecture7-8", "extract-lecture9-10"]
+  },
+  "blockingIssues": [
+    {
+      "featureId": "extract-lecture7-8",
+      "severity": "blocking",
+      "description": "VAL-EXTRACT-002 NOT SATISFIED: Lecture 8 has only 10,659 chars vs required 26,000+ chars. Worker preserved existing 'String Operations' content instead of replacing with 'Memory Hierarchy' from lecture8_raw.txt."
+    },
+    {
+      "featureId": "extract-lecture9-10",
+      "severity": "blocking",
+      "description": "VAL-EXTRACT-003 NOT SATISFIED: Lecture 9 has 24,068 chars vs required 26,000+ chars."
+    },
+    {
+      "featureId": "extract-lecture9-10",
+      "severity": "blocking",
+      "description": "VAL-EXTRACT-004 NOT SATISFIED: Lecture 10 has 26,571 chars vs required 32,000+ chars."
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Add guidance for content-worker: when raw file topic differs from existing section topic, document the mismatch and either (a) create new section for new topic or (b) extract what matches and clearly label gaps.",
+      "evidence": "extract-lecture7-8 worker faced this decision and chose to preserve, leaving VAL-EXTRACT-002 unsatisfied.",
+      "isSystemic": true
+    },
+    {
+      "target": ".factory/skills/content-worker.md",
+      "suggestion": "Create the content-worker skill file that was referenced in features.json but never implemented.",
+      "evidence": "Both extract-lecture7-8 and extract-lecture9-10 reference skillName='content-worker' but the skill does not exist.",
+      "isSystemic": true
+    }
+  ],
+  "rejectedObservations": [],
+  "previousRound": null
+}

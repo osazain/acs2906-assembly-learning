@@ -1,0 +1,39 @@
+{
+  "featureId": "extract-lecture9-10",
+  "reviewedAt": "2026-04-14T02:45:00.000Z",
+  "commitId": "0d95e38",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "Implementation partially meets requirements but has blocking char count deficiencies. L9 is 24,068 chars (need 26,000+) and L10 is 26,571 chars (need 32,000+). Extraction ratio is ~91% for L9 and ~82% for L10, compared to ~104% for lecture 7.",
+    "issues": [
+      {
+        "file": "data/processed/lectures.json",
+        "line": 1529,
+        "severity": "blocking",
+        "description": "Lecture 9 total char count is 24,068, which does NOT meet the required 26,000+ chars (VAL-EXTRACT-003)"
+      },
+      {
+        "file": "data/processed/lectures.json",
+        "line": 1529,
+        "severity": "blocking",
+        "description": "Lecture 10 total char count is 26,571, which does NOT meet the required 32,000+ chars (VAL-EXTRACT-004)"
+      },
+      {
+        "file": "worker-transcripts.jsonl",
+        "line": 0,
+        "severity": "non_blocking",
+        "description": "No transcript skeleton found for worker session d843e23f-ed4b-40e7-b2a5-c3c01f7f2974 - cannot verify what procedures were followed"
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "The content-worker skill referenced in features.json does not exist in .factory/skills/. The worker proceeded without this skill's guidance.",
+      "evidence": "features.json shows skillName='content-worker', but Skill tool returned error: 'Skill \"content-worker\" not found'"
+    }
+  ],
+  "addressesFailureFrom": null
+}

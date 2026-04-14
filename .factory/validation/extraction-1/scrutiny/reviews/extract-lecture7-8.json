@@ -1,0 +1,31 @@
+{
+  "featureId": "extract-lecture7-8",
+  "reviewedAt": "2026-04-14T02:30:00.000Z",
+  "commitId": "f247579",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "Lecture 7 extraction successful but Lecture 8 NOT updated. L7 has 15,113 chars (exceeds 14,000+ target). L8 only has 10,659 chars vs required 26,000+ chars. The worker preserved existing 'String Operations' content instead of replacing with 'Memory Hierarchy' content from lecture8_raw.txt.",
+    "issues": [
+      {
+        "file": "data/processed/lectures.json",
+        "severity": "blocking",
+        "description": "VAL-EXTRACT-002 NOT SATISFIED: Lecture 8 sections have only 10,659 chars, but validation contract requires 26,000+ chars. The worker preserved existing 'String Operations' content because lecture8_raw.txt contains 'Memory Hierarchy' content which topic didn't match."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "conventions",
+      "observation": "No documented guidance exists on handling mismatches between raw files and existing lectures.json structure. Workers must decide whether to preserve or replace when topics differ.",
+      "evidence": "lecture8_raw.txt is Memory Hierarchy content but L8 section is titled String Operations. Worker chose to preserve."
+    },
+    {
+      "area": "skills",
+      "observation": "The content-worker skill referenced in features.json does not exist in .factory/skills/. Workers proceed without this skill's guidance.",
+      "evidence": "features.json shows skillName='content-worker', but the skill file was not found"
+    }
+  ],
+  "addressesFailureFrom": null
+}

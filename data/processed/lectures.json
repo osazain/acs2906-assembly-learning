@@ -1529,13 +1529,14 @@
         {
           "id": "l9-s1",
           "lectureId": 9,
-          "title": "Locality Principles",
-          "content": "## Locality Principles\n\n### What is Locality?\n\nWell-written programs tend to reference data items that:\n- Are near to other recently referenced items\n- Were recently referenced themselves\n\n### Two Forms of Locality\n\n**Spatial Locality:** If a memory location was referenced, memory locations nearby will likely be or have been referenced.\n\n**Temporal Locality:** If a memory location was referenced, the memory location is likely to be referenced again in the near future.\n\n### Why Consider Locality?\n\nPrograms with good locality will run faster than programs with poor locality. All levels of a computer system exploit locality:\n\n- **Hardware:** Uses caches to speed up memory accesses\n- **Operating System:** Uses main memory as a cache for the most recently used chunks of the virtual address space\n- **Applications:** Web browsers cache recently viewed pages on disk\n\n### Locality of Instructions\n\n- CPU fetches instructions from memory in sequential order unless a branch occurs\n- Small tight loops enjoy both good spatial and temporal locality\n- Large functions enjoy good spatial locality but bad temporal locality\n- Small functions that are not called from loops enjoy neither\n\n### Stride\n\nStride-1 means a function visits every kth item. Stride-1 is most common and has good spatial locality. Greater stride means worse locality.\n\n> 💡 **Tip:** Sequential array access has stride-1 and excellent spatial locality. Random access patterns have poor locality.\n",
+          "title": "Storage Technology Trends and Locality",
+          "content": "## Storage Technology Trends and Locality\n\n### Recall: Storage Technology Trends\n\n**Observations:**\n- CPU speed is out-pacing all storage\n- SRAM is keeping up, but DRAM and Disk are sorely lacking\n- SRAM is too expensive to use for main memory\n- DRAM and disk are main storage devices\n- Creates the CPU-memory gap: CPU is limited by speed of memory and disk\n- To bridge gap: modern systems use SRAM based caches\n- This approach works because most programs exhibit good locality\n\n## Locality\n\n### What is Locality?\n\nWell written programs tend to reference data items that:\n- Are near to other recently referenced items\n- Were recently referenced themselves\n\n### Two Forms of Locality\n\n**Spatial Locality:** If a memory location was referenced, memory locations nearby will likely be or have been referenced.\n\n**Temporal Locality:** If a memory location was referenced, the memory location is likely to be referenced again in the near future.\n\n### Why Consider Locality?\n\nPrograms with good locality will run faster than programs with poor locality. All levels of a computer system exploit locality:\n\n- **Hardware:** Uses caches to speed up memory accesses\n- **Operating Systems:**\n  - Main memory is used as a cache for the most recently used chunks of the virtual address space\n  - Use main memory as cache for disk data\n- **Applications:** Web browser cache recently viewed pages on disk\n\n### Principle of Locality\n\nTwo different things are fetched from memory during execution:\n- **Program data:** Fetched at request of program\n- **Program instructions:** Fetched at request of CPU\n\nLocality principles apply to both.\n\n### Locality of References to Program Data\n\nConsider a function like maxvec. The reference pattern for each variable:\n\n**Max:**\n- Scalar: no spatial locality\n- Accessed at least once in each loop iteration: good temporal locality\n\n**i:**\n- Scalar: no spatial locality\n- Accessed at least once in each loop iteration: good temporal locality\n\n**v:**\n- Array elements are accessed sequentially: good spatial locality\n- Each element is accessed once: bad temporal locality\n\nSince all variables have either good temporal or spatial locality, maxvec has good locality. Maxvec accesses elements sequentially: said to have a stride of 1.\n\n**Definition:** stride-k means function visits every kth item. Stride-1 is most common and has good spatial locality. Greater the stride, the worse the locality.\n\n### Locality of Instruction Fetches\n\n- CPU fetches instructions from memory in sequential order unless a branch occurs\n- These are also memory accesses\n- Small tight loops enjoy both good spatial and temporal locality\n- Large functions enjoy good spatial locality, bad temporal locality\n- Small functions that are not called from loops enjoy neither\n\n### Summary of Locality\n\n- Programs that repeatedly reference the same variables enjoy good temporal locality\n- For program with k-stride patterns, the smaller the stride the better the spatial locality\n- Loops have good temporal and spatial locality\n- Smaller loops have better spatial locality\n- More loop iterations have better temporal locality",
           "concepts": [
             "locality",
             "spatial-locality",
             "temporal-locality",
-            "stride"
+            "stride",
+            "cpu-memory-gap"
           ],
           "instructions": [],
           "examples": [
@@ -1551,12 +1552,15 @@
           "id": "l9-s2",
           "lectureId": 9,
           "title": "The Memory Hierarchy",
-          "content": "## The Memory Hierarchy\n\n### Two Fundamental Properties\n\n1. Different storage technologies have widely ranging access times\n2. Faster technologies are more expensive and have less capacity\n\n### Memory Hierarchy Organization\n\nStorage devices get slower, cheaper, and larger as we move from higher to lower levels:\n\n| Level | Technology | Access Time | Size |\n|-------|------------|-------------|------|\n| L0 | CPU Registers | 1 cycle | < 1 KB |\n| L1 | On-chip SRAM cache | ~4 cycles | 32-64 KB |\n| L2 | Off-chip SRAM cache | ~10 cycles | 256 KB-8 MB |\n| L3 | DRAM main memory | ~100 cycles | GB |\n| L4 | Local disks | ~10M cycles | TB |\n| L5 | Remote storage | Network dependent | Unlimited |\n\n### Caching\n\nA cache is a small fast storage device that acts as a staging area for data objects in slower devices. The key idea:\n\n- Faster & smaller memory at level k acts as a cache for larger & slower memory at level k+1\n- Each level \"caches\" data objects from the next lower level\n\n### Block Organization\n\nStorage at level k+1 is partitioned into blocks with unique addresses. Storage at level k is partitioned into smaller same-sized blocks. Data is copied between levels in units of block size.\n\n> 💡 **Tip:** Lower in hierarchy = longer access time and larger blocks.\n",
+          "content": "## The Memory Hierarchy\n\n### Two Fundamental Properties\n\n1. Different storage technologies have widely ranging access times\n2. Faster technologies are more expensive and have less capacity\n\nWell written programs tend to have good locality. These principles complement each other and suggests organization of computer memory into a hierarchy.\n\n### Memory Hierarchy Organization\n\nIn general:\n- Storage devices get slower, cheaper, and larger as we move from higher to lower levels\n\n**At the highest level (L0):** A small number of fast CPU registers\n- Accessed in a single clock cycle\n\n**Next:** One or more small SRAM-based cache memories\n- Accessed in a few clock cycles\n\n**Followed by:** DRAM-based memory\n- Accessed in 10s to 100s clock cycles\n\n**Next:** Slow enormous disks\n\n### Memory Hierarchy Levels\n\n| Level | Device | Holds | Retrieved from |\n|-------|--------|-------|----------------|\n| L0 | Registers | Words retrieved from L1 cache | CPU registers |\n| L1 | On-chip cache | Cache lines retrieved from L2 | L2 cache |\n| L2 | Off-chip cache | Lines retrieved from main memory | Memory |\n| L3 | Main Memory | Disk blocks retrieved from local disk | Local disks |\n| L4 | Local Disks | Files retrieved from remote sources | Remote storage |\n| L5 | Remote secondary storage | End of hierarchy | - |\n\n### Caching in the Memory Hierarchy\n\nA cache is a small fast storage device that acts as a staging area for data objects in slower devices.\n\n**Caching:** The process of using a cache\n\n**Main idea:**\n- Faster & smaller memory at level k acts as a cache for larger & slower memory at level k+1\n- Each level \"caches\" data objects from the next lower level\n\n### Block Organization\n\n- Storage at level k+1 is partitioned into blocks\n- Each block has a unique address\n- Blocks can be either fixed (in most cases) or variable size\n\nStorage at level k is partitioned into smaller set of same-sized blocks. Data is copied between levels k and k+1 in units corresponding to the size of the block. Note: different block sizes between different levels.\n\n**General principle:** Lower in hierarchy = longer access and larger blocks.\n\n### Cache Hits and Misses\n\n**When a program looks for data object d at level k+1:**\n- It first looks for d at level k\n- If d is cached at level k, then this is called a cache hit\n- Program reads d from level k, which is faster than level k+1\n\n**If d is not found (cache miss):**\n- Cache at level k fetches block d from level k+1\n- If level k cache is full, fetched block overwrites another block\n- The overwritten block is called the victim block\n- The victim block is said to be evicted from the cache\n- Method used to perform eviction is called the replacement policy:\n  - Random\n  - Least Recently Used (LRU)\n\nOnce d is read into level k, it can be used by the program.\n\n### Three Types of Cache Misses\n\n1. **Compulsory misses:** Caused by an empty cache (cold cache)\n2. **Conflict misses:** Could have been avoided had the cache not evicted an entry earlier\n3. **Capacity misses:** Misses that occur solely due to finite size of the caches\n\nWhen a block is loaded into cache, it must have a place. Ideal: a flexible policy to place block anywhere in cache.\n\n**Problem:** Caches at top of hierarchy must be fast, such a policy would be too expensive to implement in hardware.\n\n**Solution:** Hardware caches restrict where blocks can be placed to a subset or even singleton of blocks at level k. Example: block i can be placed only in location i mod 4.\n\nHowever: Even if cache is not full, another block may have to be evicted.\n\n**Working Set:** Programs generally work in phases. In each stage, program accesses a limited # of blocks. This set of blocks is called the working set. If working set fits in cache, great! Program runs quickly. If working set does not fit, program wastes time evicting and replacing blocks in cache.\n\n### Cache Management\n\nAt each level of memory something must manage the cache (evict and load blocks, decide which blocks to replace):\n- **Compiler** manages L0\n- **Hardware** manages L1/L2\n- **Hardware/OS** manages L3\n- **OS** manages L4 (many disks also have a hardware cache)\n\n### Summary of Memory Concepts\n\n**Exploiting Temporal Locality:**\n- Objects will be accessed many times\n- First time object is loaded into cache\n- In the future object is accessed from the cache faster\n\n**Exploiting Spatial Locality:**\n- Blocks contain multiple data objects\n- First object causes block to be loaded into cache\n- Next object accessed after first object will already be in the cache",
           "concepts": [
             "memory-hierarchy",
             "caching",
             "cache-block",
-            "storage-technology"
+            "storage-technology",
+            "cache-hit",
+            "cache-miss",
+            "working-set"
           ],
           "instructions": [],
           "examples": [
@@ -1564,44 +1568,22 @@
           ],
           "assessmentItems": [
             "QB-093",
-            "QB-094"
+            "QB-094",
+            "QB-095"
           ]
         },
         {
           "id": "l9-s3",
           "lectureId": 9,
-          "title": "Cache Hits and Misses",
-          "content": "## Cache Hits and Misses\n\n### Cache Hit\n\nWhen a program looks for data object d at level k+1, it first looks at level k. If d is cached at level k, this is called a **cache hit**. The program reads d from level k, which is faster than level k+1.\n\n### Cache Miss\n\nIf d is not found at level k, this is called a **cache miss**. The cache at level k fetches block d from level k+1. If the cache is full, the fetched block overwrites another block (the **victim block**). This is called **eviction**.\n\n### Replacement Policy\n\nThe method used to perform eviction is called the replacement policy:\n- **Random:** Choose a line at random\n- **LFU:** Least Frequently Used\n- **LRU:** Least Recently Used\n\n### Three Types of Cache Misses\n\n1. **Compulsory misses:** Caused by an empty cache (cold cache)\n2. **Conflict misses:** Could have been avoided had the cache not evicted an entry earlier\n3. **Capacity misses:** Occur solely due to finite size of the caches\n\n### Cache Management\n\nAt each level of memory, something must manage the cache:\n- **Compiler** manages L0\n- **Hardware** manages L1/L2\n- **Hardware/OS** manages L3\n- **OS** manages L4\n\n> 💡 **Tip:** If your working set fits in cache, your program runs quickly. If not, you waste time evicting and replacing blocks.\n",
-          "concepts": [
-            "cache-hit",
-            "cache-miss",
-            "victim-block",
-            "replacement-policy",
-            "compulsory-miss",
-            "conflict-miss",
-            "capacity-miss"
-          ],
-          "instructions": [],
-          "examples": [
-            "cache-hits-misses-demo"
-          ],
-          "assessmentItems": [
-            "QB-095",
-            "QB-096",
-            "QB-097"
-          ]
-        },
-        {
-          "id": "l9-s4",
-          "lectureId": 9,
-          "title": "Direct-Mapped Cache",
-          "content": "## Direct-Mapped Cache\n\n### Key Characteristic\n\nEach set has exactly 1 line (E = 1), so the number of sets equals the number of lines.\n\n### How It Works\n\n1. **Set Selection:** Use s bits of address to index into the set array\n2. **Line Matching:** Check if valid bit is set AND if tag bits match\n3. **Word Selection:** Use block offset to select the word from the block\n\n### Address Division\n\nFor address A with m total bits:\n- **Tag bits (t):** Used to match the line's tag\n- **Set index (s):** Identifies which set the block can be in\n- **Block offset (b):** Offset of word within the block\n\n### Example\n\nGiven (S, E, B, m) = (4, 1, 2, 4):\n- To access address 8: tag=1, set=0, block offset=0\n- Cache checks set 0 for a tag of 1\n- If found, byte at offset 0 is read (cache hit)\n\n### Advantages and Disadvantages\n\n**Advantages:**\n- Very fast - simple hardware\n- Easy to implement\n\n**Disadvantages:**\n- Each set can only hold one line\n- Results in **thrashing** when two blocks map to the same set\n\n### Thrashing\n\nExample: Two blocks map to the same set. Program accesses each block in alternating order, causing constant eviction and reload. This can slow execution by 2-3x!\n\n> 💡 **Tip:** Direct-mapped caches are fast but can cause performance issues with certain access patterns.\n",
+          "title": "Cache Memories - General Operation",
+          "content": "## Cache Memories - General Operation\n\n### General Cache Operation\n\nAssume the following memory hierarchy: Registers, L1 cache, Memory.\n\n### Generic Cache Structure\n\nThe cache must determine whether a request is a hit or a miss, and extract the requested word. This process consists of three steps:\n\n1. **Set selection:** Use s bits of address to identify which set the block may be cached in\n2. **Line matching:** Check if valid bit is set AND if tag bits match\n3. **Word selection:** Use block offset to select the word from the block\n\n### Address Division\n\nCPU requests word at address A. A is divided into three parts:\n- **Tag:** Used to determine which line, if any, the block is in\n- **Set:** Used to determine which set the block may be cached in\n- **Offset:** Offset of word in block\n\nCache uses s bits of A to identify the set that may contain the block. Cache uses tag and valid bit to determine if a line in set contains the block. Offset bits are used to load word if found. Otherwise cache loads block from memory.\n\n### Types of Cache\n\nCaches are grouped into different classes based on E (# of cache lines per set):\n- **Direct-mapped caches:** Easiest to understand and implement\n- **Set associative caches:** Hard to implement\n- **Fully associative caches:** Hard to implement\n\n### Direct-Mapped Cache\n\n**Key characteristic:** Each set has 1 line (E = 1). Therefore # of sets = # of lines.\n\n**DM: Set Selection**\nTo determine if cache contains word at address A: Find set using s bits of A to index into array of sets.\n\n**DM: Line Matching**\n- Check if valid bit is set\n- Check if tag bits of A match tag of line\n- If above conditions are true: cache hit\n- Otherwise: miss, then load block from memory, replace line with block, set bit to valid, extract word in block\n\n**DM: Word Selection**\nWhen a hit occurs (or block was loaded from memory), we know word is somewhere in the block. The block offset provides us with the offset of the first byte in the desired word. Think of block as an array of bytes, and the byte offset as an index into that array.\n\n### Example (pg. 619-621)\n\nThe mechanisms that a cache uses to select sets and identify lines are extremely simple. Have to be, because hardware must perform them in a few nanoseconds. However, manipulating these bits can be confusing to us.\n\n**Given:** (S,E,B,m) = (4, 1, 2, 4)\n\n**Accessing address 8:**\n- tag = 1, set = 0, block offset = 0\n- Cache checks set 0 for a tag of 1. If found, byte at offset 0 is read (cache hit)\n- Otherwise, update the cache: M[8], M[9] are the bytes of data located at addresses 8, 9\n\n**Now try to access address 0:**\n- tag = 0, set = 0, block offset = 0\n- Currently cache at set 0 shows tag of 1. We wanted tag of 0, so cache miss\n- Evict the line and update the cache: M[0], M[1] are the bytes of data located at addresses 0, 1\n\n### Direct Mapped Cache - Advantages and Disadvantages\n\n**Advantages:**\n- Very fast - code to determine if set contains block is very simple\n\n**Disadvantages:**\n- Each set can only hold one line\n- Results in thrashing\n\n**Example of thrashing:** Two blocks map to the same set. Program accesses each block in alternating order. Each time block is accessed, other block is evicted from cache. Cache is forced to reload block on each access. Slows down program execution significantly (as much as 2x or 3x). Also, conflict misses stem from the constraint that each set has exactly one line.",
           "concepts": [
             "direct-mapped-cache",
             "set-selection",
             "line-matching",
-            "thrashing",
-            "cache-tags"
+            "word-selection",
+            "cache-tags",
+            "thrashing"
           ],
           "instructions": [],
           "examples": [
@@ -1613,16 +1595,17 @@
           ]
         },
         {
-          "id": "l9-s5",
+          "id": "l9-s4",
           "lectureId": 9,
-          "title": "Set Associative Caches",
-          "content": "## Set Associative Caches\n\n### Key Characteristic\n\n1 < E < C/B, called E-way set associative caches. Each set contains multiple lines.\n\n### How It Works\n\n1. **Set Selection:** Identical to direct-mapped (s bits identify the set)\n2. **Line Matching:** Check ALL lines in set in parallel\n3. **Word Selection:** Use offset to get word in cached block\n\n### Advantages Over Direct-Mapped\n\n- Reduces thrashing due to conflict misses\n- Multiple lines per set give more placement options\n\n### Line Replacement\n\nWhen no empty lines are available, choose which line to evict:\n- **Random:** Cheapest, but more conflict misses\n- **LFU:** Least Frequently Used\n- **LRU:** Least Recently Used (most effective but expensive)\n\n### Fully Associative Cache\n\nKey characteristic: E = C/B (S = 1). The cache is a single set with all lines.\n\n**Properties:**\n- Address is divided into tag and offset (no s bits)\n- Like a huge hash table\n- Must check all lines in parallel (slow and expensive)\n- Only practical for caches at lower end of hierarchy (L3, etc.)\n\n> 💡 **Tip:** L1 and L2 caches typically use 2-way or 4-way set associativity for a good balance of speed and hit rate.\n",
+          "title": "Set Associative and Fully Associative Caches",
+          "content": "## Set Associative and Fully Associative Caches\n\n### Set Associative Caches\n\n**Key characteristic:** 1 < E < C/B. Called E-way set associative caches. Each set contains multiple lines.\n\n**SA: Set Selection**\nIdentical to direct-mapped caches: s bits identify the set.\n\n**SA: Line Matching and Word Selection**\nCheck ALL lines in set in parallel.\n\nRetrieve word if line is valid and if line contains matching tag. Otherwise, load block from memory (assuming only 1 cache). If no empty lines are available (all lines are valid), then evict a line from the set. Use offset to get word in cached block.\n\n### Line Replacement\n\nWhich line to evict?\n\n**Replacement policy:** Method to select block for eviction\n- **Random:** Choose a line at random from the set\n- **LFU:** Least frequently used\n- **LRU:** Least recently used\n\nFirst policy is cheap, but results in more conflict misses. Latter policies are more expensive, but result in less conflict misses.\n\n### Caching Example\n\nGeneral: Same procedure as previous example but now we have 2 lines of space for each cache set. If both lines are full, choose which line to evict based on a replacement policy. Replacement policy will vary depending on the storage medium.\n\n### Fully Associative Caches\n\n**Key Characteristic:** E = C/B (S = 1). Cache is a single set with C/B lines. Address is divided into tag and offset. No s bits.\n\nAnalogous to a huge hash table.\n\n**Properties:**\n- Valid bit and Tag for each line\n- Entire cache = 1 set with E = C/B lines in the one and only set\n\n**Works similar to set associative caches:**\n- There is only one set\n- Check all lines in set (in parallel)\n- Retrieve word if line is valid and line contains matching tag\n- Otherwise: Choose empty line to place block, Or evict a block if there are no empty lines\n- Load block from memory (assuming only 1 cache)\n- Use offset to get word in cached block\n\n### FA: Line Matching and Word Selection\n\nThree conditions must all be true for a cache hit:\n1. The valid bit must be set\n2. The tag bits in one of the cache lines must match the tag bits in the address\n3. If (1) and (2), then cache hit, and block offset selects starting byte\n\n### Cache Implementation Considerations\n\nLogic for searching for tags is slow and expensive. Only an option in caches at lower end of hierarchy. Too slow for L1 and L2 cache. L1 and L2 caches use either:\n- Direct mapped caches\n- 2-way caches\n- 3-way caches\n- 4-way caches",
           "concepts": [
             "set-associative-cache",
             "e-way-set-associative",
             "fully-associative-cache",
             "line-replacement",
-            "lru-policy"
+            "lru-policy",
+            "lfu-policy"
           ],
           "instructions": [],
           "examples": [
@@ -1634,17 +1617,21 @@
           ]
         },
         {
-          "id": "l9-s6",
+          "id": "l9-s5",
           "lectureId": 9,
           "title": "Cache Writes and Performance",
-          "content": "## Cache Writes and Performance\n\n### Write-Through vs Write-Back\n\n**Write-through:** Immediately write block to memory\n- Simplest to implement\n- Increases number of bus transactions\n\n**Write-back:** Defer block write until block is evicted\n- Significantly reduces bus transactions\n- Requires a 'dirty bit' to track modified blocks\n\n### Write Allocation\n\n**Write-allocate:** Update cache only (exploits spatial locality)\n- Generally done by write-back caches\n- Requires more cache hardware\n\n**No-write-allocate:** Send update only to lower level\n- More bus transactions\n- Generally done by write-through caches\n\n### Cache Performance Metrics\n\n- **Miss rate:** Fraction of memory references that are cache misses\n- **Hit rate:** Fraction that are hits (1 - miss rate)\n- **Hit time:** Time to deliver a cached word to CPU (~few cycles for L1)\n- **Miss penalty:** Additional time due to a miss (10 cycles from L2, 100 from memory)\n\n### Impact of Parameters\n\n| Parameter | Advantage | Disadvantage |\n|-----------|-----------|--------------|\n| Larger cache | Higher hit rate | Longer hit time |\n| Larger block | Better spatial locality | Larger miss penalty |\n| Higher associativity | Less thrashing | Slower, more expensive |\n\n### Write Buffer\n\nWrite-through caches can use a write buffer that works independently of cache to update memory, making writes asynchronous.\n\n> 💡 **Tip:** Write-back caches are more common further down the hierarchy where bandwidth is precious.\n",
+          "content": "## Cache Writes and Performance\n\n### Caches and Memory Writes\n\n**What about writing to memory?**\n\nRecall read procedure: CPU requests word from cache. If block with word is cached, it's a hit. Else it's a miss, and cache fetches block from next level. Word from block is returned once block is cached.\n\n**Writes are more complicated.** Scenario: CPU writes a word to memory. Either block with word is in cache, or not.\n\n**If block is in cache (cache hit):**\n- Block in cache is updated with word\n- Eventually memory has to be updated with word\n- What does cache do about updating the copy of w in the next lower level in the hierarchy?\n\n### Write-Through vs Write-Back\n\n**Two options:**\n\n**Write-through:** Immediately write block to memory\n- Simplest to implement\n- Increases number of bus transactions\n\n**Write-back:** Defer block write until block is evicted\n- Advantage: significantly reduces number of bus transactions\n- Disadvantage: additional complexity\n- Cache must maintain a 'dirty bit' to keep track of which blocks must be written back when evicted\n- Loading cache may take longer because eviction is more complex\n\n### Write Allocation\n\n**Scenario:** CPU writes a word to memory. Either block with word is in cache, or not. If block is not in cache (cache miss) - should the block be loaded?\n\n**Two options:**\n\n**Write-allocate:** Update cache only\n- Exploits spatial locality of writes\n- Reduces # of bus transactions\n- Generally done by write-back caches\n- Requires more cache hardware\n\n**No-write allocate:** Send update only to lower level\n- More bus transactions will occur\n- Cache updated only on hits\n- Generally done by write-through caches\n- Takes less hardware\n\n### Types of Caches\n\nIn many cases CPUs use two caches:\n- **d-cache:** For program data - Should handle a wide variety of access patterns - Handles reads/writes\n- **i-cache:** For program instructions - Mainly needs to handle simple sequential access - Does not need to handle writes - Can be made simpler and faster than a d-cache\n- **Unified cache:** A single cache is used for both instructions and data\n\nModern processors include separate i-caches and d-caches:\n- Processor can read an instruction word and a data word at the same time\n- I-caches are typically read-only (simpler)\n- Each cache is often optimized to different access patterns\n- Different block sizes, associativities, and capacities\n\n**Cache hierarchy for Intel Core i7 processor:**\n- Each CPU has four cores\n- Each core has its own private L1 i-cache and L1 d-cache\n- Each core also has its own L2 unified cache\n- All of the cores share an on-chip L3 unified cache\n- Note: all SRAM cache memories are contained on the chip\n\n### Performance Impact\n\nCache performance is evaluated using several metrics:\n- **Miss rate:** Fraction of memory references that are cache misses = # misses / # references\n- **Hit rate:** Fraction of memory references that are cache hits = 1 – miss rate\n- **Hit time:** Time to deliver a cached word to the CPU including time for set selection, line identification, and word selection - several cycles for L1\n- **Miss penalty:** Additional time required due to a miss - 10 cycles to load from L2, 40 cycles to load from L3, 100 cycles to load from memory\n\n### Impact of Cache Parameters\n\n**Cache parameters:**\n- Cache size: # of bytes cache can store\n- Block size: # of bytes stored in a line\n- Associativity: # of lines per set\n\n**Impact of cache size:**\n- Adv.: Large caches tend to increase hit rate\n- Disadv.: Large caches tend to increase hit time (especially important for L1 caches that must have short hit time)\n\n**Impact of block size:**\n- Large blocks can increase hit rate if spatial locality is good\n- Large blocks imply smaller number of cache lines (C = SxExB)\n- Reduction in hit rate in programs with good temporal locality\n- Large blocks increase miss penalty (time to load blocks) since larger blocks cause larger transfer times\n- Modern systems usually compromise: blocks that contain 32 to 64 bytes\n\n**Impact of associativity:**\n- Advantage of higher associativity: reduces thrashing due to conflict misses\n- Disadvantages:\n  - Slower and more expensive to implement\n  - Hard to make fast\n  - Requires more tag bits\n  - More bits to keep track of which block to evict next\n  - Can increase hit time because of increased complexity\n  - Can increase miss penalty because of increased complexity of choosing a victim\n- Essentially a trade-off between cost, hit-rate, and miss penalty\n\n**Write-through caches:**\n- Simpler to implement\n- Can use a write buffer that works independently of cache to update memory\n- Read misses are less expensive (do not trigger a memory write)\n\n**Write-back caches:**\n- Result in fewer transfers\n- Allows more bandwidth to memory for I/O devices\n- Reducing the # of transfers becomes important as we move down the hierarchy\n- In general, caches further down the hierarchy are more likely to use write-back caches",
           "concepts": [
             "write-through",
             "write-back",
             "write-buffer",
+            "write-allocation",
             "cache-performance",
             "miss-penalty",
-            "hit-time"
+            "hit-time",
+            "d-cache",
+            "i-cache",
+            "unified-cache"
           ],
           "instructions": [],
           "examples": [
@@ -1656,15 +1643,17 @@
           ]
         },
         {
-          "id": "l9-s7",
+          "id": "l9-s6",
           "lectureId": 9,
           "title": "The Memory Mountain",
-          "content": "## The Memory Mountain\n\n### Overview\n\nEvery computer has a unique memory mountain that characterizes the capabilities of the memory system. It shows read throughput as a function of:\n- **Working set size** (temporal locality)\n- **Stride** (spatial locality)\n\n### Reading the Mountain\n\n- **Ridges:** Correspond to regions where working set fits entirely in a cache level\n- **Slopes:** Show how performance falls as stride increases (decreased spatial locality)\n- **Valleys:** Working sets too large for any cache\n\n### Key Observations\n\n1. L1 ridge peak: ~6 GB/s throughput\n2. L2 ridge: ~4.5 GB/s\n3. Main memory ridge: ~600 MB/s to 4+ GB/s depending on access pattern\n\n### Prefetching\n\nModern processors have prefetching mechanisms that automatically identify memory referencing patterns and fetch blocks into cache before they are accessed. This is why stride-1 reads show relatively constant high throughput.\n\n### Optimization Guidelines\n\n**For temporal locality:**\n- Keep heavily used words in L1 cache\n- Reuse data objects as often as possible once loaded\n\n**For spatial locality:**\n- Access objects with stride-1\n- Sequential access patterns are optimal\n\n> 💡 **Tip:** Focus optimization efforts on inner loops where the bulk of computations and memory accesses occur.\n",
+          "content": "## The Memory Mountain\n\n### Overview\n\nEvery computer has a unique memory mountain that characterizes the capabilities of the memory system. It shows read throughput as a function of:\n- Working set size (temporal locality)\n- Stride (spatial locality)\n\n### Memory Mountain for Intel Core i7\n\nThe next slide shows the memory mountain for an Intel Core i7 system:\n- L1 cache: 32KB\n- L2 cache: 256KB\n- L3 cache: 8MB\n- Working set: size varies from 2 KB – 64 MB, stride varies from 1 to 64 elements\n\n### Reading the Mountain\n\n**Geography reveals a rich structure:**\n- Perpendicular to the size axis are four ridges\n- Correspond to regions of temporal locality (working set fits entirely in a cache level)\n- Note: order of magnitude difference between top of L1 ridge and bottom of memory ridge\n- Reads at 6 GB/s vs 600 MB/s\n\n**Slopes of spatial locality:**\n- For L2, L3, and main memory ridges there is a slope that falls downhill as stride increases\n- Increase in stride = decrease in locality\n- Notice even when the working set is too large to fit in any of the caches, the highest point on the main memory ridge is a factor of 7 higher than its lowest point\n- Even with poor temporal locality, spatial locality can still come to the rescue\n\n### Prefetching\n\nNotice flat ridge for stride 1. Read throughput is relatively constant at 4.5 GB/s. Due to prefetching mechanism in the Core i7 memory system that automatically identifies memory referencing patterns and attempts to fetch those blocks into cache before they are accessed. Yet another reason to favor sequential access in your code.\n\n### Impact of Cache Size and Temporal Locality\n\nLet's take a slice of mountain holding stride constant to see impact of cache size and temporal locality on performance.\n\n**Up to 32 KB:** Working set fits entirely in L1 d-cache. Thus, reads are served at the peak throughput (6 GB/s).\n\n**Up to 256 KB:** Working set fits entirely in L2 cache.\n\n**Up to 8 MB:** Working sets fits entirely in L3 cache.\n\n**Larger working sets:** Served from memory.\n\nNotice that read throughputs drop when the working sets are equal to their respective cache sizes. Likely drops are caused by other data and code blocks that make it impossible to fit the entire array in the cache.\n\n### Impact of Spatial Locality\n\nLet's take a slice of the mountain holding working set size constant to see impact of spatial locality on read throughput. Let's use a fixed size of 4 MB (cut along L3 ridge). Working set fits entirely in L3 cache (too large for L2 cache).\n\nNotice read throughput decreases steadily as the stride increases from 1 to 8. In this region a read miss in L2 causes a block to be transferred from L3 to L2, followed by some number of hits on the block loaded into L2. Depends on the stride. As the stride increases, the ratio of L2 hits to L2 misses increases. Since misses are slower than hits, the read throughput decreases. Once stride reaches 8, every read request misses in L2.\n\n### Summary: Optimizing for Memory Performance\n\n**Performance of the memory system is not characterized by a single number.** Instead, it is a mountain of temporal and spatial locality. Elevations can vary by over an order of magnitude. Wise programmers try to structure their programs so that they run in the peaks instead of the valleys.\n\n**Goals:**\n- Exploit temporal locality so that heavily used words are fetched from L1 cache\n- Exploit spatial locality so that as many words as possible are accessed from a single L1 cache\n\n**Broken record:**\n- Focus your attention on inner loops (bulk of computations and memory accesses)\n- Try to maximize spatial locality by reading objects with stride 1\n- Try to maximize temporal locality by using a data object as often as possible once it has been read from memory",
           "concepts": [
             "memory-mountain",
             "working-set",
             "prefetching",
-            "cache-optimization"
+            "cache-optimization",
+            "spatial-locality",
+            "temporal-locality"
           ],
           "instructions": [],
           "examples": [
@@ -1674,22 +1663,69 @@
             "QB-104",
             "QB-105"
           ]
+        },
+        {
+          "id": "l9-s7",
+          "lectureId": 9,
+          "title": "Cache Types and Modern Processor Cache Hierarchies",
+          "content": "## Cache Types and Modern Processor Cache Hierarchies\n\n### Separate I-Cache and D-Cache\n\nModern processors include separate i-caches and d-caches for important reasons:\n\n**Why Separate Caches?**\n- Processor can read an instruction word and a data word at the same time\n- I-caches are typically read-only (simpler)\n- Each cache can be optimized to different access patterns\n- Different block sizes, associativities, and capacities\n\n**I-Cache Characteristics:**\n- Mainly needs to handle simple sequential access\n- Does not need to handle writes\n- Can be made simpler and faster than a d-cache\n\n**D-Cache Characteristics:**\n- Should handle a wide variety of access patterns\n- Handles reads/writes\n- More complex to optimize\n\n### Intel Core i7 Cache Hierarchy\n\nThe cache hierarchy for the Intel Core i7 processor demonstrates modern cache organization:\n\n**Level 0 (L0):** CPU Registers\n- Holds words retrieved from L1 cache\n\n**Level 1 (L1):** On-chip L1 caches (separate i-cache and d-cache)\n- Holds cache lines retrieved from L2 cache\n\n**Level 2 (L2):** Off-chip L2 unified cache\n- Holds lines retrieved from main memory\n\n**Level 3 (L3):** On-chip L3 unified cache (shared)\n- All cores share this cache\n\n**Key Observations:**\n- All SRAM cache memories are contained on the chip\n- Each CPU has four cores\n- Each core has its own private L1 i-cache and L1 d-cache\n- Each core also has its own private L2 unified cache\n- All of the cores share an on-chip L3 unified cache\n\n### Cache Parameters Summary\n\nModern cache design involves trade-offs between:\n- **Capacity:** More capacity = better hit rate but longer hit time\n- **Block Size:** Larger blocks = better spatial locality but higher miss penalty\n- **Associativity:** Higher associativity = less thrashing but slower\n\nThe goal is to balance cost, hit rate, and miss penalty for each level of the hierarchy.",
+          "concepts": [
+            "i-cache",
+            "d-cache",
+            "cache-hierarchy",
+            "core-i7",
+            "unified-cache"
+          ],
+          "instructions": [],
+          "examples": [
+            "core-i7-cache-hierarchy"
+          ],
+          "assessmentItems": [
+            "QB-106",
+            "QB-107"
+          ]
         }
       ],
       "concepts": [
         "locality",
         "spatial-locality",
         "temporal-locality",
+        "stride",
+        "cpu-memory-gap",
         "memory-hierarchy",
         "caching",
+        "cache-block",
+        "storage-technology",
         "cache-hit",
         "cache-miss",
+        "working-set",
         "direct-mapped-cache",
+        "set-selection",
+        "line-matching",
+        "word-selection",
+        "cache-tags",
+        "thrashing",
         "set-associative-cache",
+        "e-way-set-associative",
         "fully-associative-cache",
+        "line-replacement",
+        "lru-policy",
+        "lfu-policy",
         "write-through",
         "write-back",
-        "cache-performance"
+        "write-buffer",
+        "write-allocation",
+        "cache-performance",
+        "miss-penalty",
+        "hit-time",
+        "d-cache",
+        "i-cache",
+        "unified-cache",
+        "memory-mountain",
+        "prefetching",
+        "cache-optimization",
+        "cache-hierarchy",
+        "core-i7"
       ],
       "instructions": [],
       "difficulty": "advanced",
@@ -1713,12 +1749,13 @@
           "id": "l10-s1",
           "lectureId": 10,
           "title": "Processes and the Operating System",
-          "content": "## Processes and the Operating System\n\n### What is an Operating System?\n\nThe OS is a program (or programs) that:\n- Runs on the same CPU\n- Uses the same memory\n- Accesses the I/O devices\n- Acts as the guardian of the computer\n\n### Roles of the Operating System\n\n1. **Manage and run all programs** - Allow programs to share the CPU\n2. **Manage computer resources** - Processor, memory, disk, network, I/O devices\n3. **Protect processes from each other**\n4. **Present a standard abstraction** to programs and users\n5. **Act as intermediary** between programs, users, and hardware\n\n### OS Startup\n\n- The OS is the first program loaded by the computer\n- Resides in memory at all times\n- Runs when:\n  - A program needs a service (I/O, run program, allocation)\n  - An external event occurs\n  - A program error occurs\n  - A computer error occurs\n\n### Control Flow\n\nThe processor executes one instruction after another. Each transition from address ak to ak+1 is called a **control transfer**. A sequence of control transfers is called the **flow of control**.\n\n> 💡 **Tip:** Exceptions allow the system to respond to events outside the normal program flow.\n",
+          "content": "## Processes and the Operating System\n\n### What is an Operating System?\n\nThe OS is a program (or programs) that:\n- Runs on the same CPU\n- Uses the same memory\n- Accesses the I/O devices\n- Is the guardian of the computer\n\n### Roles of the Operating System\n\n1. **Manage and run all programs** - Allow programs to share the CPU\n2. **Manage computer resources** - Processor, memory, hard disk, network connection, and I/O devices\n3. **Protect processes from each other**\n4. **Present a standard abstraction** to programs and users\n5. **Act as intermediary** between the programs, user, and computer\n\n### OS Startup and Operation\n\n- The OS is the first program loaded by the computer\n- Resides in memory at all times\n- Runs when:\n  - A program needs a service (performing I/O, run a program, stop running, allocation of more resources)\n  - An external event occurs\n  - A program error occurs\n  - A computer error occurs\n\n### Control Flow Fundamentals\n\nRecall what the processor does:\n- The processor executes one instruction after another\n- The PC points to the next instruction to execute\n- PC takes on a sequence of values a0, a1, a2, … Where each ak is the address of a corresponding instruction Ik\n- Each transition from ak to ak+1 is called a control transfer\n- CPU control is transferred from instruction at ak to one at ak+1\n- A sequence of control transfers is called the flow of control\n\n### Program Control Flow\n\nTransfers are either **smooth** or **abrupt**:\n- **Smooth:** Instruction Ik+1 is adjacent to instruction Ik in memory\n- **Abrupt:** Ik+1 is not adjacent to instruction Ik in memory\n  - Occurs during: Jump or branch, Procedure call, Procedure return\n\nAbrupt control flow transfers are necessary to:\n- Allow a program to respond to changes of internal states\n- Execute conditional code (if statements)\n- Execute repetitive code (loops)\n- Use methods and procedures\n\n### Observations\n\nProgram has illusion that it is the only thing running on the computer. However, system must react to events outside of the program:\n- Keystrokes\n- Internet packets\n- Mouse movement\n- Inter-program signals\n\nHow is this done?",
           "concepts": [
             "operating-system",
             "process",
             "control-flow",
-            "system-resources"
+            "system-resources",
+            "flow-of-control"
           ],
           "instructions": [],
           "examples": [
@@ -1732,16 +1769,18 @@
         {
           "id": "l10-s2",
           "lectureId": 10,
-          "title": "Exceptions and Exception Handling",
-          "content": "## Exceptions and Exception Handling\n\n### What is an Exception?\n\nAn exception is an abrupt change in the flow of control implemented jointly by hardware and the operating system.\n\n### How Exceptions Work\n\n1. CPU is executing instruction Icurr\n2. A significant change in processor state occurs (an event)\n3. Processor detects the change and responds by making an indirect procedure call through the **exception table**\n4. The handler processes the event\n5. One of three things happens:\n   - Returns control to instruction Icurr\n   - Returns control to instruction Inext\n   - Aborts the program\n\n### Exception Table\n\n- Located in memory, created when OS boots\n- Entry k contains the address of the handler for exception k\n- CPU register called Exception Table Base Register holds the table's starting address\n- Pentium has 256 exception entries\n\n### Types of Events\n\nExamples include:\n- Divide by 0\n- Virtual memory page fault\n- Arithmetic overflow\n- I/O request completes\n- Hardware timer\n\n> 💡 **Tip:** The call to an exception handler differs from regular procedure calls - the return address may be current or next instruction, and additional state is pushed.\n",
+          "title": "Exceptional Control Flow",
+          "content": "## Exceptional Control Flow (ECF)\n\n### What is ECF?\n\nSystem reacts to these events by special abrupt changes in control flow called **exceptional control flow (ECF)**.\n\nThese occur at all levels of a system:\n- **Hardware:** Devices can interrupt current CPU execution via exception handlers\n- **Operating system:** Can transfer control between programs via context switches\n- **Programs:** Can abruptly change flow of other programs via signals and software exceptions\n\n### Why Study ECF?\n\nWe want to study ECF in order to understand how:\n- An OS works (basic mechanism)\n- Programs (applications) interact with the OS\n- To write more interesting applications\n- Software exceptions work\n\n### What is an Exception?\n\nAn exception is an abrupt change of flow control implemented jointly by hardware and OS.\n\n**When an exception occurs:**\n1. Application program is executing instruction Icurr\n2. Event occurs here\n3. Exception processing begins\n4. Exception handler runs\n5. Exception return (optional) - returns to either Icurr or Inext\n\n### How Exceptions Work\n\n1. CPU is executing instruction Icurr\n2. A significant change in processor's state occurs (called an event)\n   - Examples: Divide by 0, Virtual memory page fault, Arithmetic overflow, I/O request completes, Hardware timer\n3. Processor detects change\n4. Processor responds by making an indirect procedure call through a lookup table called the **exception table**\n5. The procedure is an operating system subroutine called the **exception handler**\n6. After handler terminates, one of three things happen:\n   - Handler returns control to instruction Icurr\n   - Handler returns control to instruction Inext\n   - Handler aborts program\n\n### Exception Table\n\n- Located in memory\n- Created and initialized when OS boots\n- Entry k contains the address of the handler for exception k\n- Address of table is stored in CPU register called **Exception Table Base Register**\n- CPU uses table to locate exception handler\n\nWhen exception occurs (CPU detects an event):\n1. CPU determines ID of exception\n2. Uses ID to index into exception table\n3. Locates reference to corresponding handler\n4. Uses reference to make a procedure call to handler\n\n### Observations About Exception Calls\n\nThis call differs from regular procedure call in several ways:\n- Return address pushed on stack may be either current or next instruction, depending on type of exception\n- Processor also pushes additional information on stack (e.g., the flags register)\n- Exception handler has complete control over the system\n- The handler then handles the event",
           "concepts": [
+            "exceptional-control-flow",
             "exception",
             "exception-handler",
             "exception-table",
             "event"
           ],
           "instructions": [
-            "INT"
+            "INT",
+            "IRET"
           ],
           "examples": [
             "exception-handler-demo"
@@ -1755,13 +1794,15 @@
           "id": "l10-s3",
           "lectureId": 10,
           "title": "Classes of Exceptions",
-          "content": "## Classes of Exceptions\n\n### Four Classes of Exceptions\n\n1. **Interrupts:** Caused by normal hardware events (asynchronous)\n2. **Traps:** Caused by program service requests (intentional)\n3. **Faults:** Caused by repairable program \"errors\"\n4. **Aborts:** Caused by irreparable errors and hardware errors\n\n### Interrupts (Asynchronous)\n\n- Occur due to hardware events: mouse movements, keystrokes, I/O completions\n- Not caused by execution of an instruction\n- Handler returns to next instruction after Icurr\n\n### Traps (Intentional - System Calls)\n\n- Intentional exceptions called \"system calls\"\n- Used to request services: read/write files, create processes, terminate programs\n- Provides a procedure-like interface between OS and application\n- System calls run in \"kernel\" mode, regular functions in \"user\" mode\n\n### Faults (Possibly Recoverable)\n\n- Result in correctable error conditions\n- If handler can correct: current instruction is retried\n- If not: program is aborted\n- Examples: Page fault, protection fault\n\n### Aborts (Unrecoverable)\n\n- Result from unrecoverable errors (bad memory, CPU errors)\n- Never returns - simply aborts the process\n\n> 💡 **Tip:** Use INT n instruction on Intel processors to perform traps (system calls).\n",
+          "content": "## Classes of Exceptions\n\n### Four Classes of Exceptions\n\n1. **Interrupts:** Caused by normal hardware events (asynchronous)\n2. **Traps:** Caused by program service requests (intentional)\n3. **Faults:** Caused by repairable program \"errors\"\n4. **Aborts:** Caused by irreparable program errors and hardware errors\n\n### Interrupts (Asynchronous)\n\n- Occur due to hardware events: mouse movements, keystrokes, I/O completions\n- Not caused by execution of an instruction\n- Handlers for interrupts are called interrupt handlers\n\n**Interrupt Handling Sequence:**\n1. Interrupt pin goes high during execution of current instruction\n2. A hardware device signals a pin on the CPU, at the same time places exception ID on the system bus\n3. CPU finishes current instruction\n4. CPU reads ID from system bus, invokes handler to handle the device\n5. Control passes to handler after current instruction finishes\n6. Interrupt handler runs\n7. Handler returns to next instruction (Inext)\n8. Program continues to execute as if interrupt did not occur\n\n### Traps (Intentional - System Calls)\n\n- Intentional exceptions called a \"system call\"\n- Occur as a result of executing a special \"trap\" instruction\n- Used to request services:\n  - Read/write data from/to a file\n  - Create a new process (run program)\n  - Terminate program\n- Provides a procedure-like interface between OS and application\n- From a programmer's perspective call looks just like a function call, except:\n  - Regular functions run in \"user\" mode\n  - System calls run in \"kernel\" mode\n\n### Trap Handling\n\n1. Application makes a system call\n2. Control passes to handler\n3. Trap handler runs\n4. Handler returns to instruction following the syscall\n\n### Faults (Possibly Recoverable)\n\n- Result in (possibly) correctable error conditions\n- If handler can correct condition, current instruction is retried\n- Otherwise program is aborted\n- Examples:\n  - Page fault: when memory needed by program has been swapped to disk\n  - Protection fault: when program references unowned memory\n\n### Fault Handling\n\n1. Current instruction causes a fault\n2. CPU identifies fault, assigns ID\n3. Uses ID to find handler in exception table\n4. Invokes handler\n5. If handler corrects fault, handler returns to instruction that caused it\n6. Else handler invokes abort routine\n\n### Aborts (Unrecoverable)\n\n- Result from unrecoverable errors: Bad memory, CPU errors\n- Same as a fault, but never returns - simply aborts the process\n\n### Abort Handling\n\n1. Fatal hardware error occurs\n2. Control passes to handler\n3. Abort handler runs\n4. Handler returns to abort routine (never returns to program)\n\n### Exceptions on Intel Processors\n\n- Exception table has 256 entries\n- Exceptions 0…31 are hardware defined (interrupts and faults)\n- A trap is performed by the instruction **int n** where n is a constant between 0 and 255\n- To return from an exception handler, use the special **iret** (instead of ret)\n- The iret pops the FLAGS register before returning with the return address",
           "concepts": [
             "interrupt",
             "trap",
             "fault",
             "abort",
-            "system-call"
+            "system-call",
+            "interrupt-handler",
+            "trap-handler"
           ],
           "instructions": [
             "INT",
@@ -1780,7 +1821,7 @@
           "id": "l10-s4",
           "lectureId": 10,
           "title": "Processes",
-          "content": "## Processes\n\n### What is a Process?\n\nA process is an instance of a program in execution. It provides two illusions:\n1. **Exclusive use of the CPU:** Instructions execute without interruption\n2. **Exclusive use of memory:** Code and data are only objects in memory\n\n### Process Context\n\nA process defines the context in which a program runs:\n- Program code and data\n- Logical control flow of the program\n- Private address space\n- Contents of general purpose registers\n- Program counter\n\n### Process Control Block (PCB)\n\n- Allocated by OS when a process is created\n- Stores parts of the process context\n- Only accessible to the OS\n\n### Logical Control Flow\n\nThe sequence of PC values corresponding to addresses of instructions in the .exe file. Each process has its own independent logical control flow.\n\n### Concurrency\n\n**Concurrent process:** Any process whose logical flow overlaps with another flow. The notion of processes taking turns is called **multitasking**. Each time period a process executes is called a **time slice**.\n\n### Parallel Flows\n\nTruly concurrent flows running on different processor cores or processors. These have parallel execution.\n\n> 💡 **Tip:** Even on a single processor, multiple flows can run concurrently by taking turns - the OS handles the switching.\n",
+          "content": "## Processes\n\n### What is a Process?\n\nA process is an instance of a program in execution. The idea: Abstraction presents two illusions to a program:\n\n1. **Exclusive use of the CPU:** Program instructions are executed without interruption\n2. **Exclusive use of memory:** Program code and data are only objects in memory\n\n**Definition:** A process is an instance of a program in execution.\n\n### Process Context\n\nA process defines the context in which the program runs:\n- Program code and data\n- Logical control flow of the program\n- Private address space\n- Contents of general purpose registers\n- Program counter\n\n### Process Control Block (PCB)\n\n- Information about a process is stored in a Process Control Block (PCB)\n- Allocated by the OS when a process is created\n- Is only accessible to the OS\n- Used to store parts of the process context\n\nEach time a program is run, the OS:\n1. Creates a new context\n2. Loads the program code and initial data into context\n3. Initializes context to begin execution of program\n\n### Logical Control Flow\n\nIf we used a debugger to step through our program, we could trace the contents of our IP register (program counter or PC). This corresponds to addresses of instructions contained in our .exe file, and any other objects linked to program. This sequence is the **logical control flow**.\n\nThis sequence of PC values is known as the logical control flow. We can divide a physical control flow into logical control flows. Each logical flow is independent of any other flow. Different processes do not affect the states of any other processes.\n\n### Concurrency\n\n**Concurrent process:** Any process whose logical flow overlaps with another flow. The notion of processes taking turns is called **multitasking**. Each time period that a process executes is called a **time slice**.\n\nEach process executes a portion of its flow and then is pre-empted. Process A & B and A & C run concurrently, but B and C do not (they take turns).\n\n### Parallel Flows\n\nNotice that the idea of concurrency is independent of the number of cores. If two flows overlap, they are concurrent, even if they are running on the same processor.\n\nSometimes we will find it useful to identify truly \"concurrent\" flows. Called **parallel flows**: Two flows running concurrently on different processor cores or processors. These flows are said to be running in parallel (have parallel execution).\n\n### Private Address Space\n\nEach process has illusion of exclusive use of system's address space. In actuality, a process provides each program with its own private address space. Private address spaces have similar layouts: Code, data, heap, stack, kernel space.\n\n**Why do we need this abstraction?** To multitask.",
           "concepts": [
             "process",
             "context",
@@ -1788,7 +1829,8 @@
             "logical-control-flow",
             "concurrency",
             "multitasking",
-            "time-slice"
+            "time-slice",
+            "parallel-flows"
           ],
           "instructions": [],
           "examples": [
@@ -1803,13 +1845,14 @@
           "id": "l10-s5",
           "lectureId": 10,
           "title": "Context Switching",
-          "content": "## Context Switching\n\n### When Do Context Switches Occur?\n\nContext switches occur only when an exception occurs:\n- Trap\n- Interrupt\n- Fault\n\n### Timer Chip\n\nThe computer has a timer chip that generates a \"timer\" exception at fixed intervals (10-100ms). This guarantees exceptions occur at regular intervals.\n\n### How Context Switching Works\n\nDuring an exception, the OS:\n1. Switches out current process context\n2. Switches in OS context\n3. Handles the exception (OS code)\n4. Selects a process to run (could be the same one)\n5. Switches out OS context\n6. Switches in the process's context\n\n### What's in a Context Switch?\n\nThe context switch involves two contexts (outgoing and incoming):\n1. Save CPU context (registers, FLAGS, PC) into PCB\n2. Determine PCB of process to switch in\n3. Switch memory address spaces (from the PCB)\n4. Load CPU context from current PCB\n5. Run the switched process\n\n### User vs Kernel Mode\n\n- Extra mode bit in a control register characterizes privileges\n- In user mode: cannot halt processor, change mode bit, initiate I/O, or access kernel memory\n- Exceptions place CPU in kernel mode temporarily\n\n> 💡 **Tip:** The decision of kernel to pre-empt a process is called scheduling.\n",
+          "content": "## Context Switching\n\n### User and Kernel Mode\n\nPrivate address spaces must remain private! Need to restrict user capabilities. Extra mode bit in a control register usually characterizes privileges of processor. The mode bit sets the process in user or kernel mode.\n\n**Cannot do the following in user mode:**\n- Halt processor\n- Change mode bit\n- Initiate I/O operation\n- Directly reference code in kernel area of address space\n\nAll programs initially begin in user mode and use exceptions to pass into kernel mode.\n\n### Multitasking\n\nIn the past: Computer ran a program, waited until program completed, then ran the next one.\n\nToday: We want many programs to run at once. No program should interfere with another. Programmers should not have to worry what other programs are doing.\n\n**Key Ideas:**\n- Each program has its own logical flow, runs as if it is the only program on the computer\n- Physically, many programs take turns running on the CPU\n- The OS switches between the logical flows\n- Creates the illusion that all programs are running at once\n- In reality, the processes run concurrently\n\n**To switch processes we simply switch contexts.** Recall, context consists of address space, registers, flags, PC.\n\n**Processes are protected from each other because:**\n- Processes can only manipulate data inside their context\n- Processes may not manipulate data of another process (context)\n- Processes may not manipulate data of the OS\n- OS also runs in its own context\n- A process need not worry about other processes because it is \"alone\"\n\n**Question:** When are processes switched in/out?\n\n### When Do Context Switches Occur?\n\nContext switches occur only when an exception occurs:\n- Trap\n- Interrupt\n- Fault\n\n**What if no exceptions occur?** Computer has a timer chip that generates a \"timer\" exception at fixed intervals (between 10 to 100ms). Exceptions are guaranteed to occur at regular intervals.\n\n### How Context Switching Works\n\nDuring an exception, the OS:\n1. Switches out current process context\n2. Switches in OS context\n3. Handles the exception (OS code)\n4. Selects a process to run (could be the same one)\n5. Switches out OS context\n6. Switches in the process's context\n\nSwitch out/in is called a context switch.\n\n### What's in a Context Switch?\n\nThe context switch involves two contexts (out-going and incoming):\n1. Save CPU context (state) of current process - Stores all registers (FLAGS and PC included) into PCB (essentially a sequence of mov instructions)\n2. Determine PCB of process/OS to be switched in\n3. Switch memory address spaces (from the PCB)\n4. Load CPU context (state) from current PCB\n5. Load all registers FLAGS and PC from PCB\n6. Run the switched process\n\nThese steps are performed twice for a single exception!\n\n### Scheduling\n\nDecision of kernel to pre-empt a process is called **scheduling**. Handled by part of the kernel called the scheduler.\n\n**Why would a kernel pre-empt a process?**\n- Example: Read call in process A requires disk access\n- Next instruction must be stalled until information is retrieved\n- Kernel decides to switch context for efficiency\n- Programs can opt to sleep (request for context to be switched)\n- Gets around any scheduling errors\n\n### User and Kernel Modes Revisited\n\nWhen an exception occurs:\n- Control is passed to handler\n- CPU is placed in kernel mode\n- The handler now has access to OS memory, including PCBs\n- Can manipulate OS memory, perform context switch\n- When handler returns to process, CPU is placed back in user mode",
           "concepts": [
             "context-switch",
             "scheduling",
             "kernel-mode",
             "user-mode",
-            "timer-interrupt"
+            "timer-interrupt",
+            "pre-empt"
           ],
           "instructions": [],
           "examples": [
@@ -1825,13 +1868,14 @@
           "id": "l10-s6",
           "lectureId": 10,
           "title": "Virtual Memory",
-          "content": "## Virtual Memory\n\n### Why Virtual Memory?\n\nProcesses share CPU and memory, which poses challenges:\n- Memory is vulnerable to corruption\n- One process could write to another process's memory\n- Solution: Virtual memory provides each process with a private address space\n\n### Three Important Capabilities\n\n1. **Cache:** Treats memory as a cache for an address space stored on disk\n2. **Simplified management:** Provides each process with a uniform address space\n3. **Protection:** Protects address space of each process from corruption\n\n### Physical vs Virtual Addressing\n\n**Physical Addressing:** CPU generates physical addresses (PA) sent over bus to memory. Natural for simple systems.\n\n**Virtual Addressing:** CPU generates virtual addresses (VA) converted to PA by the Memory Management Unit (MMU). Used in all modern systems.\n\n### Virtual Memory Organization\n\n- VM is organized as an array of N contiguous byte-sized cells stored on disk\n- Each byte has a unique disk address (index)\n- Contents cached in main memory\n- Data on disk partitioned into blocks (virtual pages)\n- Physical memory partitioned into physical pages (same size P)\n\n> 💡 **Tip:** VM is central to computer systems - it encompasses all levels and understanding it helps you understand the system generally.\n",
+          "content": "## Virtual Memory\n\n### Why Virtual Memory?\n\nProcesses in a system share CPU and memory, which poses some challenges:\n- Threshold in # of processes, above which some may not be able to run\n- Memory is vulnerable to corruption\n- Process could write to another process's memory\n- Cause the process to fail in some odd fashion unrelated to the program logic\n\n**Solution:** Modern systems provide an abstraction of main memory known as virtual memory.\n\n### Virtual Memory Capabilities\n\nVirtual memory is the interaction of hardware exceptions, hardware address translation, main memory, disk files, and kernel software. It provides three important capabilities:\n\n1. **Cache:** Treats memory as a cache for an address space stored on disk\n2. **Simplified management:** Provides each process with a uniform address space\n3. **Protection:** Protects address space of each process from corruption by other processes\n\n### Why Study Virtual Memory?\n\n**Virtual memory is central:**\n- Encompasses all levels of computer system\n- Helps you better understand system in general\n\n**Virtual memory is powerful:**\n- Gives applications capabilities to create and destroy chunks of memory\n- Map chunks of memory to portions of disk files\n- Share memory with other processes\n- Reading/writing virtual memory can modify contents of disk\n- Can load contents into memory without any explicit copying\n\n**Virtual memory is dangerous:**\n- If used improperly, applications can suffer from perplexing and insidious memory related bugs\n- Crash minutes or hours after problem occurred in the code\n- Run to completion with incorrect results\n\n### Physical Addressing\n\nRecall: Computer main memory is an array of byte-sized cells (CPU point of view). Each byte has a unique physical address (PA).\n\nMost natural way for CPU to access memory is to use physical addresses, called **physical addressing**. Address corresponds to same physical location in memory. The address is from the physical address space. This is the easiest and most natural approach.\n\n**Example:** A load instruction that reads the word at address 4:\n- CPU generates physical address\n- Sends it over the bus\n- Memory fetches four-byte word starting at address 4\n\n### Virtual Addressing\n\nModern computers have CPU access main memory by generating a virtual address (VA). VA is then converted to PA before being sent to memory. The task of converting a VA to a PA is called **address translation**.\n\n**Requires close cooperation between CPU hardware and the OS:**\n- Translation performed by hardware on CPU called the **memory management unit (MMU)**\n- Addresses are translated on the fly using a look-up table stored in main memory\n- Contents managed by the OS\n\nCalled virtual addressing. Each address is virtual from a virtual address space. Translated by MMU. Process thinks it is reading/writing at the specific address. In reality, the read/write occurs at MMU translated address. This allows system to control where the processes read/write memory without process involvement.",
           "concepts": [
             "virtual-memory",
             "physical-address",
             "virtual-address",
             "address-translation",
-            "mmu"
+            "mmu",
+            "memory-management"
           ],
           "instructions": [],
           "examples": [
@@ -1846,14 +1890,15 @@
           "id": "l10-s7",
           "lectureId": 10,
           "title": "Page Tables and Paging",
-          "content": "## Page Tables and Paging\n\n### Virtual Pages\n\nAt any point in time, the set of virtual pages is partitioned into:\n- **Unallocated:** Pages not yet created (no disk space used)\n- **Cached:** Allocated pages currently cached in physical memory\n- **Uncached:** Allocated pages not in physical memory (on disk)\n\n### Page Tables\n\nThe MMU uses page tables stored in physical memory to translate addresses. Each process has its own page table.\n\n### Page Table Entry (PTE)\n\nEach PTE contains:\n- **Valid bit:** Denotes if entry is cached\n- **Address:** Frame number if cached, disk address if uncached, or 0 if unallocated\n\n### Address Types Based on PTE\n\n- **Unallocated:** valid = 0, address = 0\n- **Not cached:** valid = 0, address ≠ 0 (on disk)\n- **Cached:** valid = 1\n\n### Page Fault Handling\n\n1. MMU issues exception\n2. Handler checks if page is allocated\n3. If not allocated, process is aborted\n4. Otherwise, checks for free frame\n5. Selects victim page if needed (writes to disk if modified)\n6. Loads required page from disk\n7. Updates page table\n8. Restarts faulting instruction\n\n> 💡 **Tip:** Page faults are analogous to cache misses - locality determines how often they occur.\n",
+          "content": "## Page Tables and Paging\n\n### Address Spaces\n\nAn address space is an ordered set of nonnegative integer addresses {0, 1, 2, …}. Linear address space: If the integers are consecutive. Physical main memory addresses form a linear address space. We will always assume linear address spaces.\n\n**Virtual Address Space:**\n- CPU generates virtual address space of N = 2^n addresses {0, 1, 2, …, N – 1}\n- Address space size is characterized by number of bits needed to represent largest address\n- e.g., virtual address space with N = 2^n addresses is called an n-bit address space\n- Modern systems use either 32 or 64-bit virtual address spaces\n\n**Physical Address Space:**\n- A system also has a physical address space that corresponds to M bytes of physical memory\n- {0, 1, 2, …, M – 1}\n\n**Address space concept is important** because it makes a clean distinction between data objects (bytes) and their attributes (addresses). This allows each byte to have:\n- Virtual address from the virtual address space\n- Physical address from the physical address space\n\n### VM and Caching\n\nVM is organized as an array of N contiguous byte-sized cells stored on disk (hard drive). Each byte has a unique address (index into array). The contents of the array on disk are cached in main memory.\n\nThe data on disk is partitioned into blocks that serve as the transfer units between the disk and the main memory. VM is partitioned into fixed-sized blocks called **virtual pages (VP)**. Each virtual page is P = 2^p bytes in size. Physical memory is partitioned into physical pages (PP). Physical pages are also P bytes in size.\n\n### Virtual Page States\n\nAt any point in time, the set of VP is partitioned into three disjoint subsets:\n\n1. **Unallocated:** Pages that have not yet been allocated (or created) by the VM system\n   - Contains no data and do not occupy any disk space\n\n2. **Cached:** Allocated pages that are currently cached in physical memory\n   - Page contains data\n   - Page is assigned to a frame (physical page)\n\n3. **Uncached:** Allocated pages that are not cached in physical memory\n   - Page contains data\n   - Page is not assigned to a frame (physical page)\n   - Page is stored on disk\n\n### Page Tables\n\n**Task:** The MMU has to translate addresses for each running process. For each virtual address determine:\n- Which virtual page corresponds to the address\n- Whether virtual page is allocated and cached\n- Determine location of frame containing the page\n\nTo perform the translation, the MMU uses page tables:\n- Each process has an associated table\n- The tables are stored in physical memory\n- Contain page table entries (PTE)\n\n**Page Table Entry (PTE):**\nEach PTE contains:\n- **Valid bit:** Denotes if the entry is cached or not\n- **Address entry:** Frame number if cached, disk address if uncached, or 0 if unallocated\n\n**Address denotes one of three things:**\n- If address ≠ 0 AND valid = 1: address contains location of frame (physical page)\n- If address ≠ 0 AND valid = 0: address contains location of page on disk\n- If address = 0 AND valid = 0: page is unallocated\n\n**Hence a page is:**\n- **Unallocated:** if valid = 0, and address = 0\n- **Not cached:** if valid = 0, and address ≠ 0\n- **Cached:** if valid = 1\n\n### Page Fault Handling\n\n1. MMU issues an exception\n2. Invokes page fault handler\n3. The handler:\n   - Checks if the page is allocated - If not allocated, process is aborted\n   - Otherwise, checks for free frame\n   - If free frame available, use it\n   - If not: Selects a victim page to be evicted (writes to disk if modified)\n   - Updates page table entry\n   - Uses resulting free frame\n   - Loads required page from HD into free frame\n   - Updates process' page table\n4. Handler returns to faulting process\n5. Restarts same instruction that created fault\n6. Process proceeds as if nothing has happened\n\n### Page Allocation\n\nPages are allocated under three conditions:\n1. **When a process is created:** Enough pages are allocated to hold code, data, stack, and small heap\n2. **When a process needs more heap memory:** Process uses system call to request pages from OS. OS responds by allocating pages for the heap, returns to the process # of pages that were added\n3. **When process needs more stack:** OS automatically detects when a process needs more stack, allocates more pages to the stack\n\nWhen pages are allocated:\n- OS modifies corresponding page table entries\n- Page is created on disk\n- OS may or may not allocate VP to PP mapping",
           "concepts": [
             "page-table",
             "page-table-entry",
             "page-fault",
             "virtual-page",
             "physical-page",
-            "frame"
+            "frame",
+            "page-allocation"
           ],
           "instructions": [],
           "examples": [
@@ -1869,13 +1914,14 @@
           "id": "l10-s8",
           "lectureId": 10,
           "title": "Address Translation and TLB",
-          "content": "## Address Translation and TLB\n\n### Address Translation\n\nFor a given virtual address, the MMU must:\n1. Locate the corresponding PTE\n2. Determine the frame containing the page\n3. Compute the offset into the frame\n\n### Address Division\n\n- **VPN (Virtual Page Number):** Identifies the page\n- **VPO (Virtual Page Offset):** Offset within the page\n- **PPN (Physical Page Number):** From PTE\n- **PPO (Physical Page Offset):** Same as VPO\n\n### Translation Lookaside Buffer (TLB)\n\n**Problem:** Reading PTE requires additional memory access.\n\n**Solution:** Use TLB - a special cache of PTEs located in the MMU.\n\n### TLB Operation\n\n1. Check if PTE is in TLB (very fast, parallel check)\n2. If hit: use PTE directly\n3. If miss: look in page table, load TLB with new PTE\n\nTLBs achieve ~95% hit rates because:\n- Most programs have good locality\n- Many accesses occur within the same set of virtual pages\n\n### TLB Structure\n\n- Indexed using tag and index bits from VPN\n- Very similar to caching concepts from Chapter 6\n- Fully associative in practice (few entries)\n\n> 💡 **Tip:** TLB misses are expensive - memory locality matters even at this level.\n",
+          "content": "## Address Translation and TLB\n\n### Address Translation\n\nBasic translation: Virtual to Physical. For a given address, the MMU must:\n1. Locate the corresponding PTE\n2. Determine location of frame that contains the page\n3. Compute the offset into the frame (this is the resulting address)\n\nProcess is similar to cache. Virtual address is divided into two parts:\n- **VPN (Virtual Page Number):** Identifies the page\n- **VPO (Virtual Page Offset):** Offset within the page\n\nMMU uses the VPN to locate PTE. Entry in PTE is: physical frame (or page) number. MMU composes PPN (Physical Page Number) and VPO to get physical address.\n\n### Page Hit and Page Miss\n\n**Page Hit:**\n- CPU sends address to MMU\n- MMU checks if page is in memory\n- If page is cached: called a page hit\n- MMU translates virtual address into physical address\n- Sends it to memory system to read/write data\n\n**Page Miss:**\n- If not: called a page miss\n- Similar to cache hit/miss\n- Page is loaded\n- Current instruction retried\n\n### TLB (Translation Lookaside Buffer)\n\n**Problem:** This process requires accessing more memory (to read PTE).\n\n**Solution:** Use a special cache called **Translation Lookaside Buffer**.\n\nMost programs have good locality:\n- i.e., accesses are spatially and temporally localized\n- Many accesses will occur within the same set of virtual pages and hence within the same set of physical frames\n\n### TLB Operation\n\n**Idea:**\n- Cache PTEs of recently accessed virtual pages in a cache\n- Located in the MMU\n- Called TLB\n\n**How it works:**\n1. Instead of looking up PTE in page table first check TLB\n2. If PTE is in TLB, use it\n3. Else look in page table\n4. Load TLB with new PTE (may need to evict another one)\n\n**TLBs are efficient:** ~95% hit rates because:\n- Most programs have good locality\n- Many accesses occur within the same set of virtual pages\n\n### TLB Structure\n\n- Translation Lookaside Buffer is used as a cache for page table entries\n- Indexing into a TLB is done through tag and index bits\n- Very similar to caching concepts from Chapter 6\n\n### Putting It All Together\n\nYou should now be able to explain the steps involved in a memory read beginning with an arbitrary virtual address A, ending with an arbitrary DRAM supercell address (i,j).\n\nYou should be able to describe the functions of:\n- **MMU:** Memory Management Unit - translates virtual addresses to physical addresses\n- **Buses:** Transport addresses and data between components\n- **I/O controller:** Manages communication with I/O devices\n- **Mem/Disk Controllers:** Manage memory and disk operations\n- **Caches (On-chip and off):** Speed up memory access\n- **Write-through/write-back:** Different cache write policies\n\n**The complete memory read process involves:**\n1. Virtual address generated by CPU\n2. MMU splits VA into VPN and VPO\n3. MMU checks TLB for PTE\n4. If TLB miss: look up page table in memory\n5. If page fault: load page from disk\n6. Once PTE found: translate VPN to PPN\n7. Compose PPN with VPO to get physical address\n8. Access cache (L1, L2, L3)\n9. On miss, access main memory\n10. Data returned to CPU",
           "concepts": [
             "address-translation",
             "vpn",
             "tlb",
             "translation-lookaside-buffer",
-            "page-table-entry-cache"
+            "page-table-entry-cache",
+            "ppn"
           ],
           "instructions": [],
           "examples": [
@@ -1891,12 +1937,13 @@
           "id": "l10-s9",
           "lectureId": 10,
           "title": "Memory Protection",
-          "content": "## Memory Protection\n\n### How VM Provides Protection\n\nEach PTE contains additional permission bits:\n- **Read bit:** Can read from page\n- **Write bit:** Can write to page\n- **Execute bit:** Can execute code in page\n- **Supervisor bit:** Kernel mode access only\n\n### Protection Check\n\nMMU checks not only if page is resident but also:\n- If read operation: whether read bit is set\n- If write operation: whether write bit is set\n- If CPU in user mode: whether supervisor bit is NOT set\n\nIf any check fails: MMU generates a **general protection fault**.\n\n### Why Protection Matters\n\n- Kernel sets permissions on memory accessible by the process\n- Prevents process from reading, writing, or executing dangerous memory\n- VM serves as a natural protection system\n\n### Multi-Level Page Tables\n\nPTEs may be multi-level:\n- First-level PTE points to second-level page table\n- Second-level PTE points to actual frame\n- Saves memory when large portions of address space are unused\n\n> 💡 **Tip:** Permission bits are checked in hardware - they're fast but can still cause exceptions.\n",
+          "content": "## Memory Protection\n\n### How VM Provides Protection\n\nA useful feature of VM is memory protection. Basic idea:\n- Process only sees its own memory\n- Hence it can only modify its own memory\n\n**Problem:** Process also \"sees\" kernel memory in private address space.\n\n**Solution:** Each PTE contains additional permission bits:\n- **Read bit:** Can read from page\n- **Write bit:** Can write to page\n- **Execute bit:** Can execute code in page\n- **Supervisor bit:** Kernel mode access only\n\n### Protection Check\n\nSuppose the MMU not only checks if page is resident but also:\n- If read operation: whether read bit is set\n- If write operation: whether write bit is set\n- If CPU in user mode: whether supervisor bit is NOT set\n\nIf any of these tests fail, MMU generates a **general protection fault**.\n\n### Why Protection Matters\n\n- Kernel sets permissions on memory accessible by the process\n- This prevents process from reading, writing, or executing any memory that is dangerous\n- Thus, VM serves as a natural protection system\n\n### Multi-Level Page Tables\n\nPTEs may be multi-level:\n- First-level PTE points to second-level page table\n- Second-level PTE points to actual frame\n- Saves memory when large portions of address space are unused\n\nPTEs are kept separate for processes, even if they share the same physical memory.\n\n### Aside: VM and Caching\n\nNote that valid bit in PTE denotes whether information is cached or not. Page hits and page misses are analogous to cache hits and cache misses from Chapter 6. Waiting until the last minute to swap a page from DRAM to disk is analogous to write-back caches.\n\n### VM and Locality\n\nIn the previous examples, we saw how VM consisted of pages from both DRAM and disk. Given disk access times, why isn't VM terribly inefficient?\n\n**Answer:** Locality to the rescue!\n\nTotal # of pages probably exceeds total size of physical memory. BUT: Locality promises at at any point in time they will tend to work on smaller set of active pages (working set). See memory mountain - the same principles of temporal and spatial locality that apply to cache also apply to virtual memory.",
           "concepts": [
             "memory-protection",
             "permission-bits",
             "protection-fault",
-            "supervisor-mode"
+            "supervisor-mode",
+            "user-mode"
           ],
           "instructions": [],
           "examples": [
@@ -1910,20 +1957,58 @@
         }
       ],
       "concepts": [
+        "operating-system",
+        "process",
+        "control-flow",
+        "system-resources",
+        "flow-of-control",
+        "exceptional-control-flow",
         "exception",
+        "exception-handler",
+        "exception-table",
+        "event",
         "interrupt",
         "trap",
         "fault",
         "abort",
-        "process",
+        "system-call",
+        "interrupt-handler",
+        "trap-handler",
+        "context",
+        "pcb",
+        "logical-control-flow",
+        "concurrency",
+        "multitasking",
+        "time-slice",
+        "parallel-flows",
         "context-switch",
+        "scheduling",
+        "kernel-mode",
+        "user-mode",
+        "timer-interrupt",
+        "pre-empt",
         "virtual-memory",
         "physical-address",
         "virtual-address",
+        "address-translation",
+        "mmu",
+        "memory-management",
         "page-table",
+        "page-table-entry",
+        "page-fault",
+        "virtual-page",
+        "physical-page",
+        "frame",
+        "page-allocation",
+        "vpn",
         "tlb",
+        "translation-lookaside-buffer",
+        "page-table-entry-cache",
+        "ppn",
         "memory-protection",
-        "operating-system"
+        "permission-bits",
+        "protection-fault",
+        "supervisor-mode"
       ],
       "instructions": [
         "INT",

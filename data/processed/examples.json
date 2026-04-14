@@ -2353,16 +2353,265 @@
         "extractionConfidence": 0.88,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "os-process-demonstration",
+      "filename": "OSProcess.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s1"],
+      "concepts": [
+        "operating-system",
+        "process",
+        "dos-interrupts",
+        "int-21h",
+        "program-execution",
+        "kernel-mode",
+        "user-mode"
+      ],
+      "instructions": [
+        "INT", "MOV", "PUSH", "POP", "CALL", "RET"
+      ],
+      "code": "; Operating System Process Demonstration\n; Shows how the OS manages program execution through interrupts\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    os_version   DB 'DOS Version 3.30$'\n    process_msg  DB 'Process executing under OS supervision$'\n    newline      DB 13, 10, '$'\n    ; Simulated Process Control Block (PCB) fields\n    pcb_eax      DW 0\n    pcb_ebx      DW 0\n    pcb_esp      DW 0\n    pcb_eip      DW 0\n    pcb_flags    DW 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; === Part 1: OS Controls Program Execution ===\n    ; Programs don't directly control the CPU - OS mediates\n    ; Every service (I/O, memory allocation) goes through the OS\n\n    ; Display message through DOS interrupt (OS service)\n    LEA DX, os_version\n    MOV AH, 09h\n    INT 21h                    ; OS handles string display\n\n    LEA DX, newline\n    INT 21h\n\n    ; Display process message\n    LEA DX, process_msg\n    INT 21h\n\n    ; === Part 2: Program Termination Goes Through OS ===\n    ; Exit function (AH=4Ch) is a \"system call\"\n    ; User program requests OS to terminate it properly\n    MOV AH, 4Ch\n    INT 21h                   ; TRAP - control transfers to OS kernel\n\nMAIN ENDP\nEND MAIN\n\n; ========================================\n; OS KERNEL SERVICES (Conceptual)\n; These would be in the OS kernel, not the user program\n; ========================================\n; KERNEL_SERVICE PROC\n;     ; When INT 21h is executed:\n;     ; 1. CPU switches from user mode to kernel (privileged) mode\n;     ; 2. CPU saves current process context (registers, flags, PC)\n;     ; 3. CPU looks up interrupt vector table\n;     ; 4. CPU transfers control to OS handler at vector address\n;     ; 5. OS performs the requested service\n;     ; 6. OS restores process context or terminates process\n;     IRET                    ; Return from interrupt\n; KERNEL_SERVICE ENDP\n\nEND MAIN",
+      "annotations": [
+        {
+          "line": 29,
+          "type": "comment",
+          "text": "INT 21h is a TRAP - program requests OS service (display string)",
+          "linkedConcept": "dos-interrupts"
+        },
+        {
+          "line": 29,
+          "type": "comment",
+          "text": "OS acts as intermediary - program never talks directly to hardware",
+          "linkedConcept": "operating-system"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "AH=4Ch is the standard DOS termination system call",
+          "linkedConcept": "dos-interrupts"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "Even program termination is controlled by OS, not program itself",
+          "linkedConcept": "process"
+        },
+        {
+          "line": 48,
+          "type": "comment",
+          "text": "INT instruction triggers exception vector lookup - control goes to OS",
+          "linkedConcept": "int-21h"
+        },
+        {
+          "line": 48,
+          "type": "comment",
+          "text": "OS kernel runs in privileged mode - can access hardware directly",
+          "linkedConcept": "kernel-mode"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking program has direct control of hardware - it only requests OS services",
+        "Confusing INT instruction with regular CALL - INT triggers exception handling",
+        "Not understanding that even 'simple' I/O goes through OS kernel",
+        "Forgetting that program termination is a service request, not direct exit",
+        "Thinking user programs run at same privilege level as OS kernel"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "1-25",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "exception-handler-demo",
+      "filename": "ExceptionHandler.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s2"],
+      "concepts": [
+        "exception",
+        "exception-handler",
+        "exception-table",
+        "interrupt-vector",
+        "trap",
+        "fault",
+        "divide-error",
+        "protection-fault"
+      ],
+      "instructions": [
+        "INT", "DIV", "MOV", "PUSH", "POP", "iret", "CBW", "CWD"
+      ],
+      "code": "; Exception Handler Demonstration\n; Shows how exceptions occur and how handlers process them\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    divide_err_msg   DB 'Divide Error Exception!$'\n    overflow_msg     DB 'Overflow Exception!$'\n    normal_msg       DB 'Normal operation completed$'\n    newline           DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; === Part 1: Divide Error Exception (INT 0) ===\n    ; DIV by zero causes exception - CPU detects and transfers to handler\n\n    MOV AX, 100\n    MOV BL, 0               ; BL = 0 - will cause divide error\n\n    ; Before DIV, check for zero divisor\n    CMP BL, 0\n    JE divisor_is_zero       ; Avoid the exception!\n\n    DIV BL                   ; AX / BL -> AL=quotient, AH=remainder\n    JMP continue1\n\ndivisor_is_zero:\n    LEA DX, divide_err_msg\n    MOV AH, 09h\n    INT 21h\n    JMP after_divide\n\ncontinue1:\n    LEA DX, normal_msg\n    MOV AH, 09h\n    INT 21h\n\nafter_divide:\n\n    ; === Part 2: Arithmetic Overflow Exception (INT 4) ===\n    ; INTO checks overflow flag - if OF=1, transfers to handler\n\n    MOV AX, 32767            ; AX = +32767 (max signed word)\n    ADD AX, 1                ; AX = -32768 (overflow! OF=1)\n\n    INTO                     ; If OF=1, INT 4 occurs\n    ; If OF=0, INTO is a no-op and we continue here\n\n    ; Continue with normal flow\n    LEA DX, newline\n    MOV AH, 09h\n    INT 21h\n\n    ; === Part 3: Software-Triggered Exception (INT 3) ===\n    ; INT 3 is breakpoint - used by debuggers\n\n    INT 3                     ; Breakpoint exception - transfer to debug handler\n    ; Program stops here if running in debugger\n\n    ; === Exception Handler Conceptual Code ===\n    ; EXCEPTION_HANDLER PROC\n    ;     ; CPU has pushed: error code, return address, flags, CS\n    ;     PUSH EBP\n    ;     MOV EBP, ESP\n    ;\n    ;     ; Determine exception type from vector number\n    ;     MOV EAX, [EBP+8]     ; Get vector number\n    ;     CMP EAX, 0           ; Divide error?\n    ;     JE HANDLE_DIVIDE\n    ;     CMP EAX, 4           ; Overflow?\n    ;     JE HANDLE_OVERFLOW\n    ;\n    ; HANDLE_DIVIDE:\n    ;     ; Send signal to process or recover\n    ;     JMP COMMON_HANDLER\n    ;\n    ; HANDLE_OVERFLOW:\n    ;     ; Handle overflow condition\n    ;     JMP COMMON_HANDLER\n    ;\n    ; COMMON_HANDLER:\n    ;     ; Return control to next instruction (IRET)\n    ;     POP EBP\n    ;     IRET                 ; Return to interrupted program\n    ; EXCEPTION_HANDLER ENDP\n\n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 24,
+          "type": "comment",
+          "text": "DIV with divisor=0 triggers divide error exception (INT 0)",
+          "linkedConcept": "divide-error"
+        },
+        {
+          "line": 24,
+          "type": "comment",
+          "text": "CPU detects exception BEFORE executing the instruction that would divide by zero",
+          "linkedConcept": "exception"
+        },
+        {
+          "line": 31,
+          "type": "instruction",
+          "text": "Compare to zero BEFORE DIV prevents exception by checking first",
+          "linkedConcept": "exception"
+        },
+        {
+          "line": 44,
+          "type": "instruction",
+          "text": "ADD sets overflow flag when signed result doesn't fit in destination",
+          "linkedConcept": "overflow"
+        },
+        {
+          "line": 47,
+          "type": "instruction",
+          "text": "INTO checks OF - if set, generates INT 4 (overflow exception handler)",
+          "linkedConcept": "overflow"
+        },
+        {
+          "line": 54,
+          "type": "instruction",
+          "text": "INT 3 is breakpoint trap - debuggers use it to pause program execution",
+          "linkedConcept": "trap"
+        },
+        {
+          "line": 66,
+          "type": "comment",
+          "text": "Exception handler receives control - determines type and responds",
+          "linkedConcept": "exception-handler"
+        },
+        {
+          "line": 82,
+          "type": "instruction",
+          "text": "IRET restores saved state and returns control to interrupted program",
+          "linkedConcept": "exception"
+        }
+      ],
+      "commonMistakes": [
+        "Not checking divisor before DIV - divide-by-zero causes exception",
+        "Forgetting that INTO checks OF but doesn't modify it",
+        "Confusing INT 3 (breakpoint) with INT 21h (DOS service) - different handlers",
+        "Thinking exceptions can be ignored - CPU must respond to hardware events",
+        "Not understanding that exception handlers run in kernel (privileged) mode"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "20-40",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "exception-classes-demo",
+      "filename": "ExceptionClasses.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s3"],
+      "concepts": [
+        "interrupt",
+        "trap",
+        "fault",
+        "abort",
+        "system-call",
+        "int-instruction",
+        "exception-table",
+        "user-mode",
+        "kernel-mode"
+      ],
+      "instructions": [
+        "INT", "MOV", "CMP", "JNE", "JMP", "PUSH", "POP", "iret"
+      ],
+      "code": "; Exception Classes Demonstration\n; Shows the four classes of exceptions: Interrupt, Trap, Fault, Abort\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    int_msg     DB 'INTERRUPT: Async hardware event detected$'\n    trap_msg    DB 'TRAP: Intentional service request (system call)$'\n    fault_msg   DB 'FAULT: Recoverable error - will retry instruction$'\n    abort_msg   DB 'ABORT: Unrecoverable error - program terminated$'\n    newline     DB 13, 10, '$'\n    syscall_msg DB 'Performing system call: INT 21h$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; ========================================\n    ; CLASS 1: INTERRUPT (Asynchronous)\n    ; ========================================\n    ; Caused by hardware events outside CPU control\n    ; Examples: keyboard input, mouse movement, timer tick\n    ; NOT caused by executing instructions\n    ; Handler returns to NEXT instruction (Inext)\n\n    LEA DX, int_msg\n    MOV AH, 09h\n    INT 21h                     ; DOS service is itself an interrupt\n    ; In real scenario, hardware timer would trigger INT 08h\n    ; independent of program execution\n\n    LEA DX, newline\n    INT 21h\n\n    ; ========================================\n    ; CLASS 2: TRAP (Intentional - System Calls)\n    ; ========================================\n    ; Program explicitly requests OS service\n    ; INT instruction is the mechanism\n    ; Handler returns to NEXT instruction (Inext)\n    ; \"System calls\" provide procedure-like interface to OS\n\n\n    LEA DX, syscall_msg\n    INT 21h\n\n    LEA DX, trap_msg\n    MOV AH, 09h\n    INT 21h                     ; TRAP: INT 21h is intentional service request\n\n    ; Example: Function 01h (keyboard read) is a TRAP\n    ; Program executes INT 21h to request OS read keyboard\n    ; OS reads character, returns to next instruction\n\n    LEA DX, newline\n    INT 21h\n\n    ; ========================================\n    ; CLASS 3: FAULT (Possibly Recoverable)\n    ; ========================================\n    ; Caused by error condition in current instruction\n    ; If handler can fix: retry CURRENT instruction (Icurr)\n    ; If cannot fix: terminate program\n    ; Example: Page fault - handler loads page from disk, retries\n\n    LEA DX, fault_msg\n    MOV AH, 09h\n    INT 21h\n\n    ; Simulate page fault handling conceptually:\n    ; 1. Program accesses memory location\n    ; 2. MMU detects page not in physical memory\n    ; 3. Page fault exception (INT 14 or similar)\n    ; 4. Handler loads page from disk\n    ; 5. Handler updates page table\n    ; 6. IRET returns to SAME instruction that caused fault\n    ; 7. Program re-executes instruction - now it works\n\n    LEA DX, newline\n    INT 21h\n\n    ; ========================================\n    ; CLASS 4: ABORT (Unrecoverable)\n    ; ========================================\n    ; Hardware errors or corrupted memory\n    ; Handler does NOT return control to failing program\n    ; Simply terminates process - no recovery possible\n\n    LEA DX, abort_msg\n    MOV AH, 09h\n    INT 21h\n\n    ; ========================================\n    ; SUMMARY: Exception Class Behavior\n    ; ========================================\n    ;\n    ; Class      | Cause              | Returns to      | Recovery\n    ; -----------+--------------------+-----------------+----------\n    ; INTERRUPT   | Hardware (async)   | Inext (next)    | N/A\n    ; TRAP        | Program (intentional)| Inext (next) | N/A\n    ; FAULT      | Program (error)    | Icurr (retry)   | Maybe\n    ; ABORT      | Hardware (fatal)   | Never returns   | No\n    ;\n    ; Key Difference: FAULT retries the current instruction\n    ;                 Others skip past the triggering instruction\n\n    LEA DX, newline\n    INT 21h\n\n    ; Exit\n    MOV AH, 4Ch\n    INT 21h\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 24,
+          "type": "comment",
+          "text": "INTERRUPT is asynchronous - hardware triggers it regardless of program flow",
+          "linkedConcept": "interrupt"
+        },
+        {
+          "line": 24,
+          "type": "comment",
+          "text": "Timer interrupts occur even when program isn't doing anything - background events",
+          "linkedConcept": "interrupt"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "TRAP is intentional - program deliberately executes INT to request service",
+          "linkedConcept": "trap"
+        },
+        {
+          "line": 39,
+          "type": "comment",
+          "text": "System calls are TRAPs - interface between user program and OS kernel",
+          "linkedConcept": "system-call"
+        },
+        {
+          "line": 55,
+          "type": "comment",
+          "text": "FAULT can be recovered - handler fixes problem and retries SAME instruction",
+          "linkedConcept": "fault"
+        },
+        {
+          "line": 58,
+          "type": "comment",
+          "text": "Page fault: page was on disk, handler loads it, program retries and succeeds",
+          "linkedConcept": "fault"
+        },
+        {
+          "line": 71,
+          "type": "comment",
+          "text": "ABORT never returns - fatal error, OS terminates process immediately",
+          "linkedConcept": "abort"
+        },
+        {
+          "line": 87,
+          "type": "comment",
+          "text": "Key distinction: FAULT returns to Icurr (retry), others return to Inext (skip)",
+          "linkedConcept": "fault"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing TRAP and INTERRUPT - TRAP is intentional, INTERRUPT is hardware-triggered",
+        "Thinking FAULT always aborts - FAULT can be recovered if handler fixes it",
+        "Forgetting that page fault is a FAULT not ABORT - memory was just on disk",
+        "Not understanding INT n is the instruction form of TRAP for system calls",
+        "Confusing INT (software exception/trap) with hardware interrupts - same mechanism"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "40-60",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
-  },
+  ],
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
-    "totalExamples": 23,
-    "lectureCoverage": [4, 5, 6, 7, 8, 9],
-    "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD"],
+    "totalExamples": 26,
+    "lectureCoverage": [4, 5, 6, 7, 8, 9, 10],
+    "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD", "DIV", "INTO", "CBW", "CWD"],
     "difficultyDistribution": {
-      "beginner": 4,
-      "intermediate": 10,
+      "beginner": 5,
+      "intermediate": 12,
       "advanced": 8
     }
   }

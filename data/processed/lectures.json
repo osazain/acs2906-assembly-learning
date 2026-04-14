@@ -1688,7 +1688,9 @@
             "system-resources"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "os-process-demonstration"
+          ],
           "assessmentItems": []
         },
         {
@@ -1705,7 +1707,9 @@
           "instructions": [
             "INT"
           ],
-          "examples": [],
+          "examples": [
+            "exception-handler-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1724,7 +1728,9 @@
             "INT",
             "IRET"
           ],
-          "examples": [],
+          "examples": [
+            "exception-classes-demo"
+          ],
           "assessmentItems": []
         },
         {

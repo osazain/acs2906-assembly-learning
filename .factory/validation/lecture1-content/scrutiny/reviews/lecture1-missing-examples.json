@@ -1,0 +1,46 @@
+{
+  "featureId": "lecture1-missing-examples",
+  "reviewedAt": "2026-04-14T01:45:00.000Z",
+  "commitId": "fd98f02",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Two examples added for Lecture 1: register-usage-demo for L1-S3 (8086 CPU Architecture) and segmented-memory-demo for L1-S5 (Memory Organization). Both examples meet all structural requirements.",
+    "issues": []
+  },
+  "structureValidation": {
+    "register-usage-demo": {
+      "codeNonEmpty": true,
+      "annotationCount": 17,
+      "annotationMinRequired": 2,
+      "commonMistakesCount": 6,
+      "commonMistakesMinRequired": 2,
+      "provenanceSourceFile": "Lecture 1.pdf",
+      "hasProvenance": true,
+      "difficulty": "beginner",
+      "conceptsCount": 15,
+      "conceptsMinRequired": 2
+    },
+    "segmented-memory-demo": {
+      "codeNonEmpty": true,
+      "annotationCount": 12,
+      "annotationMinRequired": 2,
+      "commonMistakesCount": 6,
+      "commonMistakesMinRequired": 2,
+      "provenanceSourceFile": "Lecture 1.pdf",
+      "hasProvenance": true,
+      "difficulty": "intermediate",
+      "conceptsCount": 8,
+      "conceptsMinRequired": 2
+    }
+  },
+  "linkageValidation": {
+    "l1-s3-examples": ["register-usage-demo"],
+    "l1-s5-examples": ["segmented-memory-demo"],
+    "allLinkagesValid": true
+  },
+  "sharedStateObservations": [],
+  "addressesFailureFrom": null,
+  "summary": "Feature implementation passes review. Both examples (register-usage-demo, segmented-memory-demo) meet all schema requirements: non-empty code, sufficient annotations (17 and 12 respectively), at least 2 common mistakes each, provenance source files set to Lecture 1.pdf, difficulty levels set, and 8+ concepts each. Examples are properly linked in lectures.json to L1-S3 and L1-S5 respectively. Commit fd98f02 shows 275 lines added across examples.json and lectures.json. Validation报告显示956/956 assertions passed."
+}

@@ -1,0 +1,36 @@
+{
+  "milestone": "lecture1-content",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "validate:content": {
+      "passed": true,
+      "command": "npm run validate:content",
+      "exitCode": 0,
+      "output": "956 assertions passed, 0 failed"
+    },
+    "lint": {
+      "passed": true,
+      "command": "npm run lint",
+      "exitCode": 0,
+      "output": "4 warnings (non-blocking): React Hook dependencies in DiagnosticMode.tsx, RegisterRally.tsx, SimulatorCore.tsx"
+    },
+    "build": {
+      "passed": true,
+      "command": "npm run build",
+      "exitCode": 0,
+      "output": "Build successful in 314ms"
+    }
+  },
+  "reviewsSummary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [],
+  "rejectedObservations": [],
+  "previousRound": null
+}

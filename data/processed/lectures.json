@@ -1583,7 +1583,9 @@
             "cache-tags"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "direct-mapped-cache-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1599,7 +1601,9 @@
             "lru-policy"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "set-associative-cache-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1616,7 +1620,9 @@
             "hit-time"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "cache-writes-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1631,7 +1637,9 @@
             "cache-optimization"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "memory-mountain-demo"
+          ],
           "assessmentItems": []
         }
       ],

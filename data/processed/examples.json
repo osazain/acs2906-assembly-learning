@@ -2127,16 +2127,243 @@
       "extractionConfidence": 0.90,
       "reviewedStatus": "pending"
     }
+    },
+    {
+      "id": "direct-mapped-cache-demo",
+      "filename": "DirectMappedCache.asm",
+      "lectureIds": [9],
+      "sectionIds": ["l9-s4"],
+      "concepts": ["direct-mapped-cache", "set-selection", "line-matching", "thrashing", "cache-tags"],
+      "instructions": ["MOV", "CMP", "JE", "JNE", "ADD", "SUB"],
+      "code": "; Direct-Mapped Cache Demonstration\n; Simulates a 4-line direct-mapped cache with 2-byte blocks\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated main memory (16 bytes)\n    main_memory DB 00h, 11h, 22h, 33h, 44h, 55h, 66h, 77h\n                DB 88h, 99h, 0AAh, 0BBh, 0CCh, 0DDh, 0EEh, 0FFh\n    \n    ; Cache: 4 sets, 1 line each, 2 bytes per block\n    ; For address A: set = A[1:0], block offset = A[0], tag = A[3:2]\n    cache_valid DB 0, 0, 0, 0          ; Valid bit for each line\n    cache_tag   DB 0, 0, 0, 0           ; Tag for each line\n    cache_block DB 4 DUP(2 DUP(?))      ; 2 bytes per line\n    \n    ; Statistics\n    hits   DW 0\n    misses DW 0\n    \n    ; Display messages\n    hit_msg   DB 'HIT!$', 13, 10, '$'\n    miss_msg  DB 'MISS!$', 13, 10, '$'\n\n.CODE\n; ========================================\n; CHECK_CACHE: Check if address is in cache\n; Input: DL = address (0-15)\n; Output: AL = data if hit, sets ZF=1 for hit, ZF=0 for miss\n; ========================================\nCHECK_CACHE PROC\n    PUSH BX\n    PUSH CX\n    PUSH DX\n    \n    ; Extract set index (bits 0-1 for 4 sets)\n    MOV AL, DL\n    AND AL, 03h              ; AL = set index (0-3)\n    MOV BL, AL               ; BL = set index\n    XOR BH, BH               ; BX = set index for addressing\n    \n    ; Extract tag (bits 3-2)\n    MOV CL, DL\n    SHR CL, 2                ; CL = tag\n    \n    ; Check if valid and tag matches\n    CMP cache_valid[BX], 1   ; Is line valid?\n    JNE cache_miss_proc\n    \n    CMP cache_tag[BX], CL    ; Does tag match?\n    JNE cache_miss_proc\n    \n    ; HIT! Return data from cache\n    MOV AL, cache_block[BX*2]\n    INC hits\n    POP DX\n    POP CX\n    POP BX\n    RET\n    \ncache_miss_proc:\n    ; MISS - return 0 (actual data would be loaded from memory)\n    XOR AL, AL\n    INC misses\n    POP DX\n    POP CX\n    POP BX\n    RET\nCHECK_CACHE ENDP\n\n; ========================================\n; LOAD_BLOCK: Load a block from memory into cache\n; Input: DL = address\n; ========================================\nLOAD_BLOCK PROC\n    PUSH BX\n    PUSH CX\n    PUSH DX\n    PUSH SI\n    PUSH DI\n    \n    ; Extract set index\n    MOV AL, DL\n    AND AL, 03h\n    MOV BL, AL\n    XOR BH, BH\n    \n    ; Extract tag\n    MOV CL, DL\n    SHR CL, 2\n    \n    ; Mark line as valid and store tag\n    MOV cache_valid[BX], 1\n    MOV cache_tag[BX], CL\n    \n    ; Load 2-byte block from memory (block aligned to even address)\n    MOV SI, DX\n    AND SI, 0FEh             ; Block start address (even)\n    \n    ; Copy from memory to cache\n    MOV DI, BX\n    SHL DI, 1                ; DI = cache block offset (BX * 2)\n    \n    MOV CX, 2                ; 2 bytes per block\nload_loop:\n    MOV AL, [main_memory + SI]\n    MOV cache_block[DI], AL\n    INC SI\n    INC DI\n    LOOP load_loop\n    \n    POP DI\n    POP SI\n    POP DX\n    POP CX\n    POP BX\n    RET\nLOAD_BLOCK ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; ========================================\n    ; TEST 1: Sequential Access (Good Locality)\n    ; Addresses 0, 1, 2, 3 all map to DIFFERENT sets\n    ; First access misses, subsequent hit within same block\n    ; ========================================\n    \n    ; Access address 0 (set 0, tag 0)\n    MOV DL, 0\n    CALL CHECK_CACHE         ; MISS - cache empty\n    CALL LOAD_BLOCK          ; Load block 0-1\n    \n    MOV DL, 1                ; Address 1 (same block as 0)\n    CALL CHECK_CACHE         ; Should HIT\n    \n    MOV DL, 4                ; Address 4 (set 0, tag 1) - CONFLICT!\n    CALL CHECK_CACHE         ; MISS - evicts set 0\n    CALL LOAD_BLOCK          ; Load block 4-5\n    \n    MOV DL, 0                ; Address 0 (set 0, tag 0) - CONFLICT!\n    CALL CHECK_CACHE         ; MISS - evicts set 0\n    \n    ; ========================================\n    ; TEST 2: Demonstrate Thrashing\n    ; Alternating between addresses that map to same set\n    ; ========================================\n    \n    ; Addresses 0 and 4 BOTH map to set 0!\n    ; This causes constant eviction and reload = THRASHING\n    \n    MOV DL, 0\n    CALL LOAD_BLOCK          ; Load address 0 (block 0-1)\n    \n    MOV DL, 4                ; Address 4 maps to set 0\n    CALL LOAD_BLOCK          ; Evicts block 0, loads block 4-5\n    \n    MOV DL, 0                ; Back to address 0 - MISS again!\n    CALL LOAD_BLOCK          ; Evicts block 4, reloads block 0\n    \n    MOV DL, 4                ; Address 4 - MISS again!\n    CALL LOAD_BLOCK          ; Evicts block 0, reloads block 4\n    \n    ; This alternating pattern causes 100% miss rate!\n    \n    ; ========================================\n    ; TEST 3: Addresses and Their Cache Mapping\n    ; ========================================\n    ; Address | Binary | Set | Tag | Block Offset\n    ; --------|--------|-----|-----|------------\n    ;    0    | 0000   |  0  |  0  |     0\n    ;    1    | 0001   |  0  |  0  |     1\n    ;    2    | 0010   |  1  |  0  |     0\n    ;    3    | 0011   |  1  |  0  |     1\n    ;    4    | 0100   |  0  |  1  |     0  <-- CONFLICT with 0!\n    ;    5    | 0101   |  0  |  1  |     1  <-- CONFLICT with 1!\n    ; ========================================\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 44,
+          "type": "comment",
+          "text": "Set index = bits [1:0] of address - determines which cache line we check",
+          "linkedConcept": "set-selection"
+        },
+        {
+          "line": 51,
+          "type": "comment",
+          "text": "Tag bits [3:2] must match for cache hit - identifies which block is stored",
+          "linkedConcept": "cache-tags"
+        },
+        {
+          "line": 58,
+          "type": "comment",
+          "text": "Cache hit requires BOTH valid bit = 1 AND tag match",
+          "linkedConcept": "line-matching"
+        },
+        {
+          "line": 108,
+          "type": "comment",
+          "text": "Block aligned to even address - offset bit [0] selects within block",
+          "linkedConcept": "direct-mapped-cache"
+        },
+        {
+          "line": 147,
+          "type": "comment",
+          "text": "THRASHING: Addresses 0 and 4 map to same set, causing constant eviction",
+          "linkedConcept": "thrashing"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking set index and tag are the same - set selects WHERE to look, tag verifies WHAT is there",
+        "Ignoring block offset - offset determines which byte within the block to return",
+        "Not understanding thrashing - direct-mapped can only hold ONE block per set",
+        "Confusing block size with cache size - block size is how much we load per miss",
+        "Thinking more cache lines always helps - direct-mapped limitation is fundamental"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-096", "QB-097"],
+      "provenance": {
+        "sourceFile": "Lecture 9.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "45-60",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.88,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "set-associative-cache-demo",
+      "filename": "SetAssociativeCache.asm",
+      "lectureIds": [9],
+      "sectionIds": ["l9-s5"],
+      "concepts": ["set-associative-cache", "e-way-set-associative", "fully-associative-cache", "line-replacement", "lru-policy"],
+      "instructions": ["MOV", "CMP", "JE", "JNE", "ADD", "SUB", "PUSH", "POP"],
+      "code": "; Set Associative Cache Demonstration\n; Simulates a 2-way set associative cache (2 lines per set)\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated main memory (16 bytes)\n    main_memory DB 00h, 11h, 22h, 33h, 44h, 55h, 66h, 77h\n                DB 88h, 99h, 0AAh, 0BBh, 0CCh, 0DDh, 0EEh, 0FFh\n    \n    ; Cache: 2 sets, 2 lines per set (2-way associative)\n    ; Each line: valid(1) + tag(1) + data(2) = 4 bytes\n    ; Layout: [valid0, tag0, data0_0, data0_1] for way 0\n    ;         [valid1, tag1, data1_0, data1_1] for way 1\n    cache_valid0 DB 0, 0          ; Valid bits for way 0 (sets 0-1)\n    cache_tag0   DB 0, 0          ; Tags for way 0\n    cache_data0   DB 4 DUP(?)      ; Data for way 0\n    \n    cache_valid1 DB 0, 0          ; Valid bits for way 1 (sets 0-1)\n    cache_tag1   DB 0, 0          ; Tags for way 1\n    cache_data1   DB 4 DUP(?)      ; Data for way 1\n    \n    ; LRU tracking: which way was used most recently (0 or 1)\n    lru          DB 0, 0           ; LRU for each set\n    \n    ; Statistics\n    hits   DW 0\n    misses DW 0\n\n.CODE\n; ========================================\n; ACCESS_CACHE_2WAY: Access 2-way set associative cache\n; Input: DL = address (0-15)\n; Output: AL = data byte\n; ========================================\nACCESS_CACHE_2WAY PROC\n    PUSH BX\n    PUSH CX\n    PUSH DX\n    PUSH SI\n    \n    ; Extract set index (for 2 sets: bit 1)\n    MOV AL, DL\n    SHR AL, 1\n    AND AL, 01h              ; AL = set index (0-1)\n    MOV BL, AL               ; BL = set index\n    \n    ; Extract tag (bits 3-2)\n    MOV CL, DL\n    SHR CL, 2                ; CL = tag\n    \n    ; Check WAY 0\n    CMP cache_valid0[BX], 1\n    JNE check_way1\n    CMP cache_tag0[BX], CL\n    JNE check_way1\n    \n    ; WAY 0 HIT!\n    ; Data at offset 0 of block (if even address) or offset 1 (if odd)\n    MOV AL, DL\n    AND AL, 01h              ; AL = 0 for even, 1 for odd\n    XOR AH, AH\n    MOV SI, AX\n    MOV AL, cache_data0[BX*2 + SI]\n    INC hits\n    MOV lru[BX], 1           ; Mark way 1 as most recently used\n    JMP access_done_2way\n    \ncheck_way1:\n    ; Check WAY 1\n    CMP cache_valid1[BX], 1\n    JNE cache_miss_2way\n    CMP cache_tag1[BX], CL\n    JNE cache_miss_2way\n    \n    ; WAY 1 HIT!\n    MOV AL, DL\n    AND AL, 01h\n    XOR AH, AH\n    MOV SI, AX\n    MOV AL, cache_data1[BX*2 + SI]\n    INC hits\n    MOV lru[BX], 0           ; Mark way 0 as most recently used\n    JMP access_done_2way\n    \ncache_miss_2way:\n    ; MISS - need to load from memory\n    INC misses\n    \n    ; Determine which way to evict (use LRU policy)\n    CMP lru[BX], 0\n    JE evict_way0\n    \n    ; Evict WAY 1 and load new block\n    MOV cache_valid1[BX], 1\n    MOV cache_tag1[BX], CL\n    \n    ; Load 2-byte block from memory\n    MOV SI, DX\n    AND SI, 0FEh             ; Block start (aligned)\n    MOV AL, [main_memory + SI]\n    MOV cache_data1[BX*2], AL\n    MOV AL, [main_memory + SI + 1]\n    MOV cache_data1[BX*2 + 1], AL\n    \n    MOV lru[BX], 0           ; Way 0 is now more recently used\n    JMP access_done_2way\n    \nevict_way0:\n    ; Evict WAY 0 and load new block\n    MOV cache_valid0[BX], 1\n    MOV cache_tag0[BX], CL\n    \n    ; Load 2-byte block from memory\n    MOV SI, DX\n    AND SI, 0FEh\n    MOV AL, [main_memory + SI]\n    MOV cache_data0[BX*2], AL\n    MOV AL, [main_memory + SI + 1]\n    MOV cache_data0[BX*2 + 1], AL\n    \n    MOV lru[BX], 1           ; Way 1 is now more recently used\n    \naccess_done_2way:\n    POP SI\n    POP DX\n    POP CX\n    POP BX\n    RET\nACCESS_CACHE_2WAY ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; ========================================\n    ; TEST 1: Addresses that conflict in direct-mapped\n    ; Now they can coexist in different ways!\n    ; ========================================\n    \n    ; Address 0: set 0, tag 0\n    MOV DL, 0\n    CALL ACCESS_CACHE_2WAY   ; MISS\n    \n    ; Address 4: set 0, tag 1 (conflicts with 0 in direct-mapped!)\n    ; But in 2-way: goes to WAY 1, no conflict!\n    MOV DL, 4\n    CALL ACCESS_CACHE_2WAY   ; MISS (cold start for way 1)\n    \n    ; Address 0 again - STILL IN WAY 0!\n    MOV DL, 0\n    CALL ACCESS_CACHE_2WAY   ; HIT! (avoids thrashing)\n    \n    ; ========================================\n    ; TEST 2: Demonstrate LRU Replacement\n    ; When both ways full, LRU determines eviction\n    ; ========================================\n    \n    ; Set 0 currently has: way0=block0, way1=block1\n    ; Access block 2 (also set 0, tag 1)\n    MOV DL, 8                ; Address 8: set 0, tag 2\n    CALL ACCESS_CACHE_2WAY   ; MISS - must evict one way\n    ; LRU says evict way 0 (least recently used)\n    \n    ; Now access evicted block 0 - must reload\n    MOV DL, 0\n    CALL ACCESS_CACHE_2WAY   ; MISS - block 0 was evicted\n    \n    ; ========================================\n    ; TEST 3: Compare Direct-Mapped vs 2-Way\n    ; ========================================\n    ; Direct-mapped with addresses 0, 4, 0, 4, 0, 4...\n    ; Miss rate: 100% (alternating conflict)\n    ;\n    ; 2-way associative with same pattern:\n    ; Way 0: block 0\n    ; Way 1: block 1 (first address 4)\n    ; Then addresses 0, 4 HIT!\n    ; Only address 8 causes eviction\n    ; Miss rate: ~33% (much better!)\n    \n    ; ========================================\n    ; Address Mapping Summary\n    ; ========================================\n    ; Address | Binary | Set | Tag | Block\n    ; --------|--------|-----|-----|------\n    ;    0    | 0000   |  0  |  0  | 0-1\n    ;    4    | 0100   |  0  |  1  | 4-5  <-- same set, diff tag\n    ;    8    | 1000   |  0  |  2  | 8-9  <-- same set, diff tag\n    ; ========================================\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 45,
+          "type": "comment",
+          "text": "2-way: check both ways in parallel, return data from matching way",
+          "linkedConcept": "e-way-set-associative"
+        },
+        {
+          "line": 68,
+          "type": "comment",
+          "text": "LRU: evict the way that hasn't been used recently",
+          "linkedConcept": "lru-policy"
+        },
+        {
+          "line": 95,
+          "type": "comment",
+          "text": "Fully associative would have 1 set with all lines - no set index bits",
+          "linkedConcept": "fully-associative-cache"
+        },
+        {
+          "line": 145,
+          "type": "comment",
+          "text": "2-way allows addresses 0 and 4 (same set, different tags) to coexist",
+          "linkedConcept": "set-associative-cache"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing 'ways' with 'sets' - 2-way means 2 lines PER SET, not 2 total lines",
+        "Thinking associativity is free - checking multiple lines costs hardware complexity and power",
+        "Ignoring LRU overhead - true LRU needs to track order of all line accesses",
+        "Not understanding fully associative - tag is entire address minus offset, very expensive",
+        "Assuming higher associativity always better - diminishing returns beyond 4-8 ways"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-098", "QB-099"],
+      "provenance": {
+        "sourceFile": "Lecture 9.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "60-75",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.88,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "cache-writes-demo",
+      "filename": "CacheWrites.asm",
+      "lectureIds": [9],
+      "sectionIds": ["l9-s6"],
+      "concepts": ["write-through", "write-back", "write-buffer", "cache-performance", "miss-penalty", "hit-time"],
+      "instructions": ["MOV", "CMP", "JE", "JNE", "ADD", "SUB", "PUSH", "POP", "AND", "OR"],
+      "code": "; Cache Writes and Performance Demonstration\n; Simulates write-through and write-back policies\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated memory\n    main_memory DB 16 DUP(0FFh)\n    \n    ; Cache with dirty bit for write-back\n    cache_valid DB 1 DUP(0)\n    cache_dirty DB 1 DUP(0)        ; Dirty bit - set if modified\n    cache_data  DB 2 DUP(?)\n    \n    ; Write buffer for write-through\n    write_buf_valid DB 0\n    write_buf_addr  DB ?\n    write_buf_data  DB ?\n    \n    ; Statistics\n    bus_transactions DW 0         ; Counts writes to main memory\n    cache_hits DW 0\n    cache_misses DW 0\n\n.CODE\n; ========================================\n; WRITE_THROUGH: Write data with write-through policy\n; Input: DL = address, AL = data\n; ========================================\nWRITE_THROUGH PROC\n    PUSH BX\n    \n    ; Check if address is in cache\n    CMP cache_valid[0], 1\n    JNE wt_cache_miss\n    \n    ; Update cache\n    MOV cache_data[0], AL\n    \n    ; ALSO write directly to memory (immediate bus transaction)\n    MOV BX, DX\n    MOV [main_memory + BX], AL\n    INC bus_transactions\n    \n    JMP wt_done\n    \nwt_cache_miss:\n    ; With write-no-allocate: only update memory, don't load block\n    MOV BX, DX\n    MOV [main_memory + BX], AL\n    INC bus_transactions\n    \n    ; With write-allocate (commented): load block, then update\n    ; CALL LOAD_BLOCK\n    ; MOV cache_data[0], AL\n    \nwt_done:\n    POP BX\n    RET\nWRITE_THROUGH ENDP\n\n; ========================================\n; WRITE_BACK: Write data with write-back policy\n; Input: DL = address, AL = data\n; ========================================\nWRITE_BACK PROC\n    PUSH BX\n    \n    ; Check if address is in cache\n    CMP cache_valid[0], 1\n    JNE wb_cache_miss\n    \n    ; Update cache and mark dirty\n    MOV cache_data[0], AL\n    MOV cache_dirty[0], 1\n    ; NO bus transaction yet!\n    \n    JMP wb_done\n    \nwb_cache_miss:\n    ; Write-allocate: load block into cache, then update\n    CALL LOAD_BLOCK_WB\n    MOV cache_data[0], AL\n    MOV cache_dirty[0], 1\n    \nwb_done:\n    POP BX\n    RET\nWRITE_BACK ENDP\n\n; ========================================\n; LOAD_BLOCK_WB: Load block from memory\n; Input: DL = address\n; ========================================\nLOAD_BLOCK_WB PROC\n    PUSH BX\n    PUSH DX\n    \n    ; Check if current block is dirty - if so, write back first!\n    CMP cache_valid[0], 1\n    JNE no_evict_needed\n    CMP cache_dirty[0], 1\n    JNE no_evict_needed\n    \n    ; Write dirty block back to memory before loading new one\n    MOV BX, 0                ; Address (would need tag check in real impl)\n    MOV AL, cache_data[0]\n    MOV [main_memory + BX], AL\n    INC bus_transactions\n    \nno_evict_needed:\n    ; Load new block from memory\n    POP DX\n    PUSH DX\n    MOV BX, DX\n    AND BX, 0FEh              ; Block aligned address\n    MOV cache_valid[0], 1\n    MOV cache_dirty[0], 0\n    MOV AL, [main_memory + BX]\n    MOV cache_data[0], AL\n    \n    POP DX\n    POP BX\n    RET\nLOAD_BLOCK_WB ENDP\n\n; ========================================\n; EVICT_BLOCK: Force eviction of dirty block\n; ========================================\nEVICT_BLOCK PROC\n    CMP cache_dirty[0], 1\n    JNE evict_clean\n    \n    ; Write dirty block to memory\n    MOV BX, 0\n    MOV AL, cache_data[0]\n    MOV [main_memory + BX], AL\n    INC bus_transactions\n    MOV cache_dirty[0], 0\n    \nevict_clean:\n    MOV cache_valid[0], 0\n    RET\nEVICT_BLOCK ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; ========================================\n    ; TEST 1: Write-Through vs Write-Back\n    ; ========================================\n    \n    ; Scenario: Write to same location 5 times\n    \n    ; Write-Through: 5 bus transactions\n    MOV cache_valid[0], 1\n    MOV DL, 10h\n    MOV AL, 0AAh\n    CALL WRITE_THROUGH        ; Bus transaction 1\n    \n    MOV AL, 0BBh\n    CALL WRITE_THROUGH        ; Bus transaction 2\n    \n    MOV AL, 0CCh\n    CALL WRITE_THROUGH        ; Bus transaction 3\n    \n    MOV AL, 0DDh\n    CALL WRITE_THROUGH        ; Bus transaction 4\n    \n    MOV AL, 0EEh\n    CALL WRITE_THROUGH        ; Bus transaction 5\n    \n    ; Reset cache\n    MOV cache_valid[0], 1\n    MOV cache_dirty[0], 0\n    \n    ; Write-Back: 0 bus transactions (until eviction)\n    MOV DL, 10h\n    MOV AL, 0AAh\n    CALL WRITE_BACK           ; No bus transaction!\n    \n    MOV AL, 0BBh\n    CALL WRITE_BACK           ; No bus transaction!\n    \n    MOV AL, 0CCh\n    CALL WRITE_BACK           ; No bus transaction!\n    \n    MOV AL, 0DDh\n    CALL WRITE_BACK           ; No bus transaction!\n    \n    MOV AL, 0EEh\n    CALL WRITE_BACK           ; No bus transaction!\n    \n    ; Bus transaction only happens when we EVICT the dirty block\n    CALL EVICT_BLOCK          ; Bus transaction 1 (writing 0EEh)\n    \n    ; Result: Write-back uses FAR fewer bus transactions!\n    \n    ; ========================================\n    ; TEST 2: Write Buffer Benefit\n    ; ========================================\n    ; Write buffer allows CPU to continue without waiting\n    ; for memory write to complete\n    \n    ; Without buffer: CPU waits for each memory write\n    ; With buffer: CPU continues, buffer handles memory writes async\n    \n    ; Simulate buffered write:\n    MOV write_buf_valid, 1\n    MOV write_buf_addr, 20h\n    MOV write_buf_data, 55h\n    ; CPU can continue immediately - doesn't wait!\n    \n    ; Later, buffer writes to memory (in background)\n    ; This would happen while CPU does other work\n    MOV BX, 20h\n    MOV AL, write_buf_data\n    MOV [main_memory + BX], AL\n    INC bus_transactions\n    MOV write_buf_valid, 0\n    \n    ; ========================================\n    ; Performance Comparison Summary\n    ; ========================================\n    ; Write-Through:\n    ;   + Simple to implement\n    ;   + Memory always consistent with cache\n    ;   - Many bus transactions (slow)\n    ;\n    ; Write-Back:\n    ;   + Fewer bus transactions (fast)\n    ;   + More complex (dirty bits, write-back on eviction)\n    ;   - Memory may lag behind cache\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 38,
+          "type": "comment",
+          "text": "Write-through: every write goes to BOTH cache AND memory (immediate bus transaction)",
+          "linkedConcept": "write-through"
+        },
+        {
+          "line": 62,
+          "type": "comment",
+          "text": "Write-back: write only to cache, defer memory write until eviction",
+          "linkedConcept": "write-back"
+        },
+        {
+          "line": 71,
+          "type": "comment",
+          "text": "Dirty bit tracks whether cache line has been modified vs memory",
+          "linkedConcept": "write-back"
+        },
+        {
+          "line": 105,
+          "type": "comment",
+          "text": "Write buffer decouples CPU from slow memory - allows async writes",
+          "linkedConcept": "write-buffer"
+        },
+        {
+          "line": 160,
+          "type": "comment",
+          "text": "Miss penalty: extra time to fetch from lower level - write-back reduces this",
+          "linkedConcept": "miss-penalty"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking write policy affects hit rate - it only affects bus traffic and complexity",
+        "Confusing write-through with write-back - wt writes immediately, wb defers",
+        "Not understanding dirty bit purpose - tracks modification relative to memory",
+        "Ignoring write buffer benefit - allows CPU to continue while memory updates in background",
+        "Thinking write-no-allocate is always worse - sometimes avoiding cache pollution is worth it"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-100", "QB-101"],
+      "provenance": {
+        "sourceFile": "Lecture 9.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "75-95",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.88,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "memory-mountain-demo",
+      "filename": "MemoryMountain.asm",
+      "lectureIds": [9],
+      "sectionIds": ["l9-s7"],
+      "concepts": ["memory-mountain", "working-set", "prefetching", "cache-optimization", "stride"],
+      "instructions": ["MOV", "CMP", "JE", "JNE", "ADD", "SUB", "LOOP"],
+      "code": "; Memory Mountain Demonstration\n; Shows how throughput varies with working set size and stride\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Large array simulating main memory (256 bytes)\n    ; In real systems, this would be much larger (MB-GB)\n    array DB 256 DUP(0)\n    \n    ; Cache simulation parameters\n    L1_SIZE EQU 64           ; L1 cache: 64 bytes (16 elements)\n    L2_SIZE EQU 128          ; L2 cache: 128 bytes (32 elements)\n    BLOCK_SIZE EQU 8         ; Cache block: 8 bytes\n    \n    ; Timing simulation (in reality, would use cycle counters)\n    L1_HIT_CYCLES EQU 4      ; L1 hit takes 4 cycles\n    L2_HIT_CYCLES EQU 12     ; L2 hit takes 12 cycles\n    MEM_ACCESS_CYCLES EQU 100 ; Memory access takes 100 cycles\n    \n    ; Results storage\n    throughput_report DB 256 DUP(?)\n\n.CODE\n; ========================================\n; SIMULATE_ACCESS: Simulate memory access time\n; Input: CX = stride (1, 2, 4, 8...)\n;       BX = working set size (elements accessed)\n; Output: AX = average cycles per access\n; ========================================\nSIMULATE_ACCESS PROC\n    PUSH CX\n    PUSH DX\n    PUSH SI\n    \n    MOV AX, 0               ; Total cycles\n    XOR SI, SI               ; Index = 0\n    \naccess_loop:\n    ; Determine which cache level (if any) this access hits\n    \n    ; Check L1: address in [0, L1_SIZE)?\n    CMP SI, L1_SIZE\n    JAE check_l2\n    \n    ; L1 HIT\n    ADD AX, L1_HIT_CYCLES\n    JMP next_access\n    \ncheck_l2:\n    ; Check L2: address in [L1_SIZE, L2_SIZE)?\n    CMP SI, L2_SIZE\n    JAE memory_access\n    \n    ; L2 HIT (but L1 missed - this costs extra)\n    ADD AX, L1_HIT_CYCLES    ; L1 miss penalty + L2 hit\n    ADD AX, L2_HIT_CYCLES\n    JMP next_access\n    \nmemory_access:\n    ; Full memory access\n    ADD AX, L1_HIT_CYCLES    ; L1 miss penalty\n    ADD AX, L2_HIT_CYCLES    ; L2 miss penalty\n    ADD AX, MEM_ACCESS_CYCLES\n    \nnext_access:\n    ; Move to next element with stride\n    MOV DX, CX               ; DX = stride\n    SHL DX, 0                ; Stride in bytes (1 element = 1 byte)\n    ADD SI, DX\n    \n    ; Loop until we've accessed working set\n    DEC BX\n    CMP BX, 0\n    JNE access_loop\n    \n    ; Average cycles per access\n    POP SI\n    POP DX\n    POP CX\n    RET\nSIMULATE_ACCESS ENDP\n\n; ========================================\n; DEMONSTRATE_PREFETCH: Show prefetch benefit\n; Input: CX = stride\n; ========================================\nDEMONSTRATE_PREFETCH PROC\n    PUSH CX\n    PUSH DX\n    \n    ; Without prefetch: each access pays miss penalty\n    MOV DX, CX               ; Same stride\n    \n    ; With hardware prefetch: next block fetched early\n    ; When stride is predictable, prefetch can hide miss penalty\n    \n    ; Stride-1 (sequential): prefetch works well\n    ; Prefetch distance = 1 cache block means we're ready\n    \n    ; Large stride: prefetch doesn't help much\n    ; We jump over blocks without using them\n    \n    POP DX\n    POP CX\n    RET\nDEMONSTRATE_PREFETCH ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; ========================================\n    ; THE MEMORY MOUNTAIN\n    ; X-axis: Working set size (determines which cache level)\n    ; Y-axis: Stride (determines spatial locality benefit)\n    ; Z-axis: Throughput (higher is better)\n    ; ========================================\n    \n    ; ========================================\n    ; RIDGE 1: Working set fits in L1\n    ; ========================================\n    ; Small working set (< 64 bytes), any stride\n    ; Performance is BEST - all hits in L1\n    \n    MOV CX, 1                ; Stride = 1\n    MOV BX, 16                ; 16 elements = 16 bytes < L1_SIZE\n    CALL SIMULATE_ACCESS     ; AX = ~4 cycles/access (L1 ridge peak)\n    \n    MOV CX, 4                ; Stride = 4\n    MOV BX, 16\n    CALL SIMULATE_ACCESS     ; Still ~4 cycles (fits in L1)\n    \n    ; ==========================================\n    ; RIDGE 2: Working set fits in L2 but not L1\n    ; ========================================\n    ; Medium working set (64-128 bytes)\n    ; L1 misses, L2 hits - performance drops\n    \n    MOV CX, 1                ; Stride = 1 (good spatial locality)\n    MOV BX, 80                ; 80 bytes - doesn't fit in L1\n    CALL SIMULATE_ACCESS     ; ~16 cycles/access (L2 ridge)\n    \n    MOV CX, 8                ; Large stride - spatial locality wasted\n    MOV BX, 80\n    CALL SIMULATE_ACCESS     ; Higher - cache blocks not fully utilized\n    \n    ; ========================================\n    ; VALLEY: Working set too large for any cache\n    ; ========================================\n    ; Large working set (> 128 bytes)\n    ; All cache levels miss - worst performance\n    \n    MOV CX, 1                ; Even stride-1 doesn't help\n    MOV BX, 200               ; 200 bytes - exceeds L2\n    CALL SIMULATE_ACCESS     ; ~116 cycles/access (valley bottom)\n    \n    MOV CX, 4                ; Large stride = terrible spatial locality\n    MOV BX, 200\n    CALL SIMULATE_ACCESS     ; Even worse - constant cache misses\n    \n    ; ========================================\n    ; SLOPES: How performance falls with stride\n    ; ========================================\n    ; For working set = 32 elements (fits in L1):\n    ; \n    ; Stride 1: 16 elements * 1 block each = 16 blocks\n    ;            All blocks fit in L1 = HIGH throughput\n    ;\n    ; Stride 8: 4 elements * 8 blocks each = 32 blocks\n    ;            32 blocks > L1 capacity = constant evictions\n    ;            = LOW throughput\n    \n    MOV CX, 1                ; Good: uses full cache line\n    MOV BX, 32\n    CALL SIMULATE_ACCESS     ; Peak L1 performance\n    \n    MOV CX, 8                ; Bad: skipping over blocks\n    MOV BX, 32\n    CALL SIMULATE_ACCESS     ; Reduced performance\n    \n    ; ========================================\n    ; PREFETCH DEMONSTRATION\n    ; ========================================\n    ; Modern CPUs prefetch when they detect regular stride\n    \n    ; Sequential access (stride-1): prefetch works!\n    ; CPU detects pattern and loads next block early\n    \n    ; Random access: prefetch can't help\n    ; Unpredictable pattern - no benefit\n    \n    CALL DEMONSTRATE_PREFETCH\n    \n    ; ========================================\n    ; OPTIMIZATION GUIDELINES\n    ; ========================================\n    ; 1. Maximize temporal locality:\n    ;    - Keep heavily used data in L1\n    ;    - Reuse loaded data before eviction\n    ;\n    ; 2. Maximize spatial locality:\n    ;    - Use stride-1 access patterns\n    ;    - Sequential access is optimal\n    ;\n    ; 3. Consider cache line size:\n    ;    - Block size typically 64 bytes\n    ;    - Stride-1 uses full block (8 accesses per block)\n    ;    - Large stride wastes block capacity\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "Memory mountain has ridges (working set fits cache) and valleys (working set too large)",
+          "linkedConcept": "memory-mountain"
+        },
+        {
+          "line": 75,
+          "type": "comment",
+          "text": "Working set: amount of data accessed - determines which cache level is effective",
+          "linkedConcept": "working-set"
+        },
+        {
+          "line": 115,
+          "type": "comment",
+          "text": "Prefetch hides miss penalty by loading next block before it's needed",
+          "linkedConcept": "prefetching"
+        },
+        {
+          "line": 160,
+          "type": "comment",
+          "text": "Stride determines spatial locality - stride-1 best, large stride wastes cache blocks",
+          "linkedConcept": "stride"
+        },
+        {
+          "line": 195,
+          "type": "comment",
+          "text": "Optimization focus on inner loops where most memory access occurs",
+          "linkedConcept": "cache-optimization"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking throughput is constant - it varies dramatically with access pattern",
+        "Ignoring working set effect - too much data = cache thrashing = slow",
+        "Using large strides without reason - stride-1 always better for throughput",
+        "Not considering prefetch - predictable patterns get hardware acceleration",
+        "Over-optimizing inner loops unnecessarily - measure first, optimize where it matters"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": ["QB-102", "QB-103"],
+      "provenance": {
+        "sourceFile": "Lecture 9.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "95-115",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.88,
+        "reviewedStatus": "pending"
+      }
+    }
   },
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
-    "totalExamples": 19,
+    "totalExamples": 23,
     "lectureCoverage": [4, 5, 6, 7, 8, 9],
     "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD"],
     "difficultyDistribution": {
       "beginner": 4,
       "intermediate": 10,
-      "advanced": 4
+      "advanced": 8
     }
   }
 }

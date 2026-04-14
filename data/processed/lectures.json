@@ -59,7 +59,9 @@
             "memory-addressing"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "register-usage-demo"
+          ],
           "assessmentItems": [
             "q-arch-001",
             "q-arch-002"
@@ -102,7 +104,9 @@
             "memory-model"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "segmented-memory-demo"
+          ],
           "assessmentItems": [
             "q-mem-001",
             "q-mem-002"

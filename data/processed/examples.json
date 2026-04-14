@@ -2992,12 +2992,279 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "register-usage-demo",
+      "filename": "RegisterUsage.asm",
+      "lectureIds": [1],
+      "sectionIds": ["l1-s3"],
+      "concepts": [
+        "8086-architecture",
+        "registers",
+        "ax-register",
+        "bx-register",
+        "cx-register",
+        "dx-register",
+        "sp-register",
+        "bp-register",
+        "si-register",
+        "di-register",
+        "segment-registers",
+        "cs-register",
+        "ds-register",
+        "ss-register",
+        "es-register"
+      ],
+      "instructions": [
+        "MOV", "ADD", "INC", "DEC", "PUSH", "POP", "XCHG", "INT"
+      ],
+      "code": "; Register Usage Demonstration\n; Shows the purpose and special uses of each 8086 register\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Data variables\n    value1 DW 1234h\n    value2 DW 5678h\n    result DW ?\n    buffer DB 80 DUP(?)\n    text DB 'Hello$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === AX (Accumulator) - Primary arithmetic register ===\n    ; Used implicitly by MUL, DIV, CBW, CWD, many string ops\n    MOV AX, 1234h        ; AX = 0x1234\n    MOV BX, 5678h        ; BX = 0x5678\n    ADD AX, BX            ; AX = 0x1234 + 0x5678 = 0x68AC\n    ; AX is the 'accumulator' - result of arithmetic goes here\n    \n    ; === BX (Base Register) - Memory addressing base ===\n    ; Can be used for data, but special for [BX] addressing\n    MOV BX, OFFSET value1 ; BX = offset of value1\n    MOV AX, [BX]          ; AX = value at address in BX\n    ; [BX] is Register Indirect addressing\n    \n    ; === CX (Counter) - Loop counter and shifts ===\n    ; Used implicitly by LOOP, REP, shift/rotate count\n    MOV CX, 10            ; CX = 10 (loop counter)\ncount_loop:\n    DEC CX                ; CX = CX - 1 (DEC doesn't affect CF)\n    JNZ count_loop        ; Jump if CX != 0\n    ; CX is now 0\n    \n    ; CX also used for shift count:\n    MOV CL, 4             ; Shift count\n    MOV AX, 0001h\n    SHL AX, CL            ; AX = 0x0010 (shifted left 4)\n    \n    ; === DX (Data Register) - I/O and extended arithmetic ===\n    ; Used for I/O port addressing and MUL/DIV extended results\n    MOV DX, 0             ; DX = 0 (for 16-bit division)\n    MOV AX, 1234h         ; AX = dividend low\n    MOV CX, 100h          ; CX = divisor\n    DIV CX                ; AX = quotient, DX = remainder\n    ; DX now holds remainder\n    \n    ; DX for I/O port access:\n    MOV DX, 3F8h          ; COM1 port address\n    ; IN AL, DX            ; Would read from serial port\n    \n    ; === SP (Stack Pointer) - Top of stack ===\n    ; Cannot be used directly in most addressing; modified by PUSH/POP/CALL/RET\n    PUSH AX               ; SP = SP - 2, [SP] = AX\n    PUSH BX               ; SP = SP - 2, [SP] = BX\n    ; Stack grows DOWN in memory\n    \n    ; SP points to current top of stack\n    ; Cannot MOV to SP directly (except with POP/SP-based addressing)\n    \n    ; === BP (Base Pointer) - Stack frame reference ===\n    ; Used for accessing stack-based parameters and locals\n    ; Unlike SP, BP can be used in address calculations\n    MOV BP, SP            ; BP = current stack position\n    ; Now we can access stack: [BP+4] = return addr, [BP+6] = first param\n    MOV AX, [BP+6]         ; Get first parameter from stack\n    \n    ; === SI (Source Index) - String/source pointer ===\n    ; Auto-incremented by string instructions (LODSB, LODSW, MOVSB, etc.)\n    LEA SI, text           ; SI = offset of text\n    LODSB                 ; AL = [SI], SI = SI + 1\n    ; SI now points to 'e' in \"Hello\"\n    \n    ; === DI (Destination Index) - String/destination pointer ===\n    ; Auto-incremented by string instructions (STOSB, STOSW, MOVSB, etc.)\n    LEA DI, buffer         ; DI = offset of buffer\n    MOV AL, 'X'            ; AL = 'X'\n    STOSB                 ; [DI] = AL, DI = DI + 1\n    ; Buffer now contains 'X' at position 0\n    \n    ; SI and DI together for copy operations:\n    LEA SI, text           ; Source = text\n    LEA DI, buffer         ; Destination = buffer\n    MOV CX, 5              ; Copy 5 bytes\n    ; REP MOVSB would copy CX bytes from [SI] to [DI]\n    \n    ; === Segment Registers ===\n    ; CS: Code Segment - where instructions are fetched\n    ; MOV CS, AX            ; ILLEGAL! CS cannot be destination\n    ; CS is set automatically by JMP, CALL, RET (far)\n    \n    ; DS: Data Segment - default for data access\n    MOV AX, @DATA          ; Get data segment address\n    MOV DS, AX             ; Must initialize DS before accessing data\n    \n    ; SS: Stack Segment - where stack is located\n    ; PUSH and POP use SS:SP implicitly\n    ; MOV SS, AX            ; ILLEGAL! SS cannot be directly modified\n    \n    ; ES: Extra Segment - string destination\n    ; MOVSB/MOVSW use ES:DI as destination automatically\n    LEA DI, buffer         ; DI = offset in current segment\n    ; But for string ops, must set ES:\n    MOV AX, @DATA\n    MOV ES, AX             ; ES = data segment\n    ; Now string ops will write to buffer in data segment\n    \n    ; === Register organization summary ===\n    ; General Purpose: AX, BX, CX, DX (can be split into AH/AL, BH/BL, CH/CL, DH/DL)\n    ; Pointers/Indexes: SP, BP, SI, DI (16-bit only, no split)\n    ; Segment: CS, DS, SS, ES\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 23,
+          "type": "instruction",
+          "text": "AX is the accumulator - primary register for arithmetic results",
+          "linkedConcept": "ax-register"
+        },
+        {
+          "line": 23,
+          "type": "comment",
+          "text": "MUL, DIV, CBW, CWD all use AX implicitly as one operand",
+          "linkedConcept": "ax-register"
+        },
+        {
+          "line": 29,
+          "type": "instruction",
+          "text": "BX is special because [BX] is valid indirect addressing, unlike [AX]",
+          "linkedConcept": "bx-register"
+        },
+        {
+          "line": 34,
+          "type": "instruction",
+          "text": "CX is the loop counter - LOOP decrements CX and jumps if CX != 0",
+          "linkedConcept": "cx-register"
+        },
+        {
+          "line": 34,
+          "type": "comment",
+          "text": "CX also holds shift/rotate count for SHL, SHR, ROL, ROR",
+          "linkedConcept": "cx-register"
+        },
+        {
+          "line": 47,
+          "type": "instruction",
+          "text": "DIV uses DX:AX as dividend - DX holds high word/remainder",
+          "linkedConcept": "dx-register"
+        },
+        {
+          "line": 55,
+          "type": "instruction",
+          "text": "DX also holds I/O port addresses for IN/OUT instructions",
+          "linkedConcept": "dx-register"
+        },
+        {
+          "line": 61,
+          "type": "instruction",
+          "text": "SP points to current stack top - PUSH decrements SP first, then stores",
+          "linkedConcept": "sp-register"
+        },
+        {
+          "line": 61,
+          "type": "comment",
+          "text": "Stack grows toward lower addresses - SP decreases with each PUSH",
+          "linkedConcept": "sp-register"
+        },
+        {
+          "line": 73,
+          "type": "instruction",
+          "text": "BP is for stack frame access - stable reference unlike SP which moves",
+          "linkedConcept": "bp-register"
+        },
+        {
+          "line": 73,
+          "type": "comment",
+          "text": "[BP] defaults to SS (stack segment), unlike [BX] which defaults to DS",
+          "linkedConcept": "bp-register"
+        },
+        {
+          "line": 81,
+          "type": "instruction",
+          "text": "SI auto-increments after LODSB - points to next byte to load",
+          "linkedConcept": "si-register"
+        },
+        {
+          "line": 88,
+          "type": "instruction",
+          "text": "DI auto-increments after STOSB - points to next position to store",
+          "linkedConcept": "di-register"
+        },
+        {
+          "line": 97,
+          "type": "comment",
+          "text": "CS cannot be destination of MOV - it's set by JMP/CALL/RET (far)",
+          "linkedConcept": "cs-register"
+        },
+        {
+          "line": 105,
+          "type": "instruction",
+          "text": "DS must be initialized to point to your data segment - required!",
+          "linkedConcept": "ds-register"
+        },
+        {
+          "line": 111,
+          "type": "comment",
+          "text": "SS also cannot be directly modified - stack operations use it implicitly",
+          "linkedConcept": "ss-register"
+        },
+        {
+          "line": 119,
+          "type": "instruction",
+          "text": "ES is the destination segment for string operations (MOVSB, STOSB, etc.)",
+          "linkedConcept": "es-register"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking registers are truly interchangeable - each has special purposes and implicit uses",
+        "Forgetting to initialize DS before accessing data variables",
+        "Using [AX] for indirect addressing - must use [BX], [SI], [DI], or [BP]",
+        "Not realizing SP moves with every PUSH/POP - don't use it for stable addressing",
+        "CS and SS cannot be MOV'd to - they're modified by instructions and far jumps",
+        "AX/AL confusion: MOV AH, 10h followed by MOV AL, 20h gives AX = 1020h, not 2020h"
+      ],
+      "difficulty": "beginner",
+      "relatedQuestions": ["q-arch-001", "q-arch-002"],
+      "provenance": {
+        "sourceFile": "Lecture 1.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "10-30",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "segmented-memory-demo",
+      "filename": "SegMemory.asm",
+      "lectureIds": [1],
+      "sectionIds": ["l1-s5"],
+      "concepts": [
+        "segmented-memory",
+        "physical-address",
+        "segment-offset",
+        "segment-register",
+        "logical-address",
+        "address-calculation",
+        "endianness",
+        "little-endian"
+      ],
+      "instructions": [
+        "MOV", "ADD", "INT"
+      ],
+      "code": "; Segmented Memory Addressing Demonstration\n; Shows how 8086 uses segment:offset to address 1MB with 16-bit registers\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Variables in data segment\n    myVar DB 0AAh         ; Byte at some offset in DS\n    myWord DW 1234h       ; Word at offset in DS\n    buffer DB 16 DUP(?)\n    \n    ; Messages for display\n    seg_msg DB 'Segment:Offset Demo$'\n    nl DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX             ; DS = data segment base\n    \n    ; ========================================\n    ; Understanding Segmented Addressing\n    ; ========================================\n    ; Physical Address = (Segment × 16) + Offset\n    ; \"Segment\" is a 16-bit value stored in a segment register\n    ; \"Offset\" is a 16-bit value (0 to 64KB-1)\n    \n    ; Example: DS = 0x0400, SI = 0x003C\n    ; Physical = (0x0400 × 16) + 0x003C\n    ; Physical = 0x04000 + 0x003C\n    ; Physical = 0x0403C\n    \n    MOV AX, 0400h          ; Set up segment\n    MOV DS, AX             ; DS = 0x0400\n    \n    MOV SI, 003Ch          ; SI = offset 0x3C\n    MOV AL, [DS:SI]        ; Load from physical address 0x0403C\n    ; Equivalent to just: MOV AL, [SI] (DS is default)\n    \n    ; ========================================\n    ; Why Segmentation?\n    ; ========================================\n    ; 8086 has 20-bit address bus but only 16-bit registers\n    ; Segmentation allows 16-bit registers to access 20-bit addresses\n    ; Each segment covers 64KB (2^16 addresses)\n    ; Multiple segment:offset pairs can refer to same physical address!\n    \n    ; Same physical address 0x0403C can be:\n    ;   DS=0400h, SI=003Ch\n    ;   DS=0401h, SI=002Ch (0401h × 16 + 002Ch = 04010h + 002Ch = 0403Ch)\n    ;   DS=0403h, SI=0000h (0403h × 16 + 0000h = 04030h + 0000h = 0403Ch)\n    \n    ; ==========================================\n    ; Segment Register Usage\n    ; ========================================\n    ; CS (Code Segment): Instructions fetched from CS:IP\n    MOV AX, CS              ; Cannot MOV to CS, but can read it\n    \n    ; DS (Data Segment): Default for data access\n    MOV AX, @DATA\n    MOV DS, AX              ; Must initialize DS!\n    MOV AL, myVar           ; Actually accesses DS:offset_of_myVar\n    \n    ; SS (Stack Segment): Stack operations use SS:SP\n    ; PUSH, POP, CALL, RET use stack segment implicitly\n    \n    ; ES (Extra Segment): String destination\n    LEA DI, buffer          ; DI = offset in DS\n    MOV AX, DS\n    MOV ES, AX              ; Set ES = DS for string operations\n    ; Now ES:DI points to buffer\n    \n    ; ========================================\n    ; Address Calculation in Detail\n    ; ========================================\n    ; Let's trace what happens with: MOV AL, [BX+SI+4]\n    ; Effective Address = BX + SI + 4\n    ; Physical Address = (DS × 16) + (BX + SI + 4)\n    \n    MOV BX, 10h             ; BX = 0x0010\n    MOV SI, 20h             ; SI = 0x0020\n    ; If DS = 0x1000\n    ; Physical = 0x10000 + 0x0010 + 0x0020 + 4 = 0x10034\n    \n    ; ========================================\n    ; Little Endian Storage\n    ; ========================================\n    ; 8086 is little-endian: LOW byte stored at LOW address\n    MOV AX, 1234h\n    LEA BX, myWord           ; BX = offset of myWord\n    MOV [BX], AX             ; Store 0x1234 at myWord\n    \n    ; myWord at offset X:\n    ; Address X:   gets 0x34 (low byte)\n    ; Address X+1: gets 0x12 (high byte)\n    ; Memory dump: XX: 34 12\n    \n    ; Reading back word:\n    MOV [BX], AX             ; Already stored\n    ; Reading as bytes:\n    MOV AL, [BX]             ; AL = 0x34 (low byte first!)\n    MOV AH, [BX+1]           ; AH = 0x12\n    ; AX = 0x1234 again\n    \n    ; ========================================\n    ; Maximum Addressable Memory\n    ; ========================================\n    ; Segment = 0xFFFF (max 16-bit value)\n    ; Offset = 0xFFFF (max 16-bit value)\n    ; Physical = (0xFFFF × 16) + 0xFFFF\n    ; Physical = 0xFFFF0 + 0xFFFF\n    ; Physical = 0x10FFEF = 1,114,063 (just under 1MB+64KB)\n    ; Actually addresses 0x00000 to 0xFFFFF (1MB = 2^20)\n    \n    ; ========================================\n    ; Segment Alignment (Paragraphs)\n    ; ========================================\n    ; Segment registers hold paragraph addresses (divisible by 16)\n    ; Because segment × 16 means last 4 bits are always 0\n    ; Physical = segment << 4 (left shift 4 bits)\n    \n    MOV AX, 0x1234\n    SHL AX, 4                ; AX << 4 = 0x12340 (20-bit physical segment base)\n    ; But AX is still 16-bit, so bits shifted out are lost\n    ; This is why segments must be paragraph-aligned conceptually\n    \n    MOV AH, 4Ch\n    INT 21h\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 34,
+          "type": "comment",
+          "text": "Physical address = (segment << 4) + offset. Left shift multiplies by 16.",
+          "linkedConcept": "physical-address"
+        },
+        {
+          "line": 38,
+          "type": "instruction",
+          "text": "DS:SI syntax explicitly specifies segment and offset",
+          "linkedConcept": "segment-offset"
+        },
+        {
+          "line": 38,
+          "type": "comment",
+          "text": "Without explicit segment, [SI] uses DS by default",
+          "linkedConcept": "ds-register"
+        },
+        {
+          "line": 47,
+          "type": "comment",
+          "text": "Many segment:offset pairs can refer to the same physical address",
+          "linkedConcept": "segmented-memory"
+        },
+        {
+          "line": 48,
+          "type": "comment",
+          "text": "0401h:002Ch = 0x0401×16 + 0x002C = 0x04010 + 0x002C = 0x0403C",
+          "linkedConcept": "address-calculation"
+        },
+        {
+          "line": 65,
+          "type": "instruction",
+          "text": "myVar actually means DS:offset_of_myVar - DS is default for data",
+          "linkedConcept": "ds-register"
+        },
+        {
+          "line": 78,
+          "type": "instruction",
+          "text": "ES must be set explicitly for string ops - DI doesn't auto-use DS",
+          "linkedConcept": "es-register"
+        },
+        {
+          "line": 88,
+          "type": "comment",
+          "text": "Physical = (DS << 4) + (BX + SI + 4) = 0x10000 + 0x0010 + 0x0020 + 0x0004 = 0x10034",
+          "linkedConcept": "address-calculation"
+        },
+        {
+          "line": 97,
+          "type": "comment",
+          "text": "Little endian: low byte at low address, high byte at high address",
+          "linkedConcept": "little-endian"
+        },
+        {
+          "line": 102,
+          "type": "instruction",
+          "text": "First byte stored (at lower address) is 0x34 (low byte of 0x1234)",
+          "linkedConcept": "endianness"
+        },
+        {
+          "line": 111,
+          "type": "comment",
+          "text": "Maximum physical address = 0xFFFFF (20 bits = 1MB addressable)",
+          "linkedConcept": "physical-address"
+        },
+        {
+          "line": 119,
+          "type": "instruction",
+          "text": "SHL AX, 4 simulates what CPU does: treats segment as paragraph-aligned",
+          "linkedConcept": "segment-register"
+        },
+        {
+          "line": 119,
+          "type": "comment",
+          "text": "Segment << 4 produces 20-bit value, but upper bits truncated to fit register",
+          "linkedConcept": "segmented-memory"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking segment:offset is like two independent addresses - it's one 20-bit address encoded as two parts",
+        "Forgetting that multiple segment:offset pairs point to the same physical address (aliases)",
+        "Assuming MOV [AX], AL is valid - AX cannot be used for indirect addressing",
+        "Not realizing 8086 is little-endian - word 0x1234 stored as bytes 0x34, 0x12",
+        "Confusing segment address (e.g., 0x0400) with physical address (0x04000)",
+        "Thinking segmentation adds limitation - it actually extends addressable memory from 64KB to 1MB"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": ["q-mem-001", "q-mem-002"],
+      "provenance": {
+        "sourceFile": "Lecture 1.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "20-45",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
-    "totalExamples": 26,
-    "lectureCoverage": [4, 5, 6, 7, 8, 9, 10],
+    "totalExamples": 28,
+    "lectureCoverage": [1, 4, 5, 6, 7, 8, 9, 10],
     "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD", "DIV", "INTO", "CBW", "CWD"],
     "difficultyDistribution": {
       "beginner": 5,

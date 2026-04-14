@@ -1,0 +1,50 @@
+{
+  "milestone": "lecture10-content",
+  "round": 1,
+  "status": "success",
+  "assertionsSummary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-CONTENT-004",
+    "VAL-CONTENT-009"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [],
+  "environmentNotes": {
+    "serverStartupAttempts": [
+      "python -m http.server on port 4173 - server started but connection refused when tested",
+      "npx serve on port 4173 - background process started but connection refused when tested",
+      "file:// protocol - page loaded but JavaScript assets did not load correctly (SPA)"
+    ],
+    "validationApproach": "content-validation-only",
+    "reason": "user-testing.md explicitly states this is content-generation-only project with validation via JSON schema. Browser-based user testing was attempted but could not be completed due to server startup issues in the environment."
+  },
+  "contentValidationEvidence": {
+    "command": "npm run validate:content",
+    "exitCode": 0,
+    "assertionsPassed": 956,
+    "assertionsFailed": 0
+  },
+  "lecture10ContentVerification": {
+    "sections": [
+      { "id": "l10-s1", "title": "Processes and the Operating System", "examples": ["os-process-demonstration"], "assessmentItems": ["QB-106", "QB-107"] },
+      { "id": "l10-s2", "title": "Exceptions and Exception Handling", "examples": ["exception-handler-demo"], "assessmentItems": ["QB-108", "QB-109"] },
+      { "id": "l10-s3", "title": "Classes of Exceptions", "examples": ["exception-classes-demo"], "assessmentItems": ["QB-110", "QB-111", "QB-112"] },
+      { "id": "l10-s4", "title": "Processes", "examples": ["process-context-demo"], "assessmentItems": ["QB-113", "QB-114"] },
+      { "id": "l10-s5", "title": "Context Switching", "examples": ["context-switch-demo"], "assessmentItems": ["QB-115", "QB-116", "QB-117"] },
+      { "id": "l10-s6", "title": "Virtual Memory", "examples": ["virtual-memory-demo"], "assessmentItems": ["QB-118", "QB-119"] },
+      { "id": "l10-s7", "title": "Page Tables and Paging", "examples": ["page-table-demo"], "assessmentItems": ["QB-120", "QB-121", "QB-122"] },
+      { "id": "l10-s8", "title": "Address Translation and TLB", "examples": ["tlb-operation-demo"], "assessmentItems": ["QB-123", "QB-124", "QB-125"] },
+      { "id": "l10-s9", "title": "Memory Protection", "examples": ["memory-protection-demo"], "assessmentItems": ["QB-126", "QB-127", "QB-128"] }
+    ],
+    "allSectionsHaveExamples": true,
+    "allSectionsHaveMin2Assessments": true,
+    "totalAssessmentItems": 23
+  },
+  "previousRound": null
+}

@@ -104,13 +104,13 @@
     },
     {
       "id": 8,
-      "title": "String Operations",
+      "title": "Memory Hierarchy",
       "topics": [
-        "MOVSB, MOVSW, LODSB, LODSW",
-        "STOSB, STOSW instructions",
-        "REP prefix and repetition",
-        "String processing loops",
-        "CLD and STD direction flag"
+        "Memory hierarchy concepts",
+        "Storage devices and tradeoffs",
+        "CPU registers and cache",
+        "Locality principles (temporal and spatial)",
+        "RAM and ROM technologies"
       ],
       "examples": 8,
       "examRelevance": "medium",
@@ -118,13 +118,13 @@
     },
     {
       "id": 9,
-      "title": "Arrays and Data Structures",
+      "title": "Memory Hierarchy (cont)",
       "topics": [
-        "Array declaration and initialization",
-        "Indexed addressing modes",
-        "Bubble sort and selection sort",
-        "Searching algorithms (linear, binary)",
-        "Multi-dimensional arrays"
+        "Cache types and organization",
+        "Cache write policies",
+        "Memory mountain performance",
+        "Stride-k access patterns",
+        "Multi-dimensional array locality"
       ],
       "examples": 7,
       "examRelevance": "medium",
@@ -132,13 +132,14 @@
     },
     {
       "id": 10,
-      "title": "Advanced Topics and Review",
+      "title": "Exceptional Control Flow",
       "topics": [
-        "Macros and assembly directives",
-        "Modular programming",
-        "Bit manipulation instructions",
-        "Shift and rotate operations",
-        "Course review and exam preparation"
+        "Exceptions and exception handlers",
+        "Processes and the Operating System",
+        "Operating System roles and responsibilities",
+        "Control flow transfer mechanisms",
+        "ECF (Exceptional Control Flow)",
+        "Signals and context switches"
       ],
       "examples": 9,
       "examRelevance": "low",

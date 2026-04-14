@@ -1,0 +1,37 @@
+{
+  "milestone": "course-map-fix",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "blocked": 0,
+    "untested": 0,
+    "note": "The course-map-fix milestone contains only fix-course-map which has no fulfills (empty array). No assertions from validation-contract.md are linked to this milestone. The VAL_* assertions belong to the pdf-extraction milestone."
+  },
+  "passedAssertions": [],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "untestedAssertions": [],
+  "observations": [
+    {
+      "severity": "info",
+      "description": "The fix-course-map feature updated course-map.json L8/L9/L10 titles to match actual PDF content, but does not fulfill any validation contract assertions",
+      "evidence": "fix-course-map.fulfills = []"
+    },
+    {
+      "severity": "info", 
+      "description": "Scrutiny validation already passed for this milestone (npm run validate:content, npm run lint)",
+      "evidence": "scrutiny/synthesis.json shows status: pass"
+    },
+    {
+      "severity": "info",
+      "description": "The VAL_* assertions in validation-contract.md relate to lectures.json content quality, which is the pdf-extraction milestone scope",
+      "evidence": "extract-l1-l2-full, extract-l3-l4-full, etc. have fulfills linking to VAL_* assertions"
+    }
+  ],
+  "appliedUpdates": [],
+  "previousRound": null,
+  "conclusion": "course-map-fix milestone has no user-testable assertions. The feature only modified course-map.json metadata (titles/topics) without linking to any validation contract assertions. Scrutiny validation passed."
+}

@@ -1691,7 +1691,10 @@
           "examples": [
             "os-process-demonstration"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-106",
+            "QB-107"
+          ]
         },
         {
           "id": "l10-s2",
@@ -1710,7 +1713,10 @@
           "examples": [
             "exception-handler-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-108",
+            "QB-109"
+          ]
         },
         {
           "id": "l10-s3",
@@ -1731,7 +1737,11 @@
           "examples": [
             "exception-classes-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-110",
+            "QB-111",
+            "QB-112"
+          ]
         },
         {
           "id": "l10-s4",
@@ -1751,7 +1761,10 @@
           "examples": [
             "process-context-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-113",
+            "QB-114"
+          ]
         },
         {
           "id": "l10-s5",
@@ -1769,7 +1782,11 @@
           "examples": [
             "context-switch-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-115",
+            "QB-116",
+            "QB-117"
+          ]
         },
         {
           "id": "l10-s6",
@@ -1787,7 +1804,10 @@
           "examples": [
             "virtual-memory-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-118",
+            "QB-119"
+          ]
         },
         {
           "id": "l10-s7",
@@ -1806,7 +1826,11 @@
           "examples": [
             "page-table-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-120",
+            "QB-121",
+            "QB-122"
+          ]
         },
         {
           "id": "l10-s8",
@@ -1824,7 +1848,11 @@
           "examples": [
             "tlb-operation-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-123",
+            "QB-124",
+            "QB-125"
+          ]
         },
         {
           "id": "l10-s9",
@@ -1841,7 +1869,11 @@
           "examples": [
             "memory-protection-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": [
+            "QB-126",
+            "QB-127",
+            "QB-128"
+          ]
         }
       ],
       "concepts": [

@@ -2294,6 +2294,759 @@
         }
       ],
       "misconceptionTags": []
+    },
+    {
+      "id": "QB-106",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Processes and Operating System",
+      "concepts": [
+        "operating-system",
+        "process",
+        "system-resources"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What are the three main roles of an operating system?",
+      "answer": "Run programs, manage resources, protect processes",
+      "options": [
+        "Run programs, manage resources, protect processes",
+        "Compile code, debug programs, manage files",
+        "Connect to networks, print documents, display graphics",
+        "Install software, update system, delete files"
+      ],
+      "hints": [
+        "OS acts as guardian of the computer",
+        "Think about what makes OS different from regular programs"
+      ],
+      "explanation": "The OS runs programs, manages system resources (CPU, memory, I/O devices), and protects processes from interfering with each other. It provides a standard abstraction between programs and hardware.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Processes and the Operating System"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:os-role"
+      ]
+    },
+    {
+      "id": "QB-107",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Processes and Operating System",
+      "concepts": [
+        "control-flow",
+        "exception"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A sequence of control transfers is called the flow of control.",
+      "answer": "True",
+      "hints": [
+        "Control transfers occur when going from one instruction to the next"
+      ],
+      "explanation": "The flow of control is the sequence of control transfers - the path through the program's instructions. Normal flow is sequential; exceptions cause abrupt changes in this flow.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Processes and the Operating System"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-108",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Exception Handling",
+      "concepts": [
+        "exception",
+        "exception-table"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "The exception table contains:",
+      "answer": "Addresses of handlers for each exception type",
+      "options": [
+        "Addresses of handlers for each exception type",
+        "Error codes from recent exceptions",
+        "Priority levels for interrupts",
+        "System call numbers and parameters"
+      ],
+      "hints": [
+        "The CPU uses this table to find the right handler",
+        "Each exception type has its own handler"
+      ],
+      "explanation": "The exception table is created when the OS boots and contains the address of the handler for each of the 256 possible exceptions. The Exception Table Base Register points to its start.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Exceptions and Exception Handling"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:exception-table"
+      ]
+    },
+    {
+      "id": "QB-109",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Exception Handling",
+      "concepts": [
+        "exception-handler",
+        "event"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "After an exception handler executes, what are the three possible outcomes for control flow?",
+      "answer": "Return to Icurr, return to Inext, or abort the program",
+      "hints": [
+        "Think about different types of exceptions",
+        "Some can be recovered from, some cannot"
+      ],
+      "explanation": "Exception handlers can: (1) return to the current instruction if the error was recoverable, (2) return to the next instruction after Icurr, or (3) abort the program entirely if the error cannot be fixed.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Exceptions and Exception Handling"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-110",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Classes of Exceptions",
+      "concepts": [
+        "interrupt",
+        "trap"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "What is the key difference between an interrupt and a trap?",
+      "answer": "Interrupts are asynchronous (caused by hardware events), traps are intentional (caused by program requests)",
+      "options": [
+        "Interrupts are asynchronous (caused by hardware events), traps are intentional (caused by program requests)",
+        "Interrupts are faster than traps",
+        "Traps cannot be masked, interrupts can",
+        "Interrupts are generated by software, traps by hardware"
+      ],
+      "hints": [
+        "Think about when each type occurs",
+        "One is predictable, the other is not"
+      ],
+      "explanation": "Interrupts occur due to external hardware events (mouse, keyboard, timer) asynchronously to instruction execution. Traps are intentional exceptions from program execution, like system calls to request OS services.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Classes of Exceptions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:interrupt-vs-trap"
+      ]
+    },
+    {
+      "id": "QB-111",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Classes of Exceptions",
+      "concepts": [
+        "fault",
+        "page-fault"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A fault differs from a trap in that a fault:",
+      "answer": "May be recoverable by returning to the current instruction",
+      "options": [
+        "May be recoverable by returning to the current instruction",
+        "Always aborts the program",
+        "Is caused by intentional program actions",
+        "Does not involve the CPU"
+      ],
+      "hints": [
+        "Think about page faults - they can be fixed and instruction retried"
+      ],
+      "explanation": "Faults are caused by potentially repairable errors. If the handler can correct the problem (like loading a page from disk), it returns control to the faulting instruction to retry it.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Classes of Exceptions"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:fault-recovery"
+      ]
+    },
+    {
+      "id": "QB-112",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Classes of Exceptions",
+      "concepts": [
+        "abort",
+        "trap"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "An abort is an exception that never returns to the program.",
+      "answer": "True",
+      "hints": [
+        "Abort comes from unrecoverable errors"
+      ],
+      "explanation": "Aborts result from unrecoverable hardware errors (bad memory, CPU failures) and never return control to the program. The program is simply terminated.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Classes of Exceptions"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-113",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Processes",
+      "concepts": [
+        "process",
+        "pcb"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What does a Process Control Block (PCB) store?",
+      "answer": "Parts of the process context saved by the OS",
+      "options": [
+        "Parts of the process context saved by the OS",
+        "The program's source code",
+        "Only the program counter values",
+        "User passwords and credentials"
+      ],
+      "hints": [
+        "PCB is used when switching between processes"
+      ],
+      "explanation": "The PCB stores the process context including register values, program counter, stack pointer, memory management info, and other state needed to resume a process later.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Processes"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-114",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Processes",
+      "concepts": [
+        "concurrency",
+        "multitasking",
+        "time-slice"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Two processes running on a single CPU by taking turns demonstrates:",
+      "answer": "Concurrency (multitasking)",
+      "options": [
+        "Concurrency (multitasking)",
+        "Parallelism",
+        "Direct execution",
+        "Process isolation"
+      ],
+      "hints": [
+        "Think about whether they run at the exact same time"
+      ],
+      "explanation": "Concurrency means logical flows overlap in time - processes take turns on the CPU. True parallelism requires multiple CPUs running simultaneously.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Processes"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:concurrency-vs-parallelism"
+      ]
+    },
+    {
+      "id": "QB-115",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Context Switching",
+      "concepts": [
+        "context-switch",
+        "kernel-mode",
+        "user-mode"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "What causes a context switch to occur?",
+      "answer": "An exception (trap, interrupt, or fault)",
+      "options": [
+        "An exception (trap, interrupt, or fault)",
+        "A program calling a function",
+        "A CPU finishing its current instruction",
+        "The user pressing Ctrl+C"
+      ],
+      "hints": [
+        "Context switch only happens during exceptions"
+      ],
+      "explanation": "Context switches only occur when an exception transfers control to the OS. The exception handler may decide to switch to a different process before returning.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Context Switching"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:context-switch-trigger"
+      ]
+    },
+    {
+      "id": "QB-116",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Context Switching",
+      "concepts": [
+        "context-switch",
+        "pcb"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "What two main things are saved and restored during a context switch?",
+      "answer": "CPU registers/FLAGS/PC (context) and memory address space",
+      "hints": [
+        "Think about what makes a process distinct",
+        "One is architectural, one is memory-related"
+      ],
+      "explanation": "A context switch saves the CPU context (registers, FLAGS, PC) into the outgoing process's PCB, then loads the CPU context from the incoming process's PCB. It also switches which process's address space is active.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Context Switching"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-117",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Context Switching",
+      "concepts": [
+        "kernel-mode",
+        "user-mode"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In user mode, a program can directly halt the processor or access kernel memory.",
+      "answer": "False",
+      "hints": [
+        "User mode has restrictions"
+      ],
+      "explanation": "User mode has limited privileges. Programs cannot halt the processor, change the mode bit, initiate I/O, or access kernel memory. These operations require kernel mode, which is entered via exceptions.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Context Switching"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:user-mode-restrictions"
+      ]
+    },
+    {
+      "id": "QB-118",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Virtual Memory",
+      "concepts": [
+        "virtual-memory",
+        "mmu"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What does the MMU (Memory Management Unit) do?",
+      "answer": "Translates virtual addresses to physical addresses",
+      "options": [
+        "Translates virtual addresses to physical addresses",
+        "Manages the processor's registers",
+        "Controls the cache hierarchy",
+        "Handles interrupt routing"
+      ],
+      "hints": [
+        "MMU is part of address translation"
+      ],
+      "explanation": "The MMU translates CPU-generated virtual addresses to physical addresses that are sent to main memory. This translation enables virtual memory and process isolation.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Virtual Memory"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-119",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Virtual Memory",
+      "concepts": [
+        "virtual-memory",
+        "physical-address"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Virtual memory provides each process with a private address space, preventing one process from writing to another's memory.",
+      "answer": "True",
+      "hints": [
+        "This is a key protection feature of VM"
+      ],
+      "explanation": "Each process has its own virtual address space. The MMU ensures that virtual addresses from different processes map to different physical addresses, providing memory protection.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Virtual Memory"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-120",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Page Tables",
+      "concepts": [
+        "page-table",
+        "page-table-entry"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "What does a Page Table Entry (PTE) contain?",
+      "answer": "Valid bit and either frame number (if cached) or disk address (if uncached)",
+      "options": [
+        "Valid bit and either frame number (if cached) or disk address (if uncached)",
+        "Only the physical frame number",
+        "The virtual page number",
+        "The process ID"
+      ],
+      "hints": [
+        "PTE tells us if page is in memory and where"
+      ],
+      "explanation": "Each PTE has a valid bit indicating if the page is currently in physical memory. If valid=1, the PTE contains the physical frame number. If valid=0 and address≠0, the page is on disk at that address.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Page Tables and Paging"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-121",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Page Tables",
+      "concepts": [
+        "page-fault"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "When a page fault occurs, what is the sequence of steps the OS takes?",
+      "answer": "Check if page is allocated, find free frame, load page from disk, update page table, restart instruction",
+      "hints": [
+        "Page fault = page not in memory",
+        "Need to bring it in from disk"
+      ],
+      "explanation": "Handler checks if page is allocated. If not, abort. If allocated but not cached, finds/allocates a frame, potentially evicts a victim (writing to disk if modified), loads required page from disk, updates PTE, then restarts the faulting instruction.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Page Tables and Paging"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:page-fault-handling"
+      ]
+    },
+    {
+      "id": "QB-122",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Page Tables",
+      "concepts": [
+        "virtual-page",
+        "physical-page"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "The set of virtual pages currently cached in physical memory are called:",
+      "answer": "Cached pages",
+      "options": [
+        "Cached pages",
+        "Unallocated pages",
+        "Uncached pages",
+        "Swapped pages"
+      ],
+      "hints": [
+        "Pages can be unallocated, cached, or uncached"
+      ],
+      "explanation": "Virtual pages are partitioned into: Unallocated (no disk space), Cached (in physical memory), and Uncached (allocated but on disk, not in RAM).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Page Tables and Paging"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-123",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Address Translation",
+      "concepts": [
+        "vpn",
+        "address-translation"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Given a virtual address, what two components does the MMU use to locate the correct PTE?",
+      "answer": "VPN (Virtual Page Number) to identify the page, and offset within the page",
+      "hints": [
+        "VPN finds which page, offset finds location within page"
+      ],
+      "explanation": "The MMU extracts the VPN from the virtual address to index into the page table. Once the PTE is found, the PPN (Physical Page Number) is combined with the VPO (Virtual Page Offset) to form the physical address.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Address Translation and TLB"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-124",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "TLB",
+      "concepts": [
+        "tlb",
+        "translation-lookaside-buffer"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Why was the TLB (Translation Lookaside Buffer) created?",
+      "answer": "To avoid the extra memory access required to read the PTE from the page table",
+      "options": [
+        "To avoid the extra memory access required to read the PTE from the page table",
+        "To store more page table entries",
+        "To speed up disk accesses",
+        "To replace the MMU"
+      ],
+      "hints": [
+        "TLB is a cache of PTEs"
+      ],
+      "explanation": "Without TLB, every memory access would require an additional memory access to read the PTE (a double fetch problem). TLB caches recent PTEs for very fast lookups, achieving ~95% hit rates.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Address Translation and TLB"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:tlb-purpose"
+      ]
+    },
+    {
+      "id": "QB-125",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "TLB",
+      "concepts": [
+        "tlb",
+        "page-table"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A TLB miss always results in a page fault.",
+      "answer": "False",
+      "hints": [
+        "TLB miss just means PTE wasn't in the TLB cache"
+      ],
+      "explanation": "A TLB miss means the PTE wasn't in the TLB. The MMU can still look up the PTE in the page table (in memory). A page fault only occurs if the page is not in physical memory.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Address Translation and TLB"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:tlb-miss-vs-page-fault"
+      ]
+    },
+    {
+      "id": "QB-126",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Memory Protection",
+      "concepts": [
+        "permission-bits",
+        "protection-fault"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "What happens if a user-mode program tries to write to a read-only page?",
+      "answer": "The MMU generates a general protection fault",
+      "options": [
+        "The MMU generates a general protection fault",
+        "The OS silently ignores the write",
+        "The program crashes immediately",
+        "The page becomes writable"
+      ],
+      "hints": [
+        "Permission bits are checked by hardware"
+      ],
+      "explanation": "The MMU checks permission bits (read, write, execute, supervisor) before every memory access. If a program in user mode tries to write a page with write bit=0, the MMU generates a protection fault.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Memory Protection"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:permission-check"
+      ]
+    },
+    {
+      "id": "QB-127",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Memory Protection",
+      "concepts": [
+        "supervisor-mode",
+        "permission-bits"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "The supervisor bit in a PTE allows kernel-mode access to a page while blocking user-mode access.",
+      "answer": "False",
+      "hints": [
+        "Think about what supervisor mode means"
+      ],
+      "explanation": "The supervisor bit=1 means the page is accessible in kernel mode but NOT in user mode. Supervisor bit=0 means user mode can access it. This protects kernel memory from user programs.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Memory Protection"
+        }
+      ],
+      "misconceptionTags": [
+        "misconception:supervisor-bit"
+      ]
+    },
+    {
+      "id": "QB-128",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Exceptional Control Flow",
+      "subtopic": "Memory Protection",
+      "concepts": [
+        "memory-protection"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What provides a natural foundation for memory protection in modern computer systems?",
+      "answer": "Virtual Memory",
+      "options": [
+        "Virtual Memory",
+        "CPU registers",
+        "Assembly language",
+        "The compiler"
+      ],
+      "hints": [
+        "VM manages address translation"
+      ],
+      "explanation": "Virtual memory provides natural protection by having the MMU check permissions and isolate address spaces. Each process has its own virtual address space that maps to different physical memory.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "10",
+          "description": "Memory Protection"
+        }
+      ],
+      "misconceptionTags": []
     }
   ],
   "metadata": {

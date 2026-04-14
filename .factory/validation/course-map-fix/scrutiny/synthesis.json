@@ -1,0 +1,44 @@
+{
+  "milestone": "course-map-fix",
+  "round": 1,
+  "status": "pass",
+  "validatorsRun": {
+    "validate:content": {
+      "passed": true,
+      "command": "npm run validate:content",
+      "exitCode": 0,
+      "output": "956 assertions passed, 0 failed, 1 warning about missing instruction-index.json metadata"
+    },
+    "lint": {
+      "passed": true,
+      "command": "npm run lint",
+      "exitCode": 0,
+      "output": "0 errors, 4 warnings (pre-existing React hooks dependency warnings in DiagnosticMode.tsx, RegisterRally.tsx, SimulatorCore.tsx)"
+    },
+    "test": {
+      "passed": false,
+      "command": "npm run test",
+      "exitCode": 1,
+      "output": "npm error Missing script: test - project does not define a test script",
+      "note": "This is a pre-existing condition. The project lacks a test suite."
+    }
+  },
+  "reviewsSummary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "failedFeatures": []
+  },
+  "blockingIssues": [],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "skill content-worker",
+      "suggestion": "Add instruction to run standard validation commands (npm run validate:content, npm run lint) from services.yaml before marking a feature as complete",
+      "evidence": "fix-course-map worker did not run validation commands, relying on manual verification instead",
+      "isSystemic": false
+    }
+  ],
+  "rejectedObservations": [],
+  "previousRound": null
+}

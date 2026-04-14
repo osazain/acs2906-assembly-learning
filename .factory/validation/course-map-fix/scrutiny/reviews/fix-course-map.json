@@ -1,0 +1,29 @@
+{
+  "featureId": "fix-course-map",
+  "milestone": "course-map-fix",
+  "reviewer": "scrutiny-validator",
+  "timestamp": "2026-04-14T03:30:00.000Z",
+  "status": "pass",
+  "issues": [],
+  "sharedStateObservations": [
+    {
+      "severity": "suggestion",
+      "description": "Worker did not use standard validation commands from services.yaml (npm run validate:content, npm run lint). Instead relied on manual JSON validity check.",
+      "evidence": "fix-course-map handoff shows only git commit/push and manual PDF content reading",
+      "appliesTo": "AGENTS.md or skill content-worker"
+    },
+    {
+      "severity": "info",
+      "description": "The actual PDF headers confirmed by worker are: L8='Lecture 08: Memory Hierarchy', L9='Lecture 09: Memory Hierarchy (cont)', L10='Lecture 10: Exceptional Control Flow'",
+      "evidence": "lecture8_full.txt, lecture9_full.txt, lecture10_full.txt first lines",
+      "appliesTo": "library"
+    }
+  ],
+  "blockingIssues": [],
+  "summary": "Feature correctly updates course-map.json titles and topics for L8, L9, L10 to match actual PDF content. Changes are syntactically valid and semantically correct.",
+  "evidence": {
+    "gitDiff": "Changed 3 lecture entries: L8 'String Operations'→'Memory Hierarchy', L9 'Arrays and Data Structures'→'Memory Hierarchy (cont)', L10 'Advanced Topics and Review'→'Exceptional Control Flow'",
+    "pdfVerification": "lecture8_full.txt starts with 'Lecture 08: Memory Hierarchy', lecture9_full.txt starts with 'Lecture 09: Memory Hierarchy (cont)', lecture10_full.txt starts with 'Lecture 10: Exceptional Control Flow'",
+    "jsonValidity": "Confirmed via node.js JSON.parse check"
+  }
+}

@@ -1912,15 +1912,231 @@
       "reviewedStatus": "pending"
     }
   },
+  {
+    "id": "locality-principles-example",
+    "filename": "LocalityPrinciples.asm",
+    "lectureIds": [9],
+    "sectionIds": ["l9-s1"],
+    "concepts": [
+      "locality",
+      "spatial-locality",
+      "temporal-locality",
+      "stride"
+    ],
+    "instructions": [
+      "MOV", "ADD", "CMP", "JMP", "JE", "LOOP"
+    ],
+    "code": "; Locality Principles Demonstration\n; Demonstrates spatial and temporal locality in array access patterns\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Array with 16 elements (each 2 bytes = word)\n    array DW 16 DUP(0)\n    result_msg DB 'Sum completed$'\n    \n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; Initialize array with values 1, 2, 3, ... 16\n    MOV CX, 16              ; Counter for initialization\n    MOV BX, 0              ; Index\ninit_loop:\n    MOV AX, CX\n    MOV [array + BX], AX   ; array[i] = i+1\n    ADD BX, 2              ; Next word (2 bytes)\n    LOOP init_loop\n    \n    ; === GOOD LOCALITY: Stride-1 Sequential Access ===\n    ; This loop accesses array elements sequentially\n    ; Each access is near the previous one (spatial locality)\n    ; Same array elements accessed repeatedly (temporal locality)\n    MOV CX, 16              ; 16 iterations\n    MOV BX, 0              ; Index = 0\n    XOR AX, AX              ; AX = 0 (accumulator)\n    \nsum_stride1:\n    ADD AX, [array + BX]   ; Load and add - cache will help!\n    ADD BX, 2              ; Move to next element (stride-1)\n    LOOP sum_stride1\n    \n    ; AX now contains 1+2+3+...+16 = 136\n    ; This runs FAST because cache loads adjacent elements\n    \n    ; === BAD LOCALITY: Stride-N Sequential Access ===\n    ; This loop accesses every 4th element\n    ; Poor spatial locality - cache can't help much\n    MOV CX, 4               ; Only 4 iterations\n    MOV BX, 0              ; Index = 0\n    XOR DX, DX              ; DX = 0 (accumulator)\n    \nsum_stride4:\n    ADD DX, [array + BX]   ; Load element at stride-4\n    ADD BX, 8              ; Skip 4 elements (8 bytes = 4 words)\n    LOOP sum_stride4\n    \n    ; DX now contains array[0] + array[4] + array[8] + array[12]\n    ; This runs SLOWER because each cache line serves fewer elements\n    \n    ; === VERY BAD LOCALITY: Random Access ===\n    ; No spatial locality at all - worst case\n    MOV CX, 4\n    MOV BX, 0\nsum_random:\n    CMP BX, 0\n    JE use_index0\n    CMP BX, 2\n    JE use_index7\n    CMP BX, 4\n    JE use_index3\n    CMP BX, 6\n    JE use_index12\n    JMP done_random\n    \nuse_index0:\n    MOV SI, 0\n    JMP do_add\nuse_index7:\n    MOV SI, 14             ; Element 7 (14 bytes offset)\n    JMP do_add\nuse_index3:\n    MOV SI, 6              ; Element 3 (6 bytes offset)\n    JMP do_add\nuse_index12:\n    MOV SI, 24             ; Element 12 (24 bytes offset)\n    \ndo_add:\n    ADD DX, [array + SI] ; Random access - no cache benefit\n    ADD BX, 2\n    LOOP sum_random\n    \ndone_random:\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 22,
+        "type": "comment",
+        "text": "Stride-1 access: BX increments by 2 (word size) each iteration - best locality",
+        "linkedConcept": "stride"
+      },
+      {
+        "line": 23,
+        "type": "instruction",
+        "text": "ADD BX, 2 maintains stride-1 - CPU cache prefetches adjacent memory",
+        "linkedConcept": "spatial-locality"
+      },
+      {
+        "line": 33,
+        "type": "comment",
+        "text": "Stride-4: only 1 in 4 cache bytes used - cache efficiency drops to 25%",
+        "linkedConcept": "stride"
+      },
+      {
+        "line": 40,
+        "type": "comment",
+        "text": "ADD BX, 8 skips 4 elements (8 bytes) - stride of 4 words",
+        "linkedConcept": "spatial-locality"
+      },
+      {
+        "line": 48,
+        "type": "comment",
+        "text": "Random access has essentially zero spatial locality - each access is independent",
+        "linkedConcept": "spatial-locality"
+      },
+      {
+        "line": 52,
+        "type": "comment",
+        "text": "Temporal locality: same loop body executed multiple times - instructions cached",
+        "linkedConcept": "temporal-locality"
+      }
+    ],
+    "commonMistakes": [
+      "Assuming all loops have good locality - stride matters significantly",
+      "Not considering cache line size when choosing data structures",
+      "Random access patterns (like linked lists) have terrible locality",
+      "Accessing large arrays beyond cache size causes constant evictions",
+      "Not aligning data to cache boundaries when beneficial"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-090", "QB-091"],
+    "provenance": {
+      "sourceFile": "Lecture 9.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "1-20",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
+  {
+    "id": "memory-hierarchy-diagram",
+    "filename": "MemoryHierarchy.asm",
+    "lectureIds": [9],
+    "sectionIds": ["l9-s2"],
+    "concepts": [
+      "memory-hierarchy",
+      "caching",
+      "cache-block",
+      "storage-technology"
+    ],
+    "instructions": [
+      "MOV", "INT"
+    ],
+    "code": "; Memory Hierarchy Demonstration\n; Simulates the concept of memory levels and caching\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Level 4: Main memory (large, slow) - 64 bytes\n    main_memory DB 64 DUP(0FFh)\n    \n    ; Level 3: Cache (smaller, faster) - simulated as registers\n    ; In real hardware, L1/L2 cache is SRAM on-chip\n    cache_valid DB 0          ; Cache has valid data?\n    cache_data DB 0           ; Cached value\n    cache_tag DB 0FFh         ; Tag to identify cached address\n    \n    ; Level 2: Simulated L1 cache as variables\n    l1_valid DB 0\n    l1_data DB 0\n    l1_tag DB 0FFh\n    \n    ; Data request tracking\n    l1_hits DB 0\n    l2_hits DB 0\n    memory_accesses DB 0\n    \n.CODE\n; Simulate cache lookup - returns value in AL if hit, sets CF if miss\nCHECK_L1 PROC\n    CMP l1_valid, 1          ; Is L1 cache valid?\n    JNE l1_miss\n    ; L1 hit!\n    MOV AL, l1_data\n    INC l1_hits\n    CLC                      ; Clear carry = hit\n    RET\n    \nl1_miss:\n    STC                      ; Set carry = miss\n    RET\nCHECK_L1 ENDP\n\nCHECK_L2 PROC\n    CMP l2_valid, 1\n    JNE l2_miss\n    ; L2 hit!\n    MOV AL, l2_data\n    INC l2_hits\n    CLC\n    RET\n    \nl2_miss:\n    STC\n    RET\nCHECK_L2 ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Simulate Memory Hierarchy Access ===\n    \n    ; First access - cache miss, load from memory\n    MOV BX, 10h              ; Address to access\n    \n    ; Check L1 cache\n    CALL CHECK_L1\n    JNC got_from_l1          ; If no carry, L1 hit\n    \n    ; Check L2 cache\n    CALL CHECK_L2\n    JNC got_from_l2          ; If no carry, L2 hit\n    \n    ; Miss in all caches - access main memory\n    MOV AL, [main_memory + BX]\n    INC memory_accesses\n    \n    ; Load into L2, then L1 (simulating cache hierarchy)\n    MOV l2_data, AL\n    MOV l2_tag, BL\n    MOV l2_valid, 1\n    \n    MOV l1_data, AL\n    MOV l1_tag, BL\n    MOV l1_valid, 1\n    \n    JMP access_done\n    \ngot_from_l2:\n    ; L2 hit - promote data to L1\n    MOV l1_data, AL\n    MOV l1_tag, BL\n    MOV l1_valid, 1\n    JMP access_done\n    \ngot_from_l1:\n    ; L1 hit - data already where needed\n    ; No promotion needed\n    \naccess_done:\n    \n    ; === Demonstrate Cache Block Concept ===\n    ; When a cache miss occurs, a whole BLOCK is loaded\n    ; Block size > 1 means spatial locality helps\n    \n    ; Simulate loading a 4-byte block starting at address 20h\n    MOV CX, 4               ; Block size = 4 bytes\n    MOV SI, 20h              ; Starting address\n    \nload_block:\n    ; In real hardware: entire cache line loaded at once\n    ; Here we simulate the loading process\n    MOV AL, [main_memory + SI]\n    ; (In real CPU: cache controller does this automatically)\n    INC SI\n    LOOP load_block\n    \n    ; Result: next 4 accesses at addresses 20h-23h will hit cache!\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 34,
+        "type": "comment",
+        "text": "L1 cache: smallest (32-64KB), fastest (~4 cycles) - checked first",
+        "linkedConcept": "caching"
+      },
+      {
+        "line": 38,
+        "type": "comment",
+        "text": "Cache uses tag to identify which memory address is stored",
+        "linkedConcept": "cache-block"
+      },
+      {
+        "line": 56,
+        "type": "comment",
+        "text": "L2 cache: larger (256KB-8MB), slower (~10 cycles) - checked if L1 misses",
+        "linkedConcept": "caching"
+      },
+      {
+        "line": 78,
+        "type": "comment",
+        "text": "Main memory: largest (GB), slowest (~100 cycles) - only accessed on cache miss",
+        "linkedConcept": "memory-hierarchy"
+      },
+      {
+        "line": 86,
+        "type": "comment",
+        "text": "Block loading: entire cache line fetched at once, exploiting spatial locality",
+        "linkedConcept": "cache-block"
+      },
+      {
+        "line": 96,
+        "type": "comment",
+        "text": "After block load, next 4 bytes at 20h-23h will hit in cache (if block size = 4)",
+        "linkedConcept": "spatial-locality"
+      }
+    ],
+    "commonMistakes": [
+      "Thinking cache size doesn't matter - larger cache = more data cached = fewer misses",
+      "Ignoring block size - larger blocks mean better spatial locality but higher miss penalty",
+      "Assuming all memory access is equal - registers (1 cycle) vs DRAM (100 cycles) is 100x difference",
+      "Not considering that cache has fixed size - working set too large causes constant evictions",
+      "Confusing cache level responsibilities - L1 managed by hardware, OS manages main memory"
+    ],
+    "difficulty": "intermediate",
+    "relatedQuestions": ["QB-092", "QB-093"],
+    "provenance": {
+      "sourceFile": "Lecture 9.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "20-40",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
+  {
+    "id": "cache-hits-misses-demo",
+    "filename": "CacheHitsMisses.asm",
+    "lectureIds": [9],
+    "sectionIds": ["l9-s3"],
+    "concepts": [
+      "cache-hit",
+      "cache-miss",
+      "victim-block",
+      "replacement-policy",
+      "compulsory-miss",
+      "conflict-miss",
+      "capacity-miss"
+    ],
+    "instructions": [
+      "MOV", "CMP", "JMP", "INT"
+    ],
+    "code": "; Cache Hits and Misses Demonstration\n; Simulates cache behavior with different access patterns\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated cache with 4 lines, each holding 2 bytes\n    ; For direct-mapped cache: 4 sets, 1 line each\n    cache_valid DB 0, 0, 0, 0     ; Valid bits for 4 lines\n    cache_tag DB 0, 0, 0, 0       ; Tag for each line\n    cache_data DW 0, 0, 0, 0      ; Data (word per line)\n    \n    ; Statistics\n    hits DW 0\n    misses DW 0\n    \n    ; Messages\n    hit_msg DB 'Cache HIT$'\n    miss_msg DB 'Cache MISS$'\n\n.CODE\n; Simulate cache access - returns AX with data, sets BX=0 hit, BX=1 miss\nACCESS_CACHE PROC\n    ; Address in DX, expected: tag in upper bits, set index in middle, offset in lower\n    ; For our 4-line cache: set = bits [1:0] of address, offset = bit [0] (word within block)\n    \n    PUSH CX\n    PUSH DX\n    \n    ; Extract set index from address (bits 0-1 for 4 sets)\n    MOV AX, DX\n    AND AX, 03h              ; AX = set index (0-3)\n    \n    ; Check if valid and tag matches\n    MOV CX, AX               ; CX = set index\n    CMP cache_valid[CX], 1   ; Is line valid?\n    JNE cache_miss\n    \n    MOV AX, cache_tag[CX]    ; Get stored tag\n    MOV DX, SP\n    MOV DX, [DX+2]          ; Get original address (rough approximation)\n    SHR DX, 2               ; Shift to get tag bits\n    AND DX, 0FFh            ; Limit tag size\n    \n    CMP AX, DX               ; Tags match?\n    JNE cache_miss\n    \n    ; HIT!\n    MOV AX, cache_data[CX] ; Get data\n    INC hits                ; Update statistics\n    MOV BX, 0               ; Return 0 = hit\n    JMP access_done\n    \ncached_miss:\n    ; MISS - load from memory (simulated)\n    MOV BX, 1               ; Return 1 = miss\n    INC misses\n    \n    ; Simulate eviction if cache is full (always evict for direct-mapped)\n    MOV cache_valid[CX], 1  ; Mark as valid\n    MOV cache_tag[CX], DL   ; Store new tag\n    ; In real system, would load full block from memory\n    MOV cache_data[CX], DX ; Store data\n    \naccess_done:\n    POP DX\n    POP CX\n    RET\nACCESS_CACHE ENDP\n\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n    \n    ; === Pattern 1: Consecutive Accesses (Good Locality) ===\n    ; Access addresses 0, 1, 2, 3 - should have good hit rate after first miss\n    \n    MOV DX, 0            ; Address 0\n    CALL ACCESS_CACHE\n    \n    MOV DX, 1            ; Address 1 - same block as 0, HIT!\n    CALL ACCESS_CACHE\n    \n    MOV DX, 2            ; Address 2 - same block, HIT!\n    CALL ACCESS_CACHE\n    \n    MOV DX, 3            ; Address 3 - same block, HIT!\n    CALL ACCESS_CACHE\n    \n    ; === Pattern 2: Conflict Miss Pattern ===\n    ; In direct-mapped cache, addresses that map to same set conflict\n    ; Address 0 and 4 map to set 0 (if block size = 2)\n    \n    MOV DX, 0            ; Access set 0\n    CALL ACCESS_CACHE\n    \n    MOV DX, 4            ; Address 4 also maps to set 0 - CONFLICT MISS!\n    CALL ACCESS_CACHE\n    \n    MOV DX, 0            ; Back to address 0 - CONFLICT MISS again!\n    CALL ACCESS_CACHE\n    \n    MOV DX, 4            ; Address 4 - CONFLICT MISS again!\n    CALL ACCESS_CACHE\n    \n    ; === Pattern 3: Capacity Miss Pattern ===\n    ; Working set larger than cache causes capacity misses\n    ; (Simulated - our simple cache can't really show this)\n    \n    MOV CX, 8               ; Try to access 8 different blocks\n    MOV DX, 0\ncapacity_loop:\n    CALL ACCESS_CACHE\n    ADD DX, 4               ; Each access different block\n    LOOP capacity_loop\n    \n    ; Result: First 4 misses (cold start), then constant misses\n    ; because our cache has only 4 lines and 8 blocks = capacity miss\n    \n    ; === Demonstrate Three Types of Misses ===\n    \n    ; 1. COMPULSORY MISS: First access to any address\n    MOV DX, 10h             ; Never accessed before\n    CALL ACCESS_CACHE       ; MUST miss - cache empty\n    \n    ; 2. CONFLICT MISS: Different addresses map to same set\n    ; (Shown above with addresses 0, 4 pattern)\n    \n    ; 3. CAPACITY MISS: Cache too small for working set\n    ; (Simulated above with 8 blocks in 4-line cache)\n    \n    ; Exit\n    MOV AH, 4CH\n    INT 21H\nMAIN ENDP\nEND MAIN",
+    "annotations": [
+      {
+        "line": 48,
+        "type": "comment",
+        "text": "Cache hit: valid bit = 1 AND tag matches - data returned from cache",
+        "linkedConcept": "cache-hit"
+      },
+      {
+        "line": 52,
+        "type": "comment",
+        "text": "Cache miss: either line invalid or tag mismatch - must fetch from memory",
+        "linkedConcept": "cache-miss"
+      },
+      {
+        "line": 68,
+        "type": "comment",
+        "text": "Victim block: the block being evicted to make room for new block",
+        "linkedConcept": "victim-block"
+      },
+      {
+        "line": 89,
+        "type": "comment",
+        "text": "Compulsory miss: first access to address - cache is cold, no choice but to miss",
+        "linkedConcept": "compulsory-miss"
+      },
+      {
+        "line": 96,
+        "type": "comment",
+        "text": "Conflict miss: addresses 0 and 4 map to same cache set - direct-mapped limitation",
+        "linkedConcept": "conflict-miss"
+      },
+      {
+        "line": 106,
+        "type": "comment",
+        "text": "Capacity miss: 8 blocks for 4-line cache - not enough capacity, constant evictions",
+        "linkedConcept": "capacity-miss"
+      }
+    ],
+    "commonMistakes": [
+      "Confusing compulsory and conflict misses - compulsory happens once per address, conflict repeats",
+      "Thinking more cache always helps - but if working set grows faster, no improvement",
+      "Ignoring replacement policy impact - LRU is better than random but costs more hardware",
+      "Not understanding that direct-mapped has more conflicts than set-associative",
+      "Thinking write policy affects misses - write-through/write-back only affect writes, not hit/miss rate"
+    ],
+    "difficulty": "advanced",
+    "relatedQuestions": ["QB-094", "QB-095"],
+    "provenance": {
+      "sourceFile": "Lecture 9.pdf",
+      "sourceType": "pdf",
+      "sourceSectionOrLineRange": "40-60",
+      "extractedBy": "content-generation-v1",
+      "extractionConfidence": 0.90,
+      "reviewedStatus": "pending"
+    }
+  },
   "metadata": {
     "lastUpdated": "2026-04-13T00:00:00.000Z",
-    "totalExamples": 16,
-    "lectureCoverage": [4, 5, 6, 7, 8],
+    "totalExamples": 19,
+    "lectureCoverage": [4, 5, 6, 7, 8, 9],
     "instructionCoverage": ["MOV", "ADD", "SUB", "CMP", "JMP", "JE", "JNE", "JA", "JBE", "JLE", "LOOP", "CALL", "RET", "PUSH", "POP", "INC", "DEC", "MUL", "LEA", "INT", "MOVSB", "MOVSW", "LODSB", "LODSW", "STOSB", "STOSW", "REP", "CLD", "STD"],
     "difficultyDistribution": {
       "beginner": 4,
-      "intermediate": 7,
-      "advanced": 3
+      "intermediate": 10,
+      "advanced": 4
     }
   }
 }

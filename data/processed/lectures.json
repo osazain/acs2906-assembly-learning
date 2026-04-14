@@ -1534,7 +1534,7 @@
             "stride"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": ["locality-principles-example"],
           "assessmentItems": []
         },
         {
@@ -1549,7 +1549,7 @@
             "storage-technology"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": ["memory-hierarchy-diagram"],
           "assessmentItems": []
         },
         {
@@ -1567,7 +1567,7 @@
             "capacity-miss"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": ["cache-hits-misses-demo"],
           "assessmentItems": []
         },
         {

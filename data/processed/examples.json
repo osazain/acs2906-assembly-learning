@@ -2602,6 +2602,248 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "process-context-demo",
+      "filename": "ProcessContext.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s4"],
+      "concepts": [
+        "process",
+        "context",
+        "pcb",
+        "logical-control-flow",
+        "concurrency",
+        "multitasking",
+        "time-slice",
+        "program-counter"
+      ],
+      "instructions": [
+        "MOV", "PUSH", "POP", "CALL", "RET", "INT"
+      ],
+      "code": "; Process Context Demonstration\n; Shows how a process maintains its execution context\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    pcb_process_name   DB 'MAIN Program$'\n    pcb_eax             DW 0\n    pcb_ebx             DW 0\n    pcb_ecx             DW 0\n    pcb_edx             DW 0\n    pcb_esi             DW 0\n    pcb_edi             DW 0\n    pcb_ebp             DW 0\n    pcb_esp             DW 0\n    pcb_pc              DW 0\n    pcb_flags           DW 0\n    pcb_state           DB 'Running$'\n    newline             DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; Simulating Process Context Save\n    MOV AX, 1234h\n    MOV BX, 5678h\n    MOV CX, 9ABCh\n    MOV DX, 0DEF0h\n\n    ; Save current register values to PCB\n    MOV pcb_eax, AX\n    MOV pcb_ebx, BX\n    MOV pcb_ecx, CX\n    MOV pcb_edx, DX\n    MOV pcb_esi, SI\n    MOV pcb_edi, DI\n    MOV pcb_ebp, BP\n\n    LEA BX, continuation_point\n    MOV pcb_pc, BX\n\n    PUSHF\n    POP AX\n    MOV pcb_flags, AX\n\n    ; Simulating Process Context Restore\n    MOV AX, pcb_eax\n    MOV BX, pcb_ebx\n    MOV CX, pcb_ecx\n    MOV DX, pcb_edx\n    MOV SI, pcb_esi\n    MOV DI, pcb_edi\n    MOV BP, pcb_ebp\n\n    MOV AX, pcb_flags\n    PUSH AX\n    POPF\n\ncontinuation_point:\n    MOV CX, 3\n\ntime_slice_loop:\n    INC AX\n    LOOP time_slice_loop\n\n    LEA DX, pcb_process_name\n    MOV AH, 09h\n    INT 21h\n\n    MOV AH, 4Ch\n    INT 21h\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 30,
+          "type": "comment",
+          "text": "PCB stores essential execution state for a process",
+          "linkedConcept": "pcb"
+        },
+        {
+          "line": 45,
+          "type": "comment",
+          "text": "Context save: register values saved before CPU switches away",
+          "linkedConcept": "context"
+        },
+        {
+          "line": 52,
+          "type": "comment",
+          "text": "PC saved so execution can continue from exact point",
+          "linkedConcept": "logical-control-flow"
+        },
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "Context restore: registers reloaded from PCB",
+          "linkedConcept": "context"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing process with program - process is executing instance of program",
+        "Thinking context switch saves all memory - only CPU registers and PC are saved",
+        "Confusing concurrency with parallelism"
+      ],
+      "difficulty": "intermediate",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "25-45",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "context-switch-demo",
+      "filename": "ContextSwitch.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s5"],
+      "concepts": [
+        "context-switch",
+        "scheduling",
+        "kernel-mode",
+        "user-mode",
+        "timer-interrupt",
+        "privilege-level",
+        "pcb"
+      ],
+      "instructions": [
+        "MOV", "PUSH", "POP", "PUSHF", "POPF", "INT", "IRET"
+      ],
+      "code": "; Context Switch Demonstration\n; Shows how OS switches between processes on timer interrupts\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    procA_eax     DW 0\n    procA_ebx     DW 0\n    procA_pc       DW 0\n    procA_flags    DW 0\n    procA_name     DB 'Process A$'\n    procB_eax     DW 0\n    procB_ebx     DW 0\n    procB_pc       DW 0\n    procB_flags    DW 0\n    procB_name     DB 'Process B$'\n    current_proc  DB 'A'\n    tick_count    DW 0\n    newline        DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    PUSHF\n    PUSHA\n    INC tick_count\n\n    CMP current_proc, 'A'\n    JNE save_proc_b\n\nsave_proc_a:\n    MOV procA_eax, AX\n    MOV procA_ebx, BX\n    LEA BX, after_switch\n    MOV procA_pc, BX\n    POPF\n    MOV procA_flags, AX\n    MOV current_proc, 'B'\n    JMP load_proc_b\n\nsave_proc_b:\n    MOV procB_eax, AX\n    MOV procB_ebx, BX\n    LEA BX, after_switch\n    MOV procB_pc, BX\n    POPF\n    MOV procB_flags, AX\n    MOV current_proc, 'A'\n\nload_proc_a:\n    MOV AX, procA_eax\n    MOV BX, procA_ebx\n    MOV procA_flags, AX\n    PUSH AX\n    POPF\n    JMP dispatch\n\nload_proc_b:\n    MOV AX, procB_eax\n    MOV BX, procB_ebx\n    MOV procB_flags, AX\n    PUSH AX\n    POPF\n\ndispatch:\n    POPA\n\nafter_switch:\n    CMP current_proc, 'A'\n    JNE show_b\n    LEA DX, procA_name\n    JMP display_proc\nshow_b:\n    LEA DX, procB_name\n\ndisplay_proc:\n    MOV AH, 09h\n    INT 21h\n\n    MOV AH, 4Ch\n    INT 21h\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 40,
+          "type": "comment",
+          "text": "Timer interrupt is hardware-generated at regular intervals",
+          "linkedConcept": "timer-interrupt"
+        },
+        {
+          "line": 50,
+          "type": "comment",
+          "text": "Context save: outgoing process state saved to its PCB",
+          "linkedConcept": "context-switch"
+        },
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "PC saved so process resumes at exact instruction",
+          "linkedConcept": "pcb"
+        },
+        {
+          "line": 90,
+          "type": "comment",
+          "text": "IRET returns from interrupt, restores saved PC and flags",
+          "linkedConcept": "iret"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking context switch is instant - takes hundreds to thousands of cycles",
+        "Confusing timer interrupt with program execution - timer is hardware-generated",
+        "Forgetting that timer interrupt can occur between ANY two instructions"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "45-65",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "virtual-memory-demo",
+      "filename": "VirtualMemory.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s6"],
+      "concepts": [
+        "virtual-memory",
+        "physical-address",
+        "virtual-address",
+        "address-translation",
+        "mmu",
+        "virtual-page",
+        "physical-page"
+      ],
+      "instructions": [
+        "MOV", "LEA", "INT"
+      ],
+      "code": "; Virtual Memory Demonstration\n; Shows how virtual addresses map to physical addresses via MMU\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    pte0    DW 0000000000000001b\n    pte1    DW 0000000000000010b\n    pte2    DW 0000000000000000b\n    pte3    DW 0000000000000011b\n    va_example     DW 1234h\n    pa_result       DW 0\n    va_msg          DB 'Virtual Address: $'\n    newline         DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; With 4KB pages: offset = 12 bits, VPN = upper bits\n    ; Example: VA = 0x1234, VPN = 0x1, VPO = 0x234\n    MOV AX, va_example\n    MOV CL, 12\n    MOV BX, AX\n    SHR BX, CL\n\n    CMP BX, 0\n    JE use_pte0\n    CMP BX, 1\n    JE use_pte1\n    CMP BX, 2\n    JE use_pte2\n    CMP BX, 3\n    JE use_pte3\n\nuse_pte0:\n    MOV CX, pte0\n    JMP translate\nuse_pte1:\n    MOV CX, pte1\n    JMP translate\nuse_pte2:\n    MOV CX, pte2\n    JMP translate\nuse_pte3:\n    MOV CX, pte3\n\ntranslate:\n    SHR CX, 1\n    AND CX, 07h\n\n    MOV AX, va_example\n    AND AX, 0FFFh\n    SHL CX, 12\n    OR AX, CX\n\n    MOV pa_result, AX\n\n    LEA DX, va_msg\n    MOV AH, 09h\n    INT 21h\n\n    MOV AH, 4Ch\n    INT 21h\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 30,
+          "type": "comment",
+          "text": "VA divided into VPN (page number) and offset within page",
+          "linkedConcept": "virtual-address"
+        },
+        {
+          "line": 40,
+          "type": "comment",
+          "text": "MMU extracts VPN and looks up corresponding PTE",
+          "linkedConcept": "address-translation"
+        },
+        {
+          "line": 50,
+          "type": "comment",
+          "text": "Valid bit in PTE indicates if page is in physical memory",
+          "linkedConcept": "page-table-entry"
+        },
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "MMU hardware does translation - transparent to programs",
+          "linkedConcept": "mmu"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing virtual addresses with physical addresses - they are different spaces",
+        "Thinking page offset changes during translation - it stays the same",
+        "Forgetting that MMU does translation on every memory reference"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "65-80",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "page-table-demo",
+      "filename": "PageTable.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s7"],
+      "concepts": [
+        "page-table",
+        "page-table-entry",
+        "page-fault",
+        "virtual-page",
+        "physical-page",
+        "frame",
+        "page-fault-handler",
+        "valid-bit"
+      ],
+      "instructions": [
+        "MOV", "CMP", "JE", "JNE", "PUSH", "POP", "INT"
+      ],
+      "code": "; Page Table and Paging Demonstration\n; Shows how page tables track virtual-to-physical mapping\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    page_table DW 0000000000001001b\n             DW 0000000000001010b\n             DW 0001000000000000b\n             DW 0000000000001011b\n             DW 0000000000000000b\n             DW 0000000000001100b\n             DW 0001100000000000b\n             DW 0000000000001101b\n    fault_count DW 0\n    valid_msg   DB ' VALID', 13, 10, '$'\n    invalid_msg DB ' INVALID', 13, 10, '$'\n    fault_msg   DB 'PAGE FAULT occurred!', 13, 10, '$'\n    newline     DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    MOV CX, 8\n    MOV BX, 0\n\ncheck_ptes:\n    MOV AX, [page_table + BX*2]\n    MOV DX, AX\n    AND DX, 1\n\n    CMP DX, 1\n    JE pte_is_valid\n\npte_is_invalid:\n    LEA DX, invalid_msg\n    MOV AH, 09h\n    INT 21h\n    CMP AX, 0\n    JNE page_fault_needed\n    JMP next_pte\n\npte_is_valid:\n    LEA DX, valid_msg\n    MOV AH, 09h\n    INT 21h\n    JMP next_pte\n\npage_fault_needed:\n    INC fault_count\n    LEA DX, fault_msg\n    MOV AH, 09h\n    INT 21h\n\nnext_pte:\n    INC BX\n    LOOP check_ptes\n\n    MOV AX, 2\n    CALL access_virtual_page\n\n    MOV AH, 4Ch\n    INT 21h\n\nACCESS_VIRTUAL_PAGE PROC\n    PUSH BX\n    PUSH CX\n    PUSH DX\n\n    MOV BX, AX\n    SHL BX, 1\n    MOV CX, [page_table + BX]\n\n    MOV DX, CX\n    AND DX, 1\n    CMP DX, 1\n    JE access_ok\n\n    LEA DX, fault_msg\n    MOV AH, 09h\n    INT 21h\n\n    OR CX, 1\n    MOV [page_table + BX], CX\n\naccess_ok:\n    POP DX\n    POP CX\n    POP BX\n    RET\nACCESS_VIRTUAL_PAGE ENDP\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 25,
+          "type": "comment",
+          "text": "PTE format: upper bits frame number or disk address, bit 0 is valid flag",
+          "linkedConcept": "page-table-entry"
+        },
+        {
+          "line": 45,
+          "type": "comment",
+          "text": "Valid=0 with address=0 means page was never allocated",
+          "linkedConcept": "page-table"
+        },
+        {
+          "line": 55,
+          "type": "comment",
+          "text": "Valid=0 with nonzero address means page is on disk",
+          "linkedConcept": "virtual-page"
+        },
+        {
+          "line": 65,
+          "type": "comment",
+          "text": "Page fault exception indicates page needs to be loaded from disk",
+          "linkedConcept": "page-fault-handler"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing page fault with process crash - page fault is recoverable",
+        "Forgetting that not-cached (PTE valid=0) means page is on disk",
+        "Not understanding that page fault handler RETRIES same instruction"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "80-100",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {

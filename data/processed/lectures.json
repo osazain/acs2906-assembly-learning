@@ -1748,7 +1748,9 @@
             "time-slice"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "process-context-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1764,7 +1766,9 @@
             "timer-interrupt"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "context-switch-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1780,7 +1784,9 @@
             "mmu"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "virtual-memory-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1797,7 +1803,9 @@
             "frame"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "page-table-demo"
+          ],
           "assessmentItems": []
         },
         {

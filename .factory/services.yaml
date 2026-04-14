@@ -3,7 +3,7 @@ commands:
   validate: npm run validate:content
   lint: npm run lint
   build: npm run build
-  test: npm run test
+  # NOTE: npm run test is NOT defined - use validate + build for validation
   extract-pdfs: python extract-pdfs.py
 
 services: {}

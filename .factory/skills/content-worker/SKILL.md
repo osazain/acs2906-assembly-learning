@@ -43,9 +43,10 @@ For each section being updated:
 
 1. Read `data/processed/lectures.json`
 2. For each lecture ID being updated:
-   - Update only the `content` field of existing sections
-   - Preserve all other fields: `id`, `title`, `concepts`, `instructions`, `examples`, `assessmentItems`, `sourceFile`
-   - Do NOT change section order or IDs
+   - Update the `content` field of existing sections with extracted content
+   - **Review metadata**: When content changes fundamentally (different topic from old content), review and update `concepts`, `instructions`, `examples`, and `assessmentItems` to reflect the new content. Do NOT preserve metadata referencing old topic content.
+   - Preserve: `id`, `title` (unless topic change requires title update), `sourceFile`
+   - Do NOT change section IDs or order
 3. Write the updated JSON back to `data/processed/lectures.json`
 
 ### Step 5: Verify

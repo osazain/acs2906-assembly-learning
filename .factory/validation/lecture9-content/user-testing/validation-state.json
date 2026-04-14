@@ -1,0 +1,19 @@
+{
+  "assertions": {
+    "VAL-CONTENT-001": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-002": { "status": "passed", "validatedAtMilestone": "lecture8-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-003": { "status": "passed", "validatedAtMilestone": "lecture9-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-004": { "status": "pending" },
+    "VAL-CONTENT-005": { "status": "pending" },
+    "VAL-CONTENT-006": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-007": { "status": "passed", "validatedAtMilestone": "lecture8-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-008": { "status": "passed", "validatedAtMilestone": "lecture9-content", "validatedAtRound": 1 },
+    "VAL-CONTENT-009": { "status": "pending" },
+    "VAL-CODE-001": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-CODE-002": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-QUEST-001": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-INTEGRITY-001": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-INTEGRITY-002": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 },
+    "VAL-CROSS-001": { "status": "passed", "validatedAtMilestone": "lecture7-content", "validatedAtRound": 1 }
+  }
+}

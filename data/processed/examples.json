@@ -2844,6 +2844,154 @@
         "extractionConfidence": 0.90,
         "reviewedStatus": "pending"
       }
+    },
+    {
+      "id": "tlb-operation-demo",
+      "filename": "TLBOperation.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s8"],
+      "concepts": [
+        "tlb",
+        "translation-lookaside-buffer",
+        "address-translation",
+        "tlb-hit",
+        "tlb-miss",
+        "vpn",
+        "page-table-entry"
+      ],
+      "instructions": [
+        "MOV", "CMP", "JE", "JNE", "SHL", "SHR", "AND", "OR", "INT"
+      ],
+      "code": "; TLB Operation Demonstration\n; Shows how Translation Lookaside Buffer speeds up address translation\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated TLB entries (tag, valid, pte_contents)\n    ; In real hardware, TLB is fully associative with ~32-64 entries\n    tlb_entries DB 8 DUP(0)      ; Each entry: valid(1) tag(7) pte_bits(8)\n    tlb_tags     DB 8 DUP(0)      ; VPN tags for each entry\n    tlb_pte      DB 8 DUP(0)      ; Cached PTE contents\n    \n    page_table_base DW 4000h     ; Base address of page table in memory\n    hit_count    DW 0\n    miss_count   DW 0\n    tlb_msg      DB 'TLB HIT - fast path$'\n    miss_msg     DB 'TLB MISS - page table access$'\n    newline      DB 13, 10, '$'\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; Initialize TLB with some entries\n    CALL init_tlb\n\n    ; Test TLB with several virtual addresses\n    ; Example 1: VPN=2 (should hit if we loaded it)\n    MOV AX, 2000h      ; VA = 0x2000, VPN = 2\n    CALL translate_addr\n    \n    ; Example 2: VPN=5 (might miss)\n    MOV AX, 5000h      ; VA = 0x5000, VPN = 5\n    CALL translate_addr\n\n    ; Example 3: VPN=2 again (should hit - temporal locality)\n    MOV AX, 2010h      ; VA = 0x2010, VPN = 2\n    CALL translate_addr\n\n    MOV AH, 4Ch\n    INT 21h\n\n; ========================================\n; Initialize TLB with some entries\n; ========================================\nINIT_TLB PROC\n    PUSH AX\n    PUSH CX\n    PUSH DI\n    \n    ; Set up TLB entry 0: VPN=1, PPN=3\n    MOV DI, 0\n    MOV tlb_tags[DI], 1\n    MOV tlb_pte[DI], 00000011b   ; Valid=1, PPN=3\n    MOV tlb_entries[DI], 81h    ; Valid bit set\n    \n    ; Set up TLB entry 1: VPN=2, PPN=5\n    MOV DI, 1\n    MOV tlb_tags[DI], 2\n    MOV tlb_pte[DI], 00000101b   ; Valid=1, PPN=5\n    MOV tlb_entries[DI], 81h\n    \n    ; Set up TLB entry 2: VPN=7, PPN=2\n    MOV DI, 2\n    MOV tlb_tags[DI], 7\n    MOV tlb_pte[DI], 00000010b   ; Valid=1, PPN=2\n    MOV tlb_entries[DI], 81h\n    \n    POP DI\n    POP CX\n    POP AX\n    RET\nINIT_TLB ENDP\n\n; ========================================\n; Translate virtual address using TLB\n; Input: AX = virtual address\n; Output: Display hit or miss\n; ========================================\nTRANSLATE_ADDR PROC\n    PUSH BX\n    PUSH CX\n    PUSH DX\n    PUSH SI\n    \n    ; Extract VPN (bits 12-15 for 4KB pages)\n    MOV CL, 12\n    MOV BX, AX\n    SHR BX, CL           ; BX = VPN\n    \n    ; Search TLB (simulated 8-entry associative search)\n    MOV CX, 8            ; TLB has 8 entries\n    MOV SI, 0            ; Index\n    \nsearch_tlb:\n    CMP SI, CX\n    JGE tlb_miss        ; Checked all entries\n    \n    MOV DL, tlb_entries[SI]\n    AND DL, 80h          ; Check valid bit\n    CMP DL, 0\n    JE next_entry       ; Invalid entry\n    \n    MOV DL, tlb_tags[SI]\n    CMP DL, BL          ; Compare tag (VPN)\n    JE tlb_hit          ; Match found!\n    \nnext_entry:\n    INC SI\n    JMP search_tlb\n    \ntlb_hit:\n    ; TLB hit - get PTE from cache\n    MOV DL, tlb_pte[SI]\n    INC hit_count\n    LEA DX, tlb_msg\n    MOV AH, 09h\n    INT 21h\n    JMP translate_done\n    \ntlb_miss:\n    ; TLB miss - must access page table in main memory\n    ; This is expensive: extra memory access to get PTE\n    INC miss_count\n    \n    ; Simulate page table lookup (would be actual memory access)\n    MOV DX, page_table_base\n    MOV CX, BX           ; CX = VPN\n    SHL CX, 1            ; PTE is 2 bytes\n    ADD DX, CX           ; PT entry address\n    \n    ; Load PTE from memory (simulated)\n    ; In real system: MEM[DX] -> PTE\n    \n    ; Update TLB with new entry (future hits will be fast)\n    CALL update_tlb\n    \n    LEA DX, miss_msg\n    MOV AH, 09h\n    INT 21h\n    \ntranslate_done:\n    POP SI\n    POP DX\n    POP CX\n    POP BX\n    RET\nTRANSLATE_ADDR ENDP\n\n; ========================================\n; Update TLB with new entry (LRU replacement)\n; ========================================\nUPDATE_TLB PROC\n    PUSH SI\n    PUSH DI\n    \n    ; Simple replacement: just put in entry 0 (simplified LRU)\n    MOV SI, 0\n    MOV tlb_tags[SI], BL  ; Store VPN as tag\n    MOV tlb_entries[SI], 80h  ; Set valid bit\n    MOV tlb_pte[SI], 00000001b  ; Simplified PTE\n    \n    POP DI\n    POP SI\n    RET\nUPDATE_TLB ENDP\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 45,
+          "type": "comment",
+          "text": "VPN extracted by shifting right by page offset bits (12 for 4KB pages)",
+          "linkedConcept": "vpn"
+        },
+        {
+          "line": 50,
+          "type": "comment",
+          "text": "TLB searched associatively - all entries checked in parallel",
+          "linkedConcept": "tlb"
+        },
+        {
+          "line": 60,
+          "type": "comment",
+          "text": "On TLB hit: PTE found in cache, no main memory access needed",
+          "linkedConcept": "tlb-hit"
+        },
+        {
+          "line": 75,
+          "type": "comment",
+          "text": "TLB miss requires full page table walk in main memory - expensive",
+          "linkedConcept": "tlb-miss"
+        },
+        {
+          "line": 80,
+          "type": "comment",
+          "text": "After miss, new entry loaded into TLB for future hits (temporal locality)",
+          "linkedConcept": "tlb"
+        },
+        {
+          "line": 85,
+          "type": "comment",
+          "text": "TLB achieves ~95% hit rate due to locality in memory access patterns",
+          "linkedConcept": "address-translation"
+        }
+      ],
+      "commonMistakes": [
+        "Thinking TLB miss is the same as page fault - TLB miss is resolved by page table access",
+        "Forgetting that TLB is hardware cache, not software - it's transparent to programs",
+        "Confusing TLB entries with page table entries - TLB caches PTEs, not data pages",
+        "Not understanding that TLB hit rate depends on program locality, not size"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "65-80",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
+    },
+    {
+      "id": "memory-protection-demo",
+      "filename": "MemProtection.asm",
+      "lectureIds": [10],
+      "sectionIds": ["l10-s9"],
+      "concepts": [
+        "memory-protection",
+        "permission-bits",
+        "read-bit",
+        "write-bit",
+        "execute-bit",
+        "supervisor-mode",
+        "protection-fault",
+        "user-mode",
+        "kernel-mode"
+      ],
+      "instructions": [
+        "MOV", "CMP", "JE", "JNE", "PUSH", "POP", "INT"
+      ],
+      "code": "; Memory Protection Demonstration\n; Shows how permission bits prevent unauthorized memory access\n\n.MODEL SMALL\n.STACK 100H\n\n.DATA\n    ; Simulated Page Table Entries with permission bits\n    ; Format: valid(1) supervisor(1) read(1) write(1) execute(1) PPN(11)\n    pte_kernel_code  DW 1100000000010010b  ; Kernel code: r=1 w=0 x=1 sup=1\n    pte_user_code    DW 1000000000010100b  ; User code: r=1 w=0 x=1 sup=0\n    pte_user_data    DW 1001000000011000b  ; User data: r=1 w=1 x=0 sup=0\n    pte_readonly     DW 1001000000010110b  ; Read-only data: r=1 w=0 x=0 sup=0\n    pte_kernel_data  DW 1100000000011010b  ; Kernel data: r=1 w=1 x=0 sup=1\n    \n    mode_msg    DB 'CPU Mode: $'\n    kernel_msg  DB ' KERNEL$'\n    user_msg    DB ' USER$'\n    prot_msg    DB 'Protection Fault!$'\n    access_msg  DB 'Access: $'\n    read_msg    DB 'R$'\n    write_msg   DB 'W$'\n    exec_msg    DB 'X$'\n    newline     DB 13, 10, '$'\n    \n    cpu_mode    DB 0    ; 0 = user, 1 = kernel\n    fault_occurred DB 0\n\n.CODE\nMAIN PROC\n    MOV AX, @DATA\n    MOV DS, AX\n\n    ; ========================================\n    ; Scenario 1: User mode trying to read code\n    ; Should succeed (read bit set, supervisor=0)\n    ; ========================================\n    MOV cpu_mode, 0          ; User mode\n    CALL init_display\n    \n    MOV AX, pte_user_code    ; Simulated PTE lookup\n    MOV BL, 0                ; User mode\n    CALL check_access        ; Should allow: read=1, mode=user, sup=0\n    CMP fault_occurred, 1\n    JNE no_fault1\n    LEA DX, prot_msg\n    JMP display_fault\nno_fault1:\n    LEA DX, read_msg         ; Read access granted\n    JMP scenario2\n\ndisplay_fault:\n    MOV AH, 09h\n    INT 21h\n\nscenario2:\n    ; ========================================\n    ; Scenario 2: User mode trying to write to code\n    ; Should FAIL (write=0 for code page)\n    ; ========================================\n    MOV fault_occurred, 0\n    LEA DX, access_msg\n    MOV AH, 09h\n    INT 21h\n    LEA DX, write_msg\n    MOV AH, 09h\n    INT 21h\n    \n    MOV AX, pte_user_code    ; User code PTE\n    MOV BL, 0                ; User mode\n    CALL check_access        ; Write=0, should fault\n    \n    ; ========================================\n    ; Scenario 3: User mode trying to write to data\n    ; Should succeed (write=1 for data page)\n    ; ========================================\n    MOV fault_occurred, 0\n    LEA DX, access_msg\n    MOV AH, 09h\n    INT 21h\n    LEA DX, write_msg\n    MOV AH, 09h\n    INT 21h\n    \n    MOV AX, pte_user_data    ; User data PTE\n    MOV BL, 0                ; User mode\n    CALL check_access        ; Write=1, should allow\n    \n    ; ========================================\n    ; Scenario 4: User mode trying to access kernel data\n    ; Should FAIL (supervisor=1, user mode)\n    ; ========================================\n    MOV fault_occurred, 0\n    LEA DX, access_msg\n    MOV AH, 09h\n    INT 21h\n    \n    MOV AX, pte_kernel_data  ; Kernel data PTE\n    MOV BL, 0                ; User mode\n    CALL check_access        ; Sup=1, should fault\n    \n    MOV AH, 4Ch\n    INT 21h\n\nINIT_DISPLAY PROC\n    LEA DX, mode_msg\n    MOV AH, 09h\n    INT 21h\n    CMP cpu_mode, 1\n    JE is_kernel\n    LEA DX, user_msg\n    JMP print_mode\nis_kernel:\n    LEA DX, kernel_msg\nprint_mode:\n    MOV AH, 09h\n    INT 21h\n    LEA DX, newline\n    INT 21h\n    RET\nINIT_DISPLAY ENDP\n\n; ========================================\n; Check memory access permissions\n; Input: AX = PTE, BL = cpu_mode (0=user, 1=kernel)\n; Output: Sets fault_occurred if access denied\n; ========================================\nCHECK_ACCESS PROC\n    PUSH CX\n    PUSH DX\n    \n    MOV CX, AX\n    \n    ; Check valid bit (bit 0)\n    TEST CX, 0001h\n    JZ fault           ; Page not valid\n    \n    ; Check supervisor mode access (bit 1)\n    ; If sup=1 and user mode, deny access\n    TEST CX, 0002h     ; Check supervisor bit\n    JNZ check_perms    ; Supervisor bit = 0, proceed\n    \n    ; Supervisor bit = 1, check if user mode\n    CMP BL, 0          ; BL=0 means user mode\n    JE fault           ; Sup=1 + user = fault\n    \ncheck_perms:\n    ; Check read bit (bit 2) - simplified, assumes read operation\n    TEST CX, 0004h     ; Read bit\n    JZ fault           ; Read not allowed\n    \n    ; For write check, would also verify write bit (bit 3)\n    ; For execute check, would verify execute bit (bit 4)\n    \n    ; Access granted\n    JMP access_ok\n    \nfault:\n    MOV fault_occurred, 1\n    LEA DX, prot_msg\n    MOV AH, 09h\n    INT 21h\n    \naccess_ok:\n    POP DX\n    POP CX\n    RET\nCHECK_ACCESS ENDP\n\nMAIN ENDP\nEND MAIN",
+      "annotations": [
+        {
+          "line": 15,
+          "type": "comment",
+          "text": "PTE permission bits: bit 0=valid, bit 1=supervisor, bit 2=read, bit 3=write, bit 4=execute",
+          "linkedConcept": "permission-bits"
+        },
+        {
+          "line": 20,
+          "type": "comment",
+          "text": "Kernel code: supervisor=1 (kernel only), read=1, write=0, execute=1",
+          "linkedConcept": "kernel-mode"
+        },
+        {
+          "line": 25,
+          "type": "comment",
+          "text": "User data: supervisor=0, read=1, write=1, execute=0 - full user access",
+          "linkedConcept": "user-mode"
+        },
+        {
+          "line": 50,
+          "type": "comment",
+          "text": "Protection check fails if: page invalid OR (supervisor=1 AND user mode) OR permission bit = 0",
+          "linkedConcept": "protection-fault"
+        },
+        {
+          "line": 75,
+          "type": "instruction",
+          "text": "User trying to write code - write bit=0 means MMU generates protection fault",
+          "linkedConcept": "write-bit"
+        },
+        {
+          "line": 90,
+          "type": "instruction",
+          "text": "User trying to access kernel data - supervisor bit=1 blocks user mode access",
+          "linkedConcept": "supervisor-mode"
+        }
+      ],
+      "commonMistakes": [
+        "Confusing protection fault with page fault - protection fault is about permissions, not presence",
+        "Forgetting that supervisor bit protects kernel memory from user processes",
+        "Thinking you can write to code pages - execute bit is separate from write bit",
+        "Not understanding that protection checks happen in hardware, before instruction executes"
+      ],
+      "difficulty": "advanced",
+      "relatedQuestions": [],
+      "provenance": {
+        "sourceFile": "Lecture 10.pdf",
+        "sourceType": "pdf",
+        "sourceSectionOrLineRange": "100-120",
+        "extractedBy": "content-generation-v1",
+        "extractionConfidence": 0.90,
+        "reviewedStatus": "pending"
+      }
     }
   ],
   "metadata": {

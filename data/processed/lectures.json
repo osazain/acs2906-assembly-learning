@@ -1821,7 +1821,9 @@
             "page-table-entry-cache"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "tlb-operation-demo"
+          ],
           "assessmentItems": []
         },
         {
@@ -1836,7 +1838,9 @@
             "supervisor-mode"
           ],
           "instructions": [],
-          "examples": [],
+          "examples": [
+            "memory-protection-demo"
+          ],
           "assessmentItems": []
         }
       ],

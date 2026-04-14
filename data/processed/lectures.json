@@ -670,7 +670,7 @@
     {
       "id": 5,
       "title": "Logic and Bit Manipulation",
-      "sourceFile": "Lecture 6.pdf",
+      "sourceFile": "Lecture 5.pdf",
       "pageCount": 34,
       "sections": [
         {
@@ -842,7 +842,7 @@
       "difficulty": "intermediate",
       "examRelevance": "high",
       "provenance": {
-        "sourceFile": "Lecture 6.pdf",
+        "sourceFile": "Lecture 5.pdf",
         "sourceType": "pdf",
         "sourceSectionOrLineRange": "26-34",
         "extractedBy": "content-ingestion-v1",

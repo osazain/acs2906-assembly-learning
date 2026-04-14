@@ -1535,7 +1535,7 @@
           ],
           "instructions": [],
           "examples": ["locality-principles-example"],
-          "assessmentItems": []
+          "assessmentItems": ["QB-090", "QB-091", "QB-092"]
         },
         {
           "id": "l9-s2",
@@ -1550,7 +1550,7 @@
           ],
           "instructions": [],
           "examples": ["memory-hierarchy-diagram"],
-          "assessmentItems": []
+          "assessmentItems": ["QB-093", "QB-094"]
         },
         {
           "id": "l9-s3",
@@ -1568,7 +1568,7 @@
           ],
           "instructions": [],
           "examples": ["cache-hits-misses-demo"],
-          "assessmentItems": []
+          "assessmentItems": ["QB-095", "QB-096", "QB-097"]
         },
         {
           "id": "l9-s4",
@@ -1586,7 +1586,7 @@
           "examples": [
             "direct-mapped-cache-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": ["QB-098", "QB-099"]
         },
         {
           "id": "l9-s5",
@@ -1604,7 +1604,7 @@
           "examples": [
             "set-associative-cache-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": ["QB-100", "QB-101"]
         },
         {
           "id": "l9-s6",
@@ -1623,7 +1623,7 @@
           "examples": [
             "cache-writes-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": ["QB-102", "QB-103"]
         },
         {
           "id": "l9-s7",
@@ -1640,7 +1640,7 @@
           "examples": [
             "memory-mountain-demo"
           ],
-          "assessmentItems": []
+          "assessmentItems": ["QB-104", "QB-105"]
         }
       ],
       "concepts": [

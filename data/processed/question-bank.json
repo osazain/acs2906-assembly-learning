@@ -3406,6 +3406,520 @@
         }
       ],
       "misconceptionTags": []
+    },
+    {
+      "id": "QB-090",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Locality Principles",
+      "concepts": [
+        "locality",
+        "spatial-locality",
+        "temporal-locality"
+      ],
+      "instructions": [],
+      "difficulty": 1,
+      "prompt": "What type of locality does a loop that accesses array elements sequentially demonstrate?",
+      "answer": "Both spatial and temporal locality",
+      "options": [
+        "Only spatial locality",
+        "Only temporal locality",
+        "Both spatial and temporal locality",
+        "Neither spatial nor temporal locality"
+      ],
+      "hints": [
+        "Sequential access has good spatial locality",
+        "Repeated loop execution has good temporal locality"
+      ],
+      "explanation": "A sequential loop has spatial locality (neighboring elements are accessed) and temporal locality (the same memory location is accessed multiple times as the loop iterates).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Locality Principles"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-091",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Locality Principles",
+      "concepts": [
+        "stride",
+        "spatial-locality"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A program with stride-1 access pattern has better spatial locality than one with stride-4.",
+      "answer": "True",
+      "hints": [
+        "Smaller stride means accessing closer memory locations"
+      ],
+      "explanation": "Stride-1 means accessing every consecutive memory location, which maximizes spatial locality. Larger strides access memory locations that are farther apart, reducing spatial locality.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Locality Principles"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-092",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Locality Principles",
+      "concepts": [
+        "temporal-locality",
+        "instruction-fetch"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Small tight loops exhibit good temporal locality because:",
+      "answer": "The same instructions are fetched repeatedly from cache",
+      "options": [
+        "The loop executes very quickly",
+        "The same instructions are fetched repeatedly from cache",
+        "Loop variables are stored in registers",
+        "Loops always have good spatial locality"
+      ],
+      "hints": [
+        "Instructions in a loop are executed multiple times"
+      ],
+      "explanation": "Tight loops stay in cache, so the same instructions are fetched from the cache repeatedly rather than from main memory. This is why keeping code small and tight improves performance.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Locality Principles"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-093",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Memory Hierarchy",
+      "concepts": [
+        "memory-hierarchy",
+        "access-time",
+        "cache"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Arrange the following memory levels from fastest to slowest: L1 cache, DRAM, Registers, Disk, L2 cache",
+      "answer": "Registers, L1 cache, L2 cache, DRAM, Disk",
+      "hints": [
+        "Small, fast storage is at the top of the hierarchy"
+      ],
+      "explanation": "Registers are fastest (1 cycle), then L1 cache (~4 cycles), L2 cache (~10 cycles), DRAM (~100 cycles), and disk (~10M cycles). Each level is slower but larger.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "The Memory Hierarchy"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-094",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Memory Hierarchy",
+      "concepts": [
+        "caching",
+        "block-transfer"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In a cache hierarchy, data is copied between levels in units of blocks, not individual bytes.",
+      "answer": "True",
+      "hints": [
+        "Block transfers are more efficient than single-byte transfers"
+      ],
+      "explanation": "Cache systems transfer data in fixed-size blocks to exploit spatial locality. This is more efficient than transferring individual bytes and allows nearby data to be cached preemptively.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "The Memory Hierarchy"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-095",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Cache Organization",
+      "concepts": [
+        "cache-hit",
+        "cache-miss",
+        "eviction"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "When a cache miss occurs and the cache is full, the process of removing an existing block to make room for the new block is called:",
+      "answer": "Eviction",
+      "options": [
+        "Eviction",
+        "Replacement",
+        "Swapping",
+        " paging"
+      ],
+      "hints": [
+        "This is the replacement policy in action"
+      ],
+      "explanation": "Eviction occurs when a cache miss happens but all lines are full. The victim block (the one evicted) is removed and replaced with the newly requested block according to the replacement policy.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Cache Hits and Misses"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-096",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Cache Replacement",
+      "concepts": [
+        "replacement-policy",
+        "lru-policy",
+        "random-policy"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Which cache replacement policy would likely cause the most conflict misses in a direct-mapped cache?",
+      "answer": "Random replacement",
+      "options": [
+        "Random replacement",
+        "LRU (Least Recently Used)",
+        "LFU (Least Frequently Used)",
+        "All policies would cause equal conflict misses"
+      ],
+      "hints": [
+        "Random doesn't consider access patterns"
+      ],
+      "explanation": "Random replacement doesn't consider temporal or spatial locality patterns. LRU and LFU attempt to keep frequently or recently accessed blocks, reducing conflict misses. Random is simplest but can evict useful blocks.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Cache Hits and Misses"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-097",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Cache Miss Types",
+      "concepts": [
+        "compulsory-miss",
+        "conflict-miss",
+        "capacity-miss"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "A cache miss that could have been avoided if the cache had not earlier evicted a different block is called a:",
+      "answer": "Conflict miss",
+      "options": [
+        "Compulsory miss",
+        "Conflict miss",
+        "Capacity miss",
+        "Cold miss"
+      ],
+      "hints": [
+        "This miss type relates to placement restrictions"
+      ],
+      "explanation": "Conflict misses occur when multiple blocks compete for the same cache set. If one block was evicted to make room for another, and then the first block is needed again, it causes a conflict miss. These wouldn't occur in a fully associative cache.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Cache Hits and Misses"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-098",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Direct-Mapped Cache",
+      "concepts": [
+        "direct-mapped-cache",
+        "set-selection",
+        "cache-tags"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In a direct-mapped cache with 8 sets, the set index requires 3 bits.",
+      "answer": "True",
+      "hints": [
+        "Log2(8) = 3"
+      ],
+      "explanation": "With 8 sets (S=8), you need log2(8) = 3 bits to uniquely identify each set. The set index bits select which set to examine for a given address.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Direct-Mapped Cache"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-099",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Direct-Mapped Cache",
+      "concepts": [
+        "direct-mapped-cache",
+        "thrashing"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "Two memory blocks that map to the same set in a direct-mapped cache and are accessed in alternating order would cause:",
+      "answer": "Thrashing - constant eviction and reload of both blocks",
+      "options": [
+        "A cache hit on every access",
+        "Thrashing - constant eviction and reload of both blocks",
+        "A compulsory miss",
+        "The cache to overflow"
+      ],
+      "hints": [
+        "Each set can only hold one line in direct-mapped"
+      ],
+      "explanation": "Direct-mapped caches can only hold one block per set. When two blocks map to the same set and are accessed alternately, each access evicts the other block, causing constant misses. This is called thrashing and can slow execution 2-3x.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Direct-Mapped Cache"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-100",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "output-prediction",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Set Associative Cache",
+      "concepts": [
+        "set-associative-cache",
+        "e-way-set-associative"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "A 4-way set associative cache has 1024 sets and 4 lines per set. How many total lines does the cache have?",
+      "answer": "4096 lines",
+      "hints": [
+        "Total lines = sets × lines per set"
+      ],
+      "explanation": "Total lines = S × E = 1024 sets × 4 lines/set = 4096 lines. Each set contains 4 lines (E=4), and set selection uses log2(1024) = 10 bits.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Set Associative Caches"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-101",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Fully Associative Cache",
+      "concepts": [
+        "fully-associative-cache"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In a fully associative cache, the address is divided into:",
+      "answer": "Tag and block offset (no set index)",
+      "options": [
+        "Tag, set index, and block offset",
+        "Tag and block offset (no set index)",
+        "Set index and block offset only",
+        "Only a tag"
+      ],
+      "hints": [
+        "S = 1 in fully associative"
+      ],
+      "explanation": "Fully associative caches have S = 1 (one set containing all lines), so there are no set index bits. The address divides into tag bits (to match all lines) and block offset (to select within the block).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Set Associative Caches"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-102",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Write Policies",
+      "concepts": [
+        "write-through",
+        "write-back"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Write-back caching defers writing to main memory until:",
+      "answer": "The block is evicted from the cache",
+      "options": [
+        "The block is evicted from the cache",
+        "Every write operation",
+        "The program terminates",
+        "A cache miss occurs"
+      ],
+      "hints": [
+        "Write-back reduces bus transactions"
+      ],
+      "explanation": "Write-back defers writes until the block is being replaced. A 'dirty bit' tracks whether the block has been modified. This reduces bus traffic significantly compared to write-through.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Cache Writes and Performance"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-103",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "true-false",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Cache Performance",
+      "concepts": [
+        "hit-time",
+        "miss-penalty"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "Hit time is the time to deliver a cached word to the CPU and is typically a few cycles for L1 cache.",
+      "answer": "True",
+      "hints": [
+        "L1 hit time is very fast"
+      ],
+      "explanation": "Hit time includes time to check cache and retrieve data. L1 hit time is typically 1-4 cycles. Miss penalty is the additional time when a miss occurs (10 cycles from L2, 100+ from memory).",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "Cache Writes and Performance"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-104",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "multiple-choice",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Memory Mountain",
+      "concepts": [
+        "memory-mountain",
+        "working-set"
+      ],
+      "instructions": [],
+      "difficulty": 2,
+      "prompt": "In the memory mountain, ridges correspond to regions where:",
+      "answer": "The working set fits entirely in a cache level",
+      "options": [
+        "Memory access is slowest",
+        "The working set fits entirely in a cache level",
+        "Stride is maximized",
+        "Data is stored on disk"
+      ],
+      "hints": [
+        "Ridges are the high-throughput regions"
+      ],
+      "explanation": "Ridges in the memory mountain occur when the working set fits within a particular cache level, allowing most accesses to hit in that fast cache. This gives consistently high throughput.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "The Memory Mountain"
+        }
+      ],
+      "misconceptionTags": []
+    },
+    {
+      "id": "QB-105",
+      "sourceType": "generated",
+      "sourceRefs": [],
+      "type": "code-tracing",
+      "topic": "Memory Hierarchy",
+      "subtopic": "Prefetching",
+      "concepts": [
+        "prefetching",
+        "spatial-locality"
+      ],
+      "instructions": [],
+      "difficulty": 3,
+      "prompt": "Hardware prefetching is most effective for which access pattern?",
+      "answer": "Strided access with regular patterns",
+      "options": [
+        "Random access patterns",
+        "Strided access with regular patterns",
+        "Single access to unique data",
+        "Write-heavy workloads"
+      ],
+      "hints": [
+        "Prefetching needs predictable patterns to work"
+      ],
+      "explanation": "Hardware prefetchers detect regular access patterns (like stride-1 or fixed stride) and bring data into cache before it's needed. Random patterns are unpredictable and hard to prefetch effectively.",
+      "remediationRefs": [
+        {
+          "type": "lecture",
+          "id": "9",
+          "description": "The Memory Mountain"
+        }
+      ],
+      "misconceptionTags": []
     }
   ],
   "metadata": {
